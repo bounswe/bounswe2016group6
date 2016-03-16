@@ -9,5 +9,5 @@ Our notion of teacher and student is different from that of traditional approach
 Every user of our platform will be a student. On top of that, high-rating users
 will have the opportunity to become teachers. For more information, please refer
 to our [Wiki page](https://github.com/bounswe/bounswe2016group6/wiki)
-to see what is currently going on such as our research topics or our group
-members.
+to see what is currently going on such as our requirements, initial plan and
+research topics.
