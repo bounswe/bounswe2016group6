@@ -1,6 +1,5 @@
-
-
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -27,7 +26,17 @@ public class MainPageServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		response.setContentType("text/html");	
+		response.getWriter().append("<ul>" +
+									"<li><a href=\"ahmet_zorer\">Ahmet Zorer</a></li>" +
+									"<li><a href=\"esra_alinca\">Esra Alinca</a></li>" +
+									"<li><a href=\"muaz_ekici\">Muaz Ekici</a></li>" +
+									"<li><a href=\"esref_ozdemir\">Esref Ozdemir</a></li>" +
+									"<li><a href=\"ali_can_erkilic\">Ali Can Erkilic</a></li>" +
+									"<li><a href=\"erhan_cagirici\">Erhan Cagirici</a></li>" +
+									"<li><a href=\"azmi_ozgen\">Azmi Ozgen</a></li>" +
+									"<li><a href=\"utku_alhan\">Utku Alhan</a></li>" +
+									"</ul>");
 	}
 
 	/**
@@ -37,5 +46,4 @@ public class MainPageServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
-
 }
