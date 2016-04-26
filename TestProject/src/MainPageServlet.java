@@ -27,16 +27,16 @@ public class MainPageServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.setContentType("text/html");	
-		response.getWriter().append("<ul>" +
-									"<li><a href=\"ahmet_zorer\">Ahmet Zorer</a></li>" +
-									"<li><a href=\"esra_alinca\">Esra Alinca</a></li>" +
-									"<li><a href=\"muaz_ekici\">Muaz Ekici</a></li>" +
-									"<li><a href=\"esref_ozdemir\">Esref Ozdemir</a></li>" +
-									"<li><a href=\"ali_can_erkilic\">Ali Can Erkilic</a></li>" +
-									"<li><a href=\"erhan_cagirici\">Erhan Cagirici</a></li>" +
-									"<li><a href=\"azmi_ozgen\">Azmi Ozgen</a></li>" +
-									"<li><a href=\"utku_alhan\">Utku Alhan</a></li>" +
-									"</ul>");
+		response.getWriter().append("<table border=\"1\" style=\"width:100%\">  <tr>" +
+									"<td><a href=\"ahmet_zorer\">Ahmet Zorer</a></td><td><a href=\"https://github.com/bounswe/bounswe2016group6/wiki/Ahmet-Zorer\"> git page</a></td> </tr>  <tr>" +
+									"<td><a href=\"esra_alinca\">Esra Alinca</a></td><td><a href=\"https://github.com/bounswe/bounswe2016group6/wiki/Esra-Alınca\"> git page</a></td> </tr>  <tr>" +
+									"<td><a href=\"muaz_ekici\">Muaz Ekici</a></td><td><a href=\"https://github.com/bounswe/bounswe2016group6/wiki/Muaz-Ekici\"> git page</a></td> </tr>  <tr>" +
+									"<td><a href=\"esref_ozdemir\">Esref Ozdemir</a></td><td><a href=\"https://github.com/bounswe/bounswe2016group6/wiki/E%C5%9Fref-Özdemir\"> git page</a></td> </tr>  <tr>" +
+									"<td><a href=\"ali_can_erkilic\">Ali Can Erkilic</a></td><td><a href=\"https://github.com/bounswe/bounswe2016group6/wiki/Ali-Can-Erkilic\"> git page</a></td> </tr>  <tr>" +
+									"<td><a href=\"erhan_cagirici\">Erhan Cagirici</a></td><td><a href=\"https://github.com/bounswe/bounswe2016group6/wiki/Erhan-Çağırıcı\"> git page</a></td> </tr>  <tr>" +
+									"<td><a href=\"azmi_ozgen\">Azmi Ozgen</a></td><td><a href=\"https://github.com/bounswe/bounswe2016group6/wiki/Azmi-Özgen\"> git page</a></td> </tr>  <tr>" +
+									"<td><a href=\"utku_alhan\">Utku Alhan</a></td><td><a href=\"https://github.com/bounswe/bounswe2016group6/wiki/Utku-Alhan\"> git page</a></td> </tr>" +
+									"</table>");
 	}
 
 	/**
