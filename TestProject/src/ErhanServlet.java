@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * Servlet implementation class ErhanServlet
+ * @author Erhan Cagirici
  */
 @WebServlet("/erhan_cagirici")
 public class ErhanServlet extends HttpServlet {
@@ -28,7 +29,8 @@ public class ErhanServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Erhan Cagirici");
+		System.out.println("Hello!");
+		request.getRequestDispatcher("/WEB-INF/erhanHome.jsp").forward(request, response);
 	}
 
 	/**
@@ -36,6 +38,7 @@ public class ErhanServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		
 		doGet(request, response);
 	}
 
