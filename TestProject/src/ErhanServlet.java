@@ -28,9 +28,17 @@ public class ErhanServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		String queryTerm = request.getParameter("queryTerm");
 		System.out.println("Hello!");
-		request.getRequestDispatcher("/WEB-INF/erhanHome.jsp").forward(request, response);
+		if(queryTerm == null){
+			System.out.println("Welcome Page");
+			request.getRequestDispatcher("/WEB-INF/erhanHome.jsp").forward(request, response);
+		} else {
+			System.out.println(queryTerm);
+			response.getWriter().println(queryTerm + " SEARCHED!");
+		}
+		
+		
 	}
 
 	/**
