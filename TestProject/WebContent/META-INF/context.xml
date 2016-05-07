@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+
+	<Resource name="jdbc/cmpe352test" auth="Container" path="/TestProject"
+
+		type="javax.sql.DataSource" username="root" password="ajanGadget"
+
+		driverClassName="com.mysql.jdbc.Driver" url="jdbc:mysql:/127.0.0.1:3306/cmpe352test"
+
+		maxActive="15" maxIdle="3" />
+
+</Context>
+
