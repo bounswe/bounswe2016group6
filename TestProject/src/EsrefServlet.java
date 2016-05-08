@@ -1,22 +1,18 @@
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.swing.plaf.synth.SynthSeparatorUI;
+
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QueryFactory;
-import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.query.ResultSetFormatter;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.regex.*;
 
 /**
  * Servlet implementation class EsrefServlet
@@ -57,25 +53,33 @@ public class EsrefServlet extends HttpServlet {
 					"bd:serviceParam wikibase:language \"en\" .\n" +
 					"}\n" +
 					"}" +
-					"LIMIT 300\n";
+					"LIMIT 100\n";
 			Query query = QueryFactory.create(s1); 
 			QueryExecution qExe = QueryExecutionFactory.sparqlService( "https://query.wikidata.org/sparql", query );
 			ResultSet results = qExe.execSelect();
 			ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 			ResultSetFormatter.outputAsJSON(outStream, results);
 			jsonData = new String(outStream.toByteArray());
+			response.getWriter().write(jsonData);
 			System.out.println(jsonData);
 		} else if (requestType.equals("selectData")) {
 			System.out.println("selectData");
-			String input = request.getParameter("input");
+			String input = request.getParameter("input"); //TODO: must be a list
 			System.out.println(input);
 			if (jsonData == null) {
 				//error
 			}
 			 //db insert action
+			if (true/*success*/) {
+				response.getWriter().write(1);
+			} else {
+				response.getWriter().write(0);
+			}
 		} else if (requestType.equals("listData")) {
 			System.out.println("listData");
 			//db select action
+			String sqlData = "SQLDATA"; //all the data in mySQL server
+			response.getWriter().write(sqlData);
 		} else {
 			System.out.println("Unexpected request type: " + requestType);
 		}

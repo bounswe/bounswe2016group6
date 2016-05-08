@@ -45,14 +45,28 @@
 </style>
 
 <script type="text/javascript">
+	 
 	function submitSearch() {
 		$.get("", {
 			type : "queryData",
 			input : $("#queryInput").val()
-		}).done(function(data) {
-			//print the data in a table with checkboxes 
-			$("#result").html(data);
-			alert("Data Loaded: " + data);
+		}).done(function(dat) { //print the resulting data in table format
+			 var data = eval("(" + dat + ")");
+			 var columns = ["objectLabel", "countryLabel", "coord"];
+			 var myList = data["results"]["bindings"];
+		 
+			 //TODO: add table headers
+			 for (var i = 0 ; i < myList.length ; i++) {
+				 var row$ = $('<tr/>');
+				 for (var colIndex = 0 ; colIndex < columns.length ; colIndex++) {
+					 var cellValue = myList[i][columns[colIndex]]["value"];
+					 if (cellValue == null) {
+						 cellValue = "";
+					 }
+					 row$.append($('<td/>').html(cellValue));
+				 }
+				 $("#excelDataTable").append(row$);
+		 	}
 		});
 	}
 	function submitCheckbox() {
@@ -92,13 +106,9 @@
                 </form>
             </div>
             
-            <h3 id="result"> Ready!</h1>
+			<table id="excelDataTable" border="1"> </table>
         </div>
 	</div>
-</div>
-
-<div>
-	
 </div>
 
 </body>
