@@ -57,14 +57,14 @@
 		 
 			 //TODO: add table headers
 			 $("#excelDataTable").append('<tr/>');
-			 var row$ = $('<tr/>');
+			 var row$ = $('<tr/>').append($('<th/>').html("Select"));
 			 for (var i = 0; i < columns.length; ++i) {
 				 row$.append($('<th/>').html(columns[i]));
 				 //$("#excelDataTable").append($('<th/>').html(i));
 			 }
 			 $("#excelDataTable").append(row$);
 			 for (var i = 0 ; i < myList.length ; i++) {
-				 row$ = $('<tr/>');
+				 row$ = $('<tr/>').append($('<td/>').html("<input type=\"checkbox\" name=\"NAME\" value=\"VALUE\">"));
 				 for (var colIndex = 0 ; colIndex < columns.length ; colIndex++) {
 					 var cellValue = myList[i][columns[colIndex]]["value"];
 					 if (cellValue == null) {
@@ -113,7 +113,9 @@
                 </form>
             </div>
             
+            <form action="">
 			<table id="excelDataTable" border="1"> </table>
+			</form>
         </div>
 	</div>
 </div>
