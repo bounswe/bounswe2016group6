@@ -52,12 +52,19 @@
 			input : $("#queryInput").val()
 		}).done(function(dat) { //print the resulting data in table format
 			 var data = eval("(" + dat + ")");
-			 var columns = ["objectLabel", "countryLabel", "coord"];
+			 var columns = data["head"]["vars"];
 			 var myList = data["results"]["bindings"];
 		 
 			 //TODO: add table headers
+			 $("#excelDataTable").append('<tr/>');
+			 var row$ = $('<tr/>');
+			 for (var i = 0; i < columns.length; ++i) {
+				 row$.append($('<th/>').html(columns[i]));
+				 //$("#excelDataTable").append($('<th/>').html(i));
+			 }
+			 $("#excelDataTable").append(row$);
 			 for (var i = 0 ; i < myList.length ; i++) {
-				 var row$ = $('<tr/>');
+				 row$ = $('<tr/>');
 				 for (var colIndex = 0 ; colIndex < columns.length ; colIndex++) {
 					 var cellValue = myList[i][columns[colIndex]]["value"];
 					 if (cellValue == null) {
