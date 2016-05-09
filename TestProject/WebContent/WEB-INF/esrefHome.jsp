@@ -1,11 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+    pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Query Analysis</title>
-
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script
@@ -43,58 +42,73 @@
     font-size: 23px;
 }
 </style>
-
 <script type="text/javascript">
 	 
+	/// Sends the given search term to the servlet and prints the resulting data
+	/// in a clickable table format.
 	function submitSearch() {
 		$.get("", {
 			type : "queryData",
 			input : $("#queryInput").val()
 		}).done(function(dat) { //print the resulting data in table format
-			 var data = eval("(" + dat + ")");
-			 var columns = data["head"]["vars"];
-			 var myList = data["results"]["bindings"];
-		 
-			 //TODO: add table headers
-			 $("#excelDataTable").append('<tr/>');
-			 var row$ = $('<tr/>').append($('<th/>').html("Select"));
-			 for (var i = 0; i < columns.length; ++i) {
-				 row$.append($('<th/>').html(columns[i]));
-				 //$("#excelDataTable").append($('<th/>').html(i));
-			 }
-			 $("#excelDataTable").append(row$);
-			 for (var i = 0 ; i < myList.length ; i++) {
-				 row$ = $('<tr/>').append($('<td/>').html("<input type=\"checkbox\" name=\"NAME\" value=\"VALUE\">"));
-				 for (var colIndex = 0 ; colIndex < columns.length ; colIndex++) {
-					 var cellValue = myList[i][columns[colIndex]]["value"];
-					 if (cellValue == null) {
-						 cellValue = "";
-					 }
-					 row$.append($('<td/>').html(cellValue));
-				 }
-				 $("#excelDataTable").append(row$);
-		 	}
+			var rows = dat.split("&&");
+			var cols=rows[0].split("||");
+			$("#excelDataTable").append('<tr/>');
+			var row$ =$('<tr/>').append($('<th/>').html("Select"));
+			for(var i = 0 ; i < cols.length ;i++){
+				row$.append($('<th/>').html(cols[i]));
+			}
+			$("#excelDataTable").append(row$);
+			 for (var i = 1 ; i < rows.length -1; i++) {	 
+ 				 row$ = $('<tr/>').append($('<td/>').html("<input type=\"checkbox\" name=\"id\" value="+i+">"));
+ 				cols = rows[i].split("||");
+ 				 for (var colIndex = 0 ; colIndex < cols.length ; colIndex++) {
+					 var cellValue =cols[colIndex];
+					 row$.append($('<td/>').html(cellValue));				
+				}
+ 				$("#excelDataTable").append(row$);
+ 		 	}
 		});
 	}
+
 	function submitCheckbox() {
+			var inputs = document.getElementsByName("id"); //or document.forms[0].elements;
+			var checked = []; //will contain all checked checkboxes
+			for (var i = 0; i < inputs.length; i++) {
+			    if (inputs[i].checked) {
+			      checked.push(i);
+			    }
+			}
+			var str = "" + checked[0];
+			for (var i = 1; i < checked.length; ++i) {
+				str = str + " " + checked[i];
+			}
 		$.get("", {
 			type : "selectData",
-			input : "blablabla"
+			input : str
 		}).done(function(data) {
-			//success or fail message
+			if (data === "0") {
+				alert("Error: Selected rows couldn't be saved");
+			} else {
+				alert("Success: Selected rows are saved");
+			}
 		});
 	}
+	  
 	function listData() {
 		$.get("", {
 			type : "listData"
 		}).done(function(data) {
-			//print the data in a table without checkboxes
+			if (data === "0") {
+				alert("Error: Data couldn't be retrieved from the database");
+			} else {
+				//print the data in a table without checkboxes
+			}
 		});
 	}
 </script>
 
 </head>
-
 <body>
 <div class="container">
 	<div class="row">
@@ -112,13 +126,14 @@
                 </div>
                 </form>
             </div>
-            
             <form action="">
 			<table id="excelDataTable" border="1"> </table>
 			</form>
+			<button onclick="submitCheckbox()" >
+				<i class="glyphican glyphicon-save"></i>
+			</button>
         </div>
 	</div>
 </div>
-
 </body>
 </html>

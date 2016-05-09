@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['utkuservlet',['UtkuServlet',['../classUtkuServlet.html',1,'UtkuServlet'],['../classUtkuServlet.html#a4dab7dfc326eac16ecc3ad3a9cc1de34',1,'UtkuServlet.UtkuServlet()']]],
-  ['utkuservlet_2ejava',['UtkuServlet.java',['../UtkuServlet_8java.html',1,'']]]
+  ['insertdata',['insertData',['../classEsrefServlet.html#aad192c5bad13436bebd91856e7708eb8',1,'EsrefServlet']]]
 ];
