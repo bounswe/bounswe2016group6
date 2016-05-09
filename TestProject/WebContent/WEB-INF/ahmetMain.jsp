@@ -62,7 +62,7 @@
 			 }
 			 $("#excelDataTable").append(row$);
 			 for (var i = 0 ; i < myList.length ; i++) {
-				 row$ = $('<tr/>').append($('<td/>').html("<input type=\"checkbox\" name=\"id\" value="+i+">"));
+				 row$ = $('<tr/>').append($('<td/>').html("<input type=\"checkbox\" name=\"NAME\" value="+i+">"));
 				 for (var colIndex = 0 ; colIndex < columns.length ; colIndex++) {
 					 var cellValue = myList[i][columns[colIndex]]["value"];
 					 if (cellValue == null) {
@@ -76,16 +76,16 @@
 	}
 	
 	function submitCheckbox() {
-		var string = [];
 		$('#excelDataTable').find('tr').each(function () {
 	        var row = $(this);
+            console.log(row);
+
 	        if (row.find('input[type="checkbox"]').is(':checked')) {
-	            console.log(row);
 	        }
 	    });
 		$.get("", {
 			type : "selectData",
-			input : $(string).val()
+			input : "blablabla"
 		}).done(function(data) {
 			//success or fail message
 		});
