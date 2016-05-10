@@ -258,7 +258,7 @@ public class AhmetServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String requestType = request.getParameter("type");
 		if (requestType == null) {
-			request.getRequestDispatcher("/WEB-INF/esrefHome.jsp").forward(request, response);;
+			request.getRequestDispatcher("/WEB-INF/Home.jsp").forward(request, response);;
 		} else if (requestType.equals("queryData")) {
 			response.getWriter().write(queryData(request));
 		} else if (requestType.equals("insertData")) {
