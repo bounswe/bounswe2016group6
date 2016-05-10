@@ -106,11 +106,13 @@ Inheritance diagram for ErhanServlet:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a0d93e918fe58934ac59c728e9c28a9fe"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classErhanServlet.html#a0d93e918fe58934ac59c728e9c28a9fe">ErhanServlet</a> ()</td></tr>
 <tr class="separator:a0d93e918fe58934ac59c728e9c28a9fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89277581ae7618e3c19840f97c602c81"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classErhanServlet.html#a89277581ae7618e3c19840f97c602c81">resultToArrayList</a> (org.apache.jena.query.ResultSet rs)</td></tr>
+<tr class="separator:a89277581ae7618e3c19840f97c602c81"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a729e29beec0ef0df035ce99e05600574"><td class="memItemLeft" align="right" valign="top">static String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classErhanServlet.html#a729e29beec0ef0df035ce99e05600574">jsonWrite</a> (ResultSet rs)  throws IOException </td></tr>
-<tr class="separator:a729e29beec0ef0df035ce99e05600574"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4c2fb92914653ddf29c0b205707c52d"><td class="memItemLeft" align="right" valign="top">static String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classErhanServlet.html#ae4c2fb92914653ddf29c0b205707c52d">arrayTojson</a> ()  throws IOException, ClassNotFoundException</td></tr>
+<tr class="separator:ae4c2fb92914653ddf29c0b205707c52d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
@@ -123,6 +125,8 @@ Protected Member Functions</h2></td></tr>
 Static Private Attributes</h2></td></tr>
 <tr class="memitem:ad7378c6848946cca89623452d8f94501"><td class="memItemLeft" align="right" valign="top">static final long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classErhanServlet.html#ad7378c6848946cca89623452d8f94501">serialVersionUID</a> = 1L</td></tr>
 <tr class="separator:ad7378c6848946cca89623452d8f94501"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae033a8907609862258e873c4773ebddf"><td class="memItemLeft" align="right" valign="top">static ArrayList&lt; <a class="el" href="classRiver.html">River</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classErhanServlet.html#ae033a8907609862258e873c4773ebddf">rivers</a></td></tr>
+<tr class="separator:ae033a8907609862258e873c4773ebddf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Servlet implementation class <a class="el" href="classErhanServlet.html">ErhanServlet</a> </p><dl class="section author"><dt>Author</dt><dd>Erhan Cagirici </dd></dl>
@@ -144,6 +148,30 @@ Static Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="ae4c2fb92914653ddf29c0b205707c52d"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static String ErhanServlet.arrayTojson </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> throws IOException, ClassNotFoundException</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Convert the rivers array into a json String. </p>
+
+</div>
+</div>
 <a class="anchor" id="a1b4febc21e1adcd299156ae5fef410e9"></a>
 <div class="memitem">
 <div class="memproto">
@@ -175,7 +203,7 @@ Static Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section see"><dt>See also</dt><dd>HttpServlet::doGet(HttpServletRequest request, HttpServletResponse response) </dd></dl>
+<dl class="section see"><dt>See also</dt><dd>HttpServlet::doGet(HttpServletRequest request, HttpServletResponse response) Provides the server-side operations for querying the Wikidata, parsing results, semantically ranking the results returning structured json saving results to database </dd></dl>
 
 </div>
 </div>
@@ -214,7 +242,30 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a729e29beec0ef0df035ce99e05600574"></a>
+<a class="anchor" id="a89277581ae7618e3c19840f97c602c81"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ErhanServlet.resultToArrayList </td>
+          <td>(</td>
+          <td class="paramtype">org.apache.jena.query.ResultSet&#160;</td>
+          <td class="paramname"><em>rs</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Convert resultset into standard Java ArrayList with <a class="el" href="classRiver.html">River</a> objects. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rs</td><td>The SPARQL result set </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="ae033a8907609862258e873c4773ebddf"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -222,23 +273,18 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static String ErhanServlet.jsonWrite </td>
-          <td>(</td>
-          <td class="paramtype">ResultSet&#160;</td>
-          <td class="paramname"><em>rs</em></td><td>)</td>
-          <td> throws IOException</td>
+          <td class="memname">ArrayList&lt;<a class="el" href="classRiver.html">River</a>&gt; ErhanServlet.rivers</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<h2 class="groupheader">Member Data Documentation</h2>
 <a class="anchor" id="ad7378c6848946cca89623452d8f94501"></a>
 <div class="memitem">
 <div class="memproto">

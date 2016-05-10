@@ -111,6 +111,8 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a0ce9c3c2047d4cd4796bb1c2b5746bbc"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEsrefServlet.html#a0ce9c3c2047d4cd4796bb1c2b5746bbc">distance</a> (double x1, double y1, double x2, double y2)</td></tr>
+<tr class="separator:a0ce9c3c2047d4cd4796bb1c2b5746bbc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae65c621e9741c7c65f3e51bc620afe76"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEsrefServlet.html#ae65c621e9741c7c65f3e51bc620afe76">EsrefServlet</a> ()</td></tr>
 <tr class="separator:ae65c621e9741c7c65f3e51bc620afe76"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -130,6 +132,8 @@ Protected Member Functions</h2></td></tr>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:abac23a5bc174677b692a776403fbfba7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEsrefServlet.html#abac23a5bc174677b692a776403fbfba7">parseData</a> (ResultSet results)</td></tr>
 <tr class="separator:abac23a5bc174677b692a776403fbfba7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81ecb6651522ea5c61bfb211fe866c35"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEsrefServlet.html#a81ecb6651522ea5c61bfb211fe866c35">sortByPark</a> (List&lt; <a class="el" href="classEsrefServlet_1_1NationalPark.html">NationalPark</a> &gt; list, <a class="el" href="classEsrefServlet_1_1NationalPark.html">NationalPark</a> np)</td></tr>
+<tr class="separator:a81ecb6651522ea5c61bfb211fe866c35"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8469d2338b7d2d7d867389c67ded4cef"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEsrefServlet.html#a8469d2338b7d2d7d867389c67ded4cef">semanticRanking</a> (String term)</td></tr>
 <tr class="separator:a8469d2338b7d2d7d867389c67ded4cef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2d8fb51d7d673d26010c8c9e6900e8a4"><td class="memItemLeft" align="right" valign="top">ArrayList&lt; <a class="el" href="classEsrefServlet_1_1NationalPark.html">NationalPark</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEsrefServlet.html#a2d8fb51d7d673d26010c8c9e6900e8a4">getSelectedParks</a> (String filter)</td></tr>
@@ -201,6 +205,55 @@ Static Private Attributes</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Resulting data as a String. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a0ce9c3c2047d4cd4796bb1c2b5746bbc"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double EsrefServlet.distance </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>x1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>y1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>x2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>y2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns the distance between two points.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x1</td><td>First x coordinate. </td></tr>
+    <tr><td class="paramname">y1</td><td>First y coordinate. </td></tr>
+    <tr><td class="paramname">x2</td><td>Second x coordinate. </td></tr>
+    <tr><td class="paramname">y2</td><td>Second y coordinate. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Distance between two points. </dd></dl>
 
 </div>
 </div>
@@ -382,7 +435,8 @@ Static Private Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Number of steps it will take to get to the second string from the first one. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Number of steps it will take to get to the second string from the first one.</dd></dl>
+<p>Source: <a href="https://en.wikipedia.org/wiki/Levenshtein_distance">https://en.wikipedia.org/wiki/Levenshtein_distance</a> </p>
 
 </div>
 </div>
@@ -507,6 +561,48 @@ Static Private Attributes</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">term</td><td>Name of a national park. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a81ecb6651522ea5c61bfb211fe866c35"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void EsrefServlet.sortByPark </td>
+          <td>(</td>
+          <td class="paramtype">List&lt; <a class="el" href="classEsrefServlet_1_1NationalPark.html">NationalPark</a> &gt;&#160;</td>
+          <td class="paramname"><em>list</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classEsrefServlet_1_1NationalPark.html">NationalPark</a>&#160;</td>
+          <td class="paramname"><em>np</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Sorts the given <a class="el" href="classEsrefServlet_1_1NationalPark.html">NationalPark</a> list with respect to the given <a class="el" href="classEsrefServlet_1_1NationalPark.html">NationalPark</a>. The list will be sorted according to the distance of each element to <a class="el" href="classEsrefServlet_1_1NationalPark.html">NationalPark</a> np.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">list</td><td>List of NationalParks to be sorted. </td></tr>
+    <tr><td class="paramname">np</td><td><a class="el" href="classEsrefServlet_1_1NationalPark.html">NationalPark</a> object according to which the list will be sorted. </td></tr>
   </table>
   </dd>
 </dl>

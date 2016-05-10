@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['utkuservlet_2ejava',['UtkuServlet.java',['../UtkuServlet_8java.html',1,'']]]
+  ['river_2ejava',['River.java',['../River_8java.html',1,'']]]
 ];

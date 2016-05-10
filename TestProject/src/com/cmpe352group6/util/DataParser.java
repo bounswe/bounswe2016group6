@@ -15,6 +15,7 @@ public class DataParser {
 	 * @param results Jena ResultSet object
 	 * @param headers Headers of the records in the given ResultSet object.
 	 * @return Data in the specified format above.
+	 * 
 	 */
 	public static String jenaToData(ResultSet results, ArrayList<String> headers) {
 		StringBuilder builder = new StringBuilder("");
