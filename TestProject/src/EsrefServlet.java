@@ -82,6 +82,8 @@ public class EsrefServlet extends HttpServlet {
 	 * @param lhs Starting string
 	 * @param rhs Target string
 	 * @return Number of steps it will take to get to the second string from the first one.
+	 * 
+	 * Source: https://en.wikipedia.org/wiki/Levenshtein_distance
 	 */
 	public static int levenshteinDistance(CharSequence lhs, CharSequence rhs) {      
 		int[][] distance = new int[lhs.length() + 1][rhs.length() + 1];        
@@ -127,7 +129,7 @@ public class EsrefServlet extends HttpServlet {
 			} else {
 				orderedParks.add(np);
 			}
-		} 
+		}
 		String countryName = inputPark.country;
 		parks = orderedParks;
 	}
@@ -170,7 +172,7 @@ public class EsrefServlet extends HttpServlet {
 				"	?object wdt:P31 wd:Q46169 . \n" + //object is a national park
 				"	?object wdt:P625 ?coord  .\n" + //get the coordinates
 				"	?object wdt:P17 ?country .\n" + //get the country
-				"	?country wdt:P31 wd:Q185441 .\n" + //county should be in european union
+				"	?country wdt:P31 wd:Q185441 .\n" + //country should be in european union
 				"	SERVICE wikibase:label {\n" +
 				"		bd:serviceParam wikibase:language \"en\" .\n" +
 				"	}\n" +
@@ -274,7 +276,6 @@ public class EsrefServlet extends HttpServlet {
 		}			
 		return "1";
 	}
-	
 	/** Gets all the records stored in MySQL server and returns them as a String.
 	 * 
 	 * @param request HTTPServletRequest object contaning the request parameters input and type.
@@ -282,7 +283,7 @@ public class EsrefServlet extends HttpServlet {
 	 */
 	private String listData(HttpServletRequest request) {
 		java.sql.Connection connection;
-		StringBuilder data = new StringBuilder("");
+		StringBuilder data = new StringBuilder("Name||Country||Longtitude||Latitude&&");
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			connection = DriverManager.getConnection (url,"root","pembePanter");
@@ -328,7 +329,7 @@ public class EsrefServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String requestType = request.getParameter("type");
 		if (requestType == null) {
-			request.getRequestDispatcher("/WEB-INF/esrefHome.jsp").forward(request, response);;
+			request.getRequestDispatcher("/WEB-INF/esrefHome.jsp").forward(request, response);
 		} else if (requestType.equals("queryData")) {
 			response.getWriter().write(queryData(request));
 		} else if (requestType.equals("insertData")) {

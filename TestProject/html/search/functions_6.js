@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['jsonwrite',['jsonWrite',['../classErhanServlet.html#a729e29beec0ef0df035ce99e05600574',1,'ErhanServlet']]]
+  ['levenshteindistance',['levenshteinDistance',['../classEsrefServlet.html#a77894b55393a8315bfce8e5823d1fc71',1,'EsrefServlet']]],
+  ['listdata',['listData',['../classEsrefServlet.html#a29400a9acb51d807fc9f8b285a96753f',1,'EsrefServlet']]]
 ];

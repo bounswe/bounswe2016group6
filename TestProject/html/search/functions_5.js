@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['insertdata',['insertData',['../classEsrefServlet.html#aad192c5bad13436bebd91856e7708eb8',1,'EsrefServlet']]]
+  ['jsonwrite',['jsonWrite',['../classErhanServlet.html#a729e29beec0ef0df035ce99e05600574',1,'ErhanServlet']]]
 ];

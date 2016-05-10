@@ -75,8 +75,8 @@
 			printTable(data);
 		});
 	}
-
-	function submitCheckbox(type) {
+	
+	function checkbox() {
 		var inputs = document.getElementsByName("id"); //or document.forms[0].elements;
 		var checked = []; //will contain all checked checkboxes
 		for (var i = 0; i < inputs.length; i++) {
@@ -88,31 +88,35 @@
 		for (var i = 1; i < checked.length; ++i) {
 			str = str + " " + checked[i];
 		}
-		if (type === "save") {
-			$.get("", {
-				type : "insertData",
-				input : str
-			}).done(function(data) {
-				if (data === "0") {
-					alert("Error: Selected rows couldn't be saved");
-				} else {
-					alert("Success: Selected rows are saved");
-					listData();
-				}
-			});
-		} else if (type === "delete") {
-			$.get("", {
-				type : "deleteData",
-				input : str
-			}).done(function(data) {
-				if (data === "0") {
-					alert("Error: Selected rows couldn't be deleted");
-				} else {
-					alert("Success: Selected rows are deleted");
-					listData();
-				}
-			});
-		}
+		return str;
+	}
+
+	function saveData() {
+		var str = checkbox();
+		$.get("", {
+			type : "insertData",
+			input : str
+		}).done(function(data) {
+			if (data === "0") {
+				alert("Error: Selected rows couldn't be saved");
+			} else {
+				alert("Success: Selected rows are saved");
+			}
+		});
+	}
+	
+	function deleteData() {
+		var str = checkbox();
+		$.get("", {
+			type : "deleteData",
+			input : str
+		}).done(function(data) {
+			if (data === "0") {
+				alert("Error: Selected rows couldn't be deleted");
+			} else {
+				alert("Success: Selected rows are deleted");
+			}
+		});
 	}
 	  
 	function listData() {
@@ -149,10 +153,10 @@
             <form action="">
 			<table id="excelDataTable" border="1"> </table>
 			</form>
-			<button onclick="submitCheckbox('save')" >
+			<button onclick="saveData()" >
 				Save
 			</button>
-			<button onclick="submitCheckbox('delete')" >
+			<button onclick="deleteData()" >
 				Delete
 			</button>
 			<button onclick="listData()" >
