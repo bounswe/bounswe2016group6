@@ -34,21 +34,21 @@ public class EsrefServlet extends HttpServlet {
 	public class NationalPark {
 		public String name;
 		public String country;
-		public double x;
-		public double y;
+		public double longtitude;
+		public double latitude;
 
 		NationalPark() {
 			this.name = "EMPTY";
 			this.country = "EMPTY";
-			this.x = 0;
-			this.y = 0;
+			this.longtitude = 0;
+			this.latitude = 0;
 		}
 		
-		NationalPark(String name, String country, double x, double y) {
+		NationalPark(String name, String country, double longtitude, double latitude) {
 			this.name = name;
 			this.country = country;
-			this.x = x;
-			this.y = y;		
+			this.longtitude = longtitude;
+			this.latitude = latitude;		
 		}
 	}
 
@@ -76,9 +76,9 @@ public class EsrefServlet extends HttpServlet {
 			String point = next.get("?coord").toString();
 			name = name.substring(0, name.indexOf('@'));
 			country = country.substring(0, country.indexOf('@'));
-			double x = Double.parseDouble(point.substring(point.indexOf('(')+1, point.indexOf(' ')));
-			double y = Double.parseDouble(point.substring(point.indexOf(' ')+1, point.indexOf(')')));
-			parks.add(new NationalPark(name, country, x, y));
+			double longtitude = Double.parseDouble(point.substring(point.indexOf('(')+1, point.indexOf(' ')));
+			double latitude = Double.parseDouble(point.substring(point.indexOf(' ')+1, point.indexOf(')')));
+			parks.add(new NationalPark(name, country, longtitude, latitude));
 		}
 	}
 	
@@ -103,9 +103,26 @@ public class EsrefServlet extends HttpServlet {
 	 */
 	private void semanticRanking(String term) {
 		ArrayList<NationalPark> rankedList = new ArrayList<NationalPark>();
-		NationalPark inputNP = this.find(term);
-		this.parks = rankedList;
-		//TODO: implement semantic ranking algorithm
+		NationalPark inputPark = this.find(term);
+		if (inputPark != null) {
+			//TODO: implement semantic ranking algorithm
+			this.parks = rankedList;
+		} //if inputPark == null, then no such park exists. Do nothing.
+	}
+	
+	/** Returns the selected NationalPark objects in an ArrayList; which objects are selected is
+	 * specified in input filter string.
+	 * 
+	 * @param filter Filter string specifying which parks to return. Has a format of "1 3 12 25"
+	 * @return ArrayList of selected NationalPark objects.
+	 */
+	private ArrayList<NationalPark> getSelectedParks(String filter) {
+		String[] idStrings = filter.split(" ");
+		ArrayList<NationalPark> result = new ArrayList<NationalPark>();
+		for (String idStr : idStrings) {
+			result.add(parks.get(Integer.parseInt(idStr)));
+		}
+		return result;
 	}
 	
 	/** Queries data from wikidata and returns the resulting data as a String in an internal data format.
@@ -141,28 +158,27 @@ public class EsrefServlet extends HttpServlet {
 		ResultSet results = qExe.execSelect();
 		this.parseData(results);
 		//this.semanticRanking(request.getParameter("input"));
-		StringBuilder data = new StringBuilder("Name||Country||CoordX||Coordy&&");
+		StringBuilder data = new StringBuilder("Name||Country||Longtitude||Latitude&&");
 		for(NationalPark np : parks) {
-			data.append(np.name + "||" + np.country + "||" + np.x + "||" + np.y + "&&");
+			data.append(np.name + "||" + np.country + "||" + np.longtitude + "||" + np.latitude + "&&");
 		}
 		return data.toString();
 	}
 	
 	/** Inserts the records in the specified indices to MySQL server.
-	 * Which records are going to be inserted are specified in "input" parameter of GET call.
+	 * Which records are going to be inserted is specified in "input" parameter of GET call.
 	 * "input" parameter is a space separated string with each entry specifying the index of
-//	 * the record to be inserted.
+	 * the record to be inserted.
 	 * 
 	 * @param request HTTPServletRequest object containing the request parameters input and type.
 	 * @return Resulting data as a String.
 	 */
 	private String insertData(HttpServletRequest request) {
-		String input = request.getParameter("input");
-		String[] idStrings = input.split(" ");
-		ArrayList<NationalPark> checkedNPs = new ArrayList<NationalPark>();
-		for (String idStr : idStrings) {
-			checkedNPs.add(parks.get(Integer.parseInt(idStr)));
+		String filter = request.getParameter("input");
+		if (filter.equals("undefined")) {
+			return "0";
 		}
+		ArrayList<NationalPark> checkedNPs = getSelectedParks(filter);
 		java.sql.Connection connection;
 		String url = "jdbc:mysql://ec2-54-186-213-92.us-west-2.compute.amazonaws.com:3306/db";
 		try {
@@ -170,27 +186,27 @@ public class EsrefServlet extends HttpServlet {
 			connection = DriverManager.getConnection (url,"root","pembePanter");
 			java.sql.Statement stmt = connection.createStatement();
 			StringBuilder sqlStmt = new StringBuilder("INSERT INTO db.NationalPark VALUES");
-			for (int i = 0; i < parks.size() - 1; ++i) {
-				NationalPark np = parks.get(i);
+			for (int i = 0; i < checkedNPs.size() - 1; ++i) {
+				NationalPark np = checkedNPs.get(i);
 				sqlStmt.append("(\""); 
 				sqlStmt.append(np.name); 
 				sqlStmt.append("\", \""); 
 				sqlStmt.append(np.country); 
 				sqlStmt.append("\", "); 
-				sqlStmt.append(np.x); 
+				sqlStmt.append(np.longtitude); 
 				sqlStmt.append(", "); 
-				sqlStmt.append(np.y); 
+				sqlStmt.append(np.latitude); 
 				sqlStmt.append("), ");
 			}
-			NationalPark last = parks.get(parks.size() - 1);
+			NationalPark last = checkedNPs.get(checkedNPs.size() - 1);
 			sqlStmt.append("(\""); 
 			sqlStmt.append(last.name); 
 			sqlStmt.append("\", \""); 
 			sqlStmt.append(last.country); 
 			sqlStmt.append("\", "); 
-			sqlStmt.append(last.x); 
+			sqlStmt.append(last.longtitude); 
 			sqlStmt.append(", "); 
-			sqlStmt.append(last.y); 
+			sqlStmt.append(last.latitude); 
 			sqlStmt.append(");");
 			stmt.executeUpdate(sqlStmt.toString());
 			connection.close();
@@ -201,6 +217,41 @@ public class EsrefServlet extends HttpServlet {
 			e.printStackTrace();
 			return "0";
 		}
+		return "1";
+	}
+	
+	/** Deletes the records in the specified indices from MySQL server.
+	 * Which records are going to be deleted is specified in "input" parameter of GET call.
+	 * "input" parameter is a space separated string with each entry specifying the index of
+	 * the record to be inserted.
+	 * 
+	 * @param request HTTPServletRequest object containing the request parameters input and type.
+	 * @return Resulting data as a String.
+	 */
+	private String deleteData(HttpServletRequest request) {
+		String filter = request.getParameter("input");
+		if (filter.equals("undefined")) {
+			return "0";
+		}
+		ArrayList<NationalPark> checkedNPs = getSelectedParks(filter);
+		java.sql.Connection connection;
+		String url = "jdbc:mysql://ec2-54-186-213-92.us-west-2.compute.amazonaws.com:3306/db";
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			connection = DriverManager.getConnection (url,"root","pembePanter");
+			java.sql.Statement stmt = connection.createStatement();
+			for (NationalPark np : checkedNPs) {
+				String sqlStmt = "DELETE FROM db.NationalPark WHERE Name = \"" + np.name + "\";";
+				stmt.executeUpdate(sqlStmt);
+			}
+			connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return "0";
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			return "0";
+		}			
 		return "1";
 	}
 	
@@ -254,6 +305,8 @@ public class EsrefServlet extends HttpServlet {
 			response.getWriter().write(queryData(request));
 		} else if (requestType.equals("insertData")) {
 			response.getWriter().write(insertData(request));
+		} else if (requestType.equals("deleteData")) {
+			response.getWriter().write(deleteData(request));
 		} else if (requestType.equals("listData")) {
 			response.getWriter().write(listData(request));
 		} else {

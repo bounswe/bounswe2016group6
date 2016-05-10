@@ -128,10 +128,14 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a70fc0e92ce32f935017a8b8e48dd1943"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8469d2338b7d2d7d867389c67ded4cef"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEsrefServlet.html#a8469d2338b7d2d7d867389c67ded4cef">semanticRanking</a> (String term)</td></tr>
 <tr class="separator:a8469d2338b7d2d7d867389c67ded4cef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d8fb51d7d673d26010c8c9e6900e8a4"><td class="memItemLeft" align="right" valign="top">ArrayList&lt; <a class="el" href="classEsrefServlet_1_1NationalPark.html">NationalPark</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEsrefServlet.html#a2d8fb51d7d673d26010c8c9e6900e8a4">getSelectedParks</a> (String filter)</td></tr>
+<tr class="separator:a2d8fb51d7d673d26010c8c9e6900e8a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a053f7f1b0562d2162fdc98b6302e5f11"><td class="memItemLeft" align="right" valign="top">String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEsrefServlet.html#a053f7f1b0562d2162fdc98b6302e5f11">queryData</a> (HttpServletRequest request)</td></tr>
 <tr class="separator:a053f7f1b0562d2162fdc98b6302e5f11"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aad192c5bad13436bebd91856e7708eb8"><td class="memItemLeft" align="right" valign="top">String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEsrefServlet.html#aad192c5bad13436bebd91856e7708eb8">insertData</a> (HttpServletRequest request)</td></tr>
 <tr class="separator:aad192c5bad13436bebd91856e7708eb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a98435c6cf1742699a4427207a7541a89"><td class="memItemLeft" align="right" valign="top">String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEsrefServlet.html#a98435c6cf1742699a4427207a7541a89">deleteData</a> (HttpServletRequest request)</td></tr>
+<tr class="separator:a98435c6cf1742699a4427207a7541a89"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a29400a9acb51d807fc9f8b285a96753f"><td class="memItemLeft" align="right" valign="top">String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEsrefServlet.html#a29400a9acb51d807fc9f8b285a96753f">listData</a> (HttpServletRequest request)</td></tr>
 <tr class="separator:a29400a9acb51d807fc9f8b285a96753f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -162,6 +166,38 @@ Static Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a98435c6cf1742699a4427207a7541a89"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">String EsrefServlet.deleteData </td>
+          <td>(</td>
+          <td class="paramtype">HttpServletRequest&#160;</td>
+          <td class="paramname"><em>request</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Deletes the records in the specified indices from MySQL server. Which records are going to be deleted is specified in "input" parameter of GET call. "input" parameter is a space separated string with each entry specifying the index of the record to be inserted.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">request</td><td>HTTPServletRequest object containing the request parameters input and type. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Resulting data as a String. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a44d2e140d6dfc8122a531e3bb7c1ef55"></a>
 <div class="memitem">
 <div class="memproto">
@@ -269,6 +305,38 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a2d8fb51d7d673d26010c8c9e6900e8a4"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">ArrayList&lt;<a class="el" href="classEsrefServlet_1_1NationalPark.html">NationalPark</a>&gt; EsrefServlet.getSelectedParks </td>
+          <td>(</td>
+          <td class="paramtype">String&#160;</td>
+          <td class="paramname"><em>filter</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the selected <a class="el" href="classEsrefServlet_1_1NationalPark.html">NationalPark</a> objects in an ArrayList; which objects are selected is specified in input filter string.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filter</td><td>Filter string specifying which parks to return. Has a format of "1 3 12 25" </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>ArrayList of selected <a class="el" href="classEsrefServlet_1_1NationalPark.html">NationalPark</a> objects. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="aad192c5bad13436bebd91856e7708eb8"></a>
 <div class="memitem">
 <div class="memproto">
@@ -290,7 +358,7 @@ Static Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Inserts the records in the specified indices to MySQL server. Which records are going to be inserted are specified in "input" parameter of GET call. "input" parameter is a space separated string with each entry specifying the index of the record to be inserted.</p>
+<p>Inserts the records in the specified indices to MySQL server. Which records are going to be inserted is specified in "input" parameter of GET call. "input" parameter is a space separated string with each entry specifying the index of the record to be inserted.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">request</td><td>HTTPServletRequest object containing the request parameters input and type. </td></tr>

@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['listdata',['listData',['../classEsrefServlet.html#a29400a9acb51d807fc9f8b285a96753f',1,'EsrefServlet']]]
+  ['jsondata',['jsonData',['../classAhmetServlet.html#a757d2c721d425aa4dc5f25fcf19f4cda',1,'AhmetServlet.jsonData()'],['../classAzmiServlet.html#a1f81ed2fe39ab40e569d00e673975a50',1,'AzmiServlet.jsonData()']]],
+  ['jsonwrite',['jsonWrite',['../classErhanServlet.html#a729e29beec0ef0df035ce99e05600574',1,'ErhanServlet']]]
 ];

@@ -71,28 +71,41 @@
 		});
 	}
 
-	function submitCheckbox() {
-			var inputs = document.getElementsByName("id"); //or document.forms[0].elements;
-			var checked = []; //will contain all checked checkboxes
-			for (var i = 0; i < inputs.length; i++) {
-			    if (inputs[i].checked) {
-			      checked.push(i);
-			    }
+	function submitCheckbox(type) {
+		var inputs = document.getElementsByName("id"); //or document.forms[0].elements;
+		var checked = []; //will contain all checked checkboxes
+		for (var i = 0; i < inputs.length; i++) {
+			if (inputs[i].checked) {
+			  checked.push(i);
 			}
-			var str = "" + checked[0];
-			for (var i = 1; i < checked.length; ++i) {
-				str = str + " " + checked[i];
-			}
-		$.get("", {
-			type : "selectData",
-			input : str
-		}).done(function(data) {
-			if (data === "0") {
-				alert("Error: Selected rows couldn't be saved");
-			} else {
-				alert("Success: Selected rows are saved");
-			}
-		});
+		}
+		var str = "" + checked[0];
+		for (var i = 1; i < checked.length; ++i) {
+			str = str + " " + checked[i];
+		}
+		if (type === "save") {
+			$.get("", {
+				type : "insertData",
+				input : str
+			}).done(function(data) {
+				if (data === "0") {
+					alert("Error: Selected rows couldn't be saved");
+				} else {
+					alert("Success: Selected rows are saved");
+				}
+			});
+		} else if (type === "delete") {
+			$.get("", {
+				type : "deleteData",
+				input : str
+			}).done(function(data) {
+				if (data === "0") {
+					alert("Error: Selected rows couldn't be deleted");
+				} else {
+					alert("Success: Selected rows are deleted");
+				}
+			});
+		}
 	}
 	  
 	function listData() {
@@ -117,7 +130,7 @@
             <div id="custom-search-input">
             	<form onsubmit="submitSearch();return false" id="searchForm" role="form">
                 <div class="input-group col-md-12">
-                    <input id="queryInput"type="text" class="form-control input-lg" name="queryInput" placeholder="Enter Query Term..." />
+                    <input id="queryInput"type="text" class="form-control input-lg" name="queryInput" placeholder="Query term" />
                     <span class="input-group-btn">
                         <button class="btn btn-info btn-lg" type="submit">
                             <i class="glyphicon glyphicon-search"></i>
@@ -129,8 +142,14 @@
             <form action="">
 			<table id="excelDataTable" border="1"> </table>
 			</form>
-			<button onclick="submitCheckbox()" >
-				<i class="glyphican glyphicon-save"></i>
+			<button onclick="submitCheckbox('save')" >
+				Save
+			</button>
+			<button onclick="submitCheckbox('delete')" >
+				Delete
+			</button>
+			<button onclick="listData()" >
+				List Database
 			</button>
         </div>
 	</div>

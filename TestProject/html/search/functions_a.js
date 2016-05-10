@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['semanticranking',['semanticRanking',['../classEsrefServlet.html#a8469d2338b7d2d7d867389c67ded4cef',1,'EsrefServlet']]]
+  ['querydata',['queryData',['../classEsrefServlet.html#a053f7f1b0562d2162fdc98b6302e5f11',1,'EsrefServlet']]]
 ];
