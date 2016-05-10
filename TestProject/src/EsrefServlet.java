@@ -43,7 +43,7 @@ public class EsrefServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	private static ArrayList<NationalPark> parks = null;
-	private static String url = "jdbc:mysql:localhost:3306/db";
+	private static String url = "jdbc:mysql://ec2-54-186-213-92.us-west-2.compute.amazonaws.com:3306/db";
 
 	/**
 	 * @see HttpServlet#HttpServlet()
