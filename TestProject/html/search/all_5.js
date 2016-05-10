@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['insertdata',['insertData',['../classEsrefServlet.html#aad192c5bad13436bebd91856e7708eb8',1,'EsrefServlet']]]
+  ['haversinedistance',['haversineDistance',['../classRiver.html#a689f41042703cb3b1be0136a184cc8c4',1,'River']]]
 ];

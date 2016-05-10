@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['parks',['parks',['../classEsrefServlet.html#afd1aca5730bcbab3c7dee17952e7bacc',1,'EsrefServlet']]],
-  ['parsedata',['parseData',['../classEsrefServlet.html#abac23a5bc174677b692a776403fbfba7',1,'EsrefServlet']]]
+  ['name',['name',['../classEsrefServlet_1_1NationalPark.html#af1bc467b3114e9b4858246eb06843b01',1,'EsrefServlet.NationalPark.name()'],['../classRiver.html#af4f92453eda7bc26f8f1b02b0083139d',1,'River.name()']]],
+  ['nationalpark',['NationalPark',['../classEsrefServlet_1_1NationalPark.html',1,'EsrefServlet']]]
 ];
