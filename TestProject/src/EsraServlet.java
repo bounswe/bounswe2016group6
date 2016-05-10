@@ -23,13 +23,13 @@ import com.cmpe352group6.util.DataParser;
 /**Servlet implementation class EsraServlet*/
 @WebServlet("/esra_alinca")
 public class EsraServlet extends HttpServlet {
-	public class City {
+	public class CITY {
 		String name;
 		double longtitude;
 		double latitude;
 		double pop;
 		
-		City(String name, double longtitude, double latitude, double pop) {
+		CITY(String name, double longtitude, double latitude, double pop) {
 			this.name = name;
 			this.longtitude = longtitude;
 			this.latitude = latitude;	
@@ -38,7 +38,7 @@ public class EsraServlet extends HttpServlet {
 	}
 
 	private static final long serialVersionUID = 1L;
-	private static ArrayList<City> parks = null;
+	private static ArrayList<CITY> parks = null;
 	private static String url = "jdbc:mysql://ec2-54-186-213-92.us-west-2.compute.amazonaws.com:3306/db";
 
 	/**
@@ -48,7 +48,7 @@ public class EsraServlet extends HttpServlet {
 		super();
 	}
 	
-	/** Constructs a City object from each result in the ResultSet and adds them to parks ArrayList.
+	/** Constructs a CITY object from each result in the ResultSet and adds them to parks ArrayList.
 	 *  After the execution of this method, all the data obtained from the SPARQL query is stored
 	 *  in the parks ArrayList.
 	 * @param results Jena ResultSet object, containing the result of SPARQL query.
@@ -62,35 +62,30 @@ public class EsraServlet extends HttpServlet {
 		while ((index = data.indexOf("&&", index+2)) != -1) {
 			String row = data.substring(prev_index, index);
 			String[] column = row.split("\\|\\|");
-			parks.add(new City(column[0],Double.parseDouble(column[1]),Double.parseDouble(column[2]),Double.parseDouble(column[3])));
+			parks.add(new CITY(column[0],Double.parseDouble(column[1]),Double.parseDouble(column[2]),Double.parseDouble(column[3])));
 			prev_index = index+2;
 		}
-		return data;
+		return ("Name||Longtitude||Latitude||Population&&"+data);
 	}
 	
-	
-	private ArrayList<City> getSelectedParks(String filter) {
+	private ArrayList<CITY> getSelectedParks(String filter) {
 		String[] idStrings = filter.split(" ");
-		ArrayList<City> result = new ArrayList<City>();
+		ArrayList<CITY> result = new ArrayList<CITY>();
 		for (String idStr : idStrings) {
 			result.add(parks.get(Integer.parseInt(idStr)));
 		}
 		return result;
 	}
 	
-	/** Queries data from wikidata and returns the resulting data as a String in an internal data format.
-	 * 
-	 * Internal data format is as follows:
-	 * ROW&&ROW&&ROW&&...&&ROW
-	 * 
-	 * Each ROW is formatted as follows:
-	 * COLUMN||COLUMN||...||COLUMN
-	 * 
-	 * @param request HTTPServletRequest object containing the request parameters input and type.
-	 * @return Resulting data in an internal data format.
-	 */
 	private String queryData(HttpServletRequest request) {
-		parks = new ArrayList<City>();
+		StringBuilder data = new StringBuilder("Name||Longtitude||Latitude||Population&&");
+		if (parks != null) {
+			for(CITY np : parks) {
+				data.append(np.name + "||" + np.longtitude + "||" + np.latitude + "||" + np.pop + "&&");
+			}
+			return data.toString();
+		}
+		parks = new ArrayList<CITY>();
 		String s1 =
 				"PREFIX bd: <http://www.bigdata.com/rdf#>"
 						+ "PREFIX wikibase: <http://wikiba.se/ontology#>"
@@ -113,56 +108,39 @@ public class EsraServlet extends HttpServlet {
 		return parseData(results);
 	}
 		
-		/*this.parseData(results);
-		this.semanticRanking(request.getParameter("input"));
-		StringBuilder data = new StringBuilder("Name||Country||Longtitude||Latitude&&");
-		for(NationalPark np : parks) {
-			data.append(np.name + "||" + np.country + "||" + np.longtitude + "||" + np.latitude + "&&");
-		}
-		return data.toString();*/
-	
-	
-	/** Inserts the records in the specified indices to MySQL server.
-	 * Which records are going to be inserted is specified in "input" parameter of GET call.
-	 * "input" parameter is a space separated string with each entry specifying the index of
-	 * the record to be inserted.
-	 * 
-	 * @param request HTTPServletRequest object containing the request parameters input and type.
-	 * @return Resulting data as a String.
-	 */
 	private String insertData(HttpServletRequest request) {
 		String filter = request.getParameter("input");
 		if (filter.equals("undefined")) {
 			return "0";
 		}
-		ArrayList<City> checkedNPs = getSelectedParks(filter);
+		ArrayList<CITY> checkedNPs = getSelectedParks(filter);
 		java.sql.Connection connection;
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			connection = DriverManager.getConnection (url,"root","pembePanter");
 			java.sql.Statement stmt = connection.createStatement();
-			StringBuilder sqlStmt = new StringBuilder("INSERT INTO db.NationalPark VALUES");
+			StringBuilder sqlStmt = new StringBuilder("INSERT INTO db.CITY VALUES");
 			for (int i = 0; i < checkedNPs.size() - 1; ++i) {
-				City np = checkedNPs.get(i);
+				CITY np = checkedNPs.get(i);
 				sqlStmt.append("(\""); 
 				sqlStmt.append(np.name); 
 				sqlStmt.append("\", \""); 
-				//sqlStmt.append(np.country); 
-				sqlStmt.append("\", "); 
 				sqlStmt.append(np.longtitude); 
-				sqlStmt.append(", "); 
+				sqlStmt.append("\", "); 
 				sqlStmt.append(np.latitude); 
+				sqlStmt.append(", "); 
+				sqlStmt.append(np.pop); 
 				sqlStmt.append("), ");
 			}
-			City last = checkedNPs.get(checkedNPs.size() - 1);
+			CITY last = checkedNPs.get(checkedNPs.size() - 1);
 			sqlStmt.append("(\""); 
 			sqlStmt.append(last.name); 
 			sqlStmt.append("\", \""); 
-			//sqlStmt.append(last.country); 
-			sqlStmt.append("\", "); 
 			sqlStmt.append(last.longtitude); 
-			sqlStmt.append(", "); 
+			sqlStmt.append("\", "); 
 			sqlStmt.append(last.latitude); 
+			sqlStmt.append(", "); 
+			sqlStmt.append(last.pop); 
 			sqlStmt.append(");");
 			stmt.executeUpdate(sqlStmt.toString());
 			connection.close();
@@ -176,102 +154,14 @@ public class EsraServlet extends HttpServlet {
 		return "1";
 	}
 	
-	/** Deletes the records in the specified indices from MySQL server.
-	 * Which records are going to be deleted is specified in "input" parameter of GET call.
-	 * "input" parameter is a space separated string with each entry specifying the index of
-	 * the record to be inserted.
-	 * 
-	 * @param request HTTPServletRequest object containing the request parameters input and type.
-	 * @return Resulting data as a String.
-	 */
-	private String deleteData(HttpServletRequest request) {
-		String filter = request.getParameter("input");
-		if (filter.equals("undefined")) {
-			return "0";
-		}
-		ArrayList<City> checkedNPs = getSelectedParks(filter);
-		java.sql.Connection connection;
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			connection = DriverManager.getConnection (url,"root","pembePanter");
-			java.sql.Statement stmt = connection.createStatement();
-			for (City np : checkedNPs) {
-				String sqlStmt = "DELETE FROM db.NationalPark WHERE Name = \"" + np.name + "\";";
-				stmt.executeUpdate(sqlStmt);
-			}
-			connection.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return "0";
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-			return "0";
-		}			
-		return "1";
-	}
-	
-	/** Gets all the records stored in MySQL server and returns them as a String.
-	 * 
-	 * @param request HTTPServletRequest object contaning the request parameters input and type.
-	 * @return Resulting data as a String.
-	 */
-	private String listData(HttpServletRequest request) {
-		java.sql.Connection connection;
-		StringBuilder data = new StringBuilder("");
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			connection = DriverManager.getConnection (url,"root","pembePanter");
-			java.sql.Statement stmt = connection.createStatement();
-			String sqlStmt = "SELECT * FROM db.NationalPark;";
-			java.sql.ResultSet res = stmt.executeQuery(sqlStmt);
-			while (res.next()) {
-				data.append(res.getString("Name"));
-				data.append("||");
-				data.append(res.getString("Country"));
-				data.append("||");
-				data.append(res.getDouble("Longtitude"));
-				data.append("||");
-				data.append(res.getDouble("Latitude"));
-				data.append("&&");
-			}
-			connection.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return "0";
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-			return "0";
-		}			
-		return data.toString();
-	}
-
-	/** doGet method responding to GET calls.
-	 * According to different request types, executes corresponding processes and returns the resulting data.
-	 * 
-	 * Accepts two parameters from the GET method:
-	 * 1. type : Request type. May be
-	 * 	i.   queryData
-	 *  ii.  insertData
-	 *  iii. listData
-	 * 2. input : Input data of a request. Each request type requires different input:
-	 * queryData  : A search term such as name of a national park.
-	 * insertData : List of checkbox id's as a string.
-	 * listData   : No input
-	 * 
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String requestType = request.getParameter("type");
 		if (requestType == null) {
-			request.getRequestDispatcher("/WEB-INF/esra.jsp").forward(request, response);;
+			request.getRequestDispatcher("/WEB-INF/Home.jsp").forward(request, response);;
 		} else if (requestType.equals("queryData")) {
 			response.getWriter().write(queryData(request));
 		} else if (requestType.equals("insertData")) {
 			response.getWriter().write(insertData(request));
-		} else if (requestType.equals("deleteData")) {
-			response.getWriter().write(deleteData(request));
-		} else if (requestType.equals("listData")) {
-			response.getWriter().write(listData(request));
 		} else {
 			System.out.println("Unexpected request type: " + requestType);
 		}
