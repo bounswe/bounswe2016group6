@@ -25,6 +25,9 @@ public class DataParser {
 			if (x.contains("@")) {
 				x = x.substring(0, x.indexOf('@'));
 			}
+			if (x.contains("^")) {
+				x = x.substring(0, x.indexOf('^'));
+			}
 			if (x.contains("Point(")) {
 				x = x.substring(x.indexOf('(') + 1, x.indexOf(')'));
 				x = x.replace(" ", "||");
@@ -35,6 +38,9 @@ public class DataParser {
 				x = next.get(s).toString();
 				if (x.contains("@")) {
 					x = x.substring(0, x.indexOf('@'));
+				}
+				if (x.contains("^")) {
+					x = x.substring(0, x.indexOf('^'));
 				}
 				if (x.contains("Point(")) {
 					x = x.substring(x.indexOf('(') + 1, x.indexOf(')'));
