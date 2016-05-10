@@ -143,17 +143,17 @@ public class AhmetServlet extends HttpServlet {
 			Class.forName("com.mysql.jdbc.Driver");
 			connection = DriverManager.getConnection (url,"root","pembePanter");
 			java.sql.Statement stmt = connection.createStatement();
-			StringBuilder sqlStmt = new StringBuilder("INSERT INTO db.University VALUES");
+			StringBuilder sqlStmt = new StringBuilder("INSERT INTO db.univ VALUES");
 			for (int i = 0; i < universityList.size() - 1; ++i) {
-				University np = universityList.get(i);
+				University uni = universityList.get(i);
 				sqlStmt.append("(\""); 
-				sqlStmt.append(np.name); 
+				sqlStmt.append(uni.name); 
 				sqlStmt.append("\", \""); 
-				sqlStmt.append(np.date); 
+				sqlStmt.append(uni.date); 
 				sqlStmt.append("\", "); 
-				sqlStmt.append(np.longtitude); 
+				sqlStmt.append(uni.longtitude); 
 				sqlStmt.append(", "); 
-				sqlStmt.append(np.latitude); 
+				sqlStmt.append(uni.latitude); 
 				sqlStmt.append("), ");
 			}
 			University last = universityList.get(universityList.size() - 1);
@@ -191,8 +191,8 @@ public class AhmetServlet extends HttpServlet {
 			Class.forName("com.mysql.jdbc.Driver");
 			connection = DriverManager.getConnection (url,"root","pembePanter");
 			java.sql.Statement stmt = connection.createStatement();
-			for (University np : checkedNPs) {
-				String sqlStmt = "DELETE FROM db.NationalPark WHERE Name = \"" + np.name + "\";";
+			for (University uni : checkedNPs) {
+				String sqlStmt = "DELETE FROM db.univ WHERE Name = \"" + uni.name + "\";";
 				stmt.executeUpdate(sqlStmt);
 			}
 			connection.close();
@@ -226,16 +226,16 @@ public class AhmetServlet extends HttpServlet {
 			Class.forName("com.mysql.jdbc.Driver");
 			connection = DriverManager.getConnection (url,"root","pembePanter");
 			java.sql.Statement stmt = connection.createStatement();
-			String sqlStmt = "SELECT * FROM db.NationalPark;";
+			String sqlStmt = "SELECT * FROM db.univ;";
 			java.sql.ResultSet res = stmt.executeQuery(sqlStmt);
 			while (res.next()) {
-				data.append(res.getString("Name"));
+				data.append(res.getString("NAME"));
 				data.append("||");
-				data.append(res.getString("Country"));
+				data.append(res.getString("DATE"));
 				data.append("||");
-				data.append(res.getDouble("Longtitude"));
+				data.append(res.getDouble("LON"));
 				data.append("||");
-				data.append(res.getDouble("Latitude"));
+				data.append(res.getDouble("LAT"));
 				data.append("&&");
 			}
 			connection.close();
@@ -250,24 +250,14 @@ public class AhmetServlet extends HttpServlet {
 	}
 
 	/** doGet method responding to GET calls.
-	 * According to different request types, executes corresponding processes and returns the resulting data.
-	 * 
-	 * Accepts two parameters from the GET method:
-	 * 1. type : Request type. May be
-	 * 	i.   queryData
-	 *  ii.  insertData
-	 *  iii. listData
-	 * 2. input : Input data of a request. Each request type requires different input:
-	 * queryData  : A search term such as name of a national park.
-	 * insertData : List of checkbox id's as a string.
-	 * listData   : No input
+	 * executes corresponding processes and returns the resulting data.
 	 * 
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String requestType = request.getParameter("type");
 		if (requestType == null) {
-			request.getRequestDispatcher("/WEB-INF/ahmetMain.jsp").forward(request, response);;
+			request.getRequestDispatcher("/WEB-INF/esrefHome.jsp").forward(request, response);;
 		} else if (requestType.equals("queryData")) {
 			response.getWriter().write(queryData(request));
 		} else if (requestType.equals("insertData")) {
