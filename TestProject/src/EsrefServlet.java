@@ -38,13 +38,17 @@ public class EsrefServlet extends HttpServlet {
 		return (y2 - y1)*(y2 - y1) + (x2 - x1)*(x2 - x1);
 	}
 	
+	/** NationalPark class representing a national park with name, country, and corodinates.
+	 */
 	public class NationalPark {
 		public String name;
 		public String country;
 		public double longtitude;
 		public double latitude;
-		
 
+		/** Default NationalPark constructor.
+		 * 
+		 */
 		NationalPark() {
 			this.name = "EMPTY";
 			this.country = "EMPTY";
@@ -52,6 +56,13 @@ public class EsrefServlet extends HttpServlet {
 			this.latitude = 0;
 		}
 		
+		/** 4 parameter NationalPark constructor.
+		 * 
+		 * @param name Name of the national park.
+		 * @param country Country of the national park.
+		 * @param longtitude Longtitude of the national park.
+		 * @param latitude Latitude of the national park.
+		 */
 		NationalPark(String name, String country, double longtitude, double latitude) {
 			this.name = name;
 			this.country = country;
@@ -59,6 +70,12 @@ public class EsrefServlet extends HttpServlet {
 			this.latitude = latitude;		
 		}
 		
+		/** Constructs a national park from a given data format row. Row is expected to be of the
+		 * following format.
+		 * 
+		 * 
+		 * @param row Of the following format Name||Country||Longtitude||Latitude
+		 */
 		NationalPark(String row) {
 			String[] cols = row.split("\\|\\|");
 			this.name = cols[0];
@@ -68,9 +85,9 @@ public class EsrefServlet extends HttpServlet {
 		}
 	}
 
-	private static final long serialVersionUID = 1L;
-	private static ArrayList<NationalPark> parks = null;
-	private static String url = "jdbc:mysql://ec2-54-186-213-92.us-west-2.compute.amazonaws.com:3306/db";
+	public static final long serialVersionUID = 1L;
+	public static ArrayList<NationalPark> parks = null;
+	public static String url = "jdbc:mysql://ec2-54-186-213-92.us-west-2.compute.amazonaws.com:3306/db";
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -84,7 +101,7 @@ public class EsrefServlet extends HttpServlet {
 	 *  in the parks ArrayList.
 	 * @param results Jena ResultSet object, containing the result of SPARQL query.
 	 */
-	private void parseData(ResultSet results) {
+	public void parseData(ResultSet results) {
 		String[] headers = {"?objectLabel", "?countryLabel", "?coord"};
 		String data = DataParser.jenaToData(results, new ArrayList<String>(Arrays.asList(headers)));
 		int index = 0;
@@ -129,7 +146,7 @@ public class EsrefServlet extends HttpServlet {
 	 * @param list List of NationalParks to be sorted.
 	 * @param np NationalPark object according to which the list will be sorted.
 	 */
-	private void sortByPark(List<NationalPark> list, NationalPark np) {
+	public void sortByPark(List<NationalPark> list, NationalPark np) {
 		Collections.sort(list, new Comparator<NationalPark>() {
 			public int compare(NationalPark np1, NationalPark np2) {
 				double d1 = distance(np.longtitude, np.latitude, np1.longtitude, np1.latitude);
@@ -145,7 +162,7 @@ public class EsrefServlet extends HttpServlet {
 	 *  
 	 * @param term Name of a national park.
 	 */
-	private void semanticRanking(String term) {
+	public void semanticRanking(String term) {
 		ArrayList<NationalPark> rankedList = new ArrayList<NationalPark>();
 		int minSteps = 10000; //min steps to convert "term" into a national park name
 		NationalPark inputPark = null;
@@ -179,7 +196,7 @@ public class EsrefServlet extends HttpServlet {
 	 * @param filter Filter string specifying which parks to return. Has a format of "1 3 12 25"
 	 * @return ArrayList of selected NationalPark objects.
 	 */
-	private ArrayList<NationalPark> getSelectedParks(String filter) {
+	public ArrayList<NationalPark> getSelectedParks(String filter) {
 		String[] idStrings = filter.split(" ");
 		ArrayList<NationalPark> result = new ArrayList<NationalPark>();
 		for (String idStr : idStrings) {
@@ -199,9 +216,10 @@ public class EsrefServlet extends HttpServlet {
 	 * @param request HTTPServletRequest object containing the request parameters input and type.
 	 * @return Resulting data in an internal data format.
 	 */
-	private String queryData(HttpServletRequest request) {
+	public String queryData(HttpServletRequest request) {
 		StringBuilder data = new StringBuilder("Name||Country||Longtitude||Latitude&&");
 		if (parks != null) {
+			this.semanticRanking(request.getParameter("input"));
 			for(NationalPark np : parks) {
 				data.append(np.name + "||" + np.country + "||" + np.longtitude + "||" + np.latitude + "&&");
 			}
@@ -242,7 +260,7 @@ public class EsrefServlet extends HttpServlet {
 	 * @param request HTTPServletRequest object containing the request parameters input and type.
 	 * @return Resulting data as a String.
 	 */
-	private String insertData(HttpServletRequest request) {
+	public String insertData(HttpServletRequest request) {
 		String filter = request.getParameter("input");
 		if (filter.equals("undefined")) {
 			return "0";
@@ -296,7 +314,7 @@ public class EsrefServlet extends HttpServlet {
 	 * @param request HTTPServletRequest object containing the request parameters input and type.
 	 * @return Resulting data as a String.
 	 */
-	private String deleteData(HttpServletRequest request) {
+	public String deleteData(HttpServletRequest request) {
 		String filter = request.getParameter("input");
 		if (filter.equals("undefined")) {
 			return "0";
@@ -326,7 +344,7 @@ public class EsrefServlet extends HttpServlet {
 	 * @param request HTTPServletRequest object contaning the request parameters input and type.
 	 * @return Resulting data as a String.
 	 */
-	private String listData(HttpServletRequest request) {
+	public String listData(HttpServletRequest request) {
 		java.sql.Connection connection;
 		StringBuilder data = new StringBuilder("Name||Country||Longtitude||Latitude&&");
 		try {
