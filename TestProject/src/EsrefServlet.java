@@ -1,7 +1,12 @@
 import java.io.IOException;
+import com.cmpe352group6.util.DataParser;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,11 +25,25 @@ import org.apache.jena.query.ResultSet;
  */
 @WebServlet("/esref_ozdemir")
 public class EsrefServlet extends HttpServlet {
+	
+	/** Returns the distance between two points.
+	 * 
+	 * @param x1 First x coordinate.
+	 * @param y1 First y coordinate.
+	 * @param x2 Second x coordinate.
+	 * @param y2 Second y coordinate.
+	 * @return Distance between two points.
+	 */
+	public double distance(double x1, double y1, double x2, double y2) {
+		return (y2 - y1)*(y2 - y1) + (x2 - x1)*(x2 - x1);
+	}
+	
 	public class NationalPark {
 		public String name;
 		public String country;
 		public double longtitude;
 		public double latitude;
+		
 
 		NationalPark() {
 			this.name = "EMPTY";
@@ -38,6 +57,14 @@ public class EsrefServlet extends HttpServlet {
 			this.country = country;
 			this.longtitude = longtitude;
 			this.latitude = latitude;		
+		}
+		
+		NationalPark(String row) {
+			String[] cols = row.split("\\|\\|");
+			this.name = cols[0];
+			this.country = cols[1];
+			this.longtitude = Double.parseDouble(cols[2]);
+			this.latitude = Double.parseDouble(cols[3]);
 		}
 	}
 
@@ -58,21 +85,14 @@ public class EsrefServlet extends HttpServlet {
 	 * @param results Jena ResultSet object, containing the result of SPARQL query.
 	 */
 	private void parseData(ResultSet results) {
-		parks = new ArrayList<NationalPark>();
-		while (results.hasNext()) {
-			QuerySolution next = results.nextSolution();
-			String name = next.get("?objectLabel").toString();
-			String country = next.get("?countryLabel").toString();
-			String point = next.get("?coord").toString();
-			if (name.contains("@")) {
-				name = name.substring(0, name.indexOf('@'));
-			}
-			if (country.contains("@")) {
-				country = country.substring(0, country.indexOf('@'));
-			}
-			double longtitude = Double.parseDouble(point.substring(point.indexOf('(')+1, point.indexOf(' ')));
-			double latitude = Double.parseDouble(point.substring(point.indexOf(' ')+1, point.indexOf(')')));
-			parks.add(new NationalPark(name, country, longtitude, latitude));
+		String[] headers = {"?objectLabel", "?countryLabel", "?coord"};
+		String data = DataParser.jenaToData(results, new ArrayList<String>(Arrays.asList(headers)));
+		int index = 0;
+		int prev_index = 0;
+		while ((index = data.indexOf("&&", index+2)) != -1) {
+			String row = data.substring(prev_index, index);
+			parks.add(new NationalPark(row));
+			prev_index = index+2;
 		}
 	}
 
@@ -82,6 +102,8 @@ public class EsrefServlet extends HttpServlet {
 	 * @param lhs Starting string
 	 * @param rhs Target string
 	 * @return Number of steps it will take to get to the second string from the first one.
+	 * 
+	 * Source: https://en.wikipedia.org/wiki/Levenshtein_distance
 	 */
 	public static int levenshteinDistance(CharSequence lhs, CharSequence rhs) {      
 		int[][] distance = new int[lhs.length() + 1][rhs.length() + 1];        
@@ -99,6 +121,22 @@ public class EsrefServlet extends HttpServlet {
 			}
 		}
 		return distance[lhs.length()][rhs.length()];                           
+	}
+	
+	/** Sorts the given NationalPark list with respect to the given NationalPark.
+	 * The list will be sorted according to the distance of each element to NationalPark np.
+	 * 
+	 * @param list List of NationalParks to be sorted.
+	 * @param np NationalPark object according to which the list will be sorted.
+	 */
+	private void sortByPark(List<NationalPark> list, NationalPark np) {
+		Collections.sort(list, new Comparator<NationalPark>() {
+			public int compare(NationalPark np1, NationalPark np2) {
+				double d1 = distance(np.longtitude, np.latitude, np1.longtitude, np1.latitude);
+				double d2 = distance(np.longtitude, np.latitude, np2.longtitude, np2.latitude);
+				return (int)(d1 - d2);
+			}
+		});
 	}
 
 	/** Semantically reorders the parks ArrayList according to the given input.
@@ -127,8 +165,11 @@ public class EsrefServlet extends HttpServlet {
 			} else {
 				orderedParks.add(np);
 			}
-		} 
-		String countryName = inputPark.country;
+		}
+		//sort the parks up till lastIndex with respect to distance
+		sortByPark(orderedParks.subList(0,  lastIndex), inputPark);
+		//sort the parks from lastIndex up till the end of the list with respect to distance
+		sortByPark(orderedParks.subList(lastIndex + 1,  orderedParks.size() - 1), inputPark);
 		parks = orderedParks;
 	}
 	
@@ -159,28 +200,34 @@ public class EsrefServlet extends HttpServlet {
 	 * @return Resulting data in an internal data format.
 	 */
 	private String queryData(HttpServletRequest request) {
+		StringBuilder data = new StringBuilder("Name||Country||Longtitude||Latitude&&");
+		if (parks != null) {
+			for(NationalPark np : parks) {
+				data.append(np.name + "||" + np.country + "||" + np.longtitude + "||" + np.latitude + "&&");
+			}
+			return data.toString();
+		}
 		parks = new ArrayList<NationalPark>();
 		String s1 =
 				"PREFIX wikibase: <http://wikiba.se/ontology#>\n" +
-				"PREFIX bd: <http://www.bigdata.com/rdf#>\n" +
-				"PREFIX wdt: <http://www.wikidata.org/prop/direct/>\n" +
-				"PREFIX wd: <http://www.wikidata.org/entity/>\n" +
-				"select ?objectLabel ?countryLabel ?coord\n" +
-				"where {\n" +
-				"	?object wdt:P31 wd:Q46169 . \n" + //object is a national park
-				"	?object wdt:P625 ?coord  .\n" + //get the coordinates
-				"	?object wdt:P17 ?country .\n" + //get the country
-				"	?country wdt:P31 wd:Q185441 .\n" + //county should be in european union
-				"	SERVICE wikibase:label {\n" +
-				"		bd:serviceParam wikibase:language \"en\" .\n" +
-				"	}\n" +
-				"}";
+						"PREFIX bd: <http://www.bigdata.com/rdf#>\n" +
+						"PREFIX wdt: <http://www.wikidata.org/prop/direct/>\n" +
+						"PREFIX wd: <http://www.wikidata.org/entity/>\n" +
+						"select ?objectLabel ?countryLabel ?coord\n" +
+						"where {\n" +
+						"	?object wdt:P31 wd:Q46169 . \n" + //object is a national park
+						"	?object wdt:P625 ?coord  .\n" + //get the coordinates
+						"	?object wdt:P17 ?country .\n" + //get the country
+						"	?country wdt:P31 wd:Q185441 .\n" + //country should be in european union
+						"	SERVICE wikibase:label {\n" +
+						"		bd:serviceParam wikibase:language \"en\" .\n" +
+						"	}\n" +
+						"}";
 		Query query = QueryFactory.create(s1); 
 		QueryExecution qExe = QueryExecutionFactory.sparqlService("https://query.wikidata.org/sparql", query);
 		ResultSet results = qExe.execSelect();
 		this.parseData(results);
 		this.semanticRanking(request.getParameter("input"));
-		StringBuilder data = new StringBuilder("Name||Country||Longtitude||Latitude&&");
 		for(NationalPark np : parks) {
 			data.append(np.name + "||" + np.country + "||" + np.longtitude + "||" + np.latitude + "&&");
 		}
@@ -274,7 +321,6 @@ public class EsrefServlet extends HttpServlet {
 		}			
 		return "1";
 	}
-	
 	/** Gets all the records stored in MySQL server and returns them as a String.
 	 * 
 	 * @param request HTTPServletRequest object contaning the request parameters input and type.
@@ -282,7 +328,7 @@ public class EsrefServlet extends HttpServlet {
 	 */
 	private String listData(HttpServletRequest request) {
 		java.sql.Connection connection;
-		StringBuilder data = new StringBuilder("");
+		StringBuilder data = new StringBuilder("Name||Country||Longtitude||Latitude&&");
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			connection = DriverManager.getConnection (url,"root","pembePanter");
@@ -328,7 +374,7 @@ public class EsrefServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String requestType = request.getParameter("type");
 		if (requestType == null) {
-			request.getRequestDispatcher("/WEB-INF/esrefHome.jsp").forward(request, response);;
+			request.getRequestDispatcher("/WEB-INF/esrefHome.jsp").forward(request, response);
 		} else if (requestType.equals("queryData")) {
 			response.getWriter().write(queryData(request));
 		} else if (requestType.equals("insertData")) {

@@ -86,6 +86,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-static-attribs">Static Private Attributes</a> &#124;
@@ -113,6 +114,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ae65c621e9741c7c65f3e51bc620afe76"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEsrefServlet.html#ae65c621e9741c7c65f3e51bc620afe76">EsrefServlet</a> ()</td></tr>
 <tr class="separator:ae65c621e9741c7c65f3e51bc620afe76"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a77894b55393a8315bfce8e5823d1fc71"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEsrefServlet.html#a77894b55393a8315bfce8e5823d1fc71">levenshteinDistance</a> (CharSequence lhs, CharSequence rhs)</td></tr>
+<tr class="separator:a77894b55393a8315bfce8e5823d1fc71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:a44d2e140d6dfc8122a531e3bb7c1ef55"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEsrefServlet.html#a44d2e140d6dfc8122a531e3bb7c1ef55">doGet</a> (HttpServletRequest request, HttpServletResponse response)  throws ServletException, IOException </td></tr>
@@ -124,8 +130,6 @@ Protected Member Functions</h2></td></tr>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:abac23a5bc174677b692a776403fbfba7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEsrefServlet.html#abac23a5bc174677b692a776403fbfba7">parseData</a> (ResultSet results)</td></tr>
 <tr class="separator:abac23a5bc174677b692a776403fbfba7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a70fc0e92ce32f935017a8b8e48dd1943"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classEsrefServlet_1_1NationalPark.html">NationalPark</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEsrefServlet.html#a70fc0e92ce32f935017a8b8e48dd1943">find</a> (String name)</td></tr>
-<tr class="separator:a70fc0e92ce32f935017a8b8e48dd1943"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8469d2338b7d2d7d867389c67ded4cef"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEsrefServlet.html#a8469d2338b7d2d7d867389c67ded4cef">semanticRanking</a> (String term)</td></tr>
 <tr class="separator:a8469d2338b7d2d7d867389c67ded4cef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2d8fb51d7d673d26010c8c9e6900e8a4"><td class="memItemLeft" align="right" valign="top">ArrayList&lt; <a class="el" href="classEsrefServlet_1_1NationalPark.html">NationalPark</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEsrefServlet.html#a2d8fb51d7d673d26010c8c9e6900e8a4">getSelectedParks</a> (String filter)</td></tr>
@@ -145,6 +149,8 @@ Static Private Attributes</h2></td></tr>
 <tr class="separator:a5f60af4bfe65cd13ce9475c93af5a78a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afd1aca5730bcbab3c7dee17952e7bacc"><td class="memItemLeft" align="right" valign="top">static ArrayList&lt; <a class="el" href="classEsrefServlet_1_1NationalPark.html">NationalPark</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEsrefServlet.html#afd1aca5730bcbab3c7dee17952e7bacc">parks</a> = null</td></tr>
 <tr class="separator:afd1aca5730bcbab3c7dee17952e7bacc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c657874c0c72b77d4b80ed415ec4caa"><td class="memItemLeft" align="right" valign="top">static String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEsrefServlet.html#a3c657874c0c72b77d4b80ed415ec4caa">url</a> = &quot;jdbc:mysql://ec2-54-186-213-92.us-west-2.compute.amazonaws.com:3306/db&quot;</td></tr>
+<tr class="separator:a3c657874c0c72b77d4b80ed415ec4caa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Servlet implementation class <a class="el" href="classEsrefServlet.html">EsrefServlet</a> </p>
@@ -273,38 +279,6 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a70fc0e92ce32f935017a8b8e48dd1943"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classEsrefServlet_1_1NationalPark.html">NationalPark</a> EsrefServlet.find </td>
-          <td>(</td>
-          <td class="paramtype">String&#160;</td>
-          <td class="paramname"><em>name</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Finds the first <a class="el" href="classEsrefServlet_1_1NationalPark.html">NationalPark</a> object with name field equal to the given name parameter and returns it.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">name</td><td>Name of a <a class="el" href="classEsrefServlet_1_1NationalPark.html">NationalPark</a> object. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd><a class="el" href="classEsrefServlet_1_1NationalPark.html">NationalPark</a> object with name field equal to given name parameter. If no such <a class="el" href="classEsrefServlet_1_1NationalPark.html">NationalPark</a> exists, then returns null. </dd></dl>
-
-</div>
-</div>
 <a class="anchor" id="a2d8fb51d7d673d26010c8c9e6900e8a4"></a>
 <div class="memitem">
 <div class="memproto">
@@ -366,6 +340,49 @@ Static Private Attributes</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Resulting data as a String. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a77894b55393a8315bfce8e5823d1fc71"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int EsrefServlet.levenshteinDistance </td>
+          <td>(</td>
+          <td class="paramtype">CharSequence&#160;</td>
+          <td class="paramname"><em>lhs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">CharSequence&#160;</td>
+          <td class="paramname"><em>rhs</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Computes the number of steps it will take to get to the second string from the first one by computing the levenshtein distance between the two strings.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lhs</td><td>Starting string </td></tr>
+    <tr><td class="paramname">rhs</td><td>Target string </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Number of steps it will take to get to the second string from the first one. </dd></dl>
 
 </div>
 </div>
@@ -453,8 +470,8 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Queries data from wikidata and returns the resulting data as a String in an internal data format.</p>
-<p>Internal data format is as follows: &lt;ROW&gt;&amp;&amp;&lt;ROW&gt;&amp;&amp;&lt;ROW&gt;&amp;&amp;...&amp;&amp;&lt;ROW&gt;</p>
-<p>Each &lt;ROW&gt; is formatted as follows: &lt;COLUMN&gt;||&lt;COLUMN&gt;||...||&lt;COLUMN&gt;</p>
+<p>Internal data format is as follows: ROW&amp;&amp;ROW&amp;&amp;ROW&amp;&amp;...&amp;&amp;ROW</p>
+<p>Each ROW is formatted as follows: COLUMN||COLUMN||...||COLUMN</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">request</td><td>HTTPServletRequest object containing the request parameters input and type. </td></tr>
@@ -486,7 +503,7 @@ Static Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Semantically reorders the parks ArrayList according to the given input.</p>
+<p>Semantically reorders the parks ArrayList according to the given input. Given input must be the name of a national park. If no such national park exists, then this algorithm doesn't do any reordering.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">term</td><td>Name of a national park. </td></tr>
@@ -526,6 +543,26 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">final long EsrefServlet.serialVersionUID = 1L</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a3c657874c0c72b77d4b80ed415ec4caa"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">String EsrefServlet.url = &quot;jdbc:mysql://ec2-54-186-213-92.us-west-2.compute.amazonaws.com:3306/db&quot;</td>
         </tr>
       </table>
   </td>
