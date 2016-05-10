@@ -20,7 +20,6 @@ import org.apache.jena.query.ResultSet;
  */
 @WebServlet("/esref_ozdemir")
 public class EsrefServlet extends HttpServlet {
-
 	public class NationalPark {
 		public String name;
 		public String country;
@@ -44,6 +43,7 @@ public class EsrefServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	private static ArrayList<NationalPark> parks = null;
+	private static String url = "jdbc:mysql:localhost:3306/db";
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -64,40 +64,72 @@ public class EsrefServlet extends HttpServlet {
 			String name = next.get("?objectLabel").toString();
 			String country = next.get("?countryLabel").toString();
 			String point = next.get("?coord").toString();
-			name = name.substring(0, name.indexOf('@'));
-			country = country.substring(0, country.indexOf('@'));
+			if (name.contains("@")) {
+				name = name.substring(0, name.indexOf('@'));
+			}
+			if (country.contains("@")) {
+				country = country.substring(0, country.indexOf('@'));
+			}
 			double longtitude = Double.parseDouble(point.substring(point.indexOf('(')+1, point.indexOf(' ')));
 			double latitude = Double.parseDouble(point.substring(point.indexOf(' ')+1, point.indexOf(')')));
 			parks.add(new NationalPark(name, country, longtitude, latitude));
 		}
 	}
-	
-	/** Finds the first NationalPark object with name field equal to the given name parameter and
-	 * returns it.
+
+	/** Computes the number of steps it will take to get to the second string from the first one
+	 * by computing the levenshtein distance between the two strings.
 	 * 
-	 * @param name Name of a NationalPark object.
-	 * @return NationalPark object with name field equal to given name parameter. If no such NationalPark exists, then returns null.
+	 * @param lhs Starting string
+	 * @param rhs Target string
+	 * @return Number of steps it will take to get to the second string from the first one.
 	 */
-	private NationalPark find(String name) {
-		for (NationalPark np : parks) {
-			if (np.name == name) {
-				return np;
+	public static int levenshteinDistance(CharSequence lhs, CharSequence rhs) {      
+		int[][] distance = new int[lhs.length() + 1][rhs.length() + 1];        
+		for (int i = 0; i <= lhs.length(); i++) {
+			distance[i][0] = i;
+		}
+		for (int j = 1; j <= rhs.length(); j++) {
+			distance[0][j] = j;
+		}
+		for (int i = 1; i <= lhs.length(); i++) {
+			for (int j = 1; j <= rhs.length(); j++) {
+				int first = Math.min(distance[i-1][j]+1, distance[i][j-1]+1);
+				int second = distance[i-1][j-1] + ((lhs.charAt(i-1) == rhs.charAt(j-1)) ? 0 : 1);
+				distance[i][j] = Math.min(first, second);
 			}
 		}
-		return null;
+		return distance[lhs.length()][rhs.length()];                           
 	}
-	
+
 	/** Semantically reorders the parks ArrayList according to the given input.
-	 * 
+	 *  Given input must be the name of a national park. If no such national park exists, then
+	 *  this algorithm doesn't do any reordering.
+	 *  
 	 * @param term Name of a national park.
 	 */
 	private void semanticRanking(String term) {
 		ArrayList<NationalPark> rankedList = new ArrayList<NationalPark>();
-		NationalPark inputPark = this.find(term);
-		if (inputPark != null) {
-			//TODO: implement semantic ranking algorithm
-			parks = rankedList;
-		} //if inputPark == null, then no such park exists. Do nothing.
+		int minSteps = 10000; //min steps to convert "term" into a national park name
+		NationalPark inputPark = null;
+		for(NationalPark np : parks){
+			int current = levenshteinDistance(term, np.name);
+			if(current < minSteps){
+				minSteps = current;
+				inputPark = np;
+			}
+		}
+		ArrayList<NationalPark> orderedParks = new ArrayList<NationalPark>();
+		int lastIndex = 0; //last index of the national parks with the same country
+		for (NationalPark np : parks) {
+			if (np.country.equals(inputPark.country)) {
+				orderedParks.add(0, np);
+				++lastIndex;
+			} else {
+				orderedParks.add(np);
+			}
+		} 
+		String countryName = inputPark.country;
+		parks = orderedParks;
 	}
 	
 	/** Returns the selected NationalPark objects in an ArrayList; which objects are selected is
@@ -128,26 +160,26 @@ public class EsrefServlet extends HttpServlet {
 	 */
 	private String queryData(HttpServletRequest request) {
 		parks = new ArrayList<NationalPark>();
-		String s1 = 
+		String s1 =
 				"PREFIX wikibase: <http://wikiba.se/ontology#>\n" +
 				"PREFIX bd: <http://www.bigdata.com/rdf#>\n" +
 				"PREFIX wdt: <http://www.wikidata.org/prop/direct/>\n" +
 				"PREFIX wd: <http://www.wikidata.org/entity/>\n" +
 				"select ?objectLabel ?countryLabel ?coord\n" +
 				"where {\n" +
-				"?object wdt:P31 wd:Q46169 . \n" +
-				"?object wdt:P625 ?coord .\n" +
-				"?object wdt:P17 ?country .\n" +
-				"SERVICE wikibase:label {\n" +
-				"bd:serviceParam wikibase:language \"en\" .\n" +
-				"}\n" +
-				"}" +
-				"LIMIT 100\n";
+				"	?object wdt:P31 wd:Q46169 . \n" + //object is a national park
+				"	?object wdt:P625 ?coord  .\n" + //get the coordinates
+				"	?object wdt:P17 ?country .\n" + //get the country
+				"	?country wdt:P31 wd:Q185441 .\n" + //county should be in european union
+				"	SERVICE wikibase:label {\n" +
+				"		bd:serviceParam wikibase:language \"en\" .\n" +
+				"	}\n" +
+				"}";
 		Query query = QueryFactory.create(s1); 
 		QueryExecution qExe = QueryExecutionFactory.sparqlService("https://query.wikidata.org/sparql", query);
 		ResultSet results = qExe.execSelect();
 		this.parseData(results);
-		//this.semanticRanking(request.getParameter("input"));
+		this.semanticRanking(request.getParameter("input"));
 		StringBuilder data = new StringBuilder("Name||Country||Longtitude||Latitude&&");
 		for(NationalPark np : parks) {
 			data.append(np.name + "||" + np.country + "||" + np.longtitude + "||" + np.latitude + "&&");
@@ -170,7 +202,6 @@ public class EsrefServlet extends HttpServlet {
 		}
 		ArrayList<NationalPark> checkedNPs = getSelectedParks(filter);
 		java.sql.Connection connection;
-		String url = "jdbc:mysql://ec2-54-186-213-92.us-west-2.compute.amazonaws.com:3306/db";
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			connection = DriverManager.getConnection (url,"root","pembePanter");
@@ -225,7 +256,6 @@ public class EsrefServlet extends HttpServlet {
 		}
 		ArrayList<NationalPark> checkedNPs = getSelectedParks(filter);
 		java.sql.Connection connection;
-		String url = "jdbc:mysql://ec2-54-186-213-92.us-west-2.compute.amazonaws.com:3306/db";
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			connection = DriverManager.getConnection (url,"root","pembePanter");
@@ -252,7 +282,6 @@ public class EsrefServlet extends HttpServlet {
 	 */
 	private String listData(HttpServletRequest request) {
 		java.sql.Connection connection;
-		String url = "jdbc:mysql://ec2-54-186-213-92.us-west-2.compute.amazonaws.com:3306/db";
 		StringBuilder data = new StringBuilder("");
 		try {
 			Class.forName("com.mysql.jdbc.Driver");

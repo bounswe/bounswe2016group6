@@ -43,6 +43,26 @@
 }
 </style>
 <script type="text/javascript">
+
+	function printTable(dat) {
+		var rows = dat.split("&&");
+		var cols=rows[0].split("||");
+		$("#excelDataTable").append('<tr/>');
+		var row$ =$('<tr/>').append($('<th/>').html("Select"));
+		for(var i = 0 ; i < cols.length ;i++){
+			row$.append($('<th/>').html(cols[i]));
+		}
+		$("#excelDataTable").append(row$);
+		 for (var i = 1 ; i < rows.length -1; i++) {	 
+			  row$ = $('<tr/>').append($('<td/>').html("<input type=\"checkbox\" name=\"id\" value="+i+">"));
+			 cols = rows[i].split("||");
+			  for (var colIndex = 0 ; colIndex < cols.length ; colIndex++) {
+				 var cellValue =cols[colIndex];
+				 row$.append($('<td/>').html(cellValue));				
+			}
+			 $("#excelDataTable").append(row$);
+		  }
+	}
 	 
 	/// Sends the given search term to the servlet and prints the resulting data
 	/// in a clickable table format.
@@ -50,24 +70,8 @@
 		$.get("", {
 			type : "queryData",
 			input : $("#queryInput").val()
-		}).done(function(dat) { //print the resulting data in table format
-			var rows = dat.split("&&");
-			var cols=rows[0].split("||");
-			$("#excelDataTable").append('<tr/>');
-			var row$ =$('<tr/>').append($('<th/>').html("Select"));
-			for(var i = 0 ; i < cols.length ;i++){
-				row$.append($('<th/>').html(cols[i]));
-			}
-			$("#excelDataTable").append(row$);
-			 for (var i = 1 ; i < rows.length -1; i++) {	 
- 				 row$ = $('<tr/>').append($('<td/>').html("<input type=\"checkbox\" name=\"id\" value="+i+">"));
- 				cols = rows[i].split("||");
- 				 for (var colIndex = 0 ; colIndex < cols.length ; colIndex++) {
-					 var cellValue =cols[colIndex];
-					 row$.append($('<td/>').html(cellValue));				
-				}
- 				$("#excelDataTable").append(row$);
- 		 	}
+		}).done(function(data) { //print the resulting data in table format
+			printTable(data);
 		});
 	}
 
@@ -115,7 +119,7 @@
 			if (data === "0") {
 				alert("Error: Data couldn't be retrieved from the database");
 			} else {
-				//print the data in a table without checkboxes
+				printTable(data);
 			}
 		});
 	}
