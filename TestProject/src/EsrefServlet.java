@@ -1,5 +1,3 @@
-import java.io.ByteArrayOutputStream;
-import org.apache.jena.atlas.json.*;
 import java.io.IOException;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -10,7 +8,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.plaf.synth.SynthSeparatorUI;
 
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecution;
@@ -18,13 +15,6 @@ import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QueryFactory;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
-import org.apache.jena.query.ResultSetFormatter;
-
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.mysql.jdbc.Connection;
-import com.mysql.jdbc.Statement;
 /**
  * Servlet implementation class EsrefServlet
  */
@@ -68,7 +58,7 @@ public class EsrefServlet extends HttpServlet {
 	 * @param results Jena ResultSet object, containing the result of SPARQL query.
 	 */
 	private void parseData(ResultSet results) {
-		this.parks = new ArrayList<NationalPark>();
+		parks = new ArrayList<NationalPark>();
 		while (results.hasNext()) {
 			QuerySolution next = results.nextSolution();
 			String name = next.get("?objectLabel").toString();
@@ -106,7 +96,7 @@ public class EsrefServlet extends HttpServlet {
 		NationalPark inputPark = this.find(term);
 		if (inputPark != null) {
 			//TODO: implement semantic ranking algorithm
-			this.parks = rankedList;
+			parks = rankedList;
 		} //if inputPark == null, then no such park exists. Do nothing.
 	}
 	
@@ -128,10 +118,10 @@ public class EsrefServlet extends HttpServlet {
 	/** Queries data from wikidata and returns the resulting data as a String in an internal data format.
 	 * 
 	 * Internal data format is as follows:
-	 * <ROW>&&<ROW>&&<ROW>&&...&&<ROW>
+	 * ROW&&ROW&&ROW&&...&&ROW
 	 * 
-	 * Each <ROW> is formatted as follows:
-	 * <COLUMN>||<COLUMN>||...||<COLUMN>
+	 * Each ROW is formatted as follows:
+	 * COLUMN||COLUMN||...||COLUMN
 	 * 
 	 * @param request HTTPServletRequest object containing the request parameters input and type.
 	 * @return Resulting data in an internal data format.
@@ -270,7 +260,16 @@ public class EsrefServlet extends HttpServlet {
 			java.sql.Statement stmt = connection.createStatement();
 			String sqlStmt = "SELECT * FROM db.NationalPark;";
 			java.sql.ResultSet res = stmt.executeQuery(sqlStmt);
-			//TODO: convert sql.ResultSet to our internal data format
+			while (res.next()) {
+				data.append(res.getString("Name"));
+				data.append("||");
+				data.append(res.getString("Country"));
+				data.append("||");
+				data.append(res.getDouble("Longtitude"));
+				data.append("||");
+				data.append(res.getDouble("Latitude"));
+				data.append("&&");
+			}
 			connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
