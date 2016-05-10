@@ -47,6 +47,7 @@
 	function printTable(dat) {
 		var rows = dat.split("&&");
 		var cols=rows[0].split("||");
+		$("#excelDataTable tr").remove();
 		$("#excelDataTable").append('<tr/>');
 		var row$ =$('<tr/>').append($('<th/>').html("Select"));
 		for(var i = 0 ; i < cols.length ;i++){
@@ -96,6 +97,7 @@
 					alert("Error: Selected rows couldn't be saved");
 				} else {
 					alert("Success: Selected rows are saved");
+					listData();
 				}
 			});
 		} else if (type === "delete") {
@@ -107,6 +109,7 @@
 					alert("Error: Selected rows couldn't be deleted");
 				} else {
 					alert("Success: Selected rows are deleted");
+					listData();
 				}
 			});
 		}
