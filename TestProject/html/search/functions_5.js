@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['jsonwrite',['jsonWrite',['../classErhanServlet.html#a729e29beec0ef0df035ce99e05600574',1,'ErhanServlet']]]
+  ['haversinedistance',['haversineDistance',['../classRiver.html#a689f41042703cb3b1be0136a184cc8c4',1,'River']]]
 ];

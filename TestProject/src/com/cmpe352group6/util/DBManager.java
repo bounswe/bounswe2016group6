@@ -1,35 +1,33 @@
 package com.cmpe352group6.util;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-
+/**
+ * Utility class for wrapping database functionality.
+ * Retrieves or adds the river data from/to database.
+ * @author Erhan Cagirici
+ *
+ */
 public class DBManager {
 	private Connection connection = null;
 
 	/**
-	 * Constructor
+	 * Construct the database
 	 * 
-	 * @throws ManagerException
 	 */
 	public DBManager(Connection connection) {
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-			System.out.println("DB hatasý!");
-		}
-		if(connection == null){
-			System.out.println("BOS");
-		}
-		
 		this.connection = connection;
 	}
 	
-	public ResultSet callSQLFunc(){
+	/**
+	 * Retrieves the user's saved data from the DB
+	 * @return user-saved resultSet
+	 */
+	public ResultSet retrieveUserSaves(){
 		PreparedStatement stmt = null;
 		String sql = "SELECT * FROM erhanrecords";
 		try {
@@ -41,6 +39,24 @@ public class DBManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
+		}
+	}
+	/**
+	 * Adds a given river string into the database
+	 * @param rivername The rivername to be saved into database
+	 * @return operation result , 1 if successful
+	 */
+	public int addDataUrl(String rivername){
+		PreparedStatement stmt = null;
+		String sql = "INSERT INTO erhanrecords VALUES ('name', '" + rivername + "')";
+		try {
+			stmt = connection.prepareStatement(sql);
+			System.out.println(sql);
+			int rs = stmt.executeUpdate();
+			return rs;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return -1;
 		}
 	}
 	
