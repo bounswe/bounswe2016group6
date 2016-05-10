@@ -38,7 +38,7 @@ public class AhmetServlet extends HttpServlet {
 	}
 
 	private static final long serialVersionUID = 1L;
-	private static ArrayList<University> parks = null;
+	private static ArrayList<University> uni = null;
 	private static String url = "jdbc:mysql://ec2-54-186-213-92.us-west-2.compute.amazonaws.com:3306/db";
 
 	/**
@@ -85,7 +85,8 @@ public class AhmetServlet extends HttpServlet {
 	 * @return Resulting data in an internal data format.
 	 */
 	private String queryData(HttpServletRequest request) {
-		parks = new ArrayList<University>();
+		
+		uni = new ArrayList<University>();
 		String queryString ="PREFIX wikibase: <http://wikiba.se/ontology#>"
 				+ "PREFIX bd: <http://www.bigdata.com/rdf#>"
 				+ "PREFIX wd: <http://www.wikidata.org/entity/>"
@@ -113,10 +114,10 @@ public class AhmetServlet extends HttpServlet {
 		while ((index = data.indexOf("&&", index+2)) != -1) {
 			String row = data.substring(prev_index, index);
 			String[] column = row.split("\\|\\|");
-			parks.add(new University(column[0], column[1], column[2],column[3]));
+			uni.add(new University(column[0], column[1], column[2],column[3]));
 			prev_index = index+2;
 		}
-
+		data = "Name||Date||Longtitude||Latitude&&"+data;
 		return data;
 	}
 	
@@ -136,7 +137,7 @@ public class AhmetServlet extends HttpServlet {
 		String[] idStrings = filter.split(" ");
 		ArrayList<University> universityList = new ArrayList<University>();
 		for (String idStr : idStrings) {
-			universityList.add(parks.get(Integer.parseInt(idStr)));
+			universityList.add(uni.get(Integer.parseInt(idStr)));
 		}
 		java.sql.Connection connection;
 		try {
@@ -209,7 +210,7 @@ public class AhmetServlet extends HttpServlet {
 		String[] idStrings = filter.split(" ");
 		ArrayList<University> result = new ArrayList<University>();
 		for (String idStr : idStrings) {
-			result.add(parks.get(Integer.parseInt(idStr)));
+			result.add(uni.get(Integer.parseInt(idStr)));
 		}
 		return result;
 	}
