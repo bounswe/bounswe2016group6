@@ -3,6 +3,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -118,9 +120,31 @@ public class AhmetServlet extends HttpServlet {
 			prev_index = index+2;
 		}
 		data = "Name||Date||Longtitude||Latitude&&"+data;
+		
+		//Semantic sort
+		for(int i =0;i<uni.size();i++){
+			
+			University univ = uni.get(i);
+			if(univ.name.equals(request.getParameter("input"))){
+				Collections.sort(uni, new Comparator<University>() {
+					public int compare(University uni1, University uni2) {
+						double d1 = distance(univ.longtitude, univ.latitude, uni1.longtitude, uni1.latitude);
+						double d2 = distance(univ.longtitude, univ.latitude, uni2.longtitude, uni2.latitude);
+						return Double.compare(d1, d2);
+					}
+				});
+				break;
+			}
+		}
+
+		
 		return data;
 	}
 	
+	protected double distance(double longtitude, double latitude, double longtitude2, double latitude2) {
+		return (longtitude-longtitude2)*(longtitude-longtitude2)+(latitude-latitude2)*(latitude-latitude2);
+	}
+
 	/** Inserts the records in the specified indices to MySQL server.
 	 * Which records are going to be inserted is specified in "input" parameter of GET call.
 	 * "input" parameter is a space separated string with each entry specifying the index of
@@ -186,13 +210,17 @@ public class AhmetServlet extends HttpServlet {
 		if (filter.equals("undefined")) {
 			return "0";
 		}
-		ArrayList<University> checkedNPs = getSelectedParks(filter);
+		String[] idStrings = filter.split(" ");
+		ArrayList<University> results = new ArrayList<University>();
+		for (String idStr : idStrings) {
+			results.add(uni.get(Integer.parseInt(idStr)));
+		}
 		java.sql.Connection connection;
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			connection = DriverManager.getConnection (url,"root","pembePanter");
 			java.sql.Statement stmt = connection.createStatement();
-			for (University uni : checkedNPs) {
+			for (University uni : results) {
 				String sqlStmt = "DELETE FROM db.univ WHERE Name = \"" + uni.name + "\";";
 				stmt.executeUpdate(sqlStmt);
 			}
@@ -206,15 +234,7 @@ public class AhmetServlet extends HttpServlet {
 		}			
 		return "1";
 	}
-	private ArrayList<University> getSelectedParks(String filter) {
-		String[] idStrings = filter.split(" ");
-		ArrayList<University> result = new ArrayList<University>();
-		for (String idStr : idStrings) {
-			result.add(uni.get(Integer.parseInt(idStr)));
-		}
-		return result;
-	}
-	
+
 	/** Gets all the records stored in MySQL server and returns them as a String.
 	 * 
 	 * @param request HTTPServletRequest object contaning the request parameters input and type.
