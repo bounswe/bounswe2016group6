@@ -15,6 +15,7 @@ public class DataParser {
 	 * @param results Jena ResultSet object
 	 * @param headers Headers of the records in the given ResultSet object.
 	 * @return Data in the specified format above.
+	 * 
 	 */
 	public static String jenaToData(ResultSet results, ArrayList<String> headers) {
 		StringBuilder builder = new StringBuilder("");
@@ -22,7 +23,6 @@ public class DataParser {
 			QuerySolution next = results.nextSolution();
 			String x = next.get(headers.get(0)).toString();
 			if (x.contains("@")) {
-				System.out.println("here");
 				x = x.substring(0, x.indexOf('@'));
 			}
 			if (x.contains("Point(")) {
@@ -34,7 +34,6 @@ public class DataParser {
 				builder.append("||");
 				x = next.get(s).toString();
 				if (x.contains("@")) {
-					System.out.println("here");
 					x = x.substring(0, x.indexOf('@'));
 				}
 				if (x.contains("Point(")) {
