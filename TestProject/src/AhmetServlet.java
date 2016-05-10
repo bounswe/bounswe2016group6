@@ -1,8 +1,8 @@
-import java.awt.Point;
 import java.io.IOException;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,8 +14,9 @@ import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QueryFactory;
-import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
+
+import com.cmpe352group6.util.DataParser;
 /**
  * Servlet implementation class AhmetServlet
  */
@@ -27,12 +28,12 @@ public class AhmetServlet extends HttpServlet {
 		double longtitude;
 		double latitude;
 
-		public University(String name, String date, String coord) {
+		public University(String name, String date, String lon,String lat) {
 			this.name = name;
-			this.date = Integer.parseInt(date);
+			this.date = Integer.parseInt(date.substring(0,4));
 			
-			this.longtitude = Double.parseDouble(coord.substring(0,coord.indexOf(" ")));
-			this.latitude = Double.parseDouble(coord.substring(coord.indexOf(" ")+1));		
+			this.longtitude = Double.parseDouble(lon);
+			this.latitude = Double.parseDouble(lat);		
 		}
 	}
 
@@ -105,32 +106,18 @@ public class AhmetServlet extends HttpServlet {
 		QueryExecution qExe = QueryExecutionFactory.sparqlService("https://query.wikidata.org/sparql", query);
 		ResultSet results = qExe.execSelect();
 
-		while (results.hasNext()) {
-			QuerySolution next = results.nextSolution();
-			String name = next.get("?universityLabel").toString();
-			String date = next.get("?date").toString().substring(0,4);
-			String coord = next.get("?coord").toString();
-			if (name.contains("@")) {
-				name = name.substring(0, name.indexOf('@'));
-			}
-			coord = coord.substring(6, coord.indexOf(")"));
-			System.out.println(name+", "+date+", "+coord);
-			parks.add(new University(name, date, coord));
-
+		String[] headers = {"?universityLabel", "?date", "?coord"};
+		String data = DataParser.jenaToData(results, new ArrayList<String>(Arrays.asList(headers)));
+		int index = 0;
+		int prev_index = 0;
+		while ((index = data.indexOf("&&", index+2)) != -1) {
+			String row = data.substring(prev_index, index);
+			String[] column = row.split("\\|\\|");
+			parks.add(new University(column[0], column[1], column[2],column[3]));
+			prev_index = index+2;
 		}
-		
-		
-		
-		//TODO
-		
-		
-		/*this.parseData(results);
-		this.semanticRanking(request.getParameter("input"));
-		StringBuilder data = new StringBuilder("Name||Country||Longtitude||Latitude&&");
-		for(NationalPark np : parks) {
-			data.append(np.name + "||" + np.country + "||" + np.longtitude + "||" + np.latitude + "&&");
-		}*/
-		return "";
+
+		return data;
 	}
 	
 	/** Inserts the records in the specified indices to MySQL server.
@@ -217,6 +204,14 @@ public class AhmetServlet extends HttpServlet {
 			return "0";
 		}			
 		return "1";
+	}
+	private ArrayList<University> getSelectedParks(String filter) {
+		String[] idStrings = filter.split(" ");
+		ArrayList<University> result = new ArrayList<University>();
+		for (String idStr : idStrings) {
+			result.add(parks.get(Integer.parseInt(idStr)));
+		}
+		return result;
 	}
 	
 	/** Gets all the records stored in MySQL server and returns them as a String.

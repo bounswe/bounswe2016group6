@@ -22,8 +22,10 @@ public class DataParser {
 			QuerySolution next = results.nextSolution();
 			String x = next.get(headers.get(0)).toString();
 			if (x.contains("@")) {
-				System.out.println("here");
 				x = x.substring(0, x.indexOf('@'));
+			}
+			if (x.contains("^")) {
+				x = x.substring(0, x.indexOf('^'));
 			}
 			if (x.contains("Point(")) {
 				x = x.substring(x.indexOf('(') + 1, x.indexOf(')'));
@@ -34,8 +36,10 @@ public class DataParser {
 				builder.append("||");
 				x = next.get(s).toString();
 				if (x.contains("@")) {
-					System.out.println("here");
 					x = x.substring(0, x.indexOf('@'));
+				}
+				if (x.contains("^")) {
+					x = x.substring(0, x.indexOf('^'));
 				}
 				if (x.contains("Point(")) {
 					x = x.substring(x.indexOf('(') + 1, x.indexOf(')'));
