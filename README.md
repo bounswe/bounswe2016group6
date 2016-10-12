@@ -6,8 +6,7 @@ and students can engage in a creative, non-traditional learning experience.
 
 
 Our notion of teacher and student is different from that of traditional approach.
-Every user of our platform will be a student. On top of that, high-rating users
-will have the opportunity to become teachers. For more information, please refer
+Every user of our platform will be a student. On the other hand, for being a teacher one is expected to sign up as a teacher in the first place. For more information, please refer
 to our [Wiki page](https://github.com/bounswe/bounswe2016group6/wiki)
 to see what is currently going on such as our requirements, initial plan and
 research topics.
