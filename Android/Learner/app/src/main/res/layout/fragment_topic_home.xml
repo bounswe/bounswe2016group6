@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    >
+
+
+    <ImageView
+        android:layout_width="10dip"
+        android:layout_height="230dip"
+        android:background="#d3d3d3"
+        android:layout_weight="7"
+
+        android:layout_marginTop="15dip"
+        android:layout_marginRight="2dip"
+        android:layout_marginLeft="10dip"
+        android:layout_marginBottom="10dip"
+
+        android:adjustViewBounds="true"
+        android:id="@+id/imageTopic"
+
+        />
+    <LinearLayout
+        android:layout_gravity="center_vertical"
+        android:layout_width="10dip"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_weight="3"
+        android:layout_marginTop="15dip"
+        android:layout_marginRight="10dip"
+        android:layout_marginLeft="2dip"
+        android:layout_marginBottom="10dip"
+        android:padding="10dip"
+       >
+
+        <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="6"
+        android:id="@+id/textTopicTitle"
+        android:text="denemedenemedenemedenemedenemedeneme"
+        android:gravity="center_horizontal"
+        android:textSize="15sp"
+        android:layout_marginRight="10dip"
+        android:layout_marginLeft="10dip"
+            style="?android:listSeparatorTextViewStyle"
+
+        />
+
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textAuthor"
+                android:textSize="15sp"
+                android:layout_marginTop="15dip"
+                android:text="muaz ekici"
+            android:gravity="center_horizontal"
+
+                />
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:text="12.1.2010"
+            android:layout_marginTop="15dip"
+            android:gravity="center_horizontal"
+                android:id="@+id/textDate"
+
+
+                />
+
+    </LinearLayout>
+
+</LinearLayout>

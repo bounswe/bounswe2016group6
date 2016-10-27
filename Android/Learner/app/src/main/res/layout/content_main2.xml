@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".TopicPage"
+    tools:showIn="@layout/activity_main2">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity">
+
+        <TabHost
+            android:id="@+id/tabHost"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:background="#3b5998">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TabWidget
+                    android:id="@android:id/tabs"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dip"></TabWidget>
+
+                <FrameLayout
+                    android:id="@android:id/tabcontent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:id="@+id/tab1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#ffffff"
+                        android:orientation="vertical">
+                        <ScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Overfishing Causing fish populations to decline faster than thought"
+                                    android:gravity="center"
+                                    android:id="@+id/txtTopicPageTitle"
+                                    android:paddingLeft="15dip"
+                                    android:paddingRight="15dip"
+                                    android:paddingTop="10dip"
+                                    android:textColor="#000000"
+                                    android:textSize="25sp"/>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:padding="10dip"
+                                    android:gravity="center_vertical"
+                                    android:background="@drawable/homepage_viewpager_background">
+
+                                    <ImageView
+                                        android:layout_width="1dp"
+                                        android:layout_height="24dp"
+                                        android:layout_weight="2"
+                                        android:src="@drawable/usericon"
+                                        android:id="@+id/imgTOpicPageUserImage"/>
+                                    <TextView
+                                        android:layout_width="10dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="4"
+                                        android:text="muaz ekici"
+                                        android:id="@+id/txtTopicPageUserName"/>
+                                    <TextView
+                                        android:layout_width="10dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="4"
+                                        android:text="01.03.2016"
+                                        android:id="@+id/txtTopicPageDate"/>
+                                </LinearLayout>
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="400dip"
+                                    android:src="@drawable/lufertopic"
+                                    android:adjustViewBounds="true"
+                                    android:id="@+id/imgTopicPageImage"
+                                    />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="We know that there are very few fish in the ocean. But there may be even less fish in the world's oceans than we thought, creating a serious problem for communities that rely on seafood for daily calories."
+                                    android:gravity="center"
+                                    android:paddingLeft="15dip"
+                                    android:paddingRight="15dip"
+                                    android:paddingTop="10dip"
+                                    android:textColor="#000000"
+                                    android:textSize="15sp"
+                                    android:id="@+id/txtTopicPageText"/>
+
+
+
+                            </LinearLayout>
+                        </ScrollView>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/tab2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#da8200"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="This is tab 2" />
+                    </LinearLayout>
+
+
+                </FrameLayout>
+            </LinearLayout>
+        </TabHost>
+
+    </LinearLayout>
+
+</RelativeLayout>
