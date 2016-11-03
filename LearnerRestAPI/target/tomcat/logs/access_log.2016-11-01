@@ -1,0 +1,2 @@
+0:0:0:0:0:0:0:1 - - [01/Nov/2016:13:18:31 +0200] "GET /LearnerRestAPI/getUsers HTTP/1.1" 200 101 http-bio-8080-exec-1 188
+0:0:0:0:0:0:0:1 - - [01/Nov/2016:13:18:31 +0200] "GET /favicon.ico HTTP/1.1" 404 - http-bio-8080-exec-3 0

@@ -1,0 +1,6 @@
+eclipse.preferences.version=1
+encoding//src/main/java/cmpe/boun/NazimVisualize/Controller/BaseController.java=UTF-8
+encoding//src/main/java/cmpe/boun/NazimVisualize/DAO/UserDAO.java=UTF-8
+encoding//src/main/java/cmpe/boun/NazimVisualize/Servlets/BaseServlet.java=UTF-8
+encoding//src/main/java/cmpe/boun/NazimVisualize/Servlets/WordCloudServlet.java=UTF-8
+encoding//src/main/webapp/WEB-INF/pages/index.jsp=UTF-8
