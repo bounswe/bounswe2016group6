@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_add_topic"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.group6boun451.learner.AddTopicActivity"
+    tools:showIn="@layout/activity_add_topic"
+    android:orientation="vertical">
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/darker_gray">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:text="H1"
+                android:width="40dp"
+                android:height="40dp"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:background="@android:color/transparent"
+                android:textColor="#444444"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/action_h1"
+                />
+            <Button
+                android:text="H2"
+                android:id="@+id/action_h2"
+                android:textStyle="bold"
+                android:textColor="#444444"
+                android:background="@android:color/transparent"
+                android:width="40dp"
+                android:textSize="16sp"
+                android:height="40dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"/>
+
+            <Button
+                android:text="H3"
+                android:id="@+id/action_h3"
+                android:textStyle="bold"
+                android:textColor="#444444"
+                android:background="@android:color/transparent"
+                android:width="40dp"
+                android:textSize="16sp"
+                android:height="40dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"/>
+
+            <ImageButton
+                android:maxHeight="20dp"
+                android:maxWidth="20dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/icon_bold"
+                android:id="@+id/action_bold" />
+
+            <ImageButton
+                android:maxHeight="20dp"
+                android:maxWidth="20dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/icon_italic"
+                android:id="@+id/action_Italic" />
+
+            <ImageButton
+                android:maxHeight="20dp"
+                android:maxWidth="20dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/icon_indent"
+                android:id="@+id/action_indent" />
+
+            <ImageButton
+                android:maxHeight="20dp"
+                android:maxWidth="20dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/icon_outdent"
+                android:id="@+id/action_outdent" />
+
+
+
+            <ImageButton
+                android:maxHeight="20dp"
+                android:maxWidth="20dp"
+                android:layout_width="40dp"
+                android:background="@android:color/transparent"
+                android:layout_height="40dp"
+                android:src="@drawable/icon_bullet_list"
+                android:id="@+id/action_bulleted" />
+
+            <ImageButton
+                android:maxHeight="20dp"
+                android:maxWidth="20dp"
+                android:background="@android:color/transparent"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/icon_numbered_list"
+                android:id="@+id/action_unordered_numbered" />
+
+            <ImageButton
+                android:maxHeight="20dp"
+                android:maxWidth="20dp"
+                android:background="@android:color/transparent"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/icon_hr"
+                android:id="@+id/action_hr" />
+
+            <ImageButton
+                android:maxHeight="20dp"
+                android:maxWidth="20dp"
+                android:background="@android:color/transparent"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/icon_image"
+                android:id="@+id/action_insert_image" />
+
+
+            <ImageButton
+                android:maxHeight="20dp"
+                android:maxWidth="20dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/icon_link"
+                android:id="@+id/action_insert_link" />
+
+            <ImageButton
+                android:maxHeight="20dp"
+                android:maxWidth="20dp"
+                android:layout_width="40dp"
+                android:background="@android:color/transparent"
+                android:layout_height="40dp"
+                android:src="@drawable/icon_marker"
+                android:id="@+id/action_map" />
+
+            <ImageButton
+                android:maxHeight="20dp"
+                android:maxWidth="20dp"
+                android:layout_width="40dp"
+                android:background="@android:color/transparent"
+                android:layout_height="40dp"
+                android:src="@drawable/icon_erase"
+                android:id="@+id/action_erase" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <EditText
+        android:id="@+id/editor"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="20dp"
+        android:text="HTML Preview"
+        android:textSize="12sp"
+        />
+
+    <TextView
+        android:id="@+id/preview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        />
+
+</LinearLayout>
