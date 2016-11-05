@@ -93,8 +93,6 @@
                 android:src="@drawable/icon_outdent"
                 android:id="@+id/action_outdent" />
 
-
-
             <ImageButton
                 android:maxHeight="20dp"
                 android:maxWidth="20dp"
@@ -164,23 +162,14 @@
     <EditText
         android:id="@+id/editor"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginTop="20dp"
-        android:text="HTML Preview"
-        android:textSize="12sp"
-        />
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_green_light"
+        android:padding="@dimen/activity_horizontal_margin"/>
 
     <TextView
         android:id="@+id/preview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        />
+        android:layout_marginTop="15dp" />
 
 </LinearLayout>
