@@ -1,0 +1,77 @@
+<html>
+
+<head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
+<title th:text="#{label.pages.home.title}"></title>
+
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sceditor/1.5.0/themes/default.min.css" type="text/css" media="all" />
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/sceditor/1.5.0/jquery.sceditor.bbcode.min.js"></script>
+
+
+
+		<script>
+			// Source: http://www.backalleycoder.com/2011/03/20/link-tag-css-stylesheet-load-event/
+			var loadCSS = function(url, callback){
+				var link = document.createElement('link');
+				link.type = 'text/css';
+				link.rel = 'stylesheet';
+				link.href = url;
+				link.id = 'theme-style';
+
+				document.getElementsByTagName('head')[0].appendChild(link);
+
+				var img = document.createElement('img');
+				img.onerror = function(){
+					if(callback) callback(link);
+				}
+				img.src = url;
+			}
+
+			$(document).ready(function() {
+				var initEditor = function() {
+					$("textarea").sceditor({
+						plugins: 'bbcode',
+						emotions: 'false',
+						style: "https://cdnjs.cloudflare.com/ajax/libs/sceditor/1.5.0/jquery.sceditor.default.min.css"
+					});
+				};
+				initEditor();
+			});
+		</script>
+
+</head>
+
+
+<body>
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" th:href="@{/home.html}" th:text="#{label.pages.home.title}">home</a>
+      </div>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a th:href="@{/logout}" th:text="#{label.pages.logout}">logout</a> </li>
+      </ul>
+    </div>
+</nav>
+
+<div class="container">         
+     <p sec:authorize="!hasAuthority('WRITE_PRIVILEGE')" th:text="#{message.unauth}">unauth</p>   
+        
+     <h1 sec:authorize="hasAuthority('WRITE_PRIVILEGE')" th:text="#{label.pages.admin.message}">admin</h1>
+     
+     <textarea th:text="${topic.content}" form ="topicform" name="content" style="height:300px;width:600px;">
+		
+</textarea>
+    <form:form id="topicform" action="/topic/create" method="post" modelAttribute="topic">>
+    	<p>Question: <form:input type="text" name="header"/></p>
+        <p><form:input type="submit" value="Submit" /> <form:input type="reset" value="Reset" /></p>
+    </form:form>
+     
+     
+
+
+</div>
+</body>
+</html>

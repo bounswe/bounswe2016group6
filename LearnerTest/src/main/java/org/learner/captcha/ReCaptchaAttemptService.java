@@ -1,10 +1,12 @@
 package org.learner.captcha;
 
+import java.util.concurrent.TimeUnit;
+
+import org.springframework.stereotype.Service;
+
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import org.springframework.stereotype.Service;
-import java.util.concurrent.TimeUnit;
 
 @Service("reCaptchaAttemptService")
 public class ReCaptchaAttemptService {

@@ -1,5 +1,10 @@
 package org.learner.captcha;
 
+import java.net.URI;
+import java.util.regex.Pattern;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.learner.web.error.ReCaptchaInvalidException;
 import org.learner.web.error.ReCaptchaUnavailableException;
 import org.slf4j.Logger;
@@ -9,10 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestOperations;
-
-import javax.servlet.http.HttpServletRequest;
-import java.net.URI;
-import java.util.regex.Pattern;
 
 @Service("captchaService")
 public class CaptchaService implements ICaptchaService {

@@ -1,5 +1,11 @@
 package org.learner.test;
 
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.isEmptyOrNullString;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,12 +15,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.learner.persistence.dao.UserRepository;
 import org.learner.persistence.model.User;
-import org.learner.spring.*;
+import org.learner.spring.Application;
+import org.learner.spring.TestDbConfig;
+import org.learner.spring.TestIntegrationConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -23,10 +30,6 @@ import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.authentication.FormAuthConfig;
 import com.jayway.restassured.response.Response;
 import com.jayway.restassured.specification.RequestSpecification;
-
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.isEmptyOrNullString;
-import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = { Application.class, TestDbConfig.class, TestIntegrationConfig.class })

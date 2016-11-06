@@ -1,5 +1,8 @@
 package org.learner.web.controller;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
 import org.learner.captcha.ICaptchaService;
 import org.learner.persistence.model.User;
 import org.learner.registration.OnRegistrationCompleteEvent;
@@ -14,11 +17,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import java.util.Locale;
-import java.util.UUID;
 
 @Controller
 public class RegistrationCaptchaController {

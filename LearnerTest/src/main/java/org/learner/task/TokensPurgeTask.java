@@ -1,14 +1,14 @@
 package org.learner.task;
 
+import java.time.Instant;
+import java.util.Date;
+
 import org.learner.persistence.dao.PasswordResetTokenRepository;
 import org.learner.persistence.dao.VerificationTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.Instant;
-import java.util.Date;
 
 @Service
 @Transactional

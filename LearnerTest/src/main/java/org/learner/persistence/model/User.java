@@ -1,6 +1,7 @@
 package org.learner.persistence.model;
 
 import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,9 +12,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.jboss.aerogear.security.otp.api.Base32;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "user_account")
@@ -26,24 +30,33 @@ public class User {
     private String firstName;
 
     private String lastName;
-
+    
     private String email;
-
+    
+    @JsonIgnore
     @Column(length = 60)
     private String password;
-
+    
     private boolean enabled;
 
+    @JsonIgnore
     private boolean isUsing2FA;
-
+    
+    @JsonIgnore
     private String secret;
-
+    
+    //@OneToMany(mappedBy = "owner")
+    //private Collection<Topic> topics;
     //
-
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Collection<Role> roles;
-
+    
+    
+    //@OneToMany(mappedBy = "user")
+    //private List<Comment> comments;
+    
     public User() {
         super();
         this.secret = Base32.random();

@@ -1,5 +1,6 @@
 package org.learner.spring;
 
+import org.learner.security.RestAuthenticationEntryPoint;
 import org.learner.security.google2fa.CustomAuthenticationProvider;
 import org.learner.security.google2fa.CustomWebAuthenticationDetailsSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,10 @@ public class SecSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserDetailsService userDetailsService;
-
+    
+    @Autowired 
+    private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+    
     @Autowired
     private AuthenticationSuccessHandler myAuthenticationSuccessHandler;
 
@@ -59,8 +63,11 @@ public class SecSecurityConfig extends WebSecurityConfigurerAdapter {
         // @formatter:off
         http
             .csrf().disable()
+            .exceptionHandling()
+            .authenticationEntryPoint(restAuthenticationEntryPoint)
+            .and()
             .authorizeRequests()
-                .antMatchers("/login*","/login*", "/logout*", "/signin/**", "/signup/**",
+                .antMatchers("/topic/greetings","/login*","/login*", "/logout*", "/signin/**", "/signup/**",
                         "/user/registration*", "/registrationConfirm*", "/expiredAccount*", "/registration*",
                         "/badUser*", "/user/resendRegistrationToken*" ,"/forgetPassword*", "/user/resetPassword*",
                         "/user/changePassword*", "/emailError*", "/resources/**","/old/user/registration*","/successRegister*","/qrcode*").permitAll()

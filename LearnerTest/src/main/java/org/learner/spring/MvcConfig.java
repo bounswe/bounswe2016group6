@@ -8,8 +8,10 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
 import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -39,6 +41,8 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/registrationCaptcha.html");
         registry.addViewController("/logout.html");
         registry.addViewController("/homepage.html");
+        registry.addViewController("/createTopic.html");
+        registry.addViewController("/editTopic.html");
         registry.addViewController("/expiredAccount.html");
         registry.addViewController("/badUser.html");
         registry.addViewController("/emailError.html");
@@ -53,7 +57,19 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/users.html");
         registry.addViewController("/qrcode.html");
     }
-
+    
+    @Override
+	public void configureContentNegotiation(
+			ContentNegotiationConfigurer configurer) {
+		// Simple strategy: only path extension is taken into account
+		configurer.favorPathExtension(true).
+			ignoreAcceptHeader(true).
+			useJaf(false).
+			defaultContentType(MediaType.TEXT_HTML).
+			mediaType("html", MediaType.TEXT_HTML).
+			mediaType("json", MediaType.APPLICATION_JSON);
+	}
+    
     @Override
     public void configureDefaultServletHandling(final DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
