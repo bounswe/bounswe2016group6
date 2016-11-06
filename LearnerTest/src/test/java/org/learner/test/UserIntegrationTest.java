@@ -1,5 +1,12 @@
 package org.learner.test;
 
+import static org.junit.Assert.assertEquals;
+
+import java.util.UUID;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -12,18 +19,11 @@ import org.learner.persistence.model.VerificationToken;
 import org.learner.spring.ServiceConfig;
 import org.learner.spring.TestDbConfig;
 import org.learner.validation.EmailExistsException;
-
-import static org.junit.Assert.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
-import java.util.UUID;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { TestDbConfig.class, ServiceConfig.class }, loader = AnnotationConfigContextLoader.class)
@@ -43,7 +43,7 @@ public class UserIntegrationTest {
     private Long userId;
 
     //
-
+ 
     @Before
     public void givenUserAndVerificationToken() throws EmailExistsException {
         User user = new User();
