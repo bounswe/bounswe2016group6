@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.learner.persistence.model.Topic;
+import org.learner.persistence.model.User;
 import org.learner.registration.TopicEvent;
 import org.learner.service.ITopicService;
 import org.learner.service.IUserService;
@@ -86,13 +87,16 @@ public class TopicController {
     	return null;
     }
     
-    @RequestMapping(value="/greetings")
+    @GetMapping(value="/yeter")
     @ResponseBody
-    public Topic greetings(){
-		Topic t = topicService.getTopicById(1);
-		
-    	return t;
+    public Greeting yether(){
+    	System.out.println("YETHER!");
+    	Greeting g = new Greeting(1,"Hello Worasdasda");
     	
+    	System.out.println(g.getContent());
+    	
+    	return g;
     }
+    
     
 }

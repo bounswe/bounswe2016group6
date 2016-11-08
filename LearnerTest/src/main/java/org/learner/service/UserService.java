@@ -63,7 +63,6 @@ public class UserService implements IUserService {
         user.setLastName(accountDto.getLastName());
         user.setPassword(passwordEncoder.encode(accountDto.getPassword()));
         user.setEmail(accountDto.getEmail());
-        user.setUsing2FA(accountDto.isUsing2FA());
         user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")));
         return repository.save(user);
     }
@@ -184,7 +183,6 @@ public class UserService implements IUserService {
     public User updateUser2FA(boolean use2FA) {
         final Authentication curAuth = SecurityContextHolder.getContext().getAuthentication();
         User currentUser = (User) curAuth.getPrincipal();
-        currentUser.setUsing2FA(use2FA);
         currentUser = repository.save(currentUser);
         final Authentication auth = new UsernamePasswordAuthenticationToken(currentUser, currentUser.getPassword(), curAuth.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(auth);

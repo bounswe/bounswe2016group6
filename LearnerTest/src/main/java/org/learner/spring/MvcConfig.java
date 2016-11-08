@@ -57,7 +57,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/users.html");
         registry.addViewController("/qrcode.html");
     }
-    
+    /*
     @Override
 	public void configureContentNegotiation(
 			ContentNegotiationConfigurer configurer) {
@@ -69,7 +69,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
 			mediaType("html", MediaType.TEXT_HTML).
 			mediaType("json", MediaType.APPLICATION_JSON);
 	}
-    
+    */
     @Override
     public void configureDefaultServletHandling(final DefaultServletHandlerConfigurer configurer) {
         configurer.enable();

@@ -7,7 +7,6 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.learner.captcha.ICaptchaService;
 import org.learner.persistence.model.User;
 import org.learner.persistence.model.VerificationToken;
 import org.learner.registration.OnRegistrationCompleteEvent;
@@ -45,8 +44,6 @@ public class RegistrationController {
     @Autowired
     private ISecurityUserService securityUserService;
 
-    @Autowired
-    private ICaptchaService captchaService;
 
     @Autowired
     private MessageSource messages;
@@ -82,10 +79,6 @@ public class RegistrationController {
         if (result.equals("valid")) {
             final User user = userService.getUser(token);
             System.out.println(user);
-            if (user.isUsing2FA()) {
-                model.addAttribute("qr", userService.generateQRUrl(user));
-                return "redirect:/qrcode.html?lang=" + locale.getLanguage();
-            }
             model.addAttribute("message", messages.getMessage("message.accountVerified", null, locale));
             return "redirect:/login?lang=" + locale.getLanguage();
         }
