@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LearnerMockup</string>
+    <string name="app_name">Learner</string>
     <string name="title_activity_home_page">HomePage</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>

@@ -1,5 +1,7 @@
 package com.group6boun451.learner;
 
+import java.util.List;
+
 /**
  * Created by muaz on 07.10.2016.
  */
@@ -9,14 +11,17 @@ public class Topic {
     private int imgid;
     private String editor;
     private String date;
+    private int id;
+    private CommentContainer comments;
+
+    public Topic(int id){
+        this.id = id;
+    }
+
+
 
     public int getId() {
         return id;
-    }
-
-    int id;
-    public Topic(int id){
-        this.id = id;
     }
 
     public String getText() {
@@ -60,4 +65,11 @@ public class Topic {
     }
 
 
+    public List<Comment> getComments() {
+        return comments.getComments();
+    }
+
+    public void setComments(CommentContainer comments) {
+        this.comments = comments;
+    }
 }

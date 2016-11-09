@@ -28,14 +28,17 @@
                 android:orientation="vertical">
 
                 <TabWidget
-                    android:id="@android:id/tabs"
                     android:layout_width="match_parent"
-                    android:layout_height="30dip"></TabWidget>
+                    android:layout_height="50dip"
+                    android:layout_weight="1"
+                    android:background="#4372AA"
+                    android:id="@android:id/tabs"></TabWidget>
 
                 <FrameLayout
                     android:id="@android:id/tabcontent"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
 
                     <LinearLayout
                         android:id="@+id/tab1"
@@ -45,11 +48,20 @@
                         android:orientation="vertical">
                         <ScrollView
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent">
+                            android:layout_height="match_parent"
+                            android:id="@+id/topicScrollView">
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical">
+                                android:orientation="vertical"
+                                android:paddingTop="10dip">
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="310dip"
+                                    android:src="@drawable/lufertopic"
+                                    android:adjustViewBounds="true"
+                                    android:id="@+id/imgTopicPageImage"
+                                    />
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -90,13 +102,7 @@
                                         android:id="@+id/txtTopicPageDate"/>
                                 </LinearLayout>
 
-                                <ImageView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="400dip"
-                                    android:src="@drawable/lufertopic"
-                                    android:adjustViewBounds="true"
-                                    android:id="@+id/imgTopicPageImage"
-                                    />
+
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -113,6 +119,8 @@
 
 
                             </LinearLayout>
+
+
                         </ScrollView>
 
 
@@ -122,15 +130,48 @@
                         android:id="@+id/tab2"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="#da8200"
+                        android:background="#ffffff"
                         android:orientation="vertical">
 
-                        <TextView
+                        <ListView
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="This is tab 2" />
+                            android:layout_height="wrap_content"
+                            android:id="@+id/topicPageCommentList"></ListView>
+
+
+
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="invisible"
+                        android:orientation="vertical"
+                        android:padding="10dip"
+                        android:background="#4372AA"
+                        android:id="@+id/snackdeneme"
+                        >
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="1dip"
+                            android:background="#ffffff"
+                            android:layout_marginBottom="3dip"></LinearLayout>
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Comment Here"
+                            android:lines="3"
+                            android:id="@+id/topicPage_comment_text_area"
+                            />
+
+                        <Button
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="send"
+                            android:id="@+id/topicPage_comment_send_btn"/>
+
+                    </LinearLayout>
 
                 </FrameLayout>
             </LinearLayout>

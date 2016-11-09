@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="15dip">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#d3d3d3"
+        android:paddingRight="10dip"
+        android:paddingLeft="10dip"
+        android:paddingTop="6dip"
+        >
+        <ImageView
+            android:layout_width="35dip"
+            android:layout_height="35dip"
+            android:src="@drawable/usericon"
+            android:id="@+id/commentUserImg"
+            android:layout_marginRight="10dip"
+            />
+        <TextView
+            android:layout_width="300dip"
+            android:layout_height="wrap_content"
+            android:text="abdullah muaz ekici"
+            android:maxLines="1"
+            android:maxLength="22"
+            android:ellipsize="end"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/commentUserImg"
+            android:layout_toEndOf="@+id/commentUserImg"
+            android:id="@+id/commentUsrName" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/commentDate"
+            android:text="12.10.2016"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/commentText"
+        android:maxLines="3"
+        android:layout_margin="15dip"
+        android:text="asdkjhasıldfhbsafbuasdbausodygsavfasdrytfugblıkdyuafsvdlnşıbuvbfcuşadgfısdafyaıufdbjaksugfaysfvbduksf6ayusfvduıasgfdyuıaslvdylıasfdgı7uasgdbyaıuslfylsfasdaslkjhfjnpıoashfuıoasghfduıagsbhufıgashfdıasd"
+        android:ellipsize="end"/>
+
+
+
+</LinearLayout>
