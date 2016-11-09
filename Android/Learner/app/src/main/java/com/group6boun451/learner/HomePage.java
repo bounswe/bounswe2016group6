@@ -22,12 +22,18 @@ import android.view.View;
 import org.kefirsf.bb.TextProcessor;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class HomePage extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private ViewPager viewpager;
-    private ViewPager viewpager2;
-    private ViewPager viewpager3;
+    @BindView(R.id.activity_topic_pager_view_pager) ViewPager viewpager;
+    @BindView(R.id.activity_topic_pager_view_pager_popular) ViewPager viewpager2;
+    @BindView(R.id.activity_topic_pager_view_pager_mostrecent) ViewPager viewpager3;
+    @BindView(R.id.fab) FloatingActionButton fab;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+
     private List<Topic> topics;
     private TopicContainer tpc;
     private boolean isTeacher = true;
@@ -35,10 +41,10 @@ public class HomePage extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        if(!isTeacher) fab.setVisibility(View.INVISIBLE);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -46,11 +52,9 @@ public class HomePage extends AppCompatActivity
                 startActivity(intent);
             }
         });
-        if(!isTeacher) fab.setVisibility(View.INVISIBLE);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
@@ -60,9 +64,6 @@ public class HomePage extends AppCompatActivity
         tpc = new TopicContainer(this);
         topics = tpc.getTopics();
 
-        viewpager = (ViewPager) findViewById(R.id.activity_topic_pager_view_pager);
-        viewpager2 = (ViewPager) findViewById(R.id.activity_topic_pager_view_pager_popular);
-        viewpager3 = (ViewPager) findViewById(R.id.activity_topic_pager_view_pager_mostrecent);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentManager fragmentManager2 = getSupportFragmentManager();
         FragmentManager fragmentManager3 = getSupportFragmentManager();

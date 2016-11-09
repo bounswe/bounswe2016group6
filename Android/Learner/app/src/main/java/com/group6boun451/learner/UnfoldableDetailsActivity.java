@@ -9,54 +9,58 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.alexvasilkov.android.commons.texts.SpannableBuilder;
 import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.foldablelayout.UnfoldableView;
 import com.alexvasilkov.foldablelayout.shading.GlanceFoldShading;
-import com.group6boun451.learner.items.Painting;
-import com.group6boun451.learner.items.PaintingsAdapter;
+import com.group6boun451.learner.items.Topic;
+import com.group6boun451.learner.items.TopicsAdapter;
 import com.group6boun451.learner.utils.GlideHelper;
+
+import butterknife.BindView;
 
 public class UnfoldableDetailsActivity extends AppCompatActivity {
 
-    private View listTouchInterceptor;
-    private View detailsLayout;
-    private UnfoldableView unfoldableView;
+    @BindView(R.id.touch_interceptor_view) View listTouchInterceptor;
+    @BindView(R.id.details_scrollView) ScrollView detailsScrollView;
+    @BindView(R.id.unfoldable_view) UnfoldableView unfoldableView;
+    @BindView(R.id.list_view) ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_unfoldable_details);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        ListView listView = Views.find(this, R.id.list_view);
-        listView.setAdapter(new PaintingsAdapter(this));
-
-        listTouchInterceptor = Views.find(this, R.id.touch_interceptor_view);
+        listView.setAdapter(new TopicsAdapter(this));
         listTouchInterceptor.setClickable(false);
-
-        detailsLayout = Views.find(this, R.id.details_layout);
-        detailsLayout.setVisibility(View.INVISIBLE);
-
-        unfoldableView = Views.find(this, R.id.unfoldable_view);
 
         Bitmap glance = BitmapFactory.decodeResource(getResources(), R.drawable.unfold_glance);
         unfoldableView.setFoldShading(new GlanceFoldShading(glance));
-
         unfoldableView.setOnFoldingListener(new UnfoldableView.SimpleFoldingListener() {
             @Override
             public void onUnfolding(UnfoldableView unfoldableView) {
                 listTouchInterceptor.setClickable(true);
-                detailsLayout.setVisibility(View.VISIBLE);
+                detailsScrollView.setVisibility(View.VISIBLE);
             }
 
             @Override
-            public void onUnfolded(UnfoldableView unfoldableView) {
+            public void onUnfolded(final UnfoldableView unfoldableView) {
                 listTouchInterceptor.setClickable(false);
+                if (detailsScrollView.getChildAt(0).getHeight()>listView.getHeight())
+                    unfoldableView.setGesturesEnabled(false);
+                detailsScrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+                    @Override
+                    public void onScrollChanged() {
+                        if(detailsScrollView.getScrollY()==0) unfoldableView.setGesturesEnabled(true);
+                        else unfoldableView.setGesturesEnabled(false);
+                    }
+                });
             }
 
             @Override
@@ -67,7 +71,7 @@ public class UnfoldableDetailsActivity extends AppCompatActivity {
             @Override
             public void onFoldedBack(UnfoldableView unfoldableView) {
                 listTouchInterceptor.setClickable(false);
-                detailsLayout.setVisibility(View.INVISIBLE);
+                detailsScrollView.setVisibility(View.INVISIBLE);
             }
         });
     }
@@ -82,8 +86,7 @@ public class UnfoldableDetailsActivity extends AppCompatActivity {
         }
     }
 
-    @NonNull
-    @Override
+    @NonNull @Override
     public ActionBar getSupportActionBar() {
         // Making getSupportActionBar() method to be @NonNull
         ActionBar actionBar = super.getSupportActionBar();
@@ -101,27 +104,27 @@ public class UnfoldableDetailsActivity extends AppCompatActivity {
         }
     }
 
-    public void openDetails(View coverView, Painting painting) {
-        final ImageView image = Views.find(detailsLayout, R.id.details_image);
-        final TextView title = Views.find(detailsLayout, R.id.details_title);
-        final TextView description = Views.find(detailsLayout, R.id.details_text);
+    public void openDetails(View coverView, Topic topic) {
+        final ImageView image = Views.find(detailsScrollView, R.id.details_image);
+        final TextView title = Views.find(detailsScrollView, R.id.details_title);
+        final TextView description = Views.find(detailsScrollView, R.id.details_text);
 
-        GlideHelper.loadPaintingImage(image, painting);
-        title.setText(painting.getTitle());
+        GlideHelper.loadPaintingImage(image, topic);
+        title.setText(topic.getTitle());
 
         SpannableBuilder builder = new SpannableBuilder(this);
         builder
                 .createStyle().setFont(Typeface.DEFAULT_BOLD).apply()
                 .append(R.string.year).append(": ")
                 .clearStyle()
-                .append(painting.getYear()).append("\n")
+                .append(topic.getYear()).append("\n")
                 .createStyle().setFont(Typeface.DEFAULT_BOLD).apply()
                 .append(R.string.location).append(": ")
                 .clearStyle()
-                .append(painting.getLocation());
+                .append(topic.getLocation());
         description.setText(builder.build());
 
-        unfoldableView.unfold(coverView, detailsLayout);
+        unfoldableView.unfold(coverView, detailsScrollView);
     }
 
 }

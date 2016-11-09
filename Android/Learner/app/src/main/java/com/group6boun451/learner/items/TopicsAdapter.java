@@ -15,15 +15,15 @@ import com.group6boun451.learner.utils.GlideHelper;
 
 import java.util.Arrays;
 
-public class PaintingsAdapter extends ItemsAdapter<Painting> implements View.OnClickListener {
+public class TopicsAdapter extends ItemsAdapter<Topic> implements View.OnClickListener {
 
-    public PaintingsAdapter(Context context) {
+    public TopicsAdapter(Context context) {
         super(context);
-        setItemsList(Arrays.asList(Painting.getAllPaintings(context.getResources())));
+        setItemsList(Arrays.asList(Topic.getAllTopics(context.getResources())));
     }
 
     @Override
-    protected View createView(Painting item, int pos, ViewGroup parent, LayoutInflater inflater) {
+    protected View createView(Topic item, int pos, ViewGroup parent, LayoutInflater inflater) {
         View view = inflater.inflate(R.layout.list_item, parent, false);
         ViewHolder vh = new ViewHolder();
         vh.image = Views.find(view, R.id.list_item_image);
@@ -35,7 +35,7 @@ public class PaintingsAdapter extends ItemsAdapter<Painting> implements View.OnC
     }
 
     @Override
-    protected void bindView(Painting item, int pos, View convertView) {
+    protected void bindView(Topic item, int pos, View convertView) {
         ViewHolder vh = (ViewHolder) convertView.getTag();
 
         vh.image.setTag(R.id.list_item_image, item);
@@ -45,7 +45,7 @@ public class PaintingsAdapter extends ItemsAdapter<Painting> implements View.OnC
 
     @Override
     public void onClick(View view) {
-        Painting item = (Painting) view.getTag(R.id.list_item_image);
+        Topic item = (Topic) view.getTag(R.id.list_item_image);
         ((UnfoldableDetailsActivity) view.getContext()).openDetails(view, item);
 
     }

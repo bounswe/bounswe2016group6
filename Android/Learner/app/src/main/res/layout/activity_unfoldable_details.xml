@@ -19,56 +19,62 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <LinearLayout
-        android:id="@+id/details_layout"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#333"
-        android:orientation="vertical">
+        android:id="@+id/details_scrollView"
+        android:visibility="invisible"
+        android:background="#333">
 
-        <ImageView
-            android:id="@+id/details_image"
-            android:layout_width="match_parent"
-            android:layout_height="320dp"
-            android:adjustViewBounds="true"
-            android:scaleType="centerCrop" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.6dp"
-            android:background="#fff" />
-
-        <TextView
-            android:id="@+id/details_title"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:layout_marginLeft="@dimen/default_margin"
-            android:layout_marginRight="@dimen/default_margin"
-            android:layout_marginTop="12dp"
-            android:textColor="#fff"
-            android:textSize="18sp" />
+            android:isScrollContainer="true"
+            android:orientation="vertical">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.6dp"
-            android:layout_marginLeft="@dimen/default_margin"
-            android:layout_marginRight="@dimen/default_margin"
-            android:background="#fff" />
+            <ImageView
+                android:id="@+id/details_image"
+                android:layout_width="match_parent"
+                android:layout_height="320dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop" />
 
-        <TextView
-            android:id="@+id/details_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/default_margin"
-            android:layout_marginLeft="@dimen/default_margin"
-            android:layout_marginRight="@dimen/default_margin"
-            android:layout_marginTop="8dp"
-            android:lineSpacingExtra="4sp"
-            android:textColor="#eee"
-            android:textSize="14sp" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.6dp"
+                android:background="#fff" />
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/details_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:layout_marginLeft="@dimen/default_margin"
+                android:layout_marginRight="@dimen/default_margin"
+                android:layout_marginTop="12dp"
+                android:textColor="#fff"
+                android:textSize="18sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.6dp"
+                android:layout_marginLeft="@dimen/default_margin"
+                android:layout_marginRight="@dimen/default_margin"
+                android:background="#fff" />
+
+            <TextView
+                android:id="@+id/details_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/default_margin"
+                android:layout_marginLeft="@dimen/default_margin"
+                android:layout_marginRight="@dimen/default_margin"
+                android:layout_marginTop="8dp"
+                android:lineSpacingExtra="4sp"
+                android:textColor="#eee"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </ScrollView>
 
     <com.alexvasilkov.foldablelayout.UnfoldableView
         android:id="@+id/unfoldable_view"
