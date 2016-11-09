@@ -48,17 +48,19 @@ public class TopicController {
     }
     
     @RequestMapping(value = "/create", method=RequestMethod.POST )
-    public Topic createTopic(@RequestParam String header, @Valid TopicDto topicdto, final HttpServletRequest request){
+    public GenericResponse createTopic(@RequestParam String header, @Valid TopicDto topicdto, final HttpServletRequest request){
     	
     	
     	LOGGER.debug("Request greeting! ++ NORELOAD ++++1111");
     	topicdto.setRevealDate(new Date());
     	final Topic posted = topicService.createNewTopic(topicdto);
     	
+    	if(posted == null){
+    		return new GenericResponse("Topic creation failed!");
+    	}
     	eventPublisher.publishEvent(new TopicEvent(posted));
-    	
-    	return posted;
-    	//return new GenericResponse("Topic Creation Succeeded!");
+    	LOGGER.debug(posted.toString());
+    	return new GenericResponse("Topic Creation Succeeded!");
     }
     
     
@@ -74,17 +76,35 @@ public class TopicController {
     	}
     	
     	model.addAttribute("topic", editing);
-    	
     	return "editTopic";
     }
     
+    
     @PostMapping(value="/edit/{topicId}")
-    public Topic editTopic(@PathVariable Long topicId){
+    public GenericResponse editTopic(@PathVariable Long topicId,TopicDto topicdto){
     	System.out.println("Edit topic request");
     	
-    	topicService.getTopicById(topicId);
+    	Topic edited = topicService.updateTopic(topicId, topicdto);
+    	LOGGER.debug(edited.toString());
     	
-    	return null;
+    	return new GenericResponse("Topic update successful!");
+    	
+    }
+    
+    @PostMapping(value="/like/{topicId}")
+    public GenericResponse likeTopic(@PathVariable Long topicId){
+    	System.out.println("Edit topic request");
+    	
+    	Topic liked = topicService.likeTopic(topicId);
+    	//LOGGER.debug(edited.toString());
+    	
+    	return new GenericResponse("Topic like successful!");
+    	
+    }
+    
+    @RequestMapping(value = "/view/{topicId}")
+    public Topic viewTopic(@PathVariable Long topicId){
+    	return topicService.getTopicById(topicId);
     }
     
     @GetMapping(value="/yeter")

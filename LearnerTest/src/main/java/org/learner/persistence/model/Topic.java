@@ -3,6 +3,7 @@ package org.learner.persistence.model;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -36,7 +37,14 @@ public class Topic {
     
     private int likes;
     
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "topic_like",
+    			joinColumns = {@JoinColumn(name="topic_id")},
+    			inverseJoinColumns = {@JoinColumn(name = "user_id")}
+    			)		
+    private List<User> likedBy;
+    
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(	name = "topic_tag" , 
     			joinColumns = {@JoinColumn(name="topic_id")}, 
     			inverseJoinColumns={@JoinColumn(name="tag_id")}
@@ -58,7 +66,7 @@ public class Topic {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
+	
 	public String getHeader() {
 		return header;
 	}
@@ -102,7 +110,17 @@ public class Topic {
 
 
 
-    @Override
+    public int getLikes() {
+		return likes;
+	}
+
+
+	public void setLikes(int likes) {
+		this.likes = likes;
+	}
+
+
+	@Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;

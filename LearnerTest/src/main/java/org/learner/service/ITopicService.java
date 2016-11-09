@@ -9,10 +9,12 @@ public interface ITopicService {
 	
 	Topic deleteTopic();
 	
-	Topic updateTopic(TopicDto topicdto);
+	Topic updateTopic(long id,TopicDto topicdto);
 	
 	Topic getTopicById(long id);
 	
 	Topic getTopicByHeader(String hdr);
+
+	Topic likeTopic(long topicId);
 	
 }

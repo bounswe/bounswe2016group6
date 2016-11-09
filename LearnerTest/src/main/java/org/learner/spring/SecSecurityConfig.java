@@ -2,6 +2,7 @@ package org.learner.spring;
 
 import org.learner.security.RestAuthenticationEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +26,7 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
 public class SecSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
+    @Qualifier("userDetailsService")
     private UserDetailsService userDetailsService;
     
     @Autowired 
@@ -39,6 +41,11 @@ public class SecSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private AuthenticationFailureHandler authenticationFailureHandler;
 
+
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+    	auth.userDetailsService(userDetailsService).passwordEncoder(encoder());
+    }
 
     public SecSecurityConfig() {
         super();
