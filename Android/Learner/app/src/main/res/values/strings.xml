@@ -10,6 +10,8 @@
     <string name="title_activity_main2">Main2Activity</string>
     <string name="title_activity_add_topic">Add New Topic</string>
 
+    <string name="year">Year</string>
+    <string name="location">Location</string>
 
     <string name="id_label">The ID is</string>
     <string name="id_value">[id]</string>

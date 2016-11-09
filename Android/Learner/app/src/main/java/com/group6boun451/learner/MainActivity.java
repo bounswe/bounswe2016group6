@@ -1,5 +1,6 @@
 package com.group6boun451.learner;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -42,7 +43,8 @@ public class MainActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new FetchSecuredResourceTask().execute();
+                startActivity(new Intent(MainActivity.this,UnfoldableDetailsActivity.class));
+              //  new FetchSecuredResourceTask().execute();
             }
         });
 

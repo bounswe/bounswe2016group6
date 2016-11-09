@@ -18,6 +18,9 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".UnfoldableDetailsActivity"
+            android:label="Unfoldable details" />
+        <activity
             android:name=".HomePage"
             android:label="Home Page"
             android:theme="@style/AppTheme.NoActionBar" />
