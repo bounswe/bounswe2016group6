@@ -17,5 +17,12 @@ public class GlideHelper {
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(image);
     }
+    public static void loadPaintingImage(ImageView image, com.group6boun451.learner.Topic topic) {
+        Glide.with(image.getContext().getApplicationContext())
+                .load(topic.getImage())
+                .dontAnimate()
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .into(image);
+    }
 
 }
