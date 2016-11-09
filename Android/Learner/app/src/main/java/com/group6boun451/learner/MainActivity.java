@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               // startActivity(new Intent(MainActivity.this,UnfoldableDetailsActivity.class));
                 startActivity(new Intent(MainActivity.this,HomePage.class));
               //  new FetchSecuredResourceTask().execute();
             }

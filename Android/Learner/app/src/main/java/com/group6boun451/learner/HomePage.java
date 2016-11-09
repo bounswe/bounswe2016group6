@@ -7,13 +7,11 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -32,10 +30,8 @@ import com.alexvasilkov.android.commons.texts.SpannableBuilder;
 import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.foldablelayout.UnfoldableView;
 import com.alexvasilkov.foldablelayout.shading.GlanceFoldShading;
-import com.group6boun451.learner.items.TopicsAdapter;
 import com.group6boun451.learner.utils.GlideHelper;
 
-import org.kefirsf.bb.TextProcessor;
 import java.util.List;
 
 import butterknife.BindView;
@@ -99,7 +95,7 @@ public class HomePage extends AppCompatActivity
             @Override
             public void onUnfolded(final UnfoldableView unfoldableView) {
                 listTouchInterceptor.setClickable(false);
-                //if (detailsScrollView.getChildAt(0).getHeight()>detailsScrollView.getRootView().getHeight())
+             //   if (detailsScrollView.getChildAt(0).getHeight()>drawer.getRootView().getHeight())
                     unfoldableView.setGesturesEnabled(false);
                 detailsScrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
                     @Override
@@ -195,13 +191,13 @@ public class HomePage extends AppCompatActivity
         title.setText(topic.getTitle());
 
         SpannableBuilder builder = new SpannableBuilder(this);
-        builder
+        builder.append(R.string.by).append(" ").append(topic.getEditor()).append("\t")
                 .createStyle().setFont(Typeface.DEFAULT_BOLD).apply()
-                .append(R.string.year).append(": ")
+                .append(R.string.date).append(": ")
                 .clearStyle()
                 .append(topic.getDate()).append("\n")
                 .createStyle().setFont(Typeface.DEFAULT_BOLD).apply()
-                .append(R.string.location).append(": ")
+                .append(R.string.content).append(": ")
                 .clearStyle()
                 .append(topic.getText());
         description.setText(builder.build());
@@ -211,8 +207,6 @@ public class HomePage extends AppCompatActivity
 
 
     private class TopicPagerAdapter extends FragmentStatePagerAdapter {
-        final TopicsAdapter ta = new TopicsAdapter(HomePage.this);
-
         public TopicPagerAdapter(FragmentManager fm) {
             super(fm);
         }

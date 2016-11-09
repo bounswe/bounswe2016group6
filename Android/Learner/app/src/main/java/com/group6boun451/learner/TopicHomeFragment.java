@@ -14,17 +14,13 @@ import android.widget.TextView;
  */
 public class TopicHomeFragment extends android.support.v4.app.Fragment {
 
-    private TextView title;
-    private TextView author;
-    private TextView date;
-    private ImageView img;
     private Topic topic;
-    private TopicContainer tpc;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         int id = getArguments().getInt("topic_id");
-        tpc = new TopicContainer(getContext());
+        TopicContainer tpc = new TopicContainer(getContext());
         topic = tpc.getTopic(id);
 
 
@@ -43,10 +39,10 @@ public class TopicHomeFragment extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_topic_home,container,false);
-        title = (TextView) v.findViewById(R.id.textTopicTitle);
-        author = (TextView) v.findViewById(R.id.textAuthor);
-        date = (TextView) v.findViewById(R.id.textDate);
-        img = (ImageView) v.findViewById(R.id.imageTopic);
+        TextView title = (TextView) v.findViewById(R.id.textTopicTitle);
+        TextView author = (TextView) v.findViewById(R.id.textAuthor);
+        TextView date = (TextView) v.findViewById(R.id.textDate);
+        ImageView img = (ImageView) v.findViewById(R.id.imageTopic);
 
 
         title.setText(topic.getTitle());
@@ -59,7 +55,7 @@ public class TopicHomeFragment extends android.support.v4.app.Fragment {
             public void onClick(View v) {
                 ((HomePage) v.getContext()).openDetails(v, topic);
 
-//                Intent intent = TopicPage.newIntent(getActivity(),topic.getId());
+                Intent intent = TopicPage.newIntent(getActivity(),topic.getId());
 //                startActivity(intent);
             }
         });
