@@ -38,4 +38,5 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-databind:2.8.4'
     compile 'com.alexvasilkov:foldable-layout:1.2.0'
     compile 'org.kefirsf:kefirbb:1.5'
+    compile 'com.github.Yalantis:GuillotineMenu-Android:1.2'
 }
