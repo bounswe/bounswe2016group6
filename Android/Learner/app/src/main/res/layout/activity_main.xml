@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#2a5ba5"
-    tools:context="deneme.mockupdemo.group6.learnermockup.MainActivity">
+    tools:context=".MainActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -36,7 +36,7 @@
             android:background="#ffffff"
             android:hint="user name"
             android:gravity="center"
-          />
+            android:singleLine="true" />
 
         <EditText
             android:layout_width="match_parent"
@@ -47,11 +47,13 @@
             android:layout_marginBottom="15dip"
             android:background="#ffffff"
             android:hint="password"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:inputType="textPassword" />
         
         <Button
             android:layout_width="match_parent"
             android:layout_height="60dip"
+            android:id="@+id/login_button"
             android:layout_marginRight="30dip"
             android:layout_marginLeft="30dip"
             android:layout_marginBottom="15dip"
@@ -60,9 +62,10 @@
             android:textAllCaps="false"
             android:textSize="23sp"
             android:textColor="#ffffff"
-            android:onClick="btnLoginClick"/>
+            android:onClick="onLogin" />
 
         <TextView
+            android:id="@+id/id_value"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="forgot password?"
@@ -79,6 +82,7 @@
         android:gravity="bottom"
         >
         <TextView
+            android:id="@+id/content_value"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
