@@ -6,22 +6,22 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -38,15 +38,15 @@ import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.foldablelayout.UnfoldableView;
 import com.alexvasilkov.foldablelayout.shading.GlanceFoldShading;
 import com.group6boun451.learner.utils.GlideHelper;
+import com.yalantis.guillotine.animation.GuillotineAnimation;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class HomePage extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
-    @BindView(R.id.drawer_layout) DrawerLayout drawer;
+public class HomePage extends AppCompatActivity{
+    @BindView(R.id.root) CoordinatorLayout root;
     @BindView(R.id.touch_interceptor_view) View listTouchInterceptor;
     @BindView(R.id.tabHost) TabHost tabHost;
     @BindView(R.id.details_scrollView) ScrollView detailsScrollView;
@@ -56,6 +56,7 @@ public class HomePage extends AppCompatActivity
     @BindView(R.id.activity_topic_pager_view_pager_mostrecent) ViewPager viewpager3;
     @BindView(R.id.fab) FloatingActionButton fab;
     @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.content_hamburger) View contentHamburger;
 
     private List<Topic> topics;
     private TopicContainer tpc;
@@ -68,7 +69,21 @@ public class HomePage extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
         ButterKnife.bind(this);
-        setSupportActionBar(toolbar);
+
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setTitle(null);
+        }
+
+        View guillotineMenu = LayoutInflater.from(this).inflate(R.layout.guillotine, null);
+        guillotineMenu.setLayoutParams(new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        root.addView(guillotineMenu);
+        new GuillotineAnimation.GuillotineBuilder(guillotineMenu, guillotineMenu.findViewById(R.id.guillotine_hamburger), contentHamburger)
+                .setStartDelay(250)
+                .setActionBarViewForAnimation(toolbar)
+                .setClosedOnStart(true)
+                .build();
+
         TabHost host = (TabHost)findViewById(R.id.tabHost);
         host.setup();
 
@@ -114,13 +129,6 @@ public class HomePage extends AppCompatActivity
             }
         });
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
         tpc = new TopicContainer(this);
         topics = tpc.getTopics();
 
@@ -141,7 +149,7 @@ public class HomePage extends AppCompatActivity
             @Override
             public void onUnfolded(final UnfoldableView unfoldableView) {
                 listTouchInterceptor.setClickable(false);
-              // if (detailsScrollView.getChildAt(0).getHeight()>drawer.getRootView().getHeight())
+              // if (detailsScrollView.getChildAt(0).getHeight()>root.getRootView().getHeight())
                     unfoldableView.setGesturesEnabled(false);
 
                 detailsScrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
@@ -174,9 +182,11 @@ public class HomePage extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else  if (unfoldableView != null && (unfoldableView.isUnfolded() || unfoldableView.isUnfolding())) {
+
+//        if (root.isDrawerOpen(GravityCompat.START)) {
+//            root.closeDrawer(GravityCompat.START);
+//        } else
+        if (unfoldableView != null && (unfoldableView.isUnfolded() || unfoldableView.isUnfolding())) {
             unfoldableView.foldBack();
         }else {
             super.onBackPressed();
@@ -206,32 +216,6 @@ public class HomePage extends AppCompatActivity
 
         return super.onOptionsItemSelected(item);
     }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
 
 
     public void openDetails(View coverView, Topic topic) {
