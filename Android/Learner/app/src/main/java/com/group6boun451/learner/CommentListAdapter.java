@@ -47,7 +47,7 @@ public class CommentListAdapter extends BaseAdapter {
     public View getView(int position, View convertView , ViewGroup parent){
 
         // layout for list view
-        View  v = mInflater.inflate(R.layout.comment_list_view,null);
+        View v = mInflater.inflate(R.layout.comment_item, null);
 
         ImageView usrImg = (ImageView) v.findViewById(R.id.commentUserImg);
         TextView usrName = (TextView) v.findViewById(R.id.commentUsrName);

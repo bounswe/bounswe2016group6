@@ -23,11 +23,6 @@
             android:label="Home Page"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".TopicPage"
-            android:label="@string/title_activity_main2"
-            android:parentActivityName=".HomePage"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".AddTopicActivity"
             android:label="@string/title_activity_add_topic"
             android:theme="@style/AppTheme.NoActionBar"/>

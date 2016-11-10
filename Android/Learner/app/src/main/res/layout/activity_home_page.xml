@@ -4,83 +4,82 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:background="@color/guillotine_background_dark">
+    android:background="@color/guillotine_background_dark"
+    android:fitsSystemWindows="true">
     <!--topiclist-->
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_marginTop="?actionBarSize"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="?actionBarSize">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
-                android:layout_marginTop="10dip"
+                style="?android:listSeparatorTextViewStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
+                android:layout_marginTop="10dip"
                 android:text="RECOMMENDED"
-                style="?android:listSeparatorTextViewStyle"/>
+                android:textSize="20sp" />
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/activity_topic_pager_view_pager"
                 android:layout_width="match_parent"
-                android:layout_height="270dip"/>
+                android:layout_height="320dp" />
 
             <TextView
-                android:layout_marginTop="10dip"
+                style="?android:listSeparatorTextViewStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
+                android:layout_marginTop="10dip"
                 android:text="MOST POPULAR"
-                style="?android:listSeparatorTextViewStyle"/>
+                android:textSize="20sp" />
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/activity_topic_pager_view_pager_popular"
                 android:layout_width="match_parent"
-                android:layout_height="270dip"/>
+                android:layout_height="320dp" />
 
             <TextView
-                android:layout_marginTop="10dip"
+                style="?android:listSeparatorTextViewStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
+                android:layout_marginTop="10dip"
                 android:text="MOST RECENT"
-                style="?android:listSeparatorTextViewStyle"/>
+                android:textSize="20sp" />
 
             <android.support.v4.view.ViewPager
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/activity_topic_pager_view_pager_mostrecent"
                 android:layout_width="match_parent"
-                android:layout_height="270dip"/>
+                android:layout_height="320dp" />
         </LinearLayout>
     </ScrollView>
     <View
         android:id="@+id/touch_interceptor_view"
         android:layout_width="match_parent"
-        android:layout_marginTop="?actionBarSize"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="?actionBarSize" />
     <!--topic-->
     <TabHost
-        android:id="@+id/tabHost"
+        android:id="@+id/topic_TabHost"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?actionBarSize"
-        android:visibility="invisible"
-        android:background="#3b5998">
+        android:background="@color/guillotine_background_dark"
+        android:visibility="invisible">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
             <TabWidget
+                android:id="@android:id/tabs"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:layout_weight="1"
-                android:background="#4372AA"
-                android:id="@android:id/tabs" />
+                android:background="#4372AA" />
             <FrameLayout
                 android:id="@android:id/tabcontent"
                 android:layout_width="match_parent"
@@ -88,16 +87,14 @@
                 android:layout_weight="1">
 
                 <LinearLayout
-                    android:id="@+id/tab1"
+                    android:id="@+id/topic_tab"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="#ffffff"
                     android:orientation="vertical">
                     <ScrollView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
                         android:id="@+id/details_scrollView"
-                        android:background="#333">
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -123,20 +120,20 @@
                                 android:isScrollContainer="true"
                                 android:orientation="horizontal">
                                 <ImageView
-                                    android:padding="4dp"
+                                    android:id="@+id/imgTOpicPageUserImage"
                                     android:layout_width="36dp"
                                     android:layout_height="36dp"
-                                    android:src="@drawable/usericon"
-                                    android:id="@+id/imgTOpicPageUserImage"/>
+                                    android:padding="4dp"
+                                    android:src="@drawable/usericon" />
                                 <TextView
                                     android:id="@+id/details_title"
                                     android:layout_width="0dp"
-                                    android:layout_weight="1"
                                     android:layout_height="wrap_content"
                                     android:layout_marginBottom="4dp"
                                     android:layout_marginLeft="@dimen/default_margin"
                                     android:layout_marginRight="@dimen/default_margin"
                                     android:layout_marginTop="12dp"
+                                    android:layout_weight="1"
                                     android:textColor="#fff"
                                     android:textSize="18sp" />
                             </LinearLayout>
@@ -165,47 +162,46 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/tab2"
-                    android:background="@color/guillotine_background_dark"
+                    android:id="@+id/comment_tab"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
                     <ListView
+                        android:id="@+id/topicPageCommentList"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/topicPageCommentList" />
+                        android:layout_height="wrap_content" />
 
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/new_comment_snack"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="#4372AA"
                     android:orientation="vertical"
                     android:padding="10dip"
-                    android:visibility="invisible"
-                    android:background="#4372AA"
-                    android:id="@+id/snackdeneme"
-                    >
+                    android:visibility="invisible">
 
-                    <LinearLayout
+                    <View
                         android:layout_width="match_parent"
                         android:layout_height="1dip"
-                        android:background="#ffffff"
-                        android:layout_marginBottom="3dip" />
+                        android:layout_marginBottom="3dip"
+                        android:background="#ffffff" />
+
                     <EditText
+                        android:id="@+id/topicPage_comment_text_area"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Comment Here"
-                        android:lines="3"
-                        android:id="@+id/topicPage_comment_text_area"
-                        />
+                        android:hint="@string/comment_here"
+                        android:lines="3" />
 
                     <Button
+                        android:id="@+id/send_comment_button"
+                        style="?android:attr/borderlessButtonStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="send"
-                        android:id="@+id/topicPage_comment_send_btn"/>
+                        android:text="@string/send" />
 
                 </LinearLayout>
             </FrameLayout>
@@ -213,14 +209,14 @@
     </TabHost>
     <com.alexvasilkov.foldablelayout.UnfoldableView
         android:id="@+id/unfoldable_view"
-        android:layout_marginTop="?actionBarSize"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="?actionBarSize" />
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
-        app:contentInsetStart="0dp"
-        style="@style/Toolbar">
+        style="@style/Toolbar"
+        app:contentInsetStart="0dp">
 
         <ImageView
             android:id="@+id/content_hamburger"

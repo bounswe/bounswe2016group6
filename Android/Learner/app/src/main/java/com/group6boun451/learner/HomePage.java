@@ -8,12 +8,9 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -26,7 +23,6 @@ import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -50,7 +46,8 @@ import butterknife.ButterKnife;
 public class HomePage extends AppCompatActivity{
 
     @BindView(R.id.touch_interceptor_view) View listTouchInterceptor;
-    @BindView(R.id.tabHost) TabHost tabHost;
+    @BindView(R.id.topic_TabHost)
+    TabHost tabHost;
     @BindView(R.id.details_scrollView) ScrollView detailsScrollView;
     @BindView(R.id.unfoldable_view) UnfoldableView unfoldableView;
     @BindView(R.id.activity_topic_pager_view_pager) ViewPager viewpager;
@@ -103,8 +100,8 @@ public class HomePage extends AppCompatActivity{
                 .build();
 
         tabHost.setup();
-        tabHost.addTab(tabHost.newTabSpec("Tab One").setContent(R.id.tab1).setIndicator("Topic"));
-        tabHost.addTab(tabHost.newTabSpec("Tab Two").setContent(R.id.tab2).setIndicator("Discussion"));
+        tabHost.addTab(tabHost.newTabSpec("Tab One").setContent(R.id.topic_tab).setIndicator("Topic"));
+        tabHost.addTab(tabHost.newTabSpec("Tab Two").setContent(R.id.comment_tab).setIndicator("Discussion"));
 
         detailsScrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
             @Override
@@ -119,7 +116,7 @@ public class HomePage extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 if(isTopicActive){
-                    LinearLayout lyt = (LinearLayout) findViewById(R.id.snackdeneme);
+                    LinearLayout lyt = (LinearLayout) findViewById(R.id.new_comment_snack);
                     if(isSnackBarActive) {
                         lyt.setVisibility(View.INVISIBLE);
                         fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_floatmenu_comment));
@@ -145,9 +142,9 @@ public class HomePage extends AppCompatActivity{
         topics = tpc.getTopics();
 
         listTouchInterceptor.setClickable(false);
-        viewpager.setAdapter(new TopicPagerAdapter(getSupportFragmentManager()));
-        viewpager2.setAdapter(new TopicPagerAdapter(getSupportFragmentManager()));
-        viewpager3.setAdapter(new TopicPagerAdapter(getSupportFragmentManager()));
+        viewpager.setAdapter(new TopicPagerAdapter(this));
+        viewpager2.setAdapter(new TopicPagerAdapter(this));
+        viewpager3.setAdapter(new TopicPagerAdapter(this));
 
         Bitmap glance = BitmapFactory.decodeResource(getResources(), R.drawable.unfold_glance);
         unfoldableView.setFoldShading(new GlanceFoldShading(glance));
@@ -227,8 +224,7 @@ public class HomePage extends AppCompatActivity{
         final ImageView image = Views.find(tabHost, R.id.details_image);
         final TextView title = Views.find(tabHost, R.id.details_title);
         final TextView description = Views.find(tabHost, R.id.details_text);
-
-        GlideHelper.loadPaintingImage(image, topic);
+        GlideHelper.loadImage(image, topic);
         title.setText(topic.getTitle());
 
         SpannableBuilder builder = new SpannableBuilder(this);
@@ -265,21 +261,42 @@ public class HomePage extends AppCompatActivity{
         unfoldableView.unfold(coverView, tabHost);
     }
 
-
-    private class TopicPagerAdapter extends FragmentStatePagerAdapter {
-        public TopicPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
+    public class TopicPagerAdapter extends PagerAdapter {
+        private Context mContext;
+        TopicPagerAdapter(Context context) {mContext = context;}
 
         @Override
-        public Fragment getItem(int position) {
-            Topic topic = topics.get(position);
-            return TopicHomeFragment.newInstance(topic.getId());
+        public Object instantiateItem(ViewGroup collection, int position) {
+            final Topic topic = topics.get(position);
+            LayoutInflater inflater = LayoutInflater.from(mContext);
+            ViewGroup v = (ViewGroup) inflater.inflate(R.layout.topic_item_home, collection, false);
+            ((TextView)v.findViewById(R.id.textTopicTitle)).setText(topic.getTitle());
+            ((TextView) v.findViewById(R.id.textAuthor)).setText(topic.getEditor());
+            ((TextView) v.findViewById(R.id.textDate)).setText(topic.getDate());
+
+            final ImageView img = (ImageView) v.findViewById(R.id.imageTopic);
+            GlideHelper.loadImage(img, topic);
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((HomePage) v.getContext()).openDetails(v.findViewById(R.id.card_view), topic);
+                }
+            });
+
+            collection.addView(v);
+            return v;
         }
 
+        @Override public void destroyItem(ViewGroup collection, int position, Object view) {collection.removeView((View) view);}
+
+        @Override public int getCount() {return topics.size();}
+
+        @Override public boolean isViewFromObject(View view, Object object) {return view == object;}
+
         @Override
-        public int getCount() {
-            return topics.size();
+        public CharSequence getPageTitle(int position) {
+            return "";
         }
-    };
+
+    }
 }

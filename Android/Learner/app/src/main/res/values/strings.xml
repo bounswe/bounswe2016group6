@@ -23,5 +23,7 @@
     <string name="feed">FEED</string>
     <string name="activity">ACTIVITY</string>
     <string name="settings">SETTINGS</string>
+    <string name="comment_here">Comment Here</string>
+    <string name="send">SEND</string>
 
 </resources>
