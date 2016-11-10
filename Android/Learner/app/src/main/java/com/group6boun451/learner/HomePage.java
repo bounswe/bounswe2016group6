@@ -46,8 +46,7 @@ import butterknife.ButterKnife;
 public class HomePage extends AppCompatActivity{
 
     @BindView(R.id.touch_interceptor_view) View listTouchInterceptor;
-    @BindView(R.id.topic_TabHost)
-    TabHost tabHost;
+    @BindView(R.id.topic_TabHost) TabHost tabHost;
     @BindView(R.id.details_scrollView) ScrollView detailsScrollView;
     @BindView(R.id.unfoldable_view) UnfoldableView unfoldableView;
     @BindView(R.id.activity_topic_pager_view_pager) ViewPager viewpager;
