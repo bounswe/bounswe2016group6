@@ -1,24 +1,247 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout android:id="@+id/root"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@color/guillotine_background_dark"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-        <View
-            android:layout_gravity="top"
+    android:background="@color/guillotine_background_dark">
+    <!--topiclist-->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_marginTop="?actionBarSize"
+        android:layout_height="match_parent">
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/guillotine_actionbar_background_view_height"
-            android:background="@color/guillotine_background" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        <include layout="@layout/content_home_page" />
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
+            <TextView
+                android:layout_marginTop="10dip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="RECOMMENDED"
+                style="?android:listSeparatorTextViewStyle"/>
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/activity_topic_pager_view_pager"
+                android:layout_width="match_parent"
+                android:layout_height="270dip"/>
+
+            <TextView
+                android:layout_marginTop="10dip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="MOST POPULAR"
+                style="?android:listSeparatorTextViewStyle"/>
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/activity_topic_pager_view_pager_popular"
+                android:layout_width="match_parent"
+                android:layout_height="270dip"/>
+
+            <TextView
+                android:layout_marginTop="10dip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="MOST RECENT"
+                style="?android:listSeparatorTextViewStyle"/>
+
+            <android.support.v4.view.ViewPager
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/activity_topic_pager_view_pager_mostrecent"
+                android:layout_width="match_parent"
+                android:layout_height="270dip"/>
+        </LinearLayout>
+    </ScrollView>
+    <View
+        android:id="@+id/touch_interceptor_view"
+        android:layout_width="match_parent"
+        android:layout_marginTop="?actionBarSize"
+        android:layout_height="match_parent" />
+    <!--topic-->
+    <TabHost
+        android:id="@+id/tabHost"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?actionBarSize"
+        android:visibility="invisible"
+        android:background="#3b5998">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TabWidget
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:background="#4372AA"
+                android:id="@android:id/tabs" />
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:id="@+id/tab1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#ffffff"
+                    android:orientation="vertical">
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/details_scrollView"
+                        android:background="#333">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:isScrollContainer="true"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/details_image"
+                                android:layout_width="match_parent"
+                                android:layout_height="320dp"
+                                android:adjustViewBounds="true"
+                                android:scaleType="centerCrop" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="0.6dp"
+                                android:background="#fff" />
+                            <!--user-->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:isScrollContainer="true"
+                                android:orientation="horizontal">
+                                <ImageView
+                                    android:padding="4dp"
+                                    android:layout_width="36dp"
+                                    android:layout_height="36dp"
+                                    android:src="@drawable/usericon"
+                                    android:id="@+id/imgTOpicPageUserImage"/>
+                                <TextView
+                                    android:id="@+id/details_title"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="4dp"
+                                    android:layout_marginLeft="@dimen/default_margin"
+                                    android:layout_marginRight="@dimen/default_margin"
+                                    android:layout_marginTop="12dp"
+                                    android:textColor="#fff"
+                                    android:textSize="18sp" />
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="0.6dp"
+                                android:layout_marginLeft="@dimen/default_margin"
+                                android:layout_marginRight="@dimen/default_margin"
+                                android:background="#fff" />
+
+                            <TextView
+                                android:id="@+id/details_text"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/default_margin"
+                                android:layout_marginLeft="@dimen/default_margin"
+                                android:layout_marginRight="@dimen/default_margin"
+                                android:layout_marginTop="8dp"
+                                android:lineSpacingExtra="4sp"
+                                android:textColor="#eee"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+                    </ScrollView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/tab2"
+                    android:background="@color/guillotine_background_dark"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <ListView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/topicPageCommentList" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="10dip"
+                    android:visibility="invisible"
+                    android:background="#4372AA"
+                    android:id="@+id/snackdeneme"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="1dip"
+                        android:background="#ffffff"
+                        android:layout_marginBottom="3dip" />
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Comment Here"
+                        android:lines="3"
+                        android:id="@+id/topicPage_comment_text_area"
+                        />
+
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="send"
+                        android:id="@+id/topicPage_comment_send_btn"/>
+
+                </LinearLayout>
+            </FrameLayout>
+        </LinearLayout>
+    </TabHost>
+    <com.alexvasilkov.foldablelayout.UnfoldableView
+        android:id="@+id/unfoldable_view"
+        android:layout_marginTop="?actionBarSize"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        app:contentInsetStart="0dp"
+        style="@style/Toolbar">
+
+        <ImageView
+            android:id="@+id/content_hamburger"
+            style="@style/ImageView.Hamburger"
+            android:src="@drawable/ic_menu_90" />
+
+        <com.group6boun451.learner.widget.CanaroTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/fab_margin"
-            android:src="@drawable/ic_add_black_24dp" />
+            android:layout_gravity="center"
+            android:text="@string/activity"
+            android:textSize="@dimen/guillotine_item_text_size" />
+    </android.support.v7.widget.Toolbar>
 
-    </android.support.design.widget.CoordinatorLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/ic_add_black_24dp" />
+
+</merge>
 

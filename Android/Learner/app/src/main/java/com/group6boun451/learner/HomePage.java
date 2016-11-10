@@ -26,6 +26,7 @@ import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -39,6 +40,7 @@ import com.alexvasilkov.foldablelayout.UnfoldableView;
 import com.alexvasilkov.foldablelayout.shading.GlanceFoldShading;
 import com.group6boun451.learner.utils.GlideHelper;
 import com.yalantis.guillotine.animation.GuillotineAnimation;
+import com.yalantis.guillotine.interfaces.GuillotineListener;
 
 import java.util.List;
 
@@ -46,7 +48,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class HomePage extends AppCompatActivity{
-    @BindView(R.id.root) CoordinatorLayout root;
+
     @BindView(R.id.touch_interceptor_view) View listTouchInterceptor;
     @BindView(R.id.tabHost) TabHost tabHost;
     @BindView(R.id.details_scrollView) ScrollView detailsScrollView;
@@ -63,6 +65,8 @@ public class HomePage extends AppCompatActivity{
     private boolean isTeacher = true;
     private boolean isSnackBarActive = false;
     private boolean isTopicActive= false;
+    private boolean isGuillotineOpened = false;
+    private GuillotineAnimation guillotineAnimation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,44 +81,52 @@ public class HomePage extends AppCompatActivity{
 
         View guillotineMenu = LayoutInflater.from(this).inflate(R.layout.guillotine, null);
         guillotineMenu.setLayoutParams(new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        root.addView(guillotineMenu);
-        new GuillotineAnimation.GuillotineBuilder(guillotineMenu, guillotineMenu.findViewById(R.id.guillotine_hamburger), contentHamburger)
+        ((ViewGroup)findViewById(android.R.id.content)).addView(guillotineMenu);
+        guillotineAnimation = new GuillotineAnimation.GuillotineBuilder(guillotineMenu, guillotineMenu.findViewById(R.id.guillotine_hamburger), contentHamburger)
                 .setStartDelay(250)
                 .setActionBarViewForAnimation(toolbar)
+                .setGuillotineListener(new GuillotineListener() {
+                    @Override
+                    public void onGuillotineOpened() {
+                        isGuillotineOpened=true;
+                        fab.setVisibility(View.INVISIBLE);
+                    }
+
+                    @Override
+                    public void onGuillotineClosed() {
+                        isGuillotineOpened=false;
+                        if(isTeacher||isTopicActive) fab.setVisibility(View.VISIBLE);
+
+                    }
+                })
                 .setClosedOnStart(true)
                 .build();
 
-        TabHost host = (TabHost)findViewById(R.id.tabHost);
-        host.setup();
+        tabHost.setup();
+        tabHost.addTab(tabHost.newTabSpec("Tab One").setContent(R.id.tab1).setIndicator("Topic"));
+        tabHost.addTab(tabHost.newTabSpec("Tab Two").setContent(R.id.tab2).setIndicator("Discussion"));
 
-        //Tab 1
-        TabHost.TabSpec spec = host.newTabSpec("Tab One");
-        spec.setContent(R.id.tab1);
-        spec.setIndicator("Topic");
-        host.addTab(spec);
-
-        //Tab 2
-        spec = host.newTabSpec("Tab Two");
-        spec.setContent(R.id.tab2);
-        spec.setIndicator("Discussion");
-        host.addTab(spec);
+        detailsScrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+            @Override
+            public void onScrollChanged() {
+                if(tabHost.getCurrentTab()==0&&detailsScrollView.getScrollY()==0) unfoldableView.setGesturesEnabled(true);
+                else unfoldableView.setGesturesEnabled(false);
+            }
+        });
 
         if (!isTeacher) fab.setVisibility(View.INVISIBLE);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(isTopicActive){
+                    LinearLayout lyt = (LinearLayout) findViewById(R.id.snackdeneme);
                     if(isSnackBarActive) {
-                        LinearLayout lyt = (LinearLayout) findViewById(R.id.snackdeneme);
-
                         lyt.setVisibility(View.INVISIBLE);
                         fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_floatmenu_comment));
                         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                         isSnackBarActive = false;
                     }else{
-
-                        LinearLayout lyt = (LinearLayout) findViewById(R.id.snackdeneme);
                         lyt.setVisibility(View.VISIBLE);
                         EditText textArea = (EditText) findViewById(R.id.topicPage_comment_text_area);
                         textArea.requestFocus();
@@ -149,16 +161,8 @@ public class HomePage extends AppCompatActivity{
             @Override
             public void onUnfolded(final UnfoldableView unfoldableView) {
                 listTouchInterceptor.setClickable(false);
-              // if (detailsScrollView.getChildAt(0).getHeight()>root.getRootView().getHeight())
+                if (detailsScrollView.getChildAt(0).getHeight()>(findViewById(android.R.id.content).getHeight()-findViewById(R.id.toolbar).getHeight()))
                     unfoldableView.setGesturesEnabled(false);
-
-                detailsScrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
-                    @Override
-                    public void onScrollChanged() {
-                        if(detailsScrollView.getScrollY()==0) unfoldableView.setGesturesEnabled(true);
-                        else unfoldableView.setGesturesEnabled(false);
-                    }
-                });
                 isTopicActive = true;
                 fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_floatmenu_comment));
                 //TODO make fab animation here
@@ -172,7 +176,9 @@ public class HomePage extends AppCompatActivity{
             @Override
             public void onFoldedBack(UnfoldableView unfoldableView) {
                 listTouchInterceptor.setClickable(false);
+                unfoldableView.setGesturesEnabled(true);
                 tabHost.setVisibility(View.INVISIBLE);
+                tabHost.setCurrentTab(0);
                 isTopicActive = false;
                 fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_add_black_24dp));
             }
@@ -183,9 +189,9 @@ public class HomePage extends AppCompatActivity{
     @Override
     public void onBackPressed() {
 
-//        if (root.isDrawerOpen(GravityCompat.START)) {
-//            root.closeDrawer(GravityCompat.START);
-//        } else
+        if (isGuillotineOpened) {
+            guillotineAnimation.close();
+        } else
         if (unfoldableView != null && (unfoldableView.isUnfolded() || unfoldableView.isUnfolding())) {
             unfoldableView.foldBack();
         }else {
@@ -216,7 +222,6 @@ public class HomePage extends AppCompatActivity{
 
         return super.onOptionsItemSelected(item);
     }
-
 
     public void openDetails(View coverView, Topic topic) {
         final ImageView image = Views.find(tabHost, R.id.details_image);
