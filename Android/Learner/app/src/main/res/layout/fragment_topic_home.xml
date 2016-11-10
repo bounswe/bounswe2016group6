@@ -13,7 +13,7 @@
         android:scaleType="centerCrop" />
     <View
         android:layout_width="match_parent"
-        android:layout_height="80sp"
+        android:layout_height="160sp"
         android:layout_gravity="bottom"
         android:background="@drawable/image_text_shadow" />
 

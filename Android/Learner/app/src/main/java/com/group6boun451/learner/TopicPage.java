@@ -33,10 +33,8 @@ public class TopicPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
 
-
         TabHost host = (TabHost)findViewById(R.id.tabHost);
         host.setup();
-
 
         //Tab 1
         TabHost.TabSpec spec = host.newTabSpec("Tab One");
@@ -94,12 +92,6 @@ public class TopicPage extends AppCompatActivity {
 
 
 
-    }
-
-    public static Intent newIntent(Context packageContext , int id){
-        Intent intent = new Intent(packageContext,TopicPage.class);
-        intent.putExtra("topic_id",id);
-        return intent;
     }
 
     public void createTopicComments(){

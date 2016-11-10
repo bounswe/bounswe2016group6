@@ -1,5 +1,6 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <!--topiclist-->
     <ScrollView
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
@@ -55,62 +56,157 @@
         android:id="@+id/touch_interceptor_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-    <ScrollView
+    <!--topic-->
+    <TabHost
+        android:id="@+id/tabHost"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/details_scrollView"
         android:visibility="invisible"
-        android:background="#333">
-
+        android:background="#3b5998">
         <LinearLayout
+            android:paddingTop="56dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:isScrollContainer="true"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/details_image"
+            <TabWidget
                 android:layout_width="match_parent"
-                android:layout_height="320dp"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop" />
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:background="#4372AA"
+                android:id="@android:id/tabs" />
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.6dp"
-                android:background="#fff" />
+                <LinearLayout
+                    android:id="@+id/tab1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#ffffff"
+                    android:orientation="vertical">
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/details_scrollView"
+                        android:background="#333">
 
-            <TextView
-                android:id="@+id/details_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:layout_marginLeft="@dimen/default_margin"
-                android:layout_marginRight="@dimen/default_margin"
-                android:layout_marginTop="12dp"
-                android:textColor="#fff"
-                android:textSize="18sp" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:isScrollContainer="true"
+                            android:orientation="vertical">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.6dp"
-                android:layout_marginLeft="@dimen/default_margin"
-                android:layout_marginRight="@dimen/default_margin"
-                android:background="#fff" />
+                            <ImageView
+                                android:id="@+id/details_image"
+                                android:layout_width="match_parent"
+                                android:layout_height="320dp"
+                                android:adjustViewBounds="true"
+                                android:scaleType="centerCrop" />
 
-            <TextView
-                android:id="@+id/details_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/default_margin"
-                android:layout_marginLeft="@dimen/default_margin"
-                android:layout_marginRight="@dimen/default_margin"
-                android:layout_marginTop="8dp"
-                android:lineSpacingExtra="4sp"
-                android:textColor="#eee"
-                android:textSize="14sp" />
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="0.6dp"
+                                android:background="#fff" />
+                            <!--user-->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:isScrollContainer="true"
+                                android:orientation="horizontal">
+                                <ImageView
+                                    android:padding="4dp"
+                                    android:layout_width="36dp"
+                                    android:layout_height="36dp"
+                                    android:src="@drawable/usericon"
+                                    android:id="@+id/imgTOpicPageUserImage"/>
+                                <TextView
+                                    android:id="@+id/details_title"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="4dp"
+                                    android:layout_marginLeft="@dimen/default_margin"
+                                    android:layout_marginRight="@dimen/default_margin"
+                                    android:layout_marginTop="12dp"
+                                    android:textColor="#fff"
+                                    android:textSize="18sp" />
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="0.6dp"
+                                android:layout_marginLeft="@dimen/default_margin"
+                                android:layout_marginRight="@dimen/default_margin"
+                                android:background="#fff" />
+
+                            <TextView
+                                android:id="@+id/details_text"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/default_margin"
+                                android:layout_marginLeft="@dimen/default_margin"
+                                android:layout_marginRight="@dimen/default_margin"
+                                android:layout_marginTop="8dp"
+                                android:lineSpacingExtra="4sp"
+                                android:textColor="#eee"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+                    </ScrollView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/tab2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <ListView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#ffffff"
+                        android:id="@+id/topicPageCommentList" />
+
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="invisible"
+                    android:orientation="vertical"
+                    android:padding="10dip"
+                    android:background="#4372AA"
+                    android:id="@+id/snackdeneme"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="1dip"
+                        android:background="#ffffff"
+                        android:layout_marginBottom="3dip" />
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Comment Here"
+                        android:lines="3"
+                        android:id="@+id/topicPage_comment_text_area"
+                        />
+
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="send"
+                        android:id="@+id/topicPage_comment_send_btn"/>
+
+                </LinearLayout>
+            </FrameLayout>
         </LinearLayout>
-    </ScrollView>
+    </TabHost>
     <com.alexvasilkov.foldablelayout.UnfoldableView
         android:id="@+id/unfoldable_view"
         android:layout_width="match_parent"

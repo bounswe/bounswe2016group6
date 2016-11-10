@@ -1,5 +1,6 @@
 package com.group6boun451.learner;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -22,8 +23,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ScrollView;
+import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.alexvasilkov.android.commons.texts.SpannableBuilder;
@@ -41,6 +48,7 @@ public class HomePage extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
     @BindView(R.id.touch_interceptor_view) View listTouchInterceptor;
+    @BindView(R.id.tabHost) TabHost tabHost;
     @BindView(R.id.details_scrollView) ScrollView detailsScrollView;
     @BindView(R.id.unfoldable_view) UnfoldableView unfoldableView;
     @BindView(R.id.activity_topic_pager_view_pager) ViewPager viewpager;
@@ -52,19 +60,58 @@ public class HomePage extends AppCompatActivity
     private List<Topic> topics;
     private TopicContainer tpc;
     private boolean isTeacher = true;
+    private boolean isSnackBarActive = false;
+    private boolean isTopicActive= false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
+        TabHost host = (TabHost)findViewById(R.id.tabHost);
+        host.setup();
+
+        //Tab 1
+        TabHost.TabSpec spec = host.newTabSpec("Tab One");
+        spec.setContent(R.id.tab1);
+        spec.setIndicator("Topic");
+        host.addTab(spec);
+
+        //Tab 2
+        spec = host.newTabSpec("Tab Two");
+        spec.setContent(R.id.tab2);
+        spec.setIndicator("Discussion");
+        host.addTab(spec);
 
         if (!isTeacher) fab.setVisibility(View.INVISIBLE);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(HomePage.this, AddTopicActivity.class);
-                startActivity(intent);
+                if(isTopicActive){
+                    if(isSnackBarActive) {
+                        LinearLayout lyt = (LinearLayout) findViewById(R.id.snackdeneme);
+
+                        lyt.setVisibility(View.INVISIBLE);
+                        fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_floatmenu_comment));
+                        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                        isSnackBarActive = false;
+                    }else{
+
+                        LinearLayout lyt = (LinearLayout) findViewById(R.id.snackdeneme);
+                        lyt.setVisibility(View.VISIBLE);
+                        EditText textArea = (EditText) findViewById(R.id.topicPage_comment_text_area);
+                        textArea.requestFocus();
+                        fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_floatmenu_comment_quit));
+                        isSnackBarActive= true;
+
+                    }
+
+                }else {
+                    Intent intent = new Intent(HomePage.this, AddTopicActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -89,14 +136,15 @@ public class HomePage extends AppCompatActivity
             @Override
             public void onUnfolding(UnfoldableView unfoldableView) {
                 listTouchInterceptor.setClickable(true);
-                detailsScrollView.setVisibility(View.VISIBLE);
+                tabHost.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onUnfolded(final UnfoldableView unfoldableView) {
                 listTouchInterceptor.setClickable(false);
-             //   if (detailsScrollView.getChildAt(0).getHeight()>drawer.getRootView().getHeight())
+              // if (detailsScrollView.getChildAt(0).getHeight()>drawer.getRootView().getHeight())
                     unfoldableView.setGesturesEnabled(false);
+
                 detailsScrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
                     @Override
                     public void onScrollChanged() {
@@ -104,6 +152,8 @@ public class HomePage extends AppCompatActivity
                         else unfoldableView.setGesturesEnabled(false);
                     }
                 });
+                isTopicActive = true;
+                //TODO make fab animation here
             }
 
             @Override
@@ -114,7 +164,8 @@ public class HomePage extends AppCompatActivity
             @Override
             public void onFoldedBack(UnfoldableView unfoldableView) {
                 listTouchInterceptor.setClickable(false);
-                detailsScrollView.setVisibility(View.INVISIBLE);
+                tabHost.setVisibility(View.INVISIBLE);
+                isTopicActive = false;
             }
         });
 
@@ -183,9 +234,9 @@ public class HomePage extends AppCompatActivity
 
 
     public void openDetails(View coverView, Topic topic) {
-        final ImageView image = Views.find(detailsScrollView, R.id.details_image);
-        final TextView title = Views.find(detailsScrollView, R.id.details_title);
-        final TextView description = Views.find(detailsScrollView, R.id.details_text);
+        final ImageView image = Views.find(tabHost, R.id.details_image);
+        final TextView title = Views.find(tabHost, R.id.details_title);
+        final TextView description = Views.find(tabHost, R.id.details_text);
 
         GlideHelper.loadPaintingImage(image, topic);
         title.setText(topic.getTitle());
@@ -193,7 +244,7 @@ public class HomePage extends AppCompatActivity
         SpannableBuilder builder = new SpannableBuilder(this);
         builder.append(R.string.by).append(" ").append(topic.getEditor()).append("\t")
                 .createStyle().setFont(Typeface.DEFAULT_BOLD).apply()
-                .append(R.string.date).append(": ")
+                .append(R.string.date).append(" ")
                 .clearStyle()
                 .append(topic.getDate()).append("\n")
                 .createStyle().setFont(Typeface.DEFAULT_BOLD).apply()
@@ -202,7 +253,26 @@ public class HomePage extends AppCompatActivity
                 .append(topic.getText());
         description.setText(builder.build());
 
-        unfoldableView.unfold(coverView, detailsScrollView);
+        topic.setComments(new CommentContainer(this));
+        ListView comments = (ListView) findViewById(R.id.topicPageCommentList);
+        CommentListAdapter cladap = new CommentListAdapter(this,topic.getComments());
+        comments.setAdapter(cladap);
+
+        comments.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TextView txt = (TextView) view.findViewById(R.id.commentText);
+                int numOfLines = txt.getMaxLines();
+                if(numOfLines == 3){
+                    txt.setMaxLines(150);
+                }else {
+                    txt.setMaxLines(3);
+                }
+            }
+        });
+
+
+        unfoldableView.unfold(coverView, tabHost);
     }
 
 

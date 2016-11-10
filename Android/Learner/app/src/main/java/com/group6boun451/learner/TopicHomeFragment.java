@@ -53,10 +53,13 @@ public class TopicHomeFragment extends android.support.v4.app.Fragment {
         img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((HomePage) v.getContext()).openDetails(v, topic);
-
-                Intent intent = TopicPage.newIntent(getActivity(),topic.getId());
-//                startActivity(intent);
+                if(topic.getId()<1)
+                    ((HomePage) v.getContext()).openDetails(v, topic);
+                else{
+                    Intent intent = new Intent(getActivity(),TopicPage.class);
+                    intent.putExtra("topic_id",topic.getId());
+                    startActivity(intent);
+                }
             }
         });
         return v;
