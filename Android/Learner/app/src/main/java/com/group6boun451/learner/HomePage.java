@@ -8,12 +8,9 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -26,7 +23,6 @@ import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -145,9 +141,9 @@ public class HomePage extends AppCompatActivity{
         topics = tpc.getTopics();
 
         listTouchInterceptor.setClickable(false);
-        viewpager.setAdapter(new TopicPagerAdapter(getSupportFragmentManager()));
-        viewpager2.setAdapter(new TopicPagerAdapter(getSupportFragmentManager()));
-        viewpager3.setAdapter(new TopicPagerAdapter(getSupportFragmentManager()));
+        viewpager.setAdapter(new TopicPagerAdapter(this));
+        viewpager2.setAdapter(new TopicPagerAdapter(this));
+        viewpager3.setAdapter(new TopicPagerAdapter(this));
 
         Bitmap glance = BitmapFactory.decodeResource(getResources(), R.drawable.unfold_glance);
         unfoldableView.setFoldShading(new GlanceFoldShading(glance));
@@ -228,7 +224,7 @@ public class HomePage extends AppCompatActivity{
         final TextView title = Views.find(tabHost, R.id.details_title);
         final TextView description = Views.find(tabHost, R.id.details_text);
 
-        GlideHelper.loadPaintingImage(image, topic);
+        GlideHelper.loadImage(image, topic);
         title.setText(topic.getTitle());
 
         SpannableBuilder builder = new SpannableBuilder(this);
@@ -265,21 +261,36 @@ public class HomePage extends AppCompatActivity{
         unfoldableView.unfold(coverView, tabHost);
     }
 
-
-    private class TopicPagerAdapter extends FragmentStatePagerAdapter {
-        public TopicPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
+    public class TopicPagerAdapter extends PagerAdapter {
+        private Context mContext;
+        TopicPagerAdapter(Context context) {mContext = context;}
 
         @Override
-        public Fragment getItem(int position) {
-            Topic topic = topics.get(position);
-            return TopicHomeFragment.newInstance(topic.getId());
+        public Object instantiateItem(ViewGroup collection, int position) {
+            final Topic topic = topics.get(position);
+            LayoutInflater inflater = LayoutInflater.from(mContext);
+            ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_topic_home, collection, false);
+            ((TextView)v.findViewById(R.id.textTopicTitle)).setText(topic.getTitle());
+            ((TextView) v.findViewById(R.id.textAuthor)).setText(topic.getEditor());
+            ((TextView) v.findViewById(R.id.textDate)).setText(topic.getDate());
+
+            ImageView img = (ImageView) v.findViewById(R.id.imageTopic);
+            GlideHelper.loadImage(img, topic);
+            img.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {((HomePage) v.getContext()).openDetails(v, topic);}
+            });
+
+            collection.addView(v);
+            return v;
         }
 
-        @Override
-        public int getCount() {
-            return topics.size();
-        }
-    };
+        @Override public void destroyItem(ViewGroup collection, int position, Object view) {collection.removeView((View) view);}
+
+        @Override public int getCount() {return topics.size();}
+
+        @Override public boolean isViewFromObject(View view, Object object) {return view == object;}
+
+        @Override public CharSequence getPageTitle(int position) {return "sjkhskjh";}
+
+    }
 }

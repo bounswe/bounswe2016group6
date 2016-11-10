@@ -9,7 +9,7 @@ public class GlideHelper {
 
     private GlideHelper() {}
 
-    public static void loadPaintingImage(ImageView image, com.group6boun451.learner.Topic topic) {
+    public static void loadImage(ImageView image, com.group6boun451.learner.Topic topic) {
         Glide.with(image.getContext().getApplicationContext())
                 .load(topic.getImage())
                 .dontAnimate()
