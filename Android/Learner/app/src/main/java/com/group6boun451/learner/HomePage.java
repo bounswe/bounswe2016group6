@@ -105,7 +105,6 @@ public class HomePage extends AppCompatActivity
                         textArea.requestFocus();
                         fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_floatmenu_comment_quit));
                         isSnackBarActive= true;
-
                     }
 
                 }else {
@@ -153,6 +152,7 @@ public class HomePage extends AppCompatActivity
                     }
                 });
                 isTopicActive = true;
+                fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_floatmenu_comment));
                 //TODO make fab animation here
             }
 
@@ -166,6 +166,7 @@ public class HomePage extends AppCompatActivity
                 listTouchInterceptor.setClickable(false);
                 tabHost.setVisibility(View.INVISIBLE);
                 isTopicActive = false;
+                fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_add_black_24dp));
             }
         });
 
