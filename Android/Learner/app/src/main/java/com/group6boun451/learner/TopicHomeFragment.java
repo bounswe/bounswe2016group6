@@ -1,6 +1,5 @@
 package com.group6boun451.learner;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -53,13 +52,8 @@ public class TopicHomeFragment extends android.support.v4.app.Fragment {
         img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(topic.getId()<1)
-                    ((HomePage) v.getContext()).openDetails(v, topic);
-                else{
-                    Intent intent = new Intent(getActivity(),TopicPage.class);
-                    intent.putExtra("topic_id",topic.getId());
-                    startActivity(intent);
-                }
+                ((HomePage) v.getContext()).openDetails(v, topic);
+
             }
         });
         return v;

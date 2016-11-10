@@ -10,7 +10,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name="com.group6boun451.learner.MainActivity"
-            android:theme="@style/LoginTheme">
+            android:theme="@style/LoginTheme"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,7 +21,7 @@
         <activity
             android:name=".HomePage"
             android:label="Home Page"
-            android:theme="@style/LoginTheme" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".TopicPage"
             android:label="@string/title_activity_main2"
