@@ -25,9 +25,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -36,6 +38,8 @@ import com.alexvasilkov.android.commons.texts.SpannableBuilder;
 import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.foldablelayout.UnfoldableView;
 import com.alexvasilkov.foldablelayout.shading.GlanceFoldShading;
+import com.group6boun451.learner.CommentContainer;
+import com.group6boun451.learner.CommentListAdapter;
 import com.group6boun451.learner.R;
 import com.group6boun451.learner.model.Topic;
 import com.group6boun451.learner.utils.GlideHelper;
@@ -258,23 +262,22 @@ public class HomePage extends AppCompatActivity{
                 .append(topic.getContent());
         description.setText(builder.build());
 
-//        topic.setCommentsOld(new CommentContainer(this));
-//        ListView comments = (ListView) findViewById(R.id.topicPageCommentList);
-//        CommentListAdapter cladap = new CommentListAdapter(this,topic.getCommentsOld());
-//        comments.setAdapter(cladap);
-//
-//        comments.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                TextView txt = (TextView) view.findViewById(R.id.commentText);
-//                int numOfLines = txt.getMaxLines();
-//                if(numOfLines == 3){
-//                    txt.setMaxLines(150);
-//                }else {
-//                    txt.setMaxLines(3);
-//                }
-//            }
-//        });
+        ListView comments = (ListView) findViewById(R.id.topicPageCommentList);
+        CommentListAdapter cladap = new CommentListAdapter(this, (new CommentContainer(this)).getComments());
+        comments.setAdapter(cladap);
+
+        comments.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TextView txt = (TextView) view.findViewById(R.id.commentText);
+                int numOfLines = txt.getMaxLines();
+                if (numOfLines == 3) {
+                    txt.setMaxLines(150);
+                } else {
+                    txt.setMaxLines(3);
+                }
+            }
+        });
 
         unfoldableView.unfold(coverView, tabHost);
     }
