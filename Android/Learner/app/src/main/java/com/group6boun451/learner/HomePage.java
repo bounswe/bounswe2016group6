@@ -35,6 +35,7 @@ import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.foldablelayout.UnfoldableView;
 import com.alexvasilkov.foldablelayout.shading.GlanceFoldShading;
 import com.group6boun451.learner.utils.GlideHelper;
+import com.group6boun451.learner.widget.CanaroTextView;
 import com.yalantis.guillotine.animation.GuillotineAnimation;
 import com.yalantis.guillotine.interfaces.GuillotineListener;
 
@@ -74,7 +75,7 @@ public class HomePage extends AppCompatActivity{
             setSupportActionBar(toolbar);
             getSupportActionBar().setTitle(null);
         }
-
+        ((CanaroTextView) toolbar.findViewById(R.id.title)).setText("LEARNER");
         View guillotineMenu = LayoutInflater.from(this).inflate(R.layout.guillotine, null);
         guillotineMenu.setLayoutParams(new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         ((ViewGroup)findViewById(android.R.id.content)).addView(guillotineMenu);
@@ -131,8 +132,10 @@ public class HomePage extends AppCompatActivity{
                     }
 
                 }else {
-                    Intent intent = new Intent(HomePage.this, AddTopicActivity.class);
-                    startActivity(intent);
+//                    Intent intent = new Intent(HomePage.this, AddTopicActivity.class);
+//                    startActivity(intent);
+                    startActivity(new Intent(HomePage.this, TestActivity.class));
+
                 }
             }
         });
