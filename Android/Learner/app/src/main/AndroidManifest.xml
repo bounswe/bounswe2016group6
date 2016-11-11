@@ -30,7 +30,8 @@
         <activity
             android:name=".TestActivity"
             android:label="@string/title_activity_add_topic"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"

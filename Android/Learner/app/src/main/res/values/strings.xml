@@ -25,5 +25,10 @@
     <string name="settings">SETTINGS</string>
     <string name="comment_here">Comment Here</string>
     <string name="send">SEND</string>
+    <string name="add_topic_name">add topic name</string>
+    <string name="enter_name">topic name cannot be empty</string>
+    <string name="content_image">Content image</string>
+    <string name="reveal_date">date</string>
+    <string name="time">time</string>
 
 </resources>

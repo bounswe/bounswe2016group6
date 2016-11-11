@@ -7,6 +7,7 @@
     android:orientation="vertical"
     tools:context=".TestActivity">
 
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         style="@style/Toolbar"
@@ -17,19 +18,77 @@
             style="@style/ImageView.Hamburger"
             android:src="@drawable/ic_menu_90" />
 
-        <com.group6boun451.learner.widget.CanaroTextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/activity"
-            android:textSize="@dimen/guillotine_item_text_size" />
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/topic_name_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <EditText
+                android:id="@+id/topic_name_textEdit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/add_topic_name" />
+        </android.support.design.widget.TextInputLayout>
     </android.support.v7.widget.Toolbar>
 
+    <RelativeLayout
+        android:id="@+id/relative_layout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/md_keylines_mini"
+        android:background="@color/guillotine_background_dark">
+
+        <Space
+            android:id="@+id/dummy"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:id="@+id/pickUpButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="1dp"
+            android:background="@drawable/border"
+            android:text="@string/content_image"
+            android:textSize="@dimen/home_page_text_size" />
+
+        <Button
+            android:id="@+id/pickUpDateButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@id/dummy"
+            android:layout_alignLeft="@id/pickUpButton"
+            android:layout_alignRight="@id/dummy"
+            android:layout_alignStart="@id/pickUpButton"
+            android:layout_below="@id/pickUpButton"
+            android:layout_marginEnd="1dp"
+            android:layout_marginRight="1dp"
+            android:background="@drawable/border"
+            android:text="@string/reveal_date"
+            android:textSize="@dimen/home_page_text_size" />
+
+        <Button
+            android:id="@+id/pickUpTimeButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@id/pickUpButton"
+            android:layout_alignLeft="@id/dummy"
+            android:layout_alignRight="@id/pickUpButton"
+            android:layout_alignStart="@id/dummy"
+            android:layout_below="@id/pickUpButton"
+            android:layout_toEndOf="@id/dummy"
+            android:layout_toRightOf="@id/dummy"
+            android:background="@drawable/border"
+            android:text="@string/time"
+            android:textSize="@dimen/home_page_text_size" />
+    </RelativeLayout>
+
+    <!--TODO fix this-->
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/md_keylines_mini">
         <WebView
             android:id="@+id/webView"
             android:layout_width="match_parent"

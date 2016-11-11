@@ -3,16 +3,19 @@ package com.group6boun451.learner;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.EditText;
 
-import com.group6boun451.learner.widget.CanaroTextView;
 import com.yalantis.guillotine.animation.GuillotineAnimation;
 import com.yalantis.guillotine.interfaces.GuillotineListener;
 
@@ -28,6 +31,10 @@ public class TestActivity extends AppCompatActivity {
     View contentHamburger;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.topic_name_layout)
+    TextInputLayout topicNameLayout;
+    @BindView(R.id.topic_name_textEdit)
+    EditText topicNameEditText;
 
     private GuillotineAnimation guillotineAnimation;
     private boolean isGuillotineOpened = false;
@@ -42,10 +49,26 @@ public class TestActivity extends AppCompatActivity {
             setSupportActionBar(toolbar);
             getSupportActionBar().setTitle(null);
         }
-        ((CanaroTextView) toolbar.findViewById(R.id.title)).setText("ADD TOPIC");
         View guillotineMenu = LayoutInflater.from(this).inflate(R.layout.guillotine, null);
         guillotineMenu.setLayoutParams(new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         ((ViewGroup) findViewById(android.R.id.content)).addView(guillotineMenu);
+        topicNameEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                validateName();
+            }
+        });
+
         guillotineAnimation = new GuillotineAnimation.GuillotineBuilder(guillotineMenu, guillotineMenu.findViewById(R.id.guillotine_hamburger), contentHamburger)
                 .setStartDelay(250)
                 .setActionBarViewForAnimation(toolbar)
@@ -66,6 +89,15 @@ public class TestActivity extends AppCompatActivity {
         summernote.setRequestCodeforFilepicker(5);
     }
 
+    public boolean validateName() {
+        if (topicNameEditText.getText().toString().trim().isEmpty()) {
+            topicNameLayout.setError(getString(R.string.enter_name));
+            return false;
+        } else {
+            topicNameLayout.setErrorEnabled(false);
+        }
+        return true;
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
@@ -90,15 +122,13 @@ public class TestActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.edit_text:
-                summernote.setVisibility(View.VISIBLE);
-                webView.setVisibility(View.INVISIBLE);
-                break;
             case R.id.save_text:
-                webView.setVisibility(View.VISIBLE);
-                webView.getSettings().setJavaScriptEnabled(true);
-                webView.loadData(summernote.getText(), "text/html", "UTF-8");
-                summernote.setVisibility(View.INVISIBLE);
+                if (validateName()) {
+                    webView.setVisibility(View.VISIBLE);
+                    webView.getSettings().setJavaScriptEnabled(true);
+                    webView.loadData(summernote.getText(), "text/html", "UTF-8");
+                    summernote.setVisibility(View.INVISIBLE);
+                }
                 break;
         }
         return true;
