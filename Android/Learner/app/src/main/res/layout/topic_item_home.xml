@@ -21,17 +21,28 @@
                 android:layout_height="@dimen/card_image_height"
                 android:scaleType="centerCrop" />
 
-            <TextView
-                android:id="@+id/textAuthor"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/imageTopic"
+                android:background="#d3d3d3"
+                android:alpha="0.6"
+                android:gravity="center_vertical"
+                >
+                <TextView
+                android:layout_marginLeft="@dimen/md_keylines"
+                android:id="@+id/textTopicTitle"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/card_title_height"
-                android:layout_alignBottom="@+id/imageTopic"
-                android:layout_marginLeft="@dimen/md_keylines"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:textColor="@color/white" />
+                android:textColor="#000000"
+
+                />
+            </LinearLayout>
+
 
             <TextView
-                android:id="@+id/textTopicTitle"
+                android:id="@+id/textAuthor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/imageTopic"
@@ -44,12 +55,21 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/article_subheading" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:layout_marginTop="4dip"
+                android:background="#d3d3d3"
+                android:layout_alignBottom="@+id/textAuthor"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"></LinearLayout>
+
             <Button
                 android:id="@+id/like_button"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/textTopicTitle"
+                android:layout_below="@+id/textAuthor"
                 android:text="LIKE"
                 android:textColor="?attr/colorAccent" />
 
@@ -58,7 +78,7 @@
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/textTopicTitle"
+                android:layout_below="@+id/textAuthor"
                 android:layout_toEndOf="@id/like_button"
                 android:layout_toRightOf="@id/like_button"
                 android:text="COMMENT"
@@ -69,9 +89,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/like_button"
-                android:layout_alignEnd="@+id/textTopicTitle"
-                android:layout_alignRight="@+id/textTopicTitle"
-                android:layout_below="@+id/textTopicTitle"
+                android:layout_alignEnd="@+id/textAuthor"
+                android:layout_alignRight="@+id/textAuthor"
+                android:layout_below="@+id/textAuthor"
                 android:gravity="center"
                 android:text="date"
                 android:textColor="?attr/colorAccent"
