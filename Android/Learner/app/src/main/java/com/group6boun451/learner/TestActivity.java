@@ -3,7 +3,6 @@ package com.group6boun451.learner;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -11,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 
 import com.group6boun451.learner.widget.CanaroTextView;
 import com.yalantis.guillotine.animation.GuillotineAnimation;
@@ -18,10 +18,12 @@ import com.yalantis.guillotine.interfaces.GuillotineListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import in.nashapp.androidsummernote.Summernote;
 
 public class TestActivity extends AppCompatActivity {
+    @BindView(R.id.summernote)
     Summernote summernote;
+    @BindView(R.id.webView)
+    WebView webView;
     @BindView(R.id.content_hamburger)
     View contentHamburger;
     @BindView(R.id.toolbar)
@@ -61,7 +63,6 @@ public class TestActivity extends AppCompatActivity {
                 })
                 .setClosedOnStart(true)
                 .build();
-        summernote = (Summernote) findViewById(R.id.summernote);
         summernote.setRequestCodeforFilepicker(5);
     }
 
@@ -89,11 +90,15 @@ public class TestActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.get_text:
-                Snackbar.make(findViewById(android.R.id.content), summernote.getText(), Snackbar.LENGTH_SHORT).show();
+            case R.id.edit_text:
+                summernote.setVisibility(View.VISIBLE);
+                webView.setVisibility(View.INVISIBLE);
                 break;
-            case R.id.set_text:
-                summernote.setText("<h2>Hello World ' \"</h2>");
+            case R.id.save_text:
+                webView.setVisibility(View.VISIBLE);
+                webView.getSettings().setJavaScriptEnabled(true);
+                webView.loadData(summernote.getText(), "text/html", "UTF-8");
+                summernote.setVisibility(View.INVISIBLE);
                 break;
         }
         return true;

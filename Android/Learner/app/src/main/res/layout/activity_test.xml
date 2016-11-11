@@ -26,8 +26,19 @@
             android:textSize="@dimen/guillotine_item_text_size" />
     </android.support.v7.widget.Toolbar>
 
-    <in.nashapp.androidsummernote.Summernote
-        android:id="@+id/summernote"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <WebView
+            android:id="@+id/webView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible" />
+
+        <com.group6boun451.learner.Summernote
+            android:id="@+id/summernote"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
 </LinearLayout>

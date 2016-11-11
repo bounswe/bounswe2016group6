@@ -1,4 +1,4 @@
-package in.nashapp.androidsummernote;
+package com.group6boun451.learner;
 
 import android.app.Activity;
 import android.content.Context;
