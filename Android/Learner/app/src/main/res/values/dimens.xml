@@ -21,5 +21,9 @@
     <dimen name="article_subheading">16sp</dimen>
     <dimen name="card_title_height">40dp</dimen>
     <dimen name="card_image_height">200dp</dimen>
+    <dimen name="home_page_text_size">16sp</dimen>
+    <dimen name="home_location_button_padding">10dp</dimen>
+    <dimen name="end_padding">2dp</dimen>
+    <dimen name="home_time_button_padding">30dp</dimen>
 
 </resources>

@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.group6boun451.learner.MainActivity"
+            android:name="com.group6boun451.learner.Activity.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/LoginTheme">
             <intent-filter>
@@ -20,17 +20,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".HomePage"
+            android:name=".Activity.HomePage"
             android:label="Home Page"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".AddTopicActivity"
+            android:name=".Activity.AddTopicActivity"
             android:label="@string/title_activity_add_topic"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".TestActivity"
+            android:name=".Activity.TestActivity"
             android:label="@string/title_activity_add_topic"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"

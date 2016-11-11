@@ -265,7 +265,7 @@
             android:src="@drawable/ic_menu_90" />
 
         <com.group6boun451.learner.widget.CanaroTextView
-            android:id="@+id/title"
+            android:id="@+id/header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

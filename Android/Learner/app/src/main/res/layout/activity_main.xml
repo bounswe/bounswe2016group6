@@ -3,9 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="#2a5ba5"
-    tools:context=".MainActivity">
+    android:orientation="vertical"
+    tools:context=".Activity.LoginActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -14,9 +14,9 @@
         <ImageView
             android:layout_width="150dip"
             android:layout_height="150dip"
-            android:src="@drawable/puzzle"
             android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"/>
+            android:layout_centerVertical="true"
+            android:src="@drawable/puzzle" />
     </RelativeLayout>
     
     <LinearLayout
@@ -27,50 +27,50 @@
         android:paddingTop="50dip">
 
         <EditText
+            android:id="@+id/editTextUserName"
             android:layout_width="match_parent"
             android:layout_height="40dip"
-            android:id="@+id/editTextUserName"
-            android:layout_marginRight="30dip"
-            android:layout_marginLeft="30dip"
             android:layout_marginBottom="15dip"
+            android:layout_marginLeft="30dip"
+            android:layout_marginRight="30dip"
             android:background="#ffffff"
-            android:hint="user name"
             android:gravity="center"
+            android:hint="user name"
             android:singleLine="true" />
 
         <EditText
+            android:id="@+id/editTextUserPassword"
             android:layout_width="match_parent"
             android:layout_height="40dip"
-            android:id="@+id/editTextUserPassword"
-            android:layout_marginRight="30dip"
-            android:layout_marginLeft="30dip"
             android:layout_marginBottom="15dip"
+            android:layout_marginLeft="30dip"
+            android:layout_marginRight="30dip"
             android:background="#ffffff"
-            android:hint="password"
             android:gravity="center"
+            android:hint="password"
             android:inputType="textPassword" />
         
         <Button
+            android:id="@+id/login_button"
             android:layout_width="match_parent"
             android:layout_height="60dip"
-            android:id="@+id/login_button"
-            android:layout_marginRight="30dip"
-            android:layout_marginLeft="30dip"
             android:layout_marginBottom="15dip"
-            android:text="Log In"
+            android:layout_marginLeft="30dip"
+            android:layout_marginRight="30dip"
             android:background="#758ab6"
+            android:onClick="onLogin"
+            android:text="Log In"
             android:textAllCaps="false"
-            android:textSize="23sp"
             android:textColor="#ffffff"
-            android:onClick="onLogin" />
+            android:textSize="23sp" />
 
         <TextView
             android:id="@+id/id_value"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:text="forgot password?"
-            android:textColor="#ffffff"
-            android:gravity="center"/>
+            android:textColor="#ffffff" />
     </LinearLayout>
 
 
@@ -78,15 +78,15 @@
         android:layout_width="match_parent"
         android:layout_height="10dip"
         android:layout_weight="1"
-        android:orientation="vertical"
         android:gravity="bottom"
+        android:orientation="vertical"
         >
         <TextView
             android:id="@+id/content_value"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_marginBottom="10dip"
+            android:gravity="center"
             android:text="Register?"
             android:textColor="#ffffff"/>
     </LinearLayout>
