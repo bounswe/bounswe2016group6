@@ -1,11 +1,14 @@
-package com.group6boun451.learner;
+package com.group6boun451.learner.Activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.MenuItemCompat;
@@ -14,6 +17,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,11 +25,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -34,17 +36,34 @@ import com.alexvasilkov.android.commons.texts.SpannableBuilder;
 import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.foldablelayout.UnfoldableView;
 import com.alexvasilkov.foldablelayout.shading.GlanceFoldShading;
+import com.group6boun451.learner.R;
+import com.group6boun451.learner.model.Topic;
 import com.group6boun451.learner.utils.GlideHelper;
-import com.group6boun451.learner.widget.CanaroTextView;
 import com.yalantis.guillotine.animation.GuillotineAnimation;
 import com.yalantis.guillotine.interfaces.GuillotineListener;
 
+import org.springframework.http.HttpAuthentication;
+import org.springframework.http.HttpBasicAuthentication;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class HomePage extends AppCompatActivity{
+    protected static final String TAG = HomePage.class.getSimpleName();
 
     @BindView(R.id.touch_interceptor_view) View listTouchInterceptor;
     @BindView(R.id.topic_TabHost) TabHost tabHost;
@@ -58,7 +77,6 @@ public class HomePage extends AppCompatActivity{
     @BindView(R.id.content_hamburger) View contentHamburger;
 
     private List<Topic> topics;
-    private TopicContainer tpc;
     private boolean isTeacher = true;
     private boolean isSnackBarActive = false;
     private boolean isTopicActive= false;
@@ -70,12 +88,16 @@ public class HomePage extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
         ButterKnife.bind(this);
+        new FetchSecuredResourceTask().execute();
 
+//        toolbar
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setTitle(null);
         }
-        ((CanaroTextView) toolbar.findViewById(R.id.title)).setText("LEARNER");
+//        ((CanaroTextView) toolbar.findViewById(R.id.title)).setText("LEARNER");
+
+//        drawer
         View guillotineMenu = LayoutInflater.from(this).inflate(R.layout.guillotine, null);
         guillotineMenu.setLayoutParams(new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         ((ViewGroup)findViewById(android.R.id.content)).addView(guillotineMenu);
@@ -98,9 +120,9 @@ public class HomePage extends AppCompatActivity{
                 })
                 .setClosedOnStart(true)
                 .build();
-
+//        topic
         tabHost.setup();
-        tabHost.addTab(tabHost.newTabSpec("Tab One").setContent(R.id.topic_tab).setIndicator("Topic"));
+        tabHost.addTab(tabHost.newTabSpec("Tab One").setContent(R.id.topic_tab).setIndicator("Example"));
         tabHost.addTab(tabHost.newTabSpec("Tab Two").setContent(R.id.comment_tab).setIndicator("Discussion"));
 
         detailsScrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
@@ -111,6 +133,7 @@ public class HomePage extends AppCompatActivity{
             }
         });
 
+//        fab
         if (!isTeacher) fab.setVisibility(View.INVISIBLE);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,13 +163,7 @@ public class HomePage extends AppCompatActivity{
             }
         });
 
-        tpc = new TopicContainer(this);
-        topics = tpc.getTopics();
-
         listTouchInterceptor.setClickable(false);
-        viewpager.setAdapter(new TopicPagerAdapter(this));
-        viewpager2.setAdapter(new TopicPagerAdapter(this));
-        viewpager3.setAdapter(new TopicPagerAdapter(this));
 
         Bitmap glance = BitmapFactory.decodeResource(getResources(), R.drawable.unfold_glance);
         unfoldableView.setFoldShading(new GlanceFoldShading(glance));
@@ -227,38 +244,37 @@ public class HomePage extends AppCompatActivity{
         final TextView title = Views.find(tabHost, R.id.details_title);
         final TextView description = Views.find(tabHost, R.id.details_text);
         GlideHelper.loadImage(image, topic);
-        title.setText(topic.getTitle());
+        title.setText(topic.getHeader());
 
         SpannableBuilder builder = new SpannableBuilder(this);
-        builder.append(R.string.by).append(" ").append(topic.getEditor()).append("\t")
+        builder.append(R.string.by).append(" ").append(topic.getOwner().getFirstName()).append("\t")
                 .createStyle().setFont(Typeface.DEFAULT_BOLD).apply()
                 .append(R.string.date).append(" ")
                 .clearStyle()
-                .append(topic.getDate()).append("\n")
+                .append(topic.getRevealDate().toString()).append("\n")
                 .createStyle().setFont(Typeface.DEFAULT_BOLD).apply()
                 .append(R.string.content).append(": ")
                 .clearStyle()
-                .append(topic.getText());
+                .append(topic.getContent());
         description.setText(builder.build());
 
-        topic.setComments(new CommentContainer(this));
-        ListView comments = (ListView) findViewById(R.id.topicPageCommentList);
-        CommentListAdapter cladap = new CommentListAdapter(this,topic.getComments());
-        comments.setAdapter(cladap);
-
-        comments.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                TextView txt = (TextView) view.findViewById(R.id.commentText);
-                int numOfLines = txt.getMaxLines();
-                if(numOfLines == 3){
-                    txt.setMaxLines(150);
-                }else {
-                    txt.setMaxLines(3);
-                }
-            }
-        });
-
+//        topic.setCommentsOld(new CommentContainer(this));
+//        ListView comments = (ListView) findViewById(R.id.topicPageCommentList);
+//        CommentListAdapter cladap = new CommentListAdapter(this,topic.getCommentsOld());
+//        comments.setAdapter(cladap);
+//
+//        comments.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                TextView txt = (TextView) view.findViewById(R.id.commentText);
+//                int numOfLines = txt.getMaxLines();
+//                if(numOfLines == 3){
+//                    txt.setMaxLines(150);
+//                }else {
+//                    txt.setMaxLines(3);
+//                }
+//            }
+//        });
 
         unfoldableView.unfold(coverView, tabHost);
     }
@@ -272,9 +288,9 @@ public class HomePage extends AppCompatActivity{
             final Topic topic = topics.get(position);
             LayoutInflater inflater = LayoutInflater.from(mContext);
             ViewGroup v = (ViewGroup) inflater.inflate(R.layout.topic_item_home, collection, false);
-            ((TextView)v.findViewById(R.id.textTopicTitle)).setText(topic.getTitle());
-            ((TextView) v.findViewById(R.id.textAuthor)).setText(topic.getEditor());
-            ((TextView) v.findViewById(R.id.textDate)).setText(topic.getDate());
+            ((TextView) v.findViewById(R.id.textTopicTitle)).setText(topic.getHeader());
+            ((TextView) v.findViewById(R.id.textAuthor)).setText(topic.getOwner().getFirstName());
+            ((TextView) v.findViewById(R.id.textDate)).setText(topic.getRevealDate().toString());
 
             final ImageView img = (ImageView) v.findViewById(R.id.imageTopic);
             GlideHelper.loadImage(img, topic);
@@ -300,5 +316,57 @@ public class HomePage extends AppCompatActivity{
             return "";
         }
 
+    }
+
+    public class FetchSecuredResourceTask extends AsyncTask<Void, Void, Topic[]> {
+        private String username;
+        private String password;
+
+        @Override
+        protected void onPreExecute() {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            username = preferences.getString(getString(R.string.user_name), " ");
+            password = preferences.getString(getString(R.string.password), " ");
+        }
+
+        @Override
+        protected Topic[] doInBackground(Void... params) {
+            final String url = getString(R.string.base_url) + "topic/recommended";
+
+            // Populate the HTTP Basic Authentitcation header with the username and password
+            HttpAuthentication authHeader = new HttpBasicAuthentication(username, password);
+            HttpHeaders requestHeaders = new HttpHeaders();
+            Log.d(TAG + " username", username + ", " + password);
+            requestHeaders.setAuthorization(authHeader);
+            requestHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+
+            // Create a new RestTemplate instance
+            RestTemplate restTemplate = new RestTemplate();
+            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+            try {
+                // Make the network request
+                Log.d(TAG, url);
+                ResponseEntity<Topic[]> response = restTemplate.exchange(url, HttpMethod.GET, new HttpEntity<Object>(requestHeaders), Topic[].class);
+                // Log.d("response",response.getBody());
+                return response.getBody();
+            } catch (HttpClientErrorException e) {
+                Log.e(TAG, e.getLocalizedMessage(), e);
+                return new Topic[0];
+            } catch (ResourceAccessException e) {
+                Log.e(TAG, e.getLocalizedMessage(), e);
+                return new Topic[0];
+            } catch (Exception e) {
+                Log.e(TAG, e.getLocalizedMessage(), e);
+                return new Topic[0];
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Topic[] result) {
+            topics = new ArrayList(Arrays.asList(result));
+            viewpager.setAdapter(new TopicPagerAdapter(HomePage.this));
+            viewpager2.setAdapter(new TopicPagerAdapter(HomePage.this));
+            viewpager3.setAdapter(new TopicPagerAdapter(HomePage.this));
+        }
     }
 }

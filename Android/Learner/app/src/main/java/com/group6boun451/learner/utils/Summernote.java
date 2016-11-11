@@ -1,4 +1,4 @@
-package com.group6boun451.learner;
+package com.group6boun451.learner.utils;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,9 +12,6 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-/**
- * Created by Avinash on 01-04-2016.
- */
 public class Summernote extends WebView {
     String text = "";
     Context context;
@@ -91,7 +88,7 @@ public class Summernote extends WebView {
 
     public String getText() {
         text = "P/%TE5XpkAijBc%LjA;_-pZcbiU25E6feX5y/n6qxCTmhprLrqC3H%^hU!%q2,k'm`SHheoW^'mQ~zW93,C?~GtYk!wi/&'3KxW8";
-        this.loadUrl("javascript:window.android.getText" + "(document.getElementsByClassName('note-editable')[0].innerHTML);");
+        this.loadUrl("javascript:window.android.getContext" + "(document.getElementsByClassName('note-editable')[0].innerHTML);");
         int i = 0;
         try {
             while (text.equals("P/%TE5XpkAijBc%LjA;_-pZcbiU25E6feX5y/n6qxCTmhprLrqC3H%^hU!%q2,k'm`SHheoW^'mQ~zW93,C?~GtYk!wi/&'3KxW8") && i < 100) {

@@ -1,4 +1,4 @@
-package com.group6boun451.learner;
+package com.group6boun451.learner.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +16,8 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.EditText;
 
+import com.group6boun451.learner.R;
+import com.group6boun451.learner.utils.Summernote;
 import com.yalantis.guillotine.animation.GuillotineAnimation;
 import com.yalantis.guillotine.interfaces.GuillotineListener;
 

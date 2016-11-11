@@ -1,8 +1,7 @@
-package com.group6boun451.learner;
+package com.group6boun451.learner.Activity;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -10,15 +9,12 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.group6boun451.learner.R;
 import com.programmingwizzard.bbcodejava.BBCode;
 import com.programmingwizzard.bbcodejava.exceptions.BBCodeException;
 
-import junit.framework.Assert;
-
 import org.kefirsf.bb.BBProcessorFactory;
 import org.kefirsf.bb.TextProcessor;
-import org.kefirsf.bb.conf.Text;
-import org.kefirsf.bb.proc.BBProcessor;
 
 public class AddTopicActivity extends AppCompatActivity {
     TextView tw;

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".TestActivity">
+    tools:context=".Activity.TestActivity">
 
 
     <android.support.v7.widget.Toolbar
@@ -95,7 +95,7 @@
             android:layout_height="match_parent"
             android:visibility="invisible" />
 
-        <com.group6boun451.learner.Summernote
+        <com.group6boun451.learner.utils.Summernote
             android:id="@+id/summernote"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
