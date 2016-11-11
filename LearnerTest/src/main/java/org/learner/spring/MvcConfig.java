@@ -42,6 +42,9 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/logout.html");
         registry.addViewController("/homepage.html");
         registry.addViewController("/createTopic.html");
+        registry.addViewController("/viewTopic.html");
+        registry.addViewController("/search.html");
+        registry.addViewController("/searchresult.html");
         registry.addViewController("/editTopic.html");
         registry.addViewController("/expiredAccount.html");
         registry.addViewController("/badUser.html");
@@ -78,6 +81,10 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addResourceHandlers(final ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/resources/**").addResourceLocations("/", "/resources/");
+        registry.addResourceHandler("/vendor/**").addResourceLocations("/resources/vendor/");
+        //registry.addResourceHandler("/img/**").addResourceLocations("/static/");
+        //registry.addResourceHandler("*.js").addResourceLocations("/resources/js");
+        //registry.addResourceHandler("*.css").addResourceLocations("/resources/css");
     }
 
     @Override

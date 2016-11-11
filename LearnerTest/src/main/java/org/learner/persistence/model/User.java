@@ -17,6 +17,7 @@ import javax.persistence.Table;
 
 import org.jboss.aerogear.security.otp.api.Base32;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -42,17 +43,19 @@ public class User {
     @JsonIgnore
     private String secret;
     
-    //@OneToMany(mappedBy = "owner")
-    //private Collection<Topic> topics;
-    //
+    @JsonBackReference
+    @OneToMany(mappedBy = "owner")
+    private List<Topic> topics;
+    
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Collection<Role> roles;
     
     
-    //@OneToMany(mappedBy = "user")
-    //private List<Comment> comments;
+    @OneToMany(mappedBy = "owner")
+    
+    private List<Comment> comments;
     
     public User() {
         super();

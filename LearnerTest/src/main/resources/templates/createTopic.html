@@ -1,44 +1,44 @@
+<!DOCTYPE html>
 <html>
 
 <head>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link> 
 <title th:text="#{label.pages.home.title}"></title>
 
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sceditor/1.5.0/themes/default.min.css" type="text/css" media="all" />
 
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/sceditor/1.5.0/jquery.sceditor.bbcode.min.js"></script>
-
-
-
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"
+	integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+	crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+		
+		<!-- include summernote css/js-->
+		<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.css" rel="stylesheet">
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.js"></script>
+		
+		
 		<script>
-			// Source: http://www.backalleycoder.com/2011/03/20/link-tag-css-stylesheet-load-event/
-			var loadCSS = function(url, callback){
-				var link = document.createElement('link');
-				link.type = 'text/css';
-				link.rel = 'stylesheet';
-				link.href = url;
-				link.id = 'theme-style';
-
-				document.getElementsByTagName('head')[0].appendChild(link);
-
-				var img = document.createElement('img');
-				img.onerror = function(){
-					if(callback) callback(link);
-				}
-				img.src = url;
-			}
-
-			$(document).ready(function() {
-				var initEditor = function() {
-					$("textarea").sceditor({
-						plugins: 'bbcode',
-						emotions: 'false',
-						style: "https://cdnjs.cloudflare.com/ajax/libs/sceditor/1.5.0/jquery.sceditor.default.min.css"
-					});
-				};
-				initEditor();
+		$(document).ready(function() {
+			  $('#summernote').summernote({
+					  toolbar: [
+						    ['style', ['style']],
+						    ['font', ['bold', 'italic', 'underline', 'clear']],
+						    ['insert', ['link', 'picture','video','hr']],
+						    ['color', ['color']],
+						    ['para', ['ul', 'ol', 'paragraph']],
+						    ['height', ['height']],
+						    ['view', ['codeview']]
+						  ]		  
+			  });
+			  
+		
+		  $('#topicform').submit(function() {
+			  alert("Form submit!");
+			  var markupStr = $('#summernote').summernote('code');
+			  console.log(markupStr);
+			  $("#tpContent").val(markupStr);
+			  return true;
 			});
+		});
 		</script>
 
 </head>
@@ -61,17 +61,14 @@
         
      <h1 sec:authorize="hasAuthority('WRITE_PRIVILEGE')" th:text="#{label.pages.admin.message}">admin</h1>
      
-     <textarea form ="topicform" name="content" style="height:300px;width:600px;">
-[center][size=3][b]BBCode SCEditor[/b][/size][/center]
-Give it a try! :)
-[color=#ff00]Red text! [/color][color=#3399ff]Blue?[/color]
-[ul][li]A simple list[/li][li]list item 2[/li][/ul]
-If you are using IE9+ or any non-IE browser just type [b]:[/b]) and it should be converted into :) as you type.
-</textarea>
+     <div id="summernote"></div>
+     
 
-    <form id="topicform" action="/topic/create" method="post">
+    <form id="topicform" action="/topic/create" method="post" onsubmit="return submitform()">
     	<p>Question: <input type="text" name="header" /></p>
+    	<input id="tpContent" type="hidden" name="content" value=""/>
         <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
+        
     </form>
      
      

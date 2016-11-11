@@ -1,6 +1,8 @@
 package org.learner.service;
 
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -63,6 +65,7 @@ public class TopicService implements ITopicService{
 		}
 		edit.setContent(topicdto.getContent());
 		edit.setHeader(topicdto.getHeader());
+		repository.save(edit);
 		//TODO insert tags
 		return edit;
 	}
@@ -89,6 +92,12 @@ public class TopicService implements ITopicService{
 		
 		//TODO insert tags
 		return liked;
+	}
+
+	@Override
+	public List<Topic> getAllTopics() {
+		return repository.findAll();
+		
 	}
 	
 	

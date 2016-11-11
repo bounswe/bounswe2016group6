@@ -25,6 +25,10 @@ public class Comment {
     @JoinColumn(name = "user_id")
     private User owner;
     
+    @ManyToOne
+    @JoinColumn(name = "topic_id")
+    private Topic relatedTopic;
+    
     private Date createdAt;
     
     public Comment() {
