@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -30,7 +29,6 @@ import android.widget.ScrollView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
-import com.alexvasilkov.android.commons.texts.SpannableBuilder;
 import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.foldablelayout.UnfoldableView;
 import com.alexvasilkov.foldablelayout.shading.GlanceFoldShading;
@@ -226,10 +224,16 @@ public class HomePage extends AppCompatActivity{
         final ImageView image = Views.find(tabHost, R.id.details_image);
         final TextView title = Views.find(tabHost, R.id.details_title);
         final TextView description = Views.find(tabHost, R.id.details_text);
+        final TextView editorName = Views.find(tabHost,R.id.txtTopicPageUserName);
+        final TextView date = Views.find(tabHost,R.id.txtTopicPageDate);
+        final ImageView userImage = Views.find(tabHost,R.id.imgTopicPageUserImage);
         GlideHelper.loadImage(image, topic);
         title.setText(topic.getTitle());
 
-        SpannableBuilder builder = new SpannableBuilder(this);
+        editorName.setText(topic.getEditor());
+        date.setText(topic.getDate());
+        description.setText(topic.getText());
+        /* SpannableBuilder builder = new SpannableBuilder(this);
         builder.append(R.string.by).append(" ").append(topic.getEditor()).append("\t")
                 .createStyle().setFont(Typeface.DEFAULT_BOLD).apply()
                 .append(R.string.date).append(" ")
@@ -239,7 +243,7 @@ public class HomePage extends AppCompatActivity{
                 .append(R.string.content).append(": ")
                 .clearStyle()
                 .append(topic.getText());
-        description.setText(builder.build());
+        description.setText(builder.build()); */
 
         topic.setComments(new CommentContainer(this));
         ListView comments = (ListView) findViewById(R.id.topicPageCommentList);
