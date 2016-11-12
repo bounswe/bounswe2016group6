@@ -149,15 +149,23 @@
     
     <div class="container">
             <div class="row">
-              <div th:each="cmnt,iterationStatus : ${topics.comments}" class="item">  
-			      <div class="carousel-caption">
+              <h3>Comments</h3>
+              <div th:each="cmnt,iterationStatus : ${topic.comments}" class="item" th:if="${cmnt.owner.firstName != null}>  
+			      
+			      
 			        <h3 th:text="${cmnt.owner.firstName+' '+cmnt.owner.lastName}">Erhan</h3>
 			        <p th:text="${cmnt.content}">User comment.</p>
 			      </div>
 			  </div>
-            </div>
+            
+            
             <div class="row">
-            	<textarea rows="4" cols="50">
+            
+    <form id="commentform" action="/topic/comment/create" method="post" onsubmit="return submitform()">
+        <p><input type="submit" value="Submit" /></p>
+        
+    </form>
+            	<textarea name="content" form="commentform" rows="4" cols="50">
 				Share your thoughts.
 				</textarea>
             </div>
