@@ -40,8 +40,10 @@ import com.alexvasilkov.foldablelayout.UnfoldableView;
 import com.alexvasilkov.foldablelayout.shading.GlanceFoldShading;
 import com.group6boun451.learner.CommentContainer;
 import com.group6boun451.learner.CommentListAdapter;
+import com.group6boun451.learner.ProfileActivity;
 import com.group6boun451.learner.R;
 import com.group6boun451.learner.utils.GlideHelper;
+import com.group6boun451.learner.widget.CanaroTextView;
 import com.yalantis.guillotine.animation.GuillotineAnimation;
 import com.yalantis.guillotine.interfaces.GuillotineListener;
 
@@ -98,12 +100,17 @@ public class HomePage extends AppCompatActivity{
             setSupportActionBar(toolbar);
             getSupportActionBar().setTitle(null);
         }
-//        ((CanaroTextView) toolbar.findViewById(R.id.title)).setText("LEARNER");
-
 //        drawer
-        View guillotineMenu = LayoutInflater.from(this).inflate(R.layout.guillotine, null);
+        final View guillotineMenu = LayoutInflater.from(this).inflate(R.layout.guillotine, null);
         guillotineMenu.setLayoutParams(new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         ((ViewGroup)findViewById(android.R.id.content)).addView(guillotineMenu);
+        guillotineMenu.findViewById(R.id.profile_group).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(HomePage.this, ProfileActivity.class));
+                guillotineAnimation.close();
+            }
+        });
         guillotineAnimation = new GuillotineAnimation.GuillotineBuilder(guillotineMenu, guillotineMenu.findViewById(R.id.guillotine_hamburger), contentHamburger)
                 .setStartDelay(250)
                 .setActionBarViewForAnimation(toolbar)

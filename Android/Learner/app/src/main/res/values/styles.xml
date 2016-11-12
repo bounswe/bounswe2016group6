@@ -1,4 +1,5 @@
 <resources>
+
     <style name="LinearLayout" />
 
     <style name="LinearLayout.GuillotineItem">
@@ -48,7 +49,9 @@
     <style name="ImageView.Hamburger" parent="Widget.AppCompat.ActionButton">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_marginBottom">@dimen/abc_action_bar_overflow_padding_start_material</item>
+        <item name="android:layout_marginBottom">
+            @dimen/abc_action_bar_overflow_padding_start_material
+        </item>
     </style>
 
     <style name="ImageView.GuillotineItem">
