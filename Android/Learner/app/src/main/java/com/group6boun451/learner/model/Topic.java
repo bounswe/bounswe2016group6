@@ -17,6 +17,7 @@ public class Topic {
     private List<User> likedBy;
     private List<Tag> tags;
     private List<Comment> comments;
+    private List<Question> questions;
 
     private String headerImage;
     private Date createdAt;

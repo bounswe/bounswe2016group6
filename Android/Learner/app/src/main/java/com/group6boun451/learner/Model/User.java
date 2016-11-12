@@ -16,8 +16,8 @@ public class User {
     private String secret;
 
 
-    private List<Topic> topics;
-    private Collection<Role> roles;
+    private List<com.group6boun451.learner.model.Topic> topics;
+    private Collection<com.group6boun451.learner.model.Role> roles;
 
     private List<Comment> comments;
     
@@ -67,11 +67,11 @@ public class User {
         this.password = password;
     }
 
-    public Collection<Role> getRoles() {
+    public Collection<com.group6boun451.learner.model.Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(final Collection<Role> roles) {
+    public void setRoles(final Collection<com.group6boun451.learner.model.Role> roles) {
         this.roles = roles;
     }
 
@@ -91,11 +91,11 @@ public class User {
         this.secret = secret;
     }
 
-    public List<Topic> getTopics() {
+    public List<com.group6boun451.learner.model.Topic> getTopics() {
         return topics;
     }
 
-    public void setTopics(List<Topic> topics) {
+    public void setTopics(List<com.group6boun451.learner.model.Topic> topics) {
         this.topics = topics;
     }
 

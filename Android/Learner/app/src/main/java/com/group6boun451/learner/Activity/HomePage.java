@@ -41,7 +41,6 @@ import com.alexvasilkov.foldablelayout.shading.GlanceFoldShading;
 import com.group6boun451.learner.CommentContainer;
 import com.group6boun451.learner.CommentListAdapter;
 import com.group6boun451.learner.R;
-import com.group6boun451.learner.model.Topic;
 import com.group6boun451.learner.utils.GlideHelper;
 import com.yalantis.guillotine.animation.GuillotineAnimation;
 import com.yalantis.guillotine.interfaces.GuillotineListener;
@@ -80,7 +79,7 @@ public class HomePage extends AppCompatActivity{
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.content_hamburger) View contentHamburger;
 
-    private List<Topic> topics;
+    private List<com.group6boun451.learner.model.Topic> topics;
     private boolean isTeacher = true;
     private boolean isSnackBarActive = false;
     private boolean isTopicActive= false;
@@ -237,13 +236,15 @@ public class HomePage extends AppCompatActivity{
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(HomePage.this,QuizActivity.class);
+            startActivity(intent);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    public void openDetails(View coverView, Topic topic) {
+    public void openDetails(View coverView, com.group6boun451.learner.model.Topic topic) {
         final ImageView image = Views.find(tabHost, R.id.details_image);
         final TextView title = Views.find(tabHost, R.id.details_title);
         final TextView description = Views.find(tabHost, R.id.details_text);
@@ -288,7 +289,7 @@ public class HomePage extends AppCompatActivity{
 
         @Override
         public Object instantiateItem(ViewGroup collection, int position) {
-            final Topic topic = topics.get(position);
+            final com.group6boun451.learner.model.Topic topic = topics.get(position);
             LayoutInflater inflater = LayoutInflater.from(mContext);
             ViewGroup v = (ViewGroup) inflater.inflate(R.layout.topic_item_home, collection, false);
             ((TextView) v.findViewById(R.id.textTopicTitle)).setText(topic.getHeader());
@@ -321,7 +322,7 @@ public class HomePage extends AppCompatActivity{
 
     }
 
-    public class FetchSecuredResourceTask extends AsyncTask<Void, Void, Topic[]> {
+    public class FetchSecuredResourceTask extends AsyncTask<Void, Void, com.group6boun451.learner.model.Topic[]> {
         private String username;
         private String password;
 
@@ -333,7 +334,7 @@ public class HomePage extends AppCompatActivity{
         }
 
         @Override
-        protected Topic[] doInBackground(Void... params) {
+        protected com.group6boun451.learner.model.Topic[] doInBackground(Void... params) {
             final String url = getString(R.string.base_url) + "topic/recommended";
 
             // Populate the HTTP Basic Authentitcation header with the username and password
@@ -349,27 +350,30 @@ public class HomePage extends AppCompatActivity{
             try {
                 // Make the network request
                 Log.d(TAG, url);
-                ResponseEntity<Topic[]> response = restTemplate.exchange(url, HttpMethod.GET, new HttpEntity<Object>(requestHeaders), Topic[].class);
+                ResponseEntity<com.group6boun451.learner.model.Topic[]> response = restTemplate.exchange(url, HttpMethod.GET, new HttpEntity<Object>(requestHeaders), com.group6boun451.learner.model.Topic[].class);
                 // Log.d("response",response.getBody());
                 return response.getBody();
             } catch (HttpClientErrorException e) {
                 Log.e(TAG, e.getLocalizedMessage(), e);
-                return new Topic[0];
+                return new com.group6boun451.learner.model.Topic[0];
             } catch (ResourceAccessException e) {
                 Log.e(TAG, e.getLocalizedMessage(), e);
-                return new Topic[0];
+                return new com.group6boun451.learner.model.Topic[0];
             } catch (Exception e) {
                 Log.e(TAG, e.getLocalizedMessage(), e);
-                return new Topic[0];
+                return new com.group6boun451.learner.model.Topic[0];
             }
         }
 
         @Override
-        protected void onPostExecute(Topic[] result) {
+        protected void onPostExecute(com.group6boun451.learner.model.Topic[] result) {
             topics = new ArrayList(Arrays.asList(result));
             viewpager.setAdapter(new TopicPagerAdapter(HomePage.this));
             viewpager2.setAdapter(new TopicPagerAdapter(HomePage.this));
             viewpager3.setAdapter(new TopicPagerAdapter(HomePage.this));
         }
     }
+
+
+
 }
