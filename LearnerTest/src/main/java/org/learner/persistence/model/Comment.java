@@ -34,4 +34,46 @@ public class Comment {
     public Comment() {
         super();
     }
+    
+	public Long getId() {
+		return id;
+	}
+	
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public User getOwner() {
+		return owner;
+	}
+
+	public void setOwner(User owner) {
+		this.owner = owner;
+	}
+
+	public Topic getRelatedTopic() {
+		return relatedTopic;
+	}
+
+	public void setRelatedTopic(Topic relatedTopic) {
+		this.relatedTopic = relatedTopic;
+	}
+
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
+    
+    
 }

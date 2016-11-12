@@ -1,5 +1,6 @@
 package org.learner.web.controller;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.learner.persistence.model.Topic;
@@ -33,5 +34,15 @@ public class HomeController {
     	model.addAttribute("username", currentUser);
     	model.addAttribute("topics", topicList);
     	return "home";
+    }
+    
+    @RequestMapping(value="/")
+    public String redirectToPage(final Principal principal){
+    	if(principal == null) {
+    		LOGGER.debug("Principal : "+ principal );
+    		return "redirect:/login";
+    	}
+    	
+    	return "redirect:/home";
     }
 }

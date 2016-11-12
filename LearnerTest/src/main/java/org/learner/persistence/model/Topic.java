@@ -15,7 +15,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -29,7 +28,7 @@ public class Topic {
     @NotNull
     private String header;
     
-    @Column(length = 5000)
+    @Column(length = 10000)
     private String content;
 
     @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
@@ -55,6 +54,8 @@ public class Topic {
     @OneToMany(mappedBy = "relatedTopic")
     private List<Comment> comments;
     
+    @OneToMany(mappedBy="relatedTopic")
+    private List<Question> questions;
     
     private String headerImage;
     private Date createdAt;
@@ -65,7 +66,47 @@ public class Topic {
     }
 	
 	
-    public Long getId() {
+    public List<User> getLikedBy() {
+		return likedBy;
+	}
+
+
+	public void setLikedBy(List<User> likedBy) {
+		this.likedBy = likedBy;
+	}
+
+
+	public List<Tag> getTags() {
+		return tags;
+	}
+
+
+	public void setTags(List<Tag> tags) {
+		this.tags = tags;
+	}
+
+
+	public List<Comment> getComments() {
+		return comments;
+	}
+
+
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
+	}
+
+
+	public String getHeaderImage() {
+		return headerImage;
+	}
+
+
+	public void setHeaderImage(String headerImage) {
+		this.headerImage = headerImage;
+	}
+
+
+	public Long getId() {
 		return id;
 	}
 
