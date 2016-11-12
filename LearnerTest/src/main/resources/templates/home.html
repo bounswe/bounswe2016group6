@@ -135,11 +135,13 @@
   <div  class="carousel-inner" role="listbox">
     
     <div th:each="tpc,iterationStatus : ${topics}" class="item">
+    <a th:href="'/topic/'+${tpc.id}">
       <img src="/resources/images/img_chania.jpg" alt="Chania">
       <div class="carousel-caption">
         <h3 th:text="${tpc.header}">Chania</h3>
         <p th:text="${tpc.owner.firstName}">The atmosphere in Chania has a touch of Florence and Venice.</p>
       </div>
+      </a>
     </div>
 
   </div>
