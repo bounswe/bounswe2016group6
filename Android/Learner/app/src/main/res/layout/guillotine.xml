@@ -39,8 +39,8 @@
             android:src="@drawable/ic_feed" />
 
         <com.group6boun451.learner.widget.CanaroTextView
-            style="@style/TextView.GuillotineItem"
-            android:text="@string/feed" />
+            style="@style/TextView.GuillotineItem.Selected"
+            android:text="@string/home" />
     </LinearLayout>
 
     <LinearLayout
@@ -52,16 +52,18 @@
             android:src="@drawable/ic_activity_active" />
 
         <com.group6boun451.learner.widget.CanaroTextView
-            style="@style/TextView.GuillotineItem.Selected"
-            android:text="@string/activity" />
+            style="@style/TextView.GuillotineItem"
+            android:text="@string/search" />
     </LinearLayout>
+
+
 
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/guillotine_divider_height" />
 
     <LinearLayout
-        android:id="@+id/settings_group"
+        android:id="@+id/activity_settings"
         style="@style/LinearLayout.GuillotineItem">
 
         <ImageView

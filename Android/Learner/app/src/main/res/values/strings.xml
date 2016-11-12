@@ -20,8 +20,8 @@
     <string name="content_value">[content]</string>
     <string name="action_refresh">Refresh</string>
     <string name="profile">PROFILE</string>
-    <string name="feed">FEED</string>
-    <string name="activity">ACTIVITY</string>
+    <string name="home">HOME</string>
+    <string name="search">SEARCH</string>
     <string name="settings">SETTINGS</string>
     <string name="comment_here">Comment Here</string>
     <string name="send">SEND</string>
@@ -32,5 +32,6 @@
     <string name="time">time</string>
     <string name="password">password</string>
     <string name="user_name">Username</string>
+    <string name="title_activity_profile">ProfileActivity</string>
 
 </resources>
