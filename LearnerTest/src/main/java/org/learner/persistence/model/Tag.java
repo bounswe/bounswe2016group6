@@ -1,6 +1,5 @@
 package org.learner.persistence.model;
 
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -9,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -29,10 +29,21 @@ public class Tag {
 	@Column(name = "updated_at")
     private Date updatedAt;
 	
-	//@ManyToMany(mappedBy = "topic")
-	//private List<Topic> relatedTopics;
+	@ManyToMany(mappedBy = "tags")
+	private List<Topic> relatedTopics;
 	
-    public Long getId() {
+	
+    public List<Topic> getRelatedTopics() {
+		return relatedTopics;
+	}
+
+
+	public void setRelatedTopics(List<Topic> relatedTopics) {
+		this.relatedTopics = relatedTopics;
+	}
+
+
+	public Long getId() {
 		return id;
 	}
 

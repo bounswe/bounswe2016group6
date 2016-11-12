@@ -57,7 +57,25 @@ public class User {
     
     private List<Comment> comments;
     
-    public User() {
+    
+    
+    public List<Topic> getTopics() {
+		return topics;
+	}
+
+	public void setTopics(List<Topic> topics) {
+		this.topics = topics;
+	}
+
+	public List<Comment> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
+	}
+
+	public User() {
         super();
         this.secret = Base32.random();
         this.enabled = false;

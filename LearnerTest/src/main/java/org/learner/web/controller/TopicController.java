@@ -107,6 +107,7 @@ public class TopicController {
     }
     
     @RequestMapping(value = "/view/{topicId}")
+    @ResponseBody
     public Topic viewTopic(@PathVariable Long topicId){
     	LOGGER.debug("Topic view!");
     	//Topic topic = 
