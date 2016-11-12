@@ -146,7 +146,24 @@
             </div>
         </div>
     </article>
+    
+    <div class="container">
+            <div class="row">
+              <div th:each="cmnt,iterationStatus : ${topics.comments}" class="item">  
+			      <div class="carousel-caption">
+			        <h3 th:text="${cmnt.owner.firstName+' '+cmnt.owner.lastName}">Erhan</h3>
+			        <p th:text="${cmnt.content}">User comment.</p>
+			      </div>
+			  </div>
+            </div>
+            <div class="row">
+            	<textarea rows="4" cols="50">
+				Share your thoughts.
+				</textarea>
+            </div>
+            </div>
 
+	
     <hr>
 
     <!-- Footer -->
