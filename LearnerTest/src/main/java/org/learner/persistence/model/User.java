@@ -18,10 +18,15 @@ import javax.persistence.Table;
 import org.jboss.aerogear.security.otp.api.Base32;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name = "user_account")
+@JsonIdentityInfo(
+		  generator = ObjectIdGenerators.PropertyGenerator.class, 
+		  property = "id")
 public class User {
 
     @Id
@@ -55,7 +60,7 @@ public class User {
     			inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Collection<Role> roles;
     
-    
+    @JsonBackReference
     @OneToMany(mappedBy = "owner")
     private List<Comment> comments;
     

@@ -8,6 +8,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "question")
 public class Question {
@@ -24,6 +26,7 @@ public class Question {
 	
 	private int correct;
 	
+	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(nullable=false, name="topic_id")
 	private Topic relatedTopic;

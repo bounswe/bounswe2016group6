@@ -155,8 +155,8 @@ public class TopicService implements ITopicService{
 
 	@Override
 	public List<Topic> basicKeywordSearch(String keyword) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return repository.findByHeaderContaining(keyword);
 	}
 
 	@Override

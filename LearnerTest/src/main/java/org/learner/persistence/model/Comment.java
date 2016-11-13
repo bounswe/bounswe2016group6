@@ -11,8 +11,15 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @Entity
 @Table(name = "comment")
+@JsonIdentityInfo(
+		  generator = ObjectIdGenerators.PropertyGenerator.class, 
+		  property = "id")
 public class Comment {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,7 +27,7 @@ public class Comment {
     
     @NotNull
     private String content;
-
+    
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User owner;
