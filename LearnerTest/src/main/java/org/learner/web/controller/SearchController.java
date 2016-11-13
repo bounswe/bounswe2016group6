@@ -8,19 +8,20 @@ import org.learner.service.ITopicService;
 import org.learner.web.util.GenericResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping(value = "/search")
+
 public class SearchController {
 	@Autowired
 	ITopicService topicService;
 	
 	
 	
-	@RequestMapping(value = "/")
+	@RequestMapping(value = "/search/keyword")
 	@ResponseBody
 	public List<Topic> basicSearch(@RequestParam String keyword){
 		System.out.println("HELLOWORLD");
@@ -29,6 +30,19 @@ public class SearchController {
 		}
 		
 		return topicService.basicKeywordSearch(keyword);
+		
+	}
+	
+	@RequestMapping(value = "/search")
+	public String basicSearchResults(@RequestParam String q,Model model){
+		System.out.println("HELLOWORLD");
+		if(q == null){
+			return null;
+		}
+		
+		List<Topic> queryResults = topicService.basicKeywordSearch(q);
+		model.addAttribute("topics", queryResults);
+		return "searchresult";
 		
 	}
 }

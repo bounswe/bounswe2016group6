@@ -1,73 +1,119 @@
 <html>
 
 <head>
-<script
-  src="https://code.jquery.com/jquery-3.1.1.min.js"
-  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
-  crossorigin="anonymous"></script>
-  <!-- Latest compiled and minified JavaScript -->
-<script type="text/javascript">
-	$(function() {
-		$(".carousel-inner .item:first-child").addClass("active");
-		$(".carousel-indicators li:first-child").addClass("active");
-	});
-</script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link> 
- <style>
-  .carousel-inner > .item > img,
-  .carousel-inner > .item > a > img {
-      width: 70%;
-      margin: auto;
-  }
-  </style>
+<title th:text="#{label.pages.home.title}"></title>
 
 
-<title th:text="#{label.pages.home.title}">home</title>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"
+	integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+	crossorigin="anonymous"></script>
+	
+<!-- Bootstrap Core CSS -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <!-- Theme CSS -->
+    <link href="/css/searchresultstyle.css" rel="stylesheet">
+	 
+	
+    <!-- Custom Fonts -->
+    <link href="/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+<title>Search Results</title>
 </head>
 <body>
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="#" th:text="#{label.pages.home.title}">home</a>
-    </div>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a th:href="@{/logout}" th:text="#{label.pages.logout}">logout</a></li>
-      </ul>
-  </div>
-</nav>
+
+<!-- Navigation -->
+    <nav class="navbar navbar-static-top navbar-default navbar-custom " style="background-color: black">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    Menu <i class="fa fa-bars"></i>
+                </button>
+                <a class="navbar-brand" href="/home">Learner</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/home">Home</a>
+                    </li>
+                    <li>
+                        <a sec:authentication="name" href="/profile">Profile</a>
+                    </li>
+                    <li>
+                        <a href="/home">Sample Post</a>
+                    </li>
+                    <li>
+                        <a href="/logout">Logout</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+    
     <div class="container">
-            <h1 th:text="#{label.pages.home.message}">home</h1>
+            <h1">Search results</h1>
+            <h1">Search results</h1>
     </div>
     
-    <div id="myCarousel" class="carousel slide col-md-6" data-ride="carousel">
-  <!-- Indicators -->
-  <ol class="carousel-indicators">
-    <li th:each="tpc,iterationStatus : ${topics}" data-target="#myCarousel" th:attr="data-slide-to=${iterationStatus.count-1}"></li>
-  </ol>
-
-  <!-- Wrapper for slides -->
-  <div  class="carousel-inner" role="listbox">
-    <div th:each="tpc,iterationStatus : ${topics}" class="item">
-      <img src="/img_chania.jpg" alt="Chania"></img>
-      <div class="carousel-caption">
-        <h3 th:text="${tpc.header}">Chania</h3>
-        <p th:text="${tpc.owner.firstName}">The atmosphere in Chania has a touch of Florence and Venice.</p>
+    <div class="container">
+    
+    	<div th:each="tpc,iterationStatus : ${topics}" class="row">
+    	
+    	<div class="col-lg-10">
+    <div class="row" >
+      <div class="col-lg-10">
+        <h3><strong><a th:text="${tpc.header}" th:href="'/topic/' + ${tpc.id}">Title of the post</a></strong></h4>
       </div>
     </div>
-
+    
+    <div class="row" >
+      <div class="col-lg-2">
+        <a href="#" class="thumbnail">
+            <img src="http://placehold.it/260x180" alt="">
+        </a>
+      </div>
+      <div class="col-lg-8" >      
+        <p><a th:href="'/topic/' + ${tpc.id}">
+          Lorem ipsum dolor sit amet, id nec conceptam conclusionemque. Et eam tation option. Utinam salutatus ex eum. Ne mea dicit tibique facilisi, ea mei omittam explicari conclusionemque, ad nobis propriae quaerendum sea.
+        </a></p>
+        <p><a class="btn btn-info" th:href="'/topic/' + ${tpc.Id}">Read more</a></p>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="col-lg-10">
+        <p></p>
+        <p>
+          <span class="glyphicon glyphicon-user"></span> by <a href="#" th:text="${tpc.owner.firstName} + ' '+ ${tpc.owner.lastName} ">John</a> 
+          | <span class="glyphicon glyphicon-calendar"></span> <span th:text="${#dates.format(tpc.createdAt,'YYYY/MM/dd HH:mm')}"></span>
+          | <span class="glyphicon glyphicon-comment"></span> <a href="#" th:text="${#lists.size(tpc.comments) + ' comments' }">comments</a>
+          <!--   | <span class="glyphicon glyphicon-share"></span> <a href="#">39 Shares</a> -->
+          | <span class="glyphicon glyphicon-tags"></span> Tags : <a href="#"> <span class="label label-info">Snipp</span></a> 
+          <a href="#"><span class="label label-info">Insert</span></a> 
+          <a href="#"><span class="label label-info">tags</span></a> 
+          <a href="#"><span class="label label-info">here</span></a>
+        </p>
+      </div>
+    </div>
   </div>
-
-  <!-- Left and right controls -->
-  <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
-    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-    <span class="sr-only">Previous</span>
-  </a>
-  <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
-    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-    <span class="sr-only">Next</span>
-  </a>
+  <hr>
 </div>
+
+    	
+    	
+    	
+    	</div>
+    </div>
     
 </body>
 
