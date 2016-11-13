@@ -88,4 +88,5 @@
             android:textSize="18sp"
             android:id="@+id/txtQuizAnswerC"/>
     </LinearLayout>
+
 </LinearLayout>
