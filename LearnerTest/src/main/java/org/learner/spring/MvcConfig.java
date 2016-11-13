@@ -30,7 +30,9 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
         super();
     }
 
-    //
+    private static final String[] CLASSPATH_RESOURCE_LOCATIONS = {
+            "classpath:/META-INF/resources/", "classpath:/resources/",
+            "classpath:/static/", "classpath:/public/" };
 
     @Override
     public void addViewControllers(final ViewControllerRegistry registry) {
@@ -77,11 +79,13 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
     public void configureDefaultServletHandling(final DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
     }
-
+    
     @Override
     public void addResourceHandlers(final ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/resources/**").addResourceLocations("/", "/resources/");
-        registry.addResourceHandler("/vendor/**").addResourceLocations("/resources/vendor/");
+        registry.addResourceHandler("/**").addResourceLocations(CLASSPATH_RESOURCE_LOCATIONS);
+
+        //registry.addResourceHandler("/resources/**").addResourceLocations("/", "/resources/");
+        //registry.addResourceHandler("/vendor/**").addResourceLocations("/resources/vendor/");
         //registry.addResourceHandler("/img/**").addResourceLocations("/static/");
         //registry.addResourceHandler("*.js").addResourceLocations("/resources/js");
         //registry.addResourceHandler("*.css").addResourceLocations("/resources/css");

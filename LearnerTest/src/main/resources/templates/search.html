@@ -49,7 +49,7 @@
   <!-- Wrapper for slides -->
   <div  class="carousel-inner" role="listbox">
     <div th:each="tpc,iterationStatus : ${topics}" class="item">
-      <img src="/resources/img_chania.jpg" alt="Chania"></img>
+      <img src="/img_chania.jpg" alt="Chania"></img>
       <div class="carousel-caption">
         <h3 th:text="${tpc.header}">Chania</h3>
         <p th:text="${tpc.owner.firstName}">The atmosphere in Chania has a touch of Florence and Venice.</p>
