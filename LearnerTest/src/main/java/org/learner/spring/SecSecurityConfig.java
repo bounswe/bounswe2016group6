@@ -53,7 +53,7 @@ public class SecSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(final WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/resources/**","/static/**");
+        web.ignoring().antMatchers("/resources/**","/static/**","/js/**","/css/**","/images/**");
     }
     
 
@@ -68,7 +68,7 @@ public class SecSecurityConfig extends WebSecurityConfigurerAdapter {
             .authenticationEntryPoint(restAuthenticationEntryPoint)
             .and()
             .authorizeRequests()
-                .antMatchers("/login*","/login*", "/logout*", "/signin/**", "/signup/**",
+                .antMatchers("/","/login*","/login*", "/logout*", "/signin/**", "/signup/**",
                         "/user/registration*", "/registrationConfirm*", "/expiredAccount*", "/registration*",
                         "/badUser*", "/user/resendRegistrationToken*" ,"/forgetPassword*", "/user/resetPassword*",
                         "/user/changePassword*", "/emailError*", "/resources/**","/old/user/registration*","/successRegister*","/qrcode*").permitAll()
@@ -80,7 +80,7 @@ public class SecSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
             .formLogin()
                 .loginPage("/login")
-                .defaultSuccessUrl("/homepage.html")
+                .defaultSuccessUrl("/home")
                 .failureUrl("/login?error=true")
                 .successHandler(myAuthenticationSuccessHandler)
                 .failureHandler(authenticationFailureHandler)
@@ -90,13 +90,13 @@ public class SecSecurityConfig extends WebSecurityConfigurerAdapter {
             .httpBasic()
             	.and()
             .sessionManagement()
-                .invalidSessionUrl("/invalidSession.html")
+                .invalidSessionUrl("/login?message=Session expired")
                 .sessionFixation().none()
             .and()
             .logout()
                 .logoutSuccessHandler(myLogoutSuccessHandler)
                 .invalidateHttpSession(false)
-                .logoutSuccessUrl("/logout.html?logSucc=true")
+                .logoutSuccessUrl("/login")
                 .deleteCookies("JSESSIONID")
                 .permitAll();
     // @formatter:on

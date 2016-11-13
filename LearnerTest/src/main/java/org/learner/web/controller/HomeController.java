@@ -36,8 +36,15 @@ public class HomeController {
     	return "home";
     }
     
+    @RequestMapping(value="/logout")
+    public String logoutRedir(){
+    	LOGGER.debug("Logout");
+    	return "redirect:/login";
+    }
+    
     @RequestMapping(value="/")
     public String redirectToPage(final Principal principal){
+    	LOGGER.debug("Context root!");
     	if(principal == null) {
     		LOGGER.debug("Principal : "+ principal );
     		return "redirect:/login";

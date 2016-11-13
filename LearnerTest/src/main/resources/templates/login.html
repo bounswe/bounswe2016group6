@@ -16,7 +16,10 @@
 </head>
 
 <body>
-	<div th:if="${param.message != null}" class="alert alert-info" th:text="${param.message[0]}">message</div>
+	
+
+
+	
 	<div class="container">
 		<div class="top">
 			<h1 id="title" class="hidden"><span id="logo">Learner</span></h1>
@@ -26,6 +29,7 @@
 			<div class="box-header">
 				<h2 th:text="#{label.form.loginTitle}">Log In</h2>
 			</div>
+			
             <form id="lgnfrm" name='f' action="login" method='POST' onsubmit="return validate();">
                 
                  <label  th:text="#{label.form.loginEmail}">Email</label>
@@ -36,8 +40,12 @@
                  <br/>
                  <input class="form-control" type='password' name='password' />
                 
-                <br/><br/>
+                <br/>
             </form>
+            <div th:if="${param.message != null}" class="alert alert-info" th:text="${param.message[0]}">message</div>
+            <div th:if="${param.error != null}" class="alert alert-danger" th:text="${session[SPRING_SECURITY_LAST_EXCEPTION]}">error</div>
+			
+			<br>
 			<button form="lgnfrm" th:value="#{label.form.submit}" name="submit" type="submit">Sign In</button>
 			<br><br>
 			
