@@ -24,7 +24,7 @@ public class HomeController {
 	
     @RequestMapping(value="/home")
     public String homepage(Model model){
-    	List<Topic> topicList = topicService.getAllTopics();
+    	List<Topic> topicList = topicService.getRecentTopics();
     	
     	final Authentication curAuth = SecurityContextHolder.getContext().getAuthentication();
         String currentUser =  curAuth.getName();

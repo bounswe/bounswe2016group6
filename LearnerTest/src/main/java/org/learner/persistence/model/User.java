@@ -49,15 +49,23 @@ public class User {
     
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    @JoinTable(name = "users_roles", 
+    			joinColumns = @JoinColumn(name = "user_id", 
+    			referencedColumnName = "id"), 
+    			inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Collection<Role> roles;
     
     
     @OneToMany(mappedBy = "owner")
-    
     private List<Comment> comments;
     
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_follow", 
+				joinColumns = @JoinColumn(name = "user_id"), 
+				inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private List<User> followedBy;
     
+    private String picture;
     
     public List<Topic> getTopics() {
 		return topics;
@@ -178,5 +186,13 @@ public class User {
                 .append(", secret=").append(secret).append(", roles=").append(roles).append("]");
         return builder.toString();
     }
+
+	public String getPicture() {
+		return picture;
+	}
+
+	public void setPicture(String picture) {
+		this.picture = picture;
+	}
 
 }

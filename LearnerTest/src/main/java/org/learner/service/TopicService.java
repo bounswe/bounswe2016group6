@@ -1,13 +1,15 @@
 package org.learner.service;
 
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.learner.persistence.dao.CommentRepository;
 import org.learner.persistence.dao.TopicRepository;
 import org.learner.persistence.dao.UserRepository;
+import org.learner.persistence.model.Comment;
+import org.learner.persistence.model.Tag;
 import org.learner.persistence.model.Topic;
 import org.learner.persistence.model.User;
 import org.learner.web.dto.TopicDto;
@@ -26,6 +28,10 @@ public class TopicService implements ITopicService{
 	
 	@Autowired
 	TopicRepository repository;
+	
+	
+	@Autowired
+	CommentRepository commentRepository;
 	
 	@Override
 	public Topic createNewTopic(TopicDto topicdto) {
@@ -51,9 +57,8 @@ public class TopicService implements ITopicService{
 	}
 
 	@Override
-	public Topic deleteTopic() {
-		// TODO Auto-generated method stub
-		return null;
+	public void deleteTopic(long id) {
+		
 	}
 
 	@Override
@@ -98,6 +103,102 @@ public class TopicService implements ITopicService{
 	public List<Topic> getAllTopics() {
 		return repository.findAll();
 		
+	}
+
+	@Override
+	public Comment createComment(long id, String content) {
+		
+		Comment cmnt = new Comment();
+		cmnt.setContent(content);
+		
+		final Authentication curAuth = SecurityContextHolder.getContext().getAuthentication();
+        String currentUserName = curAuth.getName();
+        
+        User owner = userRepo.findByEmail(currentUserName);
+        cmnt.setOwner(owner);
+        
+        Topic tpc = repository.findOne(id);
+        cmnt.setRelatedTopic(tpc);
+		
+        cmnt.setCreatedAt(new Date());
+		commentRepository.save(cmnt);
+		return cmnt;
+	}
+
+	@Override
+	public void deleteComment(long id) {
+		commentRepository.delete(id);
+	}
+
+	@Override
+	public List<Topic> getRecentTopics() {
+		return repository.findTop3ByOrderByCreatedAtDesc();
+	}
+
+	@Override
+	public List<Topic> getRecommendedTopics() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Tag createTagToTopic(long tid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void deleteTagFromQuestion(long tid, long tagid) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<Topic> basicKeywordSearch(String keyword) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Topic> getRelatedTopicsViaTopics(long topicId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Topic> getRelatedTopicsViaTags(long tagid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Topic> getTopicsCreatedByUser() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Topic> getTopicsLikedByUser() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Topic> getTopicsCommentedByUser() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Topic> getTopicsFromFollowedTeacher() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getLikeCount(long tid) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 	
 	

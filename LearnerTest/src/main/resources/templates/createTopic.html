@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link> 
@@ -9,13 +9,34 @@
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"
 	integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
 	crossorigin="anonymous"></script>
+	
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-		
+<!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link> 
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <!-- Theme CSS -->
+    <link href="/resources/css/clean-blog.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sceditor/1.5.0/themes/default.min.css" type="text/css" media="all" />
+    <link href="/resources/css/homestyle.css" rel="stylesheet">	
+	
+    <!-- Custom Fonts -->
+    <link href="/resources/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    		
 		<!-- include summernote css/js-->
 		<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.css" rel="stylesheet">
 		<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.js"></script>
 		
-		
+
 		<script>
 		$(document).ready(function() {
 			  $('#summernote').summernote({
@@ -68,32 +89,56 @@
 
 
 <body>
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" th:href="@{/home.html}" th:text="#{label.pages.home.title}">home</a>
-      </div>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a th:href="@{/logout}" th:text="#{label.pages.logout}">logout</a> </li>
-      </ul>
-    </div>
-</nav>
+<nav class="navbar navbar-static-top navbar-default navbar-custom " style="background-color: black">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    Menu <i class="fa fa-bars"></i>
+                </button>
+                <a class="navbar-brand" href="/home">Learner</a>
+            </div>
 
-<div class="container">         
-     <p sec:authorize="!hasAuthority('WRITE_PRIVILEGE')" th:text="#{message.unauth}">unauth</p>   
-        
-     <h1 sec:authorize="hasAuthority('WRITE_PRIVILEGE')" th:text="#{label.pages.admin.message}">admin</h1>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/home">Home</a>
+                    </li>
+                    <li>
+                        <a sec:authentication="name" href="/profile">Profile</a>
+                    </li>
+                    <li>
+                        <a href="/home">Sample Post</a>
+                    </li>
+                    <li>
+                        <a href="/logout">Logout</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+
+<div class="container">   
+    
+	<h1>Learner</h1>
+     <h1>Create a Topic</h1>
      
+         <form id="topicform" action="/topic/create" method="post" onsubmit="return submitform()">
+    	<p>Title: <input type="text" name="header" /></p>
+    	<input id="tpContent" type="hidden" name="content" value=""/>
+        
+    </form>
+    <h3>Create your content :</h3>
      <div id="summernote"></div>
      
 
-    <form id="topicform" action="/topic/create" method="post" onsubmit="return submitform()">
-    	<p>Question: <input type="text" name="header" /></p>
-    	<input id="tpContent" type="hidden" name="content" value=""/>
-        <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
-        
-    </form>
-     
+
+    <button form="topicform" type="submit" value="Submit" class="btn btn-primary">Submit Post</button>
      
 
 
