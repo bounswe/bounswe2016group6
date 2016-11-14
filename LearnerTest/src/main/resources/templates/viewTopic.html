@@ -123,10 +123,15 @@
 	
     <!-- Post Content -->
         <div class="container">
+        	
             <div class="row">
                 <div th:utext="${topic.content}" id="topicContent" class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                 Topic content
                 </div>
+                <div class="col-lg-2 col-md-1" th:if="${#authentication.name==topic.owner.email}">
+        		<a class="btn btn-primary btn-xs" th:href="${'/topic/edit/' + topic.id}">Edit Topic</a>
+        	</div>
+                
             </div>
         </div>
 <hr>

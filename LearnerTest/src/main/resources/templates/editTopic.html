@@ -84,11 +84,39 @@
 			  
 		
 		  $('#topicform').submit(function() {
-			  alert("Form submit!");
+			  event.preventDefault();
 			  var markupStr = $('#summernote').summernote('code');
 			  console.log(markupStr);
 			  $("#tpContent").val(markupStr);
-			  return true;
+			  
+			  var datastring = $("#topicform").serialize();
+			  var posturl = $("#topicform").attr("action");
+			  var topicurl = posturl.replace("edit/","");
+			  //console.log("POST TO: "+posturl);
+			  //console.log("TOPIC: URL" + topicurl)
+			  $.ajax({
+			      type: "POST",
+			      url: posturl,
+			      data: datastring,
+			      dataType: "json",
+			      success: function(data) {
+			          //var obj = jQuery.parseJSON(data);
+			          console.log(data.error)
+			          console.log(data.message)
+			          if(data.error == null){
+			        	  alert(data.message);
+			        	  location.replace(topicurl)
+			          } else {
+			        	  alert(data.error);
+			          }
+			      },
+			      error: function() {
+			          alert('error handing here');
+			      }
+			  });
+			  
+			  
+			  return false;
 			});
 		});
 		</script>
