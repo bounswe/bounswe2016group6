@@ -48,10 +48,11 @@ public class TopicService implements ITopicService{
 		topic.setRevealDate(topicdto.getRevealDate());
 		topic.setCreatedAt(new Date());
 		
-		//final Authentication curAuth = SecurityContextHolder.getContext().getAuthentication();
-        //User currentUser = (User) curAuth.getPrincipal();
+		final Authentication curAuth = SecurityContextHolder.getContext().getAuthentication();
+        String currentUserName = curAuth.getName();
         
-		topic.setOwner(userRepo.findOne((long)1));
+        User owner = userRepo.findByEmail(currentUserName);
+        topic.setOwner(owner);
 		
         return repository.save(topic);
 	}

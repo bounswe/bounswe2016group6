@@ -80,7 +80,7 @@ public class TopicController {
     
     
     @PostMapping(value="/edit/{topicId}")
-    @RequestMapping
+    @ResponseBody
     public GenericResponse editTopic(@PathVariable Long topicId,TopicDto topicdto){
     	System.out.println("Edit topic request");
     	
