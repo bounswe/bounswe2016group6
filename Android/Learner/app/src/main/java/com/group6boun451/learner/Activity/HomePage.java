@@ -43,7 +43,6 @@ import com.group6boun451.learner.CommentListAdapter;
 import com.group6boun451.learner.ProfileActivity;
 import com.group6boun451.learner.R;
 import com.group6boun451.learner.utils.GlideHelper;
-import com.group6boun451.learner.widget.CanaroTextView;
 import com.yalantis.guillotine.animation.GuillotineAnimation;
 import com.yalantis.guillotine.interfaces.GuillotineListener;
 
@@ -167,7 +166,7 @@ public class HomePage extends AppCompatActivity{
                 }else {
 //                    Intent intent = new Intent(HomePage.this, AddTopicActivity.class);
 //                    startActivity(intent);
-                    startActivity(new Intent(HomePage.this, TestActivity.class));
+                    startActivity(new Intent(HomePage.this, AddTopicActivity.class));
 
                 }
             }

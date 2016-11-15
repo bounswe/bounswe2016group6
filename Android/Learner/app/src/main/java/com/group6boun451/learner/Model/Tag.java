@@ -1,6 +1,7 @@
 package com.group6boun451.learner.model;
 
 import java.util.Date;
+import java.util.List;
 
 public class Tag {
     private Long id;
@@ -8,7 +9,7 @@ public class Tag {
     private String context;
     private Date createdAt;
     private Date updatedAt;
-    //private List<Topic> relatedTopics;
+    private List<Topic> relatedTopics;
 
     public Long getId() {
         return id;
@@ -60,4 +61,11 @@ public class Tag {
     }
 
 
+    public List<Topic> getRelatedTopics() {
+        return relatedTopics;
+    }
+
+    public void setRelatedTopics(List<Topic> relatedTopics) {
+        this.relatedTopics = relatedTopics;
+    }
 }

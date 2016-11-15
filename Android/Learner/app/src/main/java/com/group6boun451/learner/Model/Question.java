@@ -1,6 +1,5 @@
 package com.group6boun451.learner.model;
 public class Question {
-
     private Long id;
     private String question;
     private String answerA;
@@ -8,11 +7,9 @@ public class Question {
     private String answerC;
     private int correct;
     private Topic relatedTopic;
-
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
@@ -64,4 +61,8 @@ public class Question {
     public void setRelatedTopic(Topic relatedTopic) {
         this.relatedTopic = relatedTopic;
     }
+
+
+
+
 }

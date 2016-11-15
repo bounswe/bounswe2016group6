@@ -20,7 +20,9 @@ public class User {
     private Collection<com.group6boun451.learner.model.Role> roles;
 
     private List<Comment> comments;
-    
+    private List<User> followedBy;
+    private String picture;
+
     public User() {
         super();
 //        this.secret = Base32.random();
@@ -139,4 +141,19 @@ public class User {
         return builder.toString();
     }
 
+    public List<User> getFollowedBy() {
+        return followedBy;
+    }
+
+    public void setFollowedBy(List<User> followedBy) {
+        this.followedBy = followedBy;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
 }

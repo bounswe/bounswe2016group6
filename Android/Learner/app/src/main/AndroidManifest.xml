@@ -30,11 +30,6 @@
             android:label="@string/title_activity_add_topic"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Activity.TestActivity"
-            android:label="@string/title_activity_add_topic"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
             android:name=".Activity.QuizActivity"
 
             android:theme="@style/AppTheme.NoActionBar"
