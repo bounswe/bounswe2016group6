@@ -13,6 +13,7 @@ import org.learner.persistence.dao.RoleRepository;
 import org.learner.persistence.dao.UserRepository;
 import org.learner.persistence.dao.VerificationTokenRepository;
 import org.learner.persistence.model.PasswordResetToken;
+import org.learner.persistence.model.Role;
 import org.learner.persistence.model.User;
 import org.learner.persistence.model.VerificationToken;
 import org.learner.web.dto.UserDto;
@@ -196,5 +197,47 @@ public class UserService implements IUserService {
         }
         return false;
     }
+
+	@Override
+	public User followUser(long userid) {
+		final Authentication curAuth = SecurityContextHolder.getContext().getAuthentication();
+		String username = curAuth.getName();
+		User curuser =repository.findByEmail(username);
+		
+		User teacherToFollow = getUserByID(userid);
+		if(teacherToFollow == null){
+			return null;
+		}
+		
+		Role teacherrole = roleRepository.getOne((long) 3);
+		if(teacherToFollow.getRoles().contains(teacherrole) ){
+			teacherToFollow.getFollowedBy().add(curuser);
+		} else {
+			return null;
+		}
+		
+		return teacherToFollow;
+	}
+
+	@Override
+	public User unfollowUser(long userid) {
+		final Authentication curAuth = SecurityContextHolder.getContext().getAuthentication();
+		String username = curAuth.getName();
+		User curuser =repository.findByEmail(username);
+		
+		User teacherToFollow = getUserByID(userid);
+		if(teacherToFollow == null){
+			return null;
+		}
+		
+		Role teacherrole = roleRepository.getOne((long) 3);
+		if(teacherToFollow.getRoles().contains(teacherrole) ){
+			teacherToFollow.getFollowedBy().add(curuser);
+		} else {
+			return null;
+		}
+		
+		return teacherToFollow;
+	}
 
 }

@@ -34,6 +34,13 @@ public class TopicService implements ITopicService{
 	CommentRepository commentRepository;
 	
 	@Override
+	public Topic setTopicImage(long tid, String imgpath) {
+		Topic edit = repository.findOne(tid);
+		edit.setHeaderImage(imgpath);
+		return edit;
+	}
+
+	@Override
 	public Topic createNewTopic(TopicDto topicdto) {
 		
 		if((new Date()).before( topicdto.getRevealDate() ) ){
@@ -91,15 +98,43 @@ public class TopicService implements ITopicService{
 	public Topic likeTopic(long topicId) {
 		Topic liked = repository.findOne(topicId);
 		if(liked == null){
+			System.out.println("topic not found!");
 			return null;
 		}
 		
-		liked.setLikes(liked.getLikes()+1);
+		User user = getCurrentUser();
+		System.out.println("User :" + user);
+		
+		if(!liked.getLikedBy().contains(user)){
+			liked.getLikedBy().add(user);
+			System.out.println("Like save!");
+		} else {
+			System.out.println("Already liked!");
+			return null;
+		}
 		
 		//TODO insert tags
 		return liked;
 	}
-
+	
+	@Override
+	public Topic unlikeTopic(long topicId) {
+		Topic liked = repository.findOne(topicId);
+		if(liked == null){
+			System.out.println("topic not found!");
+			return null;
+		}
+		
+		User user = getCurrentUser();
+		System.out.println("User :" + user);
+		
+		liked.getLikedBy().remove(user);
+		
+		//TODO insert tags
+		return liked;
+	}
+	
+	
 	@Override
 	public List<Topic> getAllTopics() {
 		return repository.findAll();
@@ -203,5 +238,12 @@ public class TopicService implements ITopicService{
 	}
 	
 	
+	private User getCurrentUser(){
+		final Authentication curAuth = SecurityContextHolder.getContext().getAuthentication();
+        String currentUserName = curAuth.getName();
+        
+        User owner = userRepo.findByEmail(currentUserName);
+        return owner;
+	}
 	
 }

@@ -17,11 +17,21 @@ public class TopicDto {
     @Size(min = 1)
     private String content;
     
+    private String imagePath;
     
-    //TODO reveal > current date constraint
+
+
+	//TODO reveal > current date constraint
     private Date revealDate;
     
-    
+    public String getImagePath() {
+		return imagePath;
+	}
+
+
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
+	}
     
     public void generateFromModel(Topic topic){
     	this.setHeader(topic.getHeader());
