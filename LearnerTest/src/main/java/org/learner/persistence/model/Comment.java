@@ -17,9 +17,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name = "comment")
-@JsonIdentityInfo(
-		  generator = ObjectIdGenerators.PropertyGenerator.class, 
-		  property = "id")
+//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
 public class Comment {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,6 +30,7 @@ public class Comment {
     @JoinColumn(name = "user_id")
     private User owner;
     
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "topic_id")
     private Topic relatedTopic;

@@ -3,6 +3,7 @@ package org.learner.persistence.model;
 import java.util.Collection;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,6 +16,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.engine.internal.Cascade;
 import org.jboss.aerogear.security.otp.api.Base32;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -24,9 +26,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name = "user_account")
-@JsonIdentityInfo(
-		  generator = ObjectIdGenerators.PropertyGenerator.class, 
-		  property = "id")
+//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class User {
 
     @Id
@@ -64,15 +64,25 @@ public class User {
     @OneToMany(mappedBy = "owner")
     private List<Comment> comments;
     
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.ALL ,fetch = FetchType.LAZY)
     @JoinTable(name = "user_follow", 
 				joinColumns = @JoinColumn(name = "user_id"), 
-				inverseJoinColumns = @JoinColumn(name = "role_id"))
+				inverseJoinColumns = @JoinColumn(name = "follower_id"))
     private List<User> followedBy;
     
     private String picture;
     
-    public List<Topic> getTopics() {
+    
+    
+    public List<User> getFollowedBy() {
+		return followedBy;
+	}
+
+	public void setFollowedBy(List<User> followedBy) {
+		this.followedBy = followedBy;
+	}
+
+	public List<Topic> getTopics() {
 		return topics;
 	}
 
