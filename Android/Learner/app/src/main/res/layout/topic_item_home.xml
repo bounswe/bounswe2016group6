@@ -72,7 +72,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/textAuthor"
                 android:text="LIKE"
-                android:textColor="?attr/colorAccent" />
+                android:textColor="@color/white" />
 
             <Button
                 android:id="@+id/comment_button"
@@ -83,7 +83,7 @@
                 android:layout_toEndOf="@id/like_button"
                 android:layout_toRightOf="@id/like_button"
                 android:text="COMMENT"
-                android:textColor="?attr/colorAccent" />
+                android:textColor="@color/white" />
 
             <TextView
                 android:id="@+id/textDate"
@@ -95,7 +95,7 @@
                 android:layout_below="@+id/textAuthor"
                 android:gravity="center"
                 android:text="date"
-                android:textColor="?attr/colorAccent"
+                android:textColor="@color/white"
                 android:textSize="12sp" />
 
         </RelativeLayout>

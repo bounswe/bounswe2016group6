@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -50,6 +49,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.nio.charset.Charset;
 import java.util.Collections;
@@ -268,10 +268,14 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
             newTopic.setHeader(topicNameEditText.getText().toString());
             newTopic.setContent(summernote.getText());
             newTopic.setRevealDate(new Date(date[0],date[1],date[2],date[3],date[4],date[5]));
-            new AddContentTask().execute();
+            new AddTopicTask().execute();
+            //new AddContentTask().execute();
         }
     }
 
+    /**
+     * unused
+     */
     public class AddContentTask extends AsyncTask<Void, Void, GenericResponse> {
         private String username;
         private String password;
@@ -333,8 +337,56 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
 
         @Override
         protected void onPostExecute(GenericResponse result) {
-            Snackbar.make(findViewById(android.R.id.content),result.toString(),Snackbar.LENGTH_SHORT).show();
             finish();
+        }
+    }
+    public class AddTopicTask extends AsyncTask<Void, Void, GenericResponse> {
+        private String username;
+        private String password;
+
+        @Override
+        protected void onPreExecute() {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            username = preferences.getString(getString(R.string.user_name), " ");
+            password = preferences.getString(getString(R.string.password), " ");
+        }
+
+        @Override
+        protected GenericResponse doInBackground(Void... params) {
+            final String url = getString(R.string.base_url) + "topic/create/android";
+
+            // Populate the HTTP Basic Authentitcation header with the username and password
+            HttpAuthentication authHeader = new HttpBasicAuthentication(username, password);
+            HttpHeaders requestHeaders = new HttpHeaders();
+            requestHeaders.setAuthorization(authHeader);
+            requestHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            // Create a new RestTemplate instance
+            RestTemplate restTemplate = new RestTemplate();
+            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("header",newTopic.getHeader()).queryParam("content",newTopic.getContent());
+            try {
+                // Make the network request
+                Log.d(TAG, url);
+                ResponseEntity<GenericResponse> response = restTemplate.exchange(
+                        builder.build().encode().toUri(),
+                        HttpMethod.POST,
+                        new HttpEntity<Object>(requestHeaders), GenericResponse.class);
+                Log.d("response",response.getBody().toString());
+                return response.getBody();
+            } catch (HttpClientErrorException e) {
+                Log.e(TAG, e.getLocalizedMessage(), e);
+                return new GenericResponse();
+            } catch (ResourceAccessException e) {
+                Log.e(TAG, e.getLocalizedMessage(), e);
+                return new GenericResponse();
+            } catch (Exception e) {
+                Log.e(TAG, e.getLocalizedMessage(), e);
+                return new GenericResponse();
+            }
+        }
+
+        @Override
+        protected void onPostExecute(GenericResponse result) {
         }
     }
 

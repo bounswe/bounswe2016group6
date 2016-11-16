@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -398,7 +397,7 @@ public class HomePage extends AppCompatActivity{
         @Override
         public Object instantiateItem(ViewGroup collection, int position) {
             topicId = position;
-            final com.group6boun451.learner.model.Topic topic = topics.get(position);
+            final Topic topic = topics.get(position);
             LayoutInflater inflater = LayoutInflater.from(mContext);
             ViewGroup v = (ViewGroup) inflater.inflate(R.layout.topic_item_home, collection, false);
             ((TextView) v.findViewById(R.id.textTopicTitle)).setText(topic.getHeader());
@@ -411,6 +410,23 @@ public class HomePage extends AppCompatActivity{
                 @Override
                 public void onClick(View v) {
                     ((HomePage) v.getContext()).openDetails(v.findViewById(R.id.card_view), topic);
+                }
+            });
+
+
+            final Button likeButton = (Button)v.findViewById(R.id.like_button);
+            if(topic.getLikedBy().contains(topic)) likeButton.setTextColor(getResources().getColor(R.color.mdtp_accent_color));
+            likeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                   //TODO likes
+                    if(!topic.getLikedBy().contains(topic)) {
+                        new LikeTopicTask().execute(""+topic.getId(),"like");
+                        likeButton.setTextColor(getResources().getColor(R.color.mdtp_accent_color));
+                    }else {
+                       new LikeTopicTask().execute(""+topic.getId(),"");
+                        likeButton.setTextColor(getResources().getColor(R.color.white));
+                    }
                 }
             });
 
@@ -430,7 +446,7 @@ public class HomePage extends AppCompatActivity{
         }
 
     }
-
+//TODO merge asynctasks
     public class FetchTopicsTask extends AsyncTask<Void, Void, com.group6boun451.learner.model.Topic[]> {
         private String username;
         private String password;
@@ -530,7 +546,60 @@ public class HomePage extends AppCompatActivity{
 
         @Override
         protected void onPostExecute(GenericResponse result) {
-            Snackbar.make(findViewById(android.R.id.content),result.getMessage().toString(),Snackbar.LENGTH_SHORT).show();
+//            if(result.getError()==null)
+//            Snackbar.make(findViewById(android.R.id.content),result.getMessage().toString(),Snackbar.LENGTH_SHORT).show();
+        }
+    }
+    public class LikeTopicTask extends AsyncTask<String, Void, GenericResponse> {
+        private String username;
+        private String password;
+
+        @Override
+        protected void onPreExecute() {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            username = preferences.getString(getString(R.string.user_name), " ");
+            password = preferences.getString(getString(R.string.password), " ");
+        }
+
+        @Override
+        protected GenericResponse doInBackground(String... params) {
+            String un =(params[1].equalsIgnoreCase("like"))?"":"un";
+            final String url = getString(R.string.base_url) + "topic/"+un+"like/"+params[0];
+
+            // Populate the HTTP Basic Authentitcation header with the username and password
+            HttpAuthentication authHeader = new HttpBasicAuthentication(username, password);
+            HttpHeaders requestHeaders = new HttpHeaders();
+            requestHeaders.setAuthorization(authHeader);
+            requestHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            // Create a new RestTemplate instance
+            RestTemplate restTemplate = new RestTemplate();
+            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
+            try {
+                // Make the network request
+                Log.d(TAG, url);
+                ResponseEntity<GenericResponse> response = restTemplate.exchange(
+                        builder.build().encode().toUri(),
+                        HttpMethod.POST,
+                        new HttpEntity<Object>(requestHeaders), GenericResponse.class);
+                Log.d("response",response.getBody().toString());
+                return response.getBody();
+            } catch (HttpClientErrorException e) {
+                Log.e(TAG, e.getLocalizedMessage(), e);
+                return new GenericResponse();
+            } catch (ResourceAccessException e) {
+                Log.e(TAG, e.getLocalizedMessage(), e);
+                return new GenericResponse();
+            } catch (Exception e) {
+                Log.e(TAG, e.getLocalizedMessage(), e);
+                return new GenericResponse();
+            }
+        }
+
+        @Override
+        protected void onPostExecute(GenericResponse result) {
+//            if(result.getError()==null)
+//                Snackbar.make(findViewById(android.R.id.content),result.getMessage().toString(),Snackbar.LENGTH_SHORT).show();
         }
     }
 
