@@ -12,6 +12,8 @@ import org.learner.web.dto.TopicDto;
 
 public interface ITopicService {
 	
+	Topic setTopicImage(long tid,String imgpath);
+	
 	Topic createNewTopic(TopicDto topicdto);
 	
 	void deleteTopic(long id);
@@ -56,6 +58,8 @@ public interface ITopicService {
 	List<Topic> getTopicsFromFollowedTeacher();
 	
 	int getLikeCount(long tid);
+
+	Topic unlikeTopic(long topicId);
 	
 	
 	

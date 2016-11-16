@@ -79,7 +79,7 @@
     <div class="row" >
       <div class="col-lg-2">
         <a href="#" class="thumbnail">
-            <img src="http://placehold.it/260x180" alt="">
+            <img th:src="${tpc.headerImage}" alt="">
         </a>
       </div>
       <div class="col-lg-8" >      
@@ -97,7 +97,7 @@
           <span class="glyphicon glyphicon-user"></span> by <a href="#" th:text="${tpc.owner.firstName} + ' '+ ${tpc.owner.lastName} ">John</a> 
           | <span class="glyphicon glyphicon-calendar"></span> <span th:text="${#dates.format(tpc.createdAt,'YYYY/MM/dd HH:mm')}"></span>
           | <span class="glyphicon glyphicon-comment"></span> <a href="#" th:text="${#lists.size(tpc.comments) + ' comments' }">comments</a>
-          <!--   | <span class="glyphicon glyphicon-share"></span> <a href="#">39 Shares</a> -->
+          <!--  | <span class="glyphicon glyphicon-thumbs-up"></span> <a href="#" th:text="${#lists.size(tpc.likedBy) + ' likes'">Likes</a> -->
           | <span class="glyphicon glyphicon-tags"></span> Tags : <a href="#"> <span class="label label-info">Snipp</span></a> 
           <a href="#"><span class="label label-info">Insert</span></a> 
           <a href="#"><span class="label label-info">tags</span></a> 
