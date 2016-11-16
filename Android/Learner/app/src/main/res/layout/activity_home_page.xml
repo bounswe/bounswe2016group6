@@ -93,6 +93,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
+                    <Button
+                        android:text="@string/edit"
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:background="@null"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/edit_button" />
                     <ScrollView
                         android:id="@+id/details_scrollView"
                         android:layout_width="match_parent"
@@ -103,13 +110,6 @@
                             android:layout_height="wrap_content"
                             android:isScrollContainer="true"
                             android:orientation="vertical">
-                            <Button
-                                android:text="@string/edit"
-                                android:visibility="gone"
-                                android:layout_width="match_parent"
-                                android:background="@null"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/edit_button" />
                             <ImageView
                                 android:id="@+id/details_image"
                                 android:layout_width="match_parent"
@@ -204,10 +204,19 @@
                                 android:textColor="#eee"
                                 android:textSize="14sp" />
 
-                            <com.group6boun451.learner.widget.TouchyWebView
-                                android:id="@+id/topic_content_TouchyWebView"
+                            <FrameLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content" />
+                                android:layout_height="wrap_content">
+                                <com.group6boun451.learner.widget.Summernote
+                                    android:id="@+id/summernote"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:visibility="invisible"/>
+                                <com.group6boun451.learner.widget.TouchyWebView
+                                    android:id="@+id/topic_content_TouchyWebView"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content" />
+                            </FrameLayout>
 
                         </LinearLayout>
                     </ScrollView>

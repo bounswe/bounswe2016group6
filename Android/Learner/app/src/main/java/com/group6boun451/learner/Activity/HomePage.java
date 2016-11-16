@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -42,8 +43,10 @@ import com.alexvasilkov.foldablelayout.shading.GlanceFoldShading;
 import com.group6boun451.learner.CommentListAdapter;
 import com.group6boun451.learner.ProfileActivity;
 import com.group6boun451.learner.R;
+import com.group6boun451.learner.model.GenericResponse;
 import com.group6boun451.learner.model.Topic;
 import com.group6boun451.learner.utils.GlideHelper;
+import com.group6boun451.learner.widget.Summernote;
 import com.group6boun451.learner.widget.TouchyWebView;
 import com.yalantis.guillotine.animation.GuillotineAnimation;
 import com.yalantis.guillotine.interfaces.GuillotineListener;
@@ -59,6 +62,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -70,8 +74,10 @@ import butterknife.ButterKnife;
 
 public class HomePage extends AppCompatActivity{
     protected static final String TAG = HomePage.class.getSimpleName();
+    private static final int EDITOR = 3;
 
     @BindView(R.id.touch_interceptor_view) View listTouchInterceptor;
+    @BindView(R.id.summernote) Summernote summernote;
     @BindView(R.id.topic_TabHost) TabHost tabHost;
     @BindView(R.id.details_scrollView) ScrollView detailsScrollView;
     @BindView(R.id.unfoldable_view) UnfoldableView unfoldableView;
@@ -92,6 +98,7 @@ public class HomePage extends AppCompatActivity{
     private boolean isTopicActive= false;
     private boolean isGuillotineOpened = false;
     private GuillotineAnimation guillotineAnimation;
+    private int topicId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +107,7 @@ public class HomePage extends AppCompatActivity{
         ButterKnife.bind(this);
         username = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString(getString(R.string.user_name), " ");
         new FetchTopicsTask().execute();
+        summernote.setRequestCodeforFilepicker(EDITOR);
 
 //        toolbar
         if (toolbar != null) {
@@ -228,7 +236,25 @@ public class HomePage extends AppCompatActivity{
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO edit the content
+                if(editButton.getText().equals(getString(R.string.edit))){
+                    summernote.setVisibility(View.VISIBLE);
+                    contentView.setVisibility(View.INVISIBLE);
+                    editButton.setText(getString(R.string.done));
+                }else {
+                    contentView.setVisibility(View.VISIBLE);
+                    summernote.setVisibility(View.INVISIBLE);
+                    String content = summernote.getText();
+                    Topic t = topics.get(topicId);
+                    if(!t.getContent().equals(content)){
+                        topics.get(topicId).setContent(content);
+                        new EditTopicTask().execute(topics.get(topicId).getHeader(),summernote.getText(),""+t.getId());
+                      //TODO edit the content animation
+                    }
+                    contentView.loadData(content,"text/html",null);
+                    editButton.setText(getString(R.string.edit));
+
+                }
+
             }
         });
 
@@ -298,6 +324,12 @@ public class HomePage extends AppCompatActivity{
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        summernote.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
     public void onBackPressed() {
 
         if (isGuillotineOpened) {
@@ -353,6 +385,8 @@ public class HomePage extends AppCompatActivity{
         });
         if(topic.getOwner().getEmail().equalsIgnoreCase(username)){
             editButton.setVisibility(View.VISIBLE);
+            summernote.setText(topic.getContent());
+
         }
         unfoldableView.unfold(coverView, tabHost);
     }
@@ -363,6 +397,7 @@ public class HomePage extends AppCompatActivity{
 
         @Override
         public Object instantiateItem(ViewGroup collection, int position) {
+            topicId = position;
             final com.group6boun451.learner.model.Topic topic = topics.get(position);
             LayoutInflater inflater = LayoutInflater.from(mContext);
             ViewGroup v = (ViewGroup) inflater.inflate(R.layout.topic_item_home, collection, false);
@@ -448,7 +483,56 @@ public class HomePage extends AppCompatActivity{
             viewpager3.setAdapter(new TopicPagerAdapter(HomePage.this));
         }
     }
+    public class EditTopicTask extends AsyncTask<String, Void, GenericResponse> {
+        private String username;
+        private String password;
 
+        @Override
+        protected void onPreExecute() {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            username = preferences.getString(getString(R.string.user_name), " ");
+            password = preferences.getString(getString(R.string.password), " ");
+        }
+
+        @Override
+        protected GenericResponse doInBackground(String... params) {
+            final String url = getString(R.string.base_url) + "topic/edit/"+params[2];
+
+            // Populate the HTTP Basic Authentitcation header with the username and password
+            HttpAuthentication authHeader = new HttpBasicAuthentication(username, password);
+            HttpHeaders requestHeaders = new HttpHeaders();
+            requestHeaders.setAuthorization(authHeader);
+            requestHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            // Create a new RestTemplate instance
+            RestTemplate restTemplate = new RestTemplate();
+            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("header",params[0]).queryParam("content",params[1]);
+            try {
+                // Make the network request
+                Log.d(TAG, url);
+                ResponseEntity<GenericResponse> response = restTemplate.exchange(
+                        builder.build().encode().toUri(),
+                        HttpMethod.POST,
+                        new HttpEntity<Object>(requestHeaders), GenericResponse.class);
+                 Log.d("response",response.getBody().toString());
+                return response.getBody();
+            } catch (HttpClientErrorException e) {
+                Log.e(TAG, e.getLocalizedMessage(), e);
+                return new GenericResponse();
+            } catch (ResourceAccessException e) {
+                Log.e(TAG, e.getLocalizedMessage(), e);
+                return new GenericResponse();
+            } catch (Exception e) {
+                Log.e(TAG, e.getLocalizedMessage(), e);
+                return new GenericResponse();
+            }
+        }
+
+        @Override
+        protected void onPostExecute(GenericResponse result) {
+            Snackbar.make(findViewById(android.R.id.content),result.getMessage().toString(),Snackbar.LENGTH_SHORT).show();
+        }
+    }
 
 
 }

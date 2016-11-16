@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Learner</string>
-    <string name="base_url">http://35.156.14.81:8080/</string>
+    <string name="base_url">http://192.168.210.24:8080/</string>
+    <!--<string name="base_url">http://35.156.14.81:8080/</string>-->
     <string name="title_activity_home_page">HomePage</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -36,5 +37,6 @@
     <string name="back_button">BACK</string>
     <string name="finish_button">FINISH</string>
     <string name="edit">edit</string>
+    <string name="done">done</string>
 
 </resources>
