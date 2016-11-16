@@ -127,7 +127,7 @@ public class QuizActivity extends AppCompatActivity {
         rightArrow = (Button) findViewById(R.id.btnArrowNext);
         inWhichQuestion = (TextView) findViewById(R.id.txtAtWhich);
       //  finishQuiz = (Button) findViewById(R.id.btnFinishQuiz);
-        finishQuiz.setTypeface(chalkFont);
+       // finishQuiz.setTypeface(chalkFont);
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
