@@ -40,7 +40,6 @@ import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.foldablelayout.UnfoldableView;
 import com.alexvasilkov.foldablelayout.shading.GlanceFoldShading;
 import com.group6boun451.learner.CommentListAdapter;
-import com.group6boun451.learner.ProfileActivity;
 import com.group6boun451.learner.R;
 import com.group6boun451.learner.model.GenericResponse;
 import com.group6boun451.learner.model.Topic;
