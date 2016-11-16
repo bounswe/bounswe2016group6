@@ -20,7 +20,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -77,6 +76,7 @@ public class HomePage extends AppCompatActivity{
     @BindView(R.id.activity_topic_pager_view_pager_popular) ViewPager viewpager2;
     @BindView(R.id.activity_topic_pager_view_pager_mostrecent) ViewPager viewpager3;
     @BindView(R.id.fab) FloatingActionButton fab;
+    @BindView(R.id.fab2) FloatingActionButton fabQuiz;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.content_hamburger) View contentHamburger;
 
@@ -118,18 +118,21 @@ public class HomePage extends AppCompatActivity{
                     public void onGuillotineOpened() {
                         isGuillotineOpened=true;
                         fab.setVisibility(View.INVISIBLE);
+                        fabQuiz.setVisibility(View.INVISIBLE);
                     }
 
                     @Override
                     public void onGuillotineClosed() {
                         isGuillotineOpened=false;
+                        if(isTopicActive) fabQuiz.setVisibility(View.VISIBLE);
                         if(isTeacher||isTopicActive) fab.setVisibility(View.VISIBLE);
 
                     }
                 })
                 .setClosedOnStart(true)
                 .build();
-//        topic
+
+//       tabs on a topic
         tabHost.setup();
         tabHost.addTab(tabHost.newTabSpec("Tab One").setContent(R.id.topic_tab).setIndicator("Example"));
         tabHost.addTab(tabHost.newTabSpec("Tab Two").setContent(R.id.comment_tab).setIndicator("Discussion"));
@@ -162,18 +165,20 @@ public class HomePage extends AppCompatActivity{
                         fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_floatmenu_comment_quit));
                         isSnackBarActive= true;
                     }
-
-                }else {
-//                    Intent intent = new Intent(HomePage.this, AddTopicActivity.class);
-//                    startActivity(intent);
-                    startActivity(new Intent(HomePage.this, AddTopicActivity.class));
-
-                }
+                }else {startActivity(new Intent(HomePage.this, AddTopicActivity.class));}
             }
         });
 
-        listTouchInterceptor.setClickable(false);
+        fabQuiz.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomePage.this,QuizActivity.class);
+                startActivity(intent);
+            }
+        });
 
+//      opening animation of a topic
+        listTouchInterceptor.setClickable(false);
         Bitmap glance = BitmapFactory.decodeResource(getResources(), R.drawable.unfold_glance);
         unfoldableView.setFoldShading(new GlanceFoldShading(glance));
         unfoldableView.setOnFoldingListener(new UnfoldableView.SimpleFoldingListener() {
@@ -190,6 +195,7 @@ public class HomePage extends AppCompatActivity{
                     unfoldableView.setGesturesEnabled(false);
                 isTopicActive = true;
                 fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_floatmenu_comment));
+                fabQuiz.setVisibility(View.VISIBLE);
                 //TODO make fab animation here
             }
 
@@ -206,6 +212,7 @@ public class HomePage extends AppCompatActivity{
                 tabHost.setCurrentTab(0);
                 isTopicActive = false;
                 fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_add_black_24dp));
+                fabQuiz.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -231,23 +238,6 @@ public class HomePage extends AppCompatActivity{
 
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Intent intent = new Intent(HomePage.this,QuizActivity.class);
-            startActivity(intent);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     public void openDetails(View coverView, com.group6boun451.learner.model.Topic topic) {
