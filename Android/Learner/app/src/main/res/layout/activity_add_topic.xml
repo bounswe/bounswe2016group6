@@ -105,7 +105,7 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:background="@color/guillotine_background_dark">
-                    <com.group6boun451.learner.utils.Summernote
+                    <com.group6boun451.learner.widget.Summernote
                         android:id="@+id/summernote"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"

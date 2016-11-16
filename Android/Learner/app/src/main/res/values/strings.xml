@@ -35,5 +35,6 @@
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="back_button">BACK</string>
     <string name="finish_button">FINISH</string>
+    <string name="edit">edit</string>
 
 </resources>

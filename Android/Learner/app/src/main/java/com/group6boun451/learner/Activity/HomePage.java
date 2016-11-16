@@ -26,6 +26,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -43,6 +44,7 @@ import com.group6boun451.learner.ProfileActivity;
 import com.group6boun451.learner.R;
 import com.group6boun451.learner.model.Topic;
 import com.group6boun451.learner.utils.GlideHelper;
+import com.group6boun451.learner.widget.TouchyWebView;
 import com.yalantis.guillotine.animation.GuillotineAnimation;
 import com.yalantis.guillotine.interfaces.GuillotineListener;
 
@@ -78,10 +80,13 @@ public class HomePage extends AppCompatActivity{
     @BindView(R.id.activity_topic_pager_view_pager_mostrecent) ViewPager viewpager3;
     @BindView(R.id.fab) FloatingActionButton fab;
     @BindView(R.id.fab2) FloatingActionButton fabQuiz;
+    @BindView(R.id.edit_button) Button editButton;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.content_hamburger) View contentHamburger;
+    @BindView(R.id.topic_content_TouchyWebView) TouchyWebView contentView;
 
-    private List<com.group6boun451.learner.model.Topic> topics;
+    private List<Topic> topics;
+    private String username;
     private boolean isTeacher = true;
     private boolean isSnackBarActive = false;
     private boolean isTopicActive= false;
@@ -93,7 +98,8 @@ public class HomePage extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
         ButterKnife.bind(this);
-        new FetchSecuredResourceTask().execute();
+        username = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString(getString(R.string.user_name), " ");
+        new FetchTopicsTask().execute();
 
 //        toolbar
         if (toolbar != null) {
@@ -151,7 +157,7 @@ public class HomePage extends AppCompatActivity{
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isTopicActive){
+                       if(isTopicActive){
                     LinearLayout lyt = (LinearLayout) findViewById(R.id.new_comment_snack);
                     if(isSnackBarActive) {
                         lyt.setVisibility(View.INVISIBLE);
@@ -209,13 +215,85 @@ public class HomePage extends AppCompatActivity{
             public void onFoldedBack(UnfoldableView unfoldableView) {
                 listTouchInterceptor.setClickable(false);
                 unfoldableView.setGesturesEnabled(true);
+                //return to initial state
                 tabHost.setVisibility(View.INVISIBLE);
                 tabHost.setCurrentTab(0);
+                editButton.setVisibility(View.GONE);
                 isTopicActive = false;
                 fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_add_black_24dp));
                 fabQuiz.setVisibility(View.INVISIBLE);
             }
         });
+
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO edit the content
+            }
+        });
+
+//        //TODO test-> remove lines below in this method after test
+//        ListView comments = (ListView) findViewById(R.id.topicPageCommentList);
+//        CommentListAdapter cladap = new CommentListAdapter(this, (new CommentContainer(this)).getComments());
+//        comments.setAdapter(cladap);
+//
+//        comments.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                TextView txt = (TextView) view.findViewById(R.id.commentText);
+//                int numOfLines = txt.getMaxLines();
+//                if (numOfLines == 3) {
+//                    txt.setMaxLines(150);
+//                } else {
+//                    txt.setMaxLines(3);
+//                }
+//            }
+//        });
+//
+//        contentView.loadData("<HEAD>\n" +
+//                "<TITLE>Basic HTML Sample Page</TITLE>\n" +
+//                "</HEAD>\n" +
+//                "<BODY BGCOLOR=\"WHITE\">\n" +
+//                "<CENTER>\n" +
+//                "<H1>A Simple Sample Web Page</H1>\n" +
+//                " \n" +
+//                "  <IMG SRC=\"http://sheldonbrown.com/images/scb_eagle_contact.jpeg\">\n" +
+//                " \n" +
+//                "\n" +
+//                " \n" +
+//                "  <H4>By Sheldon Brown</H4>\n" +
+//                "<H2>Demonstrating a few HTML features</H2>\n" +
+//                "</CENTER>\n" +
+//                "HTML is really a very simple language. It consists of ordinary text, with commands that are enclosed by \"<\" and \">\" characters, or bewteen an \"&\" and a \";\". <P>\n" +
+//                " \n" +
+//                "You don't really need to know much HTML to create a page, because you can copy bits of HTML from other pages that do what you want, then change the text!<P>\n" +
+//                " \n" +
+//                "This page shows on the left as it appears in your browser, and the corresponding HTML code appears on the right. The HTML commands are linked to explanations of what they do.\n" +
+//                " \n" +
+//                " \n" +
+//                "<H3>Line Breaks</H3>\n" +
+//                "HTML doesn't normally use line breaks for ordinary text. A white space of any size is treated as a single space. This is because the author of the page has no way of knowing the size of the reader's screen, or what size type they will have their browser set for.<P>\n" +
+//                " \n" +
+//                "If you want to put a line break at a particular place, you can use the \"<BR>\" command, or, for a paragraph break, the \"<P>\" command, which will insert a blank line. The heading command (\"<4></4>\") puts a blank line above and below the heading text.\n" +
+//                " \n" +
+//                "<H4>Starting and Stopping Commands</H4>\n" +
+//                "Most HTML commands come in pairs: for example, \"<H4>\" marks the beginning of a size 4 heading, and \"</H4>\" marks the end of it. The closing command is always the same as the opening command, except for the addition of the \"/\".<P>\n" +
+//                " \n" +
+//                "Modifiers are sometimes included along with the basic command, inside the opening command's < >. The modifier does not need to be repeated in the closing command.\n" +
+//                " \n" +
+//                " \n" +
+//                "<H1>This is a size \"1\" heading</H1>\n" +
+//                "<H2>This is a size \"2\" heading</H2>\n" +
+//                "<H3>This is a size \"3\" heading</H3>\n" +
+//                "<H4>This is a size \"4\" heading</H4>\n" +
+//                "<H5>This is a size \"5\" heading</H5>\n" +
+//                "<H6>This is a size \"6\" heading</H6>\n" +
+//                "<center>\n" +
+//                "<H4>Copyright © 1997, by\n" +
+//                "<A HREF=\"http://sheldonbrown.com/index.html\">Sheldon Brown</A>\n" +
+//                "</H4>\n" +
+//                "If you would like to make a link or bookmark to this page, the URL is:<BR> http://sheldonbrown.com/web_sample1.html</body> ","text/html",null);
+
 
     }
 
@@ -244,11 +322,9 @@ public class HomePage extends AppCompatActivity{
     }
 
     public void openDetails(View coverView, Topic topic) {
-        final ImageView image = Views.find(tabHost, R.id.details_image);
-        final TextView title = Views.find(tabHost, R.id.details_title);
         final TextView description = Views.find(tabHost, R.id.details_text);
-        GlideHelper.loadImage(image, topic);
-        title.setText(topic.getHeader());
+        GlideHelper.loadImage((ImageView) Views.find(tabHost, R.id.details_image), topic);
+        ((TextView)Views.find(tabHost, R.id.details_title)).setText(topic.getHeader());
 
         SpannableBuilder builder = new SpannableBuilder(this);
         builder.append(R.string.by).append(" ").append(topic.getOwner().getFirstName()).append("\t")
@@ -256,15 +332,12 @@ public class HomePage extends AppCompatActivity{
                 .append(R.string.date).append(" ")
                 .clearStyle()
                 .append(topic.getRevealDate().toString()).append("\n")
-                .createStyle().setFont(Typeface.DEFAULT_BOLD).apply()
-                .append(R.string.content).append(": ")
-                .clearStyle()
-                .append(topic.getContent());
+                .createStyle().setFont(Typeface.DEFAULT_BOLD).apply();
         description.setText(builder.build());
+        contentView.loadData(topic.getContent(),"text/html",null);
 
         ListView comments = (ListView) findViewById(R.id.topicPageCommentList);
-        CommentListAdapter cladap = new CommentListAdapter(this, topic.getComments());//TODO it might troublesome
-        comments.setAdapter(cladap);
+        comments.setAdapter(new CommentListAdapter(this, topic.getComments()));//TODO it might troublesome
 
         comments.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -278,7 +351,9 @@ public class HomePage extends AppCompatActivity{
                 }
             }
         });
-
+        if(topic.getOwner().getEmail().equalsIgnoreCase(username)){
+            editButton.setVisibility(View.VISIBLE);
+        }
         unfoldableView.unfold(coverView, tabHost);
     }
 
@@ -321,7 +396,7 @@ public class HomePage extends AppCompatActivity{
 
     }
 
-    public class FetchSecuredResourceTask extends AsyncTask<Void, Void, com.group6boun451.learner.model.Topic[]> {
+    public class FetchTopicsTask extends AsyncTask<Void, Void, com.group6boun451.learner.model.Topic[]> {
         private String username;
         private String password;
 
@@ -333,7 +408,7 @@ public class HomePage extends AppCompatActivity{
         }
 
         @Override
-        protected com.group6boun451.learner.model.Topic[] doInBackground(Void... params) {
+        protected Topic[] doInBackground(Void... params) {
             final String url = getString(R.string.base_url) + "topic/recommended";
 
             // Populate the HTTP Basic Authentitcation header with the username and password
@@ -349,24 +424,25 @@ public class HomePage extends AppCompatActivity{
             try {
                 // Make the network request
                 Log.d(TAG, url);
-                ResponseEntity<com.group6boun451.learner.model.Topic[]> response = restTemplate.exchange(url, HttpMethod.GET, new HttpEntity<Object>(requestHeaders), com.group6boun451.learner.model.Topic[].class);
+                ResponseEntity<Topic[]> response = restTemplate.exchange(url, HttpMethod.GET, new HttpEntity<Object>(requestHeaders), Topic[].class);
                 // Log.d("response",response.getBody());
                 return response.getBody();
             } catch (HttpClientErrorException e) {
                 Log.e(TAG, e.getLocalizedMessage(), e);
-                return new com.group6boun451.learner.model.Topic[0];
+                return new Topic[0];
             } catch (ResourceAccessException e) {
                 Log.e(TAG, e.getLocalizedMessage(), e);
-                return new com.group6boun451.learner.model.Topic[0];
+                return new Topic[0];
             } catch (Exception e) {
                 Log.e(TAG, e.getLocalizedMessage(), e);
-                return new com.group6boun451.learner.model.Topic[0];
+                return new Topic[0];
             }
         }
 
         @Override
-        protected void onPostExecute(com.group6boun451.learner.model.Topic[] result) {
+        protected void onPostExecute(Topic[] result) {
             topics = new ArrayList(Arrays.asList(result));
+            //TODO handle this
             viewpager.setAdapter(new TopicPagerAdapter(HomePage.this));
             viewpager2.setAdapter(new TopicPagerAdapter(HomePage.this));
             viewpager3.setAdapter(new TopicPagerAdapter(HomePage.this));

@@ -87,6 +87,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1">
 
+                <!--topic tab-->
                 <LinearLayout
                     android:id="@+id/topic_tab"
                     android:layout_width="match_parent"
@@ -102,7 +103,13 @@
                             android:layout_height="wrap_content"
                             android:isScrollContainer="true"
                             android:orientation="vertical">
-
+                            <Button
+                                android:text="@string/edit"
+                                android:visibility="gone"
+                                android:layout_width="match_parent"
+                                android:background="@null"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/edit_button" />
                             <ImageView
                                 android:id="@+id/details_image"
                                 android:layout_width="match_parent"
@@ -197,23 +204,28 @@
                                 android:textColor="#eee"
                                 android:textSize="14sp" />
 
+                            <com.group6boun451.learner.widget.TouchyWebView
+                                android:id="@+id/topic_content_TouchyWebView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+
                         </LinearLayout>
                     </ScrollView>
                 </LinearLayout>
 
+                <!--comment tab-->
                 <LinearLayout
-                    android:id="@+id/comment_tab"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:id="@+id/comment_tab"
                     android:orientation="vertical">
-
                     <ListView
                         android:id="@+id/topicPageCommentList"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
-
                 </LinearLayout>
 
+                <!--add new comment tab-->
                 <LinearLayout
                     android:id="@+id/new_comment_snack"
                     android:layout_width="match_parent"

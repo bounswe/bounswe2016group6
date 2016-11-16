@@ -1,4 +1,4 @@
-package com.group6boun451.learner.utils;
+package com.group6boun451.learner.widget;
 
 import android.app.Activity;
 import android.content.Context;

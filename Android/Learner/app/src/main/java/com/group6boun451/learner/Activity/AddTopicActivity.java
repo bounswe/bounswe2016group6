@@ -28,7 +28,7 @@ import com.group6boun451.learner.R;
 import com.group6boun451.learner.model.GenericResponse;
 import com.group6boun451.learner.model.Topic;
 import com.group6boun451.learner.utils.GlideHelper;
-import com.group6boun451.learner.utils.Summernote;
+import com.group6boun451.learner.widget.Summernote;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import com.yalantis.guillotine.animation.GuillotineAnimation;
@@ -191,7 +191,7 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
             if (data == null) {
-                //Display an error
+                //TODO Display an error
                 return;
             }
             GlideHelper.loadImage(contentImageButton,data.getData().toString());
@@ -265,12 +265,10 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
 
     public void finishButton(View view) {
         if (validate()) {
-            //TODO edit here
             newTopic.setHeader(topicNameEditText.getText().toString());
             newTopic.setContent(summernote.getText());
             newTopic.setRevealDate(new Date(date[0],date[1],date[2],date[3],date[4],date[5]));
             new AddContentTask().execute();
-//TODO                    newTopic.setHeaderImage();
         }
     }
 
