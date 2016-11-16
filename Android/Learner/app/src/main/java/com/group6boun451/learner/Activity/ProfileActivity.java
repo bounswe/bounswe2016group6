@@ -1,4 +1,4 @@
-package com.group6boun451.learner;
+package com.group6boun451.learner.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +16,9 @@ import android.widget.TabHost;
 import android.widget.TextView;
 import android.support.v4.view.ViewPager;
 import com.group6boun451.learner.Activity.HomePage;
+import com.group6boun451.learner.CommentContainer;
+import com.group6boun451.learner.CommentListAdapter;
+import com.group6boun451.learner.R;
 import com.group6boun451.learner.utils.GlideHelper;
 import com.yalantis.guillotine.animation.GuillotineAnimation;
 import com.yalantis.guillotine.interfaces.GuillotineListener;
