@@ -11,8 +11,11 @@ public class GlideHelper {
     private GlideHelper() {}
 
     public static void loadImage(ImageView image, Topic topic) {
+        loadImage(image,"http://192.168.5.87:8080/"+topic.getHeaderImage());
+    }
+    public static void loadImage(ImageView image, String path) {
         Glide.with(image.getContext().getApplicationContext())
-                .load(topic.getHeaderImage())
+                .load(path)
                 .dontAnimate()
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(image);

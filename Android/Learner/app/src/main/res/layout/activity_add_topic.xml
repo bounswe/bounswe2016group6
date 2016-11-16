@@ -30,68 +30,115 @@
                 android:hint="@string/add_topic_name" />
         </android.support.design.widget.TextInputLayout>
     </android.support.v7.widget.Toolbar>
-
-    <RelativeLayout
-        android:id="@+id/relative_layout2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/md_keylines_mini"
-        android:background="@color/guillotine_background_dark">
-
-        <Space
-            android:id="@+id/dummy"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_centerHorizontal="true" />
-
-        <Button
-            android:id="@+id/image_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="1dp"
-            android:background="@drawable/border"
-            android:text="@string/content_image"
-            android:textSize="@dimen/home_page_text_size" />
-
-        <Button
-            android:id="@+id/reveal_date_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@id/dummy"
-            android:layout_alignLeft="@id/image_button"
-            android:layout_alignRight="@id/dummy"
-            android:layout_alignStart="@id/image_button"
-            android:layout_below="@id/image_button"
-            android:layout_marginEnd="1dp"
-            android:layout_marginRight="1dp"
-            android:background="@drawable/border"
-            android:text="@string/reveal_date"
-            android:textSize="@dimen/home_page_text_size" />
-
-        <Button
-            android:id="@+id/revealTimeButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@id/image_button"
-            android:layout_alignLeft="@id/dummy"
-            android:layout_alignRight="@id/image_button"
-            android:layout_alignStart="@id/dummy"
-            android:layout_below="@id/image_button"
-            android:layout_toEndOf="@id/dummy"
-            android:layout_toRightOf="@id/dummy"
-            android:background="@drawable/border"
-            android:text="@string/time"
-            android:textSize="@dimen/home_page_text_size" />
-    </RelativeLayout>
-
-    <!--TODO fix this-->
-    <FrameLayout
+    <TabHost
+        android:id="@+id/topic_TabHost"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="@dimen/md_keylines_mini">
-        <com.group6boun451.learner.utils.Summernote
-            android:id="@+id/summernote"
+        android:background="@color/guillotine_background_dark">
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </FrameLayout>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:background="#4372AA"
+                />
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <LinearLayout
+                    android:id="@+id/topic_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:background="@color/guillotine_background_dark">
+
+                    <ImageButton
+                        android:id="@+id/content_image_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/border"
+                        android:src="@drawable/almond_blossoms"
+                        android:text="@string/content_image"
+                        android:textSize="@dimen/home_page_text_size" />
+                    <!--TODO add tag-->
+
+                    <LinearLayout
+                        android:id="@+id/relative_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <Button
+                            android:id="@+id/cancel_button"
+                            android:layout_margin="@dimen/activity_horizontal_margin"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/border"
+                            android:onClick="cancelButton"
+                            android:text="@string/cancel_button"
+                            android:textSize="@dimen/home_page_text_size" />
+
+                        <Button
+                            android:id="@+id/next_button"
+                            android:layout_margin="@dimen/activity_horizontal_margin"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/border"
+                            android:onClick="nextButton"
+                            android:text="@string/next_button"
+                            android:textSize="@dimen/home_page_text_size" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/editor_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:background="@color/guillotine_background_dark">
+                    <com.group6boun451.learner.utils.Summernote
+                        android:id="@+id/summernote"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"/>
+                    <LinearLayout
+                        android:id="@+id/button_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <Button
+                            android:id="@+id/back_button"
+                            android:layout_margin="@dimen/activity_horizontal_margin"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/border"
+                            android:onClick="backButton"
+                            android:text="@string/back_button"
+                            android:textSize="@dimen/home_page_text_size" />
+
+                        <Button
+                            android:id="@+id/finish_button"
+                            android:layout_margin="@dimen/activity_horizontal_margin"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/border"
+                            android:onClick="finishButton"
+                            android:text="@string/finish_button"
+                            android:textSize="@dimen/home_page_text_size" />
+                    </LinearLayout>
+                </LinearLayout>
+            </FrameLayout>
+        </LinearLayout>
+    </TabHost>
 </LinearLayout>

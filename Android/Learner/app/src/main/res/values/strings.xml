@@ -28,10 +28,12 @@
     <string name="add_topic_name">add topic name</string>
     <string name="enter_name">topic name cannot be empty</string>
     <string name="content_image">Content image</string>
-    <string name="reveal_date">date</string>
-    <string name="time">time</string>
+    <string name="cancel_button">CANCEL</string>
+    <string name="next_button">NEXT</string>
     <string name="password">password</string>
     <string name="user_name">Username</string>
     <string name="title_activity_profile">ProfileActivity</string>
+    <string name="back_button">BACK</string>
+    <string name="finish_button">FINISH</string>
 
 </resources>

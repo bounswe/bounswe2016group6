@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.0"
-
+    useLibrary 'org.apache.http.legacy'
     defaultConfig {
         applicationId "com.group6boun451.learner"
         minSdkVersion 16
@@ -43,4 +43,4 @@ dependencies {
     compile 'com.alexvasilkov:android-commons:1.2.4'
     compile 'com.wdullaer:materialdatetimepicker:2.3.0'
     compile 'com.github.Yalantis:GuillotineMenu-Android:1.2'
-}
+    compile group: 'org.apache.httpcomponents' , name: 'httpclient-android' , version: '4.3.5.1'}
