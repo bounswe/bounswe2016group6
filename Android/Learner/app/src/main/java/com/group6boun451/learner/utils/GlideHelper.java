@@ -21,12 +21,4 @@ public class GlideHelper {
                 .into(image);
     }
 
-    public static void loadImage(ImageView image, String url) {
-        Glide.with(image.getContext().getApplicationContext())
-                .load(url)
-                .dontAnimate()
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .into(image);
-    }
-
 }
