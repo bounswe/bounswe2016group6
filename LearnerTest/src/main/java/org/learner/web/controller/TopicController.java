@@ -10,6 +10,8 @@ import org.learner.persistence.model.Topic;
 import org.learner.registration.TopicEvent;
 import org.learner.service.ITopicService;
 import org.learner.service.IUserService;
+import org.learner.storage.StorageException;
+import org.learner.storage.StorageService;
 import org.learner.web.dto.TopicDto;
 import org.learner.web.util.GenericResponse;
 import org.slf4j.Logger;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping(value="/topic")
@@ -40,23 +43,77 @@ public class TopicController {
     @Autowired
     private ApplicationEventPublisher eventPublisher;
     
+    private StorageService storageService;
+
+    @Autowired
+    public TopicController(StorageService storageService) {
+        this.storageService = storageService;
+    }
+    
     @GetMapping(value= "/create")
     public String createTopicPage(){
     	System.out.println("Topic Creation Page! ++");
     	return "createTopic";
     }
     
-    @RequestMapping(value = "/create", method=RequestMethod.POST )
+    
+    @RequestMapping(value = "/imageUpload")
     @ResponseBody
-    public GenericResponse createTopic(@RequestParam String header, @Valid TopicDto topicdto, final HttpServletRequest request){
+    public GenericResponse uploadImage(@RequestParam MultipartFile image,HttpServletRequest request){
+    	System.out.println("Image upload request!");
+    	System.out.println(image);
+    	storageService.store(image);
+    	System.out.println("Store complete!");
     	
-    	LOGGER.debug("Request greeting! ++ NORELOAD ++++1111");
+    	return new GenericResponse("Upload successful!");
+    }
+    
+    @RequestMapping(value="/create/android")
+    @ResponseBody
+    public GenericResponse createTopicWithoutImage(@Valid TopicDto topicdto,final HttpServletRequest request){
+    	LOGGER.debug("Topic creation for Android!");
     	topicdto.setRevealDate(new Date());
+    	topicdto.setImagePath("/images/topic");
     	final Topic posted = topicService.createNewTopic(topicdto);
     	
     	if(posted == null){
-    		return new GenericResponse("Topic creation failed!");
+    		return new GenericResponse("Topic creation failed!","Db error!");
     	}
+    	
+    	LOGGER.debug(posted.toString());
+    	return new GenericResponse("Topic Creation Succeeded!");
+    	
+    }
+    
+    @RequestMapping(value = "/create", method=RequestMethod.POST )
+    @ResponseBody
+    public GenericResponse createTopic(@RequestParam String header, 
+    								@Valid TopicDto topicdto, 
+    								@RequestParam MultipartFile image,
+    								final HttpServletRequest request){
+    	
+    	LOGGER.debug("Request greeting! ++ NORELOAD ++++1111");
+    	
+    	topicdto.setRevealDate(new Date());
+    	topicdto.setImagePath("/images/topic");
+    	final Topic posted = topicService.createNewTopic(topicdto);
+    	
+    	if(posted == null){
+    		return new GenericResponse("Topic creation failed!","Db error!");
+    	}
+    	String imgname = "tim" + posted.getId() + ".jpg";
+    	
+    	if(image != null){
+        	try{
+        		storageService.store(image,imgname);
+        	} catch (StorageException e) {
+        		return new GenericResponse("Topic creation failed!","Image upload failed!");
+    		}
+        	
+        	topicService.setTopicImage(posted.getId(), "/images/topic/"+imgname);
+    		
+    	}
+    	
     	eventPublisher.publishEvent(new TopicEvent(posted));
     	LOGGER.debug(posted.toString());
     	return new GenericResponse("Topic Creation Succeeded!");
