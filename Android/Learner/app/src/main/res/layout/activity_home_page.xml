@@ -164,7 +164,6 @@
                                         android:layout_width="36dp"
                                         android:layout_height="36dp"
                                         android:padding="4dp"
-                                        android:src="@drawable/usericon"
                                         />
                                     <TextView
                                         android:id="@+id/txtTopicPageUserName"
@@ -290,7 +289,7 @@
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="96dp"
         android:src="@drawable/ic_attachment_black_24dp"
-        android:visibility="visible"/>
+        android:visibility="invisible"/>
 
 </merge>
 

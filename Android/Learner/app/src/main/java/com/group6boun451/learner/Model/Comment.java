@@ -12,6 +12,12 @@ public class Comment {
     public Comment() {
         super();
     }
+    // constructor
+    public Comment( long id1){
+
+        this.id = id1;
+
+    }
 
     public Long getId() {
         return id;

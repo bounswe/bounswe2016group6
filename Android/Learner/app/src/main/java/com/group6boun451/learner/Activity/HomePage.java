@@ -1,5 +1,6 @@
 package com.group6boun451.learner.Activity;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -37,10 +38,10 @@ import com.alexvasilkov.android.commons.texts.SpannableBuilder;
 import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.foldablelayout.UnfoldableView;
 import com.alexvasilkov.foldablelayout.shading.GlanceFoldShading;
-import com.group6boun451.learner.CommentContainer;
 import com.group6boun451.learner.CommentListAdapter;
 import com.group6boun451.learner.ProfileActivity;
 import com.group6boun451.learner.R;
+import com.group6boun451.learner.model.Topic;
 import com.group6boun451.learner.utils.GlideHelper;
 import com.yalantis.guillotine.animation.GuillotineAnimation;
 import com.yalantis.guillotine.interfaces.GuillotineListener;
@@ -237,10 +238,12 @@ public class HomePage extends AppCompatActivity{
         getMenuInflater().inflate(R.menu.home_page, menu);
 
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+        SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         return true;
     }
 
-    public void openDetails(View coverView, com.group6boun451.learner.model.Topic topic) {
+    public void openDetails(View coverView, Topic topic) {
         final ImageView image = Views.find(tabHost, R.id.details_image);
         final TextView title = Views.find(tabHost, R.id.details_title);
         final TextView description = Views.find(tabHost, R.id.details_text);
@@ -260,7 +263,7 @@ public class HomePage extends AppCompatActivity{
         description.setText(builder.build());
 
         ListView comments = (ListView) findViewById(R.id.topicPageCommentList);
-        CommentListAdapter cladap = new CommentListAdapter(this, (new CommentContainer(this)).getComments());
+        CommentListAdapter cladap = new CommentListAdapter(this, topic.getComments());//TODO it might troublesome
         comments.setAdapter(cladap);
 
         comments.setOnItemClickListener(new AdapterView.OnItemClickListener() {
