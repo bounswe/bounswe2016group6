@@ -10,8 +10,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TabHost;
+import android.widget.TextView;
+import android.support.v4.view.ViewPager;
 import com.group6boun451.learner.Activity.HomePage;
+import com.group6boun451.learner.utils.GlideHelper;
 import com.yalantis.guillotine.animation.GuillotineAnimation;
 import com.yalantis.guillotine.interfaces.GuillotineListener;
 
@@ -23,6 +28,14 @@ public class ProfileActivity extends AppCompatActivity {
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.content_hamburger) View contentHamburger;
     @BindView(R.id.fab) FloatingActionButton fab;
+    @BindView(R.id.profile_imageView) ImageView profileImageView;
+    @BindView(R.id.name_textView) TextView nameTextView;
+    @BindView(R.id.mail_textView) TextView mailTextView;
+    @BindView(R.id.profile_TabHost) TabHost tabHost;
+    @BindView(R.id.topicList) ListView topicList;
+    @BindView(R.id.teachersList) ListView teachersList;
+    @BindView(R.id.commentList) ListView commentList;
+
 
     private boolean isGuillotineOpened = false;
     private GuillotineAnimation guillotineAnimation;
@@ -67,6 +80,11 @@ public class ProfileActivity extends AppCompatActivity {
                 .setClosedOnStart(true)
                 .build();
 
+        tabHost.setup();
+        tabHost.addTab(tabHost.newTabSpec("Tab One").setContent(R.id.interested_topics_tab).setIndicator("Favorites"));
+        tabHost.addTab(tabHost.newTabSpec("Tab Two").setContent(R.id.followed_teachers_tab).setIndicator("Followed"));
+        tabHost.addTab(tabHost.newTabSpec("Tab Three").setContent(R.id.comment_tab).setIndicator("Comments"));
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,6 +92,15 @@ public class ProfileActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        GlideHelper.loadImage(profileImageView,"https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAJlAAAAJGIxNDQ3YzhiLTYyZjUtNDU2NS04ZTg3LWYxZjFlNjg3NmE5MQ.jpg");
+        mailTextView.setText("esra.alinca@boun.edu.tr");
+        nameTextView.setText("Esra Alınca");
+
+        ListView comments = (ListView) findViewById(R.id.commentList);
+        CommentListAdapter cladap = new CommentListAdapter(this, (new CommentContainer(this)).getComments());
+        comments.setAdapter(cladap);
+
     }
 
 }
