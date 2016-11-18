@@ -1,37 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+
+<html>
 
 <head>
-	<meta charset="utf-8">
-	<title>Sign Up</title>
+
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
 
-<link rel="stylesheet" href="/css/animate.css">
-	<!-- Custom Stylesheet -->
-	<link rel="stylesheet" href="/css/style.css">
 <style>
+
 .password-verdict{
+
 color:#000;
+
 }
+
 </style>
+
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
 <script th:src="@{/pwstrength.js}"></script>
 
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII"/>
+
+<title th:text="#{label.form.title}">form</title>
+
 </head>
+
 <body>
+
     <div class="container">
-		<div class="top">
-			<h1 id="title" class="hidden"><span id="logo">Learner</span></h1>
-		</div>
-		
-		<div class="signup-box">
-			<div class="box-header">
-				<h2>Sign Up</h2>
-			</div>
-			
-			
-			
-			
+
+        <div >
+
+            <h1 th:text="#{label.form.title}">form</h1>
+
+            <br/>
+
             <form action="/" method="POST" enctype="utf8">
 
                 <div class="form-group row" >
@@ -94,91 +98,174 @@ color:#000;
 
                 <br/>
 
-                
+                <button type="submit" class="btn btn-primary" th:text="#{label.form.submit}">submit</button>
 
             </form>
-            <button type="submit" class="btn btn-primary" th:text="#{label.form.submit}">submit</button>
-            <br/> <br/>
+
+            <br/> 
+
             <a th:href="@{/login}" th:text="#{label.form.loginLink}">login</a>
+
         </div>
+
     </div>
-</body>
+
+
+
 <script th:inline="javascript">
+
 /*<![CDATA[*/
+
 var serverContext = [[@{/}]];
 
+
+
 $(document).ready(function () {
-	$('form').submit(function(event) {
-		register(event);
-	});
-	
-	$(":password").keyup(function(){
-		if($("#password").val() != $("#matchPassword").val()){
-	        $("#globalError").show().html(/*[[#{PasswordMatches.user}]]*/);
-	    }else{
-	    	$("#globalError").html("").hide();
-	    }
-	});
-	
-	options = {
-		    common: {minChar:8},
-		    ui: {
-		    	showVerdictsInsideProgressBar:true,
-		    	showErrors:true,
-		    	errorMessages:{
-		    		  wordLength: /*[[#{error.wordLength}]]*/,
-		    		  wordNotEmail: /*[[#{error.wordNotEmail}]]*/,
-		    		  wordSequences: /*[[#{error.wordSequences}]]*/,
-		    		  wordLowercase: /*[[#{error.wordLowercase}]]*/,
-		    		  wordUppercase: /*[[#{error.wordUppercase}]]*/,
-		    	      wordOneNumber: /*[[#{error.wordOneNumber}]]*/,
-		    		  wordOneSpecialChar: /*[[#{error.wordOneSpecialChar}]]*/'
-		    		}
-		    	}
-		};
-	 $('#password').pwstrength(options);
+
+$('form').submit(function(event) {
+
+register(event);
+
 });
 
-function register(event){
-	event.preventDefault();
-    $(".alert").html("").hide();
-    $(".error-list").html("");
-    if($("#password").val() != $("#matchPassword").val()){
-    	$("#globalError").show().html(/*[[#{PasswordMatches.user}]]*/);
-    	return;
+
+$(":password").keyup(function(){
+
+if($("#password").val() != $("#matchPassword").val()){
+
+        $("#globalError").show().html(/*[[#{PasswordMatches.user}]]*/);
+
+    }else{
+
+    $("#globalError").html("").hide();
+
     }
+
+});
+
+
+options = {
+
+    common: {minChar:8},
+
+    ui: {
+
+    showVerdictsInsideProgressBar:true,
+
+    showErrors:true,
+
+    errorMessages:{
+
+      wordLength: /*[[#{error.wordLength}]]*/,
+
+      wordNotEmail: /*[[#{error.wordNotEmail}]]*/,
+
+      wordSequences: /*[[#{error.wordSequences}]]*/,
+
+      wordLowercase: /*[[#{error.wordLowercase}]]*/,
+
+      wordUppercase: /*[[#{error.wordUppercase}]]*/,
+
+          wordOneNumber: /*[[#{error.wordOneNumber}]]*/,
+
+      wordOneSpecialChar: /*[[#{error.wordOneSpecialChar}]]*/'
+
+    }
+
+    }
+
+};
+
+$('#password').pwstrength(options);
+
+});
+
+
+
+function register(event){
+
+event.preventDefault();
+
+    $(".alert").html("").hide();
+
+    $(".error-list").html("");
+
+    if($("#password").val() != $("#matchPassword").val()){
+
+    $("#globalError").show().html(/*[[#{PasswordMatches.user}]]*/);
+
+    return;
+
+    }
+
     var formData= $('form').serialize();
+
     $.post(serverContext + "user/registration",formData ,function(data){
+
         if(data.message == "success"){
+
             window.location.href = serverContext + "successRegister.html";
+
         }
+
         
+
     })
+
     .fail(function(data) {
+
         if(data.responseJSON.error.indexOf("MailError") > -1)
+
         {
+
             window.location.href = serverContext + "emailError.html";
+
         }
+
         else if(data.responseJSON.error == "UserAlreadyExist"){
+
             $("#emailError").show().html(data.responseJSON.message);
+
         }
+
         else if(data.responseJSON.error.indexOf("InternalError") > -1){
+
             window.location.href = serverContext + "login?message=" + data.responseJSON.message;
+
         }
+
         else{
-        	var errors = $.parseJSON(data.responseJSON.message);
+
+        var errors = $.parseJSON(data.responseJSON.message);
+
             $.each( errors, function( index,item ){
+
                 $("#"+item.field+"Error").show().html(item.defaultMessage);
+
             });
+
             errors = $.parseJSON(data.responseJSON.error);
+
             $.each( errors, function( index,item ){
+
                 $("#globalError").show().append(item.defaultMessage+"<br/>");
+
             });
+
         }
+
     });
+
 }
+
 /*]]>*/ 
 
+
+
 </script>
+
+</body>
+
+
 
 </html>
