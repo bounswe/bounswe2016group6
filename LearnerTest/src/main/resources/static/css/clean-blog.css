@@ -70,7 +70,7 @@ hr.small {
 }
 @media only screen and (min-width: 768px) {
   .navbar-custom {
-    background: transparent;
+    background: rgba(0,0,0,0.6);
     border-bottom: 1px solid transparent;
   }
   .navbar-custom .navbar-brand {
@@ -139,6 +139,7 @@ hr.small {
 }
 .intro-header {
   background-color: #777777;
+  
   background: no-repeat center center;
   background-attachment: scroll;
   -webkit-background-size: cover;
@@ -147,11 +148,17 @@ hr.small {
   -o-background-size: cover;
   margin-bottom: 50px;
 }
+
+.intro-header .transbox{
+  background: rgba(0,0,0,0.6);
+
+}
 .intro-header .site-heading,
 .intro-header .post-heading,
 .intro-header .page-heading {
   padding: 100px 0 50px;
   color: white;
+  
 }
 @media only screen and (min-width: 768px) {
   .intro-header .site-heading,
