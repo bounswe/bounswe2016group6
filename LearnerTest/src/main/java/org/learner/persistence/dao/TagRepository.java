@@ -11,5 +11,12 @@ public interface TagRepository extends JpaRepository<Tag, Long>{
 	
 	public List<Tag> findByContextContaining(String st);
 	
+	public List<Tag> findByNameStartingWith(String st);
+	
+	public List<Tag> findByName(String st);
+	
+	public List<Tag> findByContext(String st);
+	
+	
 	
 }

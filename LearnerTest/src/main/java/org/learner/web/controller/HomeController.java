@@ -52,4 +52,10 @@ public class HomeController {
     	
     	return "redirect:/home";
     }
+    
+    @RequestMapping(value="/test")
+    public String testPage(final Principal principal){
+    	LOGGER.debug("Test page!");
+    	return "search";
+    }
 }

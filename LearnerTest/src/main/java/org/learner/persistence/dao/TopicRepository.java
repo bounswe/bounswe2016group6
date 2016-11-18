@@ -13,6 +13,7 @@ public interface TopicRepository extends JpaRepository<Topic, Long> {
     
 	public List<Topic> findByHeaderContaining(String hdr);
 	
+	public List<Topic> findTop10ByHeaderContainingOrderByCreatedAtDesc(String hdr);
 	//public List<Topic> f
     @Override
     void delete(Topic topic);

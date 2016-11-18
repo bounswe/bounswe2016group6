@@ -15,26 +15,31 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name = "topic")
 //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
 public class Topic {
+	@JsonView(JViews.Minimal.class)
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
+	@JsonView(JViews.Minimal.class)
     @NotNull
     private String header;
     
     @Column(length = 10000)
     private String content;
-
+    
+    @JsonView(JViews.Minimal.class)
     @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "user_id")
     private User owner;
@@ -56,6 +61,7 @@ public class Topic {
     private List<Tag> tags;
     
     @OneToMany(mappedBy = "relatedTopic")
+    @OrderBy("createdAt")
     private List<Comment> comments;
     
     @OneToMany(mappedBy="relatedTopic")

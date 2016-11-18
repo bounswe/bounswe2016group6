@@ -276,5 +276,12 @@ public class TopicService implements ITopicService{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public List<Topic> searchSuggest(String q) {
+		List<Topic> topicSuggest = repository.findTop10ByHeaderContainingOrderByCreatedAtDesc(q);
+		return topicSuggest;
+	}
+	
 	
 }
