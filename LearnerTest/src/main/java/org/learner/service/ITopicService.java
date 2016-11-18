@@ -39,7 +39,16 @@ public interface ITopicService {
 	//Question createQuestion(QuestionDto questionDto)
 	//Question deleteQuestion(long id)
 	
-	Tag createTagToTopic(long tid);
+	//TAG_____
+	Tag createTag(Tag tag);
+	List<Tag> createTags(List<Tag> tags);
+	
+	
+	Tag createTagToTopic(Topic topic,Tag tag);
+	List<Tag> createTagsToTopic(Topic topic,List<Tag> tags);
+	
+	
+	List<Tag> tagSuggest(String q);
 	
 	void deleteTagFromQuestion(long tid,long tagid);
 	
@@ -61,7 +70,7 @@ public interface ITopicService {
 
 	Topic unlikeTopic(long topicId);
 	
-	
+	List<Topic> searchSuggest(String q);
 	
 	
 }
