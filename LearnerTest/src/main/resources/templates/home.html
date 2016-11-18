@@ -8,23 +8,39 @@
   
   <!-- Latest compiled and minified JavaScript -->
   
-  
-<script type="text/javascript">
-	$(function() {
-		$(".carousel-inner .item:first-child").addClass("active");
-		$(".carousel-indicators li:first-child").addClass("active");
-	});
-</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.devbridge-autocomplete/1.2.27/jquery.autocomplete.js"></script>
 
 
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link> 
  <style>
-  .carousel-inner > .item > img,
-  .carousel-inner > .item > a > img {
-      width: 70%;
-      margin: auto;
-  }
+
+  
+  .carousel-inner > .item {
+  height: 430px;
+  background: cover;
+  
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  -o-background-size: cover;
+  
+   background-repeat: no-repeat;
+  background-position: center; 
+  
+}
+
+.carousel-inner > .item > img {
+
+}
+  
+  
+ .autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; }
+.autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; }
+.autocomplete-selected { background: #F0F0F0; }
+.autocomplete-suggestions strong { font-weight: normal; color: #3399FF; }
+.autocomplete-group { padding: 2px 5px; }
+.autocomplete-group strong { display: block; border-bottom: 1px solid #000; }
   </style>
 
 
@@ -37,18 +53,9 @@
     <meta name="author" content="">
 
     <title>Clean Blog - Sample Post</title>
-	<script src="https://code.jquery.com/jquery-3.1.1.min.js"
-	integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
-	crossorigin="anonymous"></script>
-	
-	
-	
-<!-- Bootstrap Core CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link> 
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
     <!-- Theme CSS -->
-    <link href="/css/clean-blog.min.css" rel="stylesheet">
+    <link href="/css/clean-blog.css" rel="stylesheet">
     <link href="/css/homestyle.css" rel="stylesheet">	
 	
     <!-- Custom Fonts -->
@@ -62,7 +69,37 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-
+	<script type="text/javascript">
+	$(function() {
+		
+		
+		
+		$(".carousel-inner .item:first-child").addClass("active");
+		$(".carousel-indicators li:first-child").addClass("active");
+		
+		 $.each( jQuery('.carousel .item'), function( i, val ) {
+			    $(this).css('background-image','url('+$(this).find('img').attr('src')+')').css('background-size','cover').find('img').css('visibility','hidden');
+			  });
+		
+		$('#autocomplete').autocomplete({
+			serviceUrl: '/search/suggest',
+		    onSelect: function (suggestion) {
+		        alert('You selected: ' + suggestion.value + ', ' + suggestion.data + ', ' + suggestion.owner);
+		    	location.replace("/topic/" + suggestion.data);
+		    },
+			paramName: 'query',
+		    transformResult: function(response) {
+		        return {
+		            suggestions: $.map( $.parseJSON(response) , function(dataItem) {
+		                return { value: dataItem.header, data: dataItem.id, owner:dataItem.owner};
+		            })
+		        };
+		    }
+		});
+		
+		
+	});
+</script>
 </head>
 <body>
 
@@ -80,7 +117,7 @@
             <div class="col-sm-3 col-md-3">
 		        <form class="navbar-form" role="search" action="/search" method="get">
 		        <div class="input-group">
-		            <input type="text" class="form-control input-lg" placeholder="Search" name="q">
+		            <input id="autocomplete" type="text" class="form-control input-lg" placeholder="Search" name="q">
 		            <div class="input-group-btn">
 		                <button class="btn btn-info btn-xs" type="submit"><i class="glyphicon glyphicon-search"></i></button>
 		            </div>
@@ -155,6 +192,22 @@
     <div id= "test">
     </div>
 
+<div>
+AsdASdasd
+</div>
+<div sec:authorize="hasAuthority('TEACHER_PRIVILEGE')" class="container">
+	<a th:href="'/topic/create'" class="btn btn-info btn-lg">Create Topic</a>
+</div>
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-2">
+		
+		</div>
+		
+		<div class="col-md-8">
+		
+		
     <div id="myCarousel" class="carousel slide " data-ride="carousel">
   <!-- Indicators -->
   <ol class="carousel-indicators">
@@ -166,7 +219,7 @@
     
     <div th:each="tpc,iterationStatus : ${topics}" class="item">
     <a th:href="'/topic/'+${tpc.id}">
-      <img src="/images/img_chania.jpg" alt="Chania">
+      <img th:attr="src=${tpc.headerImage}" alt="Chania">
       <div class="carousel-caption">
         <h3 th:text="${tpc.header}">Chania</h3>
         <p th:text="${tpc.owner.firstName}">The atmosphere in Chania has a touch of Florence and Venice.</p>
@@ -187,6 +240,17 @@
   </a>
 </div>
     
+		
+		</div>
+			
+		
+		<div></div>
+	</div>
+</div>
+
+
+<script src="/js/clean-blog.min.js"></script>
+
 </body>
 
 </html>
