@@ -6,6 +6,7 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.learner.persistence.dao.CommentRepository;
+import org.learner.persistence.dao.TagRepository;
 import org.learner.persistence.dao.TopicRepository;
 import org.learner.persistence.dao.UserRepository;
 import org.learner.persistence.model.Comment;
@@ -29,6 +30,8 @@ public class TopicService implements ITopicService{
 	@Autowired
 	TopicRepository repository;
 	
+	@Autowired 
+	TagRepository tagRepo;
 	
 	@Autowired
 	CommentRepository commentRepository;
@@ -177,10 +180,11 @@ public class TopicService implements ITopicService{
 		return null;
 	}
 
+	
 	@Override
-	public Tag createTagToTopic(long tid) {
-		// TODO Auto-generated method stub
-		return null;
+	public Tag createTagToTopic(Topic topic,Tag tag) {
+		topic.getTags().add(tag);
+		return tag;
 	}
 
 	@Override
@@ -244,6 +248,33 @@ public class TopicService implements ITopicService{
         
         User owner = userRepo.findByEmail(currentUserName);
         return owner;
+	}
+	
+	
+	
+	@Override
+	public List<Tag> tagSuggest(String q) {
+		
+		return tagRepo.findByNameContaining(q);
+	}
+
+	@Override
+	public Tag createTag(Tag tag) {
+		Tag created = tagRepo.save(tag);
+		
+		return created;
+	}
+
+	@Override
+	public List<Tag> createTags(List<Tag> tags) {
+		List<Tag> created = tagRepo.save(tags);
+		return created;
+	}
+
+	@Override
+	public List<Tag> createTagsToTopic(Topic topic, List<Tag> tags) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table (name = "tag")
 public class Tag {
@@ -26,9 +28,7 @@ public class Tag {
     @Column(name = "created_at")
     private Date createdAt;
     
-	@Column(name = "updated_at")
-    private Date updatedAt;
-	
+    @JsonBackReference
 	@ManyToMany(mappedBy = "tags")
 	private List<Topic> relatedTopics;
 	
@@ -82,15 +82,6 @@ public class Tag {
 		this.createdAt = createdAt;
 	}
 
-
-	public Date getUpdatedAt() {
-		return updatedAt;
-	}
-
-
-	public void setUpdatedAt(Date updatedAt) {
-		this.updatedAt = updatedAt;
-	}
 
 
 
