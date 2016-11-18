@@ -13,9 +13,8 @@
 <!-- Bootstrap Core CSS -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
-    <!-- Theme CSS ->
+    <!-- Theme CSS -->
     <link href="/css/clean-blog.min.css" rel="stylesheet">
-    <link href="/css/homestyle.css" rel="stylesheet">	
 	-
 	
     <!-- Custom Fonts -->
@@ -62,7 +61,7 @@
 		            $.ajax({
 		                data: data,
 		                type: "POST",
-		                url: "/imageUpload",
+		                url: "/topic/imageUpload",
 		                cache: false,
 		                contentType: false,
 		                processData: false,
@@ -72,12 +71,53 @@
 		            });
 		        }
 			  
-		
+			  $(':file').change(function(){
+				    var file = this.files[0];
+				    var name = file.name;
+				    var size = file.size;
+				    var type = file.type;
+				    
+				    alert("Name :" + name + " Size: " + type + " Type: " + type );
+				});
+			  
+			  function progressHandlingFunction(e){
+				    if(e.lengthComputable){
+				        $('progress').attr({value:e.loaded,max:e.total});
+				    }
+				}	  
 		  $('#topicform').submit(function() {
 			  alert("Form submit!");
+			  event.preventDefault();
 			  var markupStr = $('#summernote').summernote('code');
 			  console.log(markupStr);
 			  $("#tpContent").val(markupStr);
+			  
+			  var formData = new FormData($('#topicform')[0]);
+			  console.log(formData );
+			  var toprec = $.ajax({
+			        url: '/topic/create',  //Server script to process data
+			        type: 'POST',
+			        
+			        xhr: function() {  // Custom XMLHttpRequest
+			           var myXhr = $.ajaxSettings.xhr();
+			            if(myXhr.upload){ // Check if upload property exists
+			                myXhr.upload.addEventListener('progress',progressHandlingFunction, false); // For handling the progress of the upload
+			            }
+			            return myXhr;
+			        },
+			        
+			        //Ajax events
+			        beforeSend: function(){ alert("Sending!");},
+			        // Form data
+			        data: formData,
+			        //Options to tell jQuery not to process data or worry about content-type.
+			        cache: false,
+			        contentType: false,
+			        processData: false
+			    });
+			  toprec.done(function(){alert("Sending complete!"); })
+			  		.fail(function(){alert("Error!"); });
+			  
 			  return true;
 			});
 		});
@@ -123,14 +163,14 @@
 
 <div class="container">   
     
-	<h1>Learner</h1>
      <h1>Create a Topic</h1>
      
-         <form id="topicform" action="/topic/create" method="post" onsubmit="return submitform()">
+     <form id="topicform" action="/topic/create" method="post" enctype="multipart/form-data">
+    	<input name="image" type="file" />
     	<p>Title: <input type="text" name="header" /></p>
     	<input id="tpContent" type="hidden" name="content" value=""/>
-        
     </form>
+    <progress></progress>
     <h3>Create your content :</h3>
      <div id="summernote"></div>
      
@@ -141,5 +181,7 @@
 
 
 </div>
+
+<script src="/js/clean-blog.min.js"></script>
 </body>
 </html>
