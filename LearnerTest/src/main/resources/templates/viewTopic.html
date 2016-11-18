@@ -21,7 +21,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
     <!-- Theme CSS -->
-    <link href="/css/clean-blog.min.css" rel="stylesheet">
+    <link href="/css/clean-blog.css" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sceditor/1.5.0/themes/default.min.css" type="text/css" media="all" />
 	
 	
@@ -67,6 +67,28 @@
 }
 </style>
 
+<script type="text/javascript">
+
+	$(document).ready(function() {
+		$("#commentform").submit(function() {
+			event.preventDefault();
+
+			var formdata = $("#commentform").serialize();
+				
+			$.post("/topic/comment/create", formdata).done(function(data) {
+				if(data.error == null){
+					alert(data.message);
+					window.location.href = window.location.href;
+				}
+			}).fail(function(){
+				alert("Comment creation failed!!");
+			});
+		});
+		//Comment form end
+		
+	});
+</script>
+
 </head>
 
 <body>
@@ -107,7 +129,8 @@
 
     <!-- Page Header -->
     <!-- Set your background image for this header on the line below. -->
-    <header class="intro-header" style="background-image: url('/images/post-bg.jpg')">
+    <header class="intro-header" th:style="'background-image:url(\'' + ${topic.headerImage} + '\')'" >
+        <div class="transbox">
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -115,9 +138,11 @@
                         <h1 th:text="${topic.header}">Topic header</h1>
                         <h2 class="subheading">Insert tags here</h2>
                         <span class="meta">Posted by <a href="#" th:text="${topic.owner.firstName + ' ' + topic.owner.lastName}">Start Bootstrap</a>  <a th:text="${'on ' + #dates.format(topic.createdAt,'YYYY/MM/dd HH:mm')}"></a></span>
+                    	<span class="meta"> <a th:text="${#lists.size(topic.comments) + ' comments  ' }"> likes</a> <a th:text="${#lists.size(topic.likedBy) + ' likes  ' }"> likes</a></span>
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     </header>
 	
@@ -128,9 +153,12 @@
                 <div th:utext="${topic.content}" id="topicContent" class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                 Topic content
                 </div>
+                
                 <div class="col-lg-2 col-md-1" th:if="${#authentication.name==topic.owner.email}">
-        		<a class="btn btn-primary btn-xs" th:href="${'/topic/edit/' + topic.id}">Edit Topic</a>
-        	</div>
+        		<a class="btn btn-primary btn-xs" th:href="${'/topic/edit/' + topic.id}"><span class="glyphicon glyphicon-edit"></span> Edit Topic</a>
+        		<a class="btn btn-danger btn-xs" th:href="${'/topic/like/' + topic.id}"><span class="glyphicon glyphicon-heart"></span> Like Topic</a>
+        		
+        		</div>
                 
             </div>
         </div>
