@@ -1,9 +1,13 @@
 package org.learner.spring;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 import org.learner.validation.EmailValidator;
 import org.learner.validation.PasswordMatchesValidator;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -29,7 +33,10 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
     public MvcConfig() {
         super();
     }
-
+    
+    @Value("${staticpath}")
+    private  String staticPath;
+    
     private static final String[] CLASSPATH_RESOURCE_LOCATIONS = {
             "classpath:/META-INF/resources/", "classpath:/resources/",
             "classpath:/static/", "classpath:/public/" };
@@ -37,17 +44,12 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addViewControllers(final ViewControllerRegistry registry) {
         super.addViewControllers(registry);
-        registry.addViewController("/").setViewName("forward:/login");
+        //registry.addViewController("/").setViewName("forward:/login");
         registry.addViewController("/login");
-        registry.addViewController("/registration.html");
+        registry.addViewController("/registration");
         registry.addViewController("/registrationCaptcha.html");
-        registry.addViewController("/logout.html");
+        registry.addViewController("/logout").setViewName("forward:/login");
         registry.addViewController("/homepage.html");
-        registry.addViewController("/createTopic.html");
-        registry.addViewController("/viewTopic.html");
-        registry.addViewController("/search.html");
-        registry.addViewController("/searchresult.html");
-        registry.addViewController("/editTopic.html");
         registry.addViewController("/expiredAccount.html");
         registry.addViewController("/badUser.html");
         registry.addViewController("/emailError.html");
@@ -82,8 +84,21 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
     
     @Override
     public void addResourceHandlers(final ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/**").addResourceLocations(CLASSPATH_RESOURCE_LOCATIONS);
-
+    	
+        if(staticPath != null) {
+        	System.out.println("Serving static content from " + staticPath );
+        	
+        	String[] cpr = {
+                    "classpath:/META-INF/resources/", "classpath:/resources/",
+                    "classpath:/static/", "classpath:/public/" ,"file:" + staticPath+ "/","file://" + staticPath+ "/",};
+        	
+        	
+        	registry.addResourceHandler("/**").addResourceLocations(cpr);
+        }
+        else{
+            registry.addResourceHandler("/**").addResourceLocations(CLASSPATH_RESOURCE_LOCATIONS);
+        }
+        //registry.addResourceHandler("/**").addResourceLocations(staticPath);
         //registry.addResourceHandler("/resources/**").addResourceLocations("/", "/resources/");
         //registry.addResourceHandler("/vendor/**").addResourceLocations("/resources/vendor/");
         //registry.addResourceHandler("/img/**").addResourceLocations("/static/");
