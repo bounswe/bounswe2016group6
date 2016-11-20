@@ -14,7 +14,6 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link> 
  <style>
-<<<<<<< HEAD
 
   
   .carousel-inner > .item {
@@ -42,14 +41,12 @@
 .autocomplete-suggestions strong { font-weight: normal; color: #3399FF; }
 .autocomplete-group { padding: 2px 5px; }
 .autocomplete-group strong { display: block; border-bottom: 1px solid #000; }
-=======
   .carousel-inner > .item > img,
   .carousel-inner > .item > a > img {
       width: 70%;
       margin: auto;
   }
   
->>>>>>> branch 'backend' of ssh://git@github.com/bounswe/bounswe2016group6
   </style>
 
 
@@ -197,7 +194,6 @@
                 </div>
             </div>
             <div class="btn-group" role="group">
-    <button type="button" class="btn btn-default" action="/createTopic">Create New Topic</button>
   </div>
                 
             
@@ -205,27 +201,20 @@
     </header>
     <div id= "test">
     </div>
-<<<<<<< HEAD
 
-<div>
-AsdASdasd
-</div>
-<div sec:authorize="hasAuthority('TEACHER_PRIVILEGE')" class="container">
-	<a th:href="'/topic/create'" class="btn btn-info btn-lg">Create Topic</a>
-</div>
+
+
 
 <div class="container">
 	<div class="row">
 		<div class="col-md-2">
-		
+
 		</div>
 		
 		<div class="col-md-8">
 		
 		
-=======
 	
->>>>>>> branch 'backend' of ssh://git@github.com/bounswe/bounswe2016group6
     <div id="myCarousel" class="carousel slide " data-ride="carousel">
   <!-- Indicators -->
   <ol class="carousel-indicators">
@@ -262,7 +251,11 @@ AsdASdasd
 		</div>
 			
 		
-		<div></div>
+		<div class="col-md-2">
+			<div sec:authorize="hasAuthority('TEACHER_PRIVILEGE')" class="container">
+				<a th:href="'/topic/create'" class="btn btn-info btn-lg">Create Topic</a>
+			</div>
+		</div>
 	</div>
 </div>
 
