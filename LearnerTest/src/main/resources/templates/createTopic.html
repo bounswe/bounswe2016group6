@@ -36,7 +36,23 @@
 
 		<script>
 		$(document).ready(function() {
-			  $('#summernote').summernote({
+				
+			$('.nav-tabs li:first-child').addClass('active');
+			$("div.questionContainer .addQuestion").click(function(){
+				$(".topicQuestion").clone(true).insertAfter("div.topicQuestion:last").find("input[type='text']").val("");
+			});
+			
+			$("div.topicQuestion .rmQuestion").click(function(){
+				if( $('.topicQuestion').length>1 ){
+					$(this).closest('.topicQuestion').remove();
+				} else {
+					alert("Cannot remove first question!");
+				}
+				
+			});
+			
+			 
+			$('#summernote').summernote({
 					  toolbar: [
 						    ['style', ['style']],
 						    ['font', ['bold', 'italic', 'underline', 'clear']],
@@ -115,8 +131,14 @@
 			        contentType: false,
 			        processData: false
 			    });
-			  toprec.done(function(){alert("Sending complete!"); })
-			  		.fail(function(){alert("Error!"); });
+			  toprec.done(function(data){
+				  
+				  alert("Sending complete!"); 
+				  location.replace('/topic/'+data.message);
+			  })
+			  .fail(function(data){
+				  alert("Error!"); 
+				});
 			  
 			  return true;
 			});
@@ -162,24 +184,103 @@
 
 
 <div class="container">   
+    <br><br>
+    <h1>Create a Topic</h1>
     
-     <h1>Create a Topic</h1>
-     
-     <form id="topicform" action="/topic/create" method="post" enctype="multipart/form-data">
-    	<input name="image" type="file" />
-    	<p>Title: <input type="text" name="header" /></p>
-    	<input id="tpContent" type="hidden" name="content" value=""/>
-    </form>
-    <progress></progress>
-    <h3>Create your content :</h3>
-     <div id="summernote"></div>
-     
+    <div>
+	
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation"><a href="#1" aria-controls="1" role="tab" data-toggle="tab">Title and Image</a></li>
+    <li role="presentation"><a href="#2" aria-controls="2" role="tab" data-toggle="tab">Content</a></li>
+    <li role="presentation"><a href="#3" aria-controls="3" role="tab" data-toggle="tab">Tags</a></li>
+    <li role="presentation"><a href="#4" aria-controls="4" role="tab" data-toggle="tab">Questions</a></li>
+  </ul>
 
 
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane" id="1">
+    	<br>
+    	<div>
+			<form class="form-horizontal" id="topicform" action="/topic/create" method="post" enctype="multipart/form-data">
+				<div class="form-group">
+					<label class="col-sm-2">Topic Title</label>
+					<div class="col-sm-10">
+						<input type="text" name="header"/>
+					</div>
+					
+					<label class="col-sm-2">Topic Image</label>
+					<div class="col-sm-10">
+						<br>
+						<input name="image" type="file" />
+						<br>
+						<progress></progress> 
+					</div>
+				</div>
+	    		<input id="tpContent" type="hidden" name="content" value=""/>
+	    	</form>
+	    	   
+    	</div>
+    
+    </div>
+    <div role="tabpanel" class="tab-pane" id="2">
+    	<br>
+		<h3>Create your content :</h3>
+     	<div id="summernote"></div>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="3">3</div>
+    <div role="tabpanel" class="tab-pane" id="4">
+    		<div class="container questionContainer">
+    		<h3>Questions</h3>
+    		<hr>
+    		
+    		<div class="row topicQuestion">
+    		<span>Question :  <a class="btn-xs btn-danger rmQuestion">X</a></span>	
+			
+			<div class="form-group">
+				<label class="control-label col-sm-2" >Question text:</label>
+			    <div class="col-sm-10">
+			      <input form="topicform" type="text" class="form-control" name="question" placeholder="Question text">
+			    </div>
+				
+				<label class="control-label col-sm-2" >Choice 1:</label>
+			    <div class="col-sm-10">
+			      <input form="topicform" type="text" class="form-control" name="answerA" placeholder="Choice text">
+			    </div>
+			    
+			    <label class="control-label col-sm-2" >Choice 2:</label>
+			    <div class="col-sm-10">
+			      <input form="topicform" type="text" class="form-control" name="answerB" placeholder="Choice text">
+			    </div>
+			    
+			    <label class="control-label col-sm-2" >Choice 3:</label>
+			    <div class="col-sm-10">
+			      <input form="topicform" type="text" class="form-control" name="answerC" placeholder="Choice text">
+			    </div>
+			    
+			    <label class="control-label col-sm-2" >Correct answer:</label>
+			    <div class="col-sm-10">
+			      <input form="topicform" type="text" class="form-control" name="correct"  placeholder="Enter choice # ">
+			    </div>
+			    
+			    <label class="control-label col-sm-2" >Explanation:</label>
+			    <div class="col-sm-10">
+			      <input form="topicform" type="text" class="form-control" name="explanation" placeholder="Enter explanation">
+			    </div>
+			    
+			</div>
+			<hr>
+			</div>
+			<a class="btn-xs btn-primary addQuestion">Add+</a>
+		</div>	
+    </div>
+  </div>
+
+</div>
+	<br>
     <button form="topicform" type="submit" value="Submit" class="btn btn-primary">Submit Post</button>
-     
-
-
 </div>
 
 <script src="/js/clean-blog.min.js"></script>

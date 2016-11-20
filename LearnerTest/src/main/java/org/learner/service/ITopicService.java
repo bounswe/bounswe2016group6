@@ -36,7 +36,8 @@ public interface ITopicService {
 	
 	void deleteComment(long topicid);
 	
-	//Question createQuestion(QuestionDto questionDto)
+	Question createQuestions(Topic topic, TopicDto questions);
+	
 	//Question deleteQuestion(long id)
 	
 	//TAG_____
