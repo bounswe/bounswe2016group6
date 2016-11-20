@@ -76,7 +76,17 @@ public class Topic {
     }
 	
 	
-    public List<User> getLikedBy() {
+    public List<Question> getQuestions() {
+		return questions;
+	}
+
+
+	public void setQuestions(List<Question> questions) {
+		this.questions = questions;
+	}
+
+
+	public List<User> getLikedBy() {
 		return likedBy;
 	}
 

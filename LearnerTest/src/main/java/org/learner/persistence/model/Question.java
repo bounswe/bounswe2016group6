@@ -26,6 +26,8 @@ public class Question {
 	
 	private int correct;
 	
+	private String explanation;
+	
 	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(nullable=false, name="topic_id")
@@ -85,6 +87,14 @@ public class Question {
 
 	public void setRelatedTopic(Topic relatedTopic) {
 		this.relatedTopic = relatedTopic;
+	}
+
+	public String getExplanation() {
+		return explanation;
+	}
+
+	public void setExplanation(String explanation) {
+		this.explanation = explanation;
 	}	
 	
 	

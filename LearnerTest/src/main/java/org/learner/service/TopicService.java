@@ -1,15 +1,18 @@
 package org.learner.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
 
 import org.learner.persistence.dao.CommentRepository;
+import org.learner.persistence.dao.QuestionRepository;
 import org.learner.persistence.dao.TagRepository;
 import org.learner.persistence.dao.TopicRepository;
 import org.learner.persistence.dao.UserRepository;
 import org.learner.persistence.model.Comment;
+import org.learner.persistence.model.Question;
 import org.learner.persistence.model.Tag;
 import org.learner.persistence.model.Topic;
 import org.learner.persistence.model.User;
@@ -35,6 +38,9 @@ public class TopicService implements ITopicService{
 	
 	@Autowired
 	CommentRepository commentRepository;
+	
+	@Autowired
+	QuestionRepository questionRepo;
 	
 	@Override
 	public Topic setTopicImage(long tid, String imgpath) {
@@ -281,6 +287,28 @@ public class TopicService implements ITopicService{
 	public List<Topic> searchSuggest(String q) {
 		List<Topic> topicSuggest = repository.findTop10ByHeaderContainingOrderByCreatedAtDesc(q);
 		return topicSuggest;
+	}
+
+	@Override
+	public Question createQuestions(Topic topic, TopicDto questions) {
+		List<Question> ques = new ArrayList<>();
+		for(int i = 0; i<questions.getQuestion().length ;i++){
+			Question q = new Question();
+			q.setQuestion(questions.getQuestion()[i]);
+			q.setAnswerA(questions.getAnswerA()[i]);
+			q.setAnswerB(questions.getAnswerB()[i]);
+			q.setAnswerC(questions.getAnswerC()[i]);
+			q.setCorrect(questions.getCorrect()[i]);
+			q.setCorrect(questions.getCorrect()[i]);
+			q.setExplanation(questions.getExplanation()[i]);
+			q.setRelatedTopic(topic);
+			ques.add(q);
+		}
+		if(ques.isEmpty()){
+			return null;
+		}
+		questionRepo.save(ques);
+		return ques.get(0);
 	}
 	
 	

@@ -2,11 +2,13 @@ package org.learner.web.controller;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.learner.persistence.model.Topic;
+import org.learner.persistence.model.Question;
 import org.learner.registration.TopicEvent;
 import org.learner.service.ITopicService;
 import org.learner.service.IUserService;
@@ -114,9 +116,23 @@ public class TopicController {
     		
     	}
     	
+    	//Questions
+    	LOGGER.debug("Topic Questions : ");
+    	if(topicdto.getQuestion() != null){
+    		LOGGER.debug("Questions found");
+    		LOGGER.debug(topicdto.getQuestion()[0]);
+    		LOGGER.debug("Creating questions!");
+    		Question que = topicService.createQuestions(posted, topicdto);
+    		
+    		if(que!=null){
+    			LOGGER.debug("Question creation successful!");
+    		}
+    		
+    	}
+    	
     	eventPublisher.publishEvent(new TopicEvent(posted));
     	LOGGER.debug(posted.toString());
-    	return new GenericResponse("Topic Creation Succeeded!");
+    	return new GenericResponse(""+posted.getId());
     }
     
     
@@ -168,6 +184,26 @@ public class TopicController {
     }
     
     
+    @RequestMapping(value="/quiz/{topicId}")
+    public String quizPage(@PathVariable Long topicId,Model model){
+    	model.addAttribute("topicId", topicId);
+    	return "quiz";
+    }
+    
+    @RequestMapping(value="/questions/{topicId}")
+    @ResponseBody
+    public List<Question> getQuizQuestions(@PathVariable Long topicId){
+    	LOGGER.debug("Question retrieval");
+    	Topic topic = topicService.getTopicById(topicId);
+    	
+    	if(topic==null){
+    		LOGGER.debug("Topic not found!");
+    		return null;
+    	}
+    	List<Question> questions = topic.getQuestions();
+    	LOGGER.debug("Question 1 : " + questions.get(0).getQuestion());
+    	return questions;
+    }
     
     @RequestMapping(value="/recent")
     @ResponseBody

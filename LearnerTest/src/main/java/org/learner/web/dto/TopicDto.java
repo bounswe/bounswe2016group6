@@ -19,7 +19,14 @@ public class TopicDto {
     
     private String imagePath;
     
-
+    private String[] question;
+    private String[] answerA;
+    private String[] answerB;
+    private String[] answerC;
+    private Integer[] correct;
+    private String[] explanation;
+    
+    
 
 	//TODO reveal > current date constraint
     private Date revealDate;
@@ -69,6 +76,66 @@ public class TopicDto {
 
 	public void setRevealDate(Date revealDate) {
 		this.revealDate = revealDate;
+	}
+
+
+	public String[] getQuestion() {
+		return question;
+	}
+
+
+	public void setQuestion(String[] question) {
+		this.question = question;
+	}
+
+
+	public String[] getAnswerA() {
+		return answerA;
+	}
+
+
+	public void setAnswerA(String[] answerA) {
+		this.answerA = answerA;
+	}
+
+
+	public String[] getAnswerB() {
+		return answerB;
+	}
+
+
+	public void setAnswerB(String[] answerB) {
+		this.answerB = answerB;
+	}
+
+
+	public String[] getAnswerC() {
+		return answerC;
+	}
+
+
+	public void setAnswerC(String[] answerC) {
+		this.answerC = answerC;
+	}
+
+
+	public Integer[] getCorrect() {
+		return correct;
+	}
+
+
+	public void setCorrect(Integer[] correct) {
+		this.correct = correct;
+	}
+
+
+	public String[] getExplanation() {
+		return explanation;
+	}
+
+
+	public void setExplanation(String[] explanation) {
+		this.explanation = explanation;
 	}
 	
 	
