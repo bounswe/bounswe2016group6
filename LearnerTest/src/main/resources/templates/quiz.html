@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Clean Blog - Sample Post</title>
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"
+	integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+	crossorigin="anonymous"></script>
+	
+<!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link> 
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <!-- Theme CSS -->
+    <link href="/css/clean-blog.css" rel="stylesheet">
+    <link href="/css/slickQuiz.css" rel="stylesheet">
+    <link href="/css/master.css" rel="stylesheet">
+    
+	
+    <!-- Custom Fonts -->
+    <link href="/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+	
+	
+	<script src="/js/master.js"></script>
+	<script src="/js/slickquiz.js"></script>
+	<script src="/js/slickQuiz-config.js"></script>
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+	
+	<script th:inline="javascript">
+	/*<![CDATA[*/
+	
+	    var topicID = [[${topicId}]];
+	    console.log(topicID);
+	
+	/*]]>*/
+	</script>
+
+</head>
+
+
+<body id="slickQuiz">
+
+<nav class="navbar navbar-static-top navbar-default navbar-custom ">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    Menu <i class="fa fa-bars"></i>
+                </button>
+                <a class="navbar-brand" href="/home">Learner</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/home">Home</a>
+                    </li>
+                    <li>
+                        <a sec:authentication="name" href="/profile">Profile</a>
+                    </li>
+                    <li>
+                        <a href="/home">Sample Post</a>
+                    </li>
+                    <li>
+                        <a href="/logout">Logout</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-2 col-lg-2">
+		
+		</div>
+	
+		<div class="col-md-8 col-lg-8">
+		<br><br>
+		
+	        <h1 class="quizName"><!-- where the quiz name goes --></h1>
+	
+	        <div class="quizArea">
+	            <div class="quizHeader">
+	                <!-- where the quiz main copy goes -->
+	
+	                <a class="btn btn-primary btn-lg startQuiz" href="#">Get Started!</a>
+	            </div>
+	
+	            <!-- where the quiz gets built -->
+	        </div>
+	
+	        <div class="quizResults">
+	            <h3 class="quizScore">You Scored: <span><!-- where the quiz score goes --></span></h3>
+	
+	            <h3 class="quizLevel"><strong>Ranking:</strong> <span><!-- where the quiz ranking level goes --></span></h3>
+				<br><br>
+				<a class="btn btn-primary">Back to topic page</a>
+	            <div class="quizResultsCopy">
+	                <!-- where the quiz result copy goes -->
+	            </div>
+	        </div>
+        
+        </div>
+	</div>
+</div>
+    </body>
+
+
+
+
+
+</html>
