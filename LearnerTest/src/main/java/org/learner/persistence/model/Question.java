@@ -28,7 +28,7 @@ public class Question {
 	
 	private String explanation;
 	
-	@JsonBackReference
+	@JsonBackReference(value="questionTopic")
 	@ManyToOne
 	@JoinColumn(nullable=false, name="topic_id")
 	private Topic relatedTopic;

@@ -12,11 +12,14 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @Entity
 @Table (name = "tag")
-public class Tag {
 
+public class Tag {
+	@JsonInclude(Include.NON_NULL)
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -28,7 +31,7 @@ public class Tag {
     @Column(name = "created_at")
     private Date createdAt;
     
-    @JsonBackReference
+    @JsonBackReference(value="relatedTopics")
 	@ManyToMany(mappedBy = "tags")
 	private List<Topic> relatedTopics;
 	

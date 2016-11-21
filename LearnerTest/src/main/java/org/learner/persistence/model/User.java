@@ -48,7 +48,7 @@ public class User {
     @JsonIgnore
     private String secret;
     
-    @JsonBackReference
+    @JsonBackReference(value="ownerTopics")
     @OneToMany(mappedBy = "owner")
     private List<Topic> topics;
     
@@ -60,7 +60,7 @@ public class User {
     			inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Collection<Role> roles;
     
-    @JsonBackReference
+    @JsonBackReference(value="userComments")
     @OneToMany(mappedBy = "owner")
     private List<Comment> comments;
     
