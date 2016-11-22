@@ -2,26 +2,39 @@ package org.learner.web.controller;
 
 import org.learner.service.ITopicService;
 import org.learner.web.util.GenericResponse;
+import org.learner.web.util.WikidataEntity;
+import org.learner.web.util.WikidataSearch;
+import org.learner.web.util.WikidataSearchModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import ch.qos.logback.classic.Logger;
+
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.http.MediaType;
+import org.learner.persistence.dao.TagRepository;
 import org.learner.persistence.model.Tag;
 import org.learner.persistence.model.Topic;
 @Controller
 @RequestMapping("/tag")
 public class TagController {
+	
 	@Autowired
 	public ITopicService topicService;
 	
-	
+	@Autowired
+	public TagRepository tagRepo;
 	
 	@RequestMapping(value="create")
 	@ResponseBody
@@ -46,6 +59,30 @@ public class TagController {
 		
 	}
 	
+	@PostMapping(value="/{topicId}/add", consumes="application/json")
+	@ResponseBody
+	public GenericResponse addTags(@PathVariable Long topicId,@RequestBody List<Tag> tags){
+		Topic topic = topicService.getTopicById(topicId);
+		
+		if(topic == null){
+			return new GenericResponse("","Topic not found...");
+		}
+		
+		System.out.println("Tags!");
+		for (Tag tag : tags) {
+			if(tag.getId() == null){
+				Tag newtag = topicService.createTag(tag);
+				topicService.createTagToTopic(topic, newtag);
+			} else {
+				Tag existing = tagRepo.findOne(tag.getId());
+				topicService.createTagToTopic(topic, existing);
+			}
+			System.out.println(tag.getId());
+			System.out.println(tag.getName());
+			System.out.println(tag.getContext());
+		}
+		return new GenericResponse("Successful!");
+	}
 	
 	@RequestMapping(value="/suggest")
 	@ResponseBody
@@ -56,7 +93,37 @@ public class TagController {
 		
 		System.out.println("Suggested : " + suggested.get(0).getName());
 		
+		System.out.println("Deserialize starts");
+		WikidataEntity wde = WikidataSearch.wikidataQuery(query);
+		List<WikidataSearchModel> wdsm = wde.getSearch();
+		
+		
+		for(WikidataSearchModel w: wdsm){
+			Tag t = new Tag();
+			t.setContext(w.getDescription());
+			t.setName(w.getLabel());
+			System.out.println("Wikidata TAgname : " + t.getName());
+			System.out.println("Wikidata TAgcontext : " + t.getContext());
+			suggested.add(t);
+		}
+		
 		return suggested;
+	}
+	
+	@RequestMapping(value="/{topicId}/remove")
+	@ResponseBody
+	public GenericResponse removeTagFromTopic(@PathVariable Long topicId,@RequestBody Tag tag,HttpServletResponse response){
+		Topic topic = topicService.getTopicById(topicId);
+		if(topic == null){
+			return new GenericResponse("", "Topic not found!");
+		} 
+		Tag dbtag = tagRepo.findOne(tag.getId());
+		boolean success = topic.getTags().remove(dbtag);
+		
+		if(!success){
+			return new GenericResponse("","Does not exists");
+		}
+		return new GenericResponse("Tag removal successful!");
 	}
 	
 }

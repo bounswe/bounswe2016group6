@@ -3,6 +3,7 @@ package org.learner.persistence.model;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -32,7 +33,7 @@ public class Tag {
     private Date createdAt;
     
     @JsonBackReference(value="relatedTopics")
-	@ManyToMany(mappedBy = "tags")
+	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "tags")
 	private List<Topic> relatedTopics;
 	
 	
@@ -86,6 +87,7 @@ public class Tag {
 	}
 
 
+	
 
 
     

@@ -251,7 +251,6 @@ public class TopicService implements ITopicService{
 	private User getCurrentUser(){
 		final Authentication curAuth = SecurityContextHolder.getContext().getAuthentication();
         String currentUserName = curAuth.getName();
-        
         User owner = userRepo.findByEmail(currentUserName);
         return owner;
 	}
@@ -266,8 +265,8 @@ public class TopicService implements ITopicService{
 
 	@Override
 	public Tag createTag(Tag tag) {
+		tag.setCreatedAt(new Date());
 		Tag created = tagRepo.save(tag);
-		
 		return created;
 	}
 
