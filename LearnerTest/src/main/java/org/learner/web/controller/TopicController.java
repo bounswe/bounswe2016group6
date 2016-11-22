@@ -109,7 +109,7 @@ public class TopicController {
         	try{
         		storageService.store(image,imgname);
         	} catch (StorageException e) {
-        		return new GenericResponse("Topic creation failed!","Image upload failed!");
+        		return new GenericResponse(""+posted.getId(),"Image upload failed!");
     		}
         	
         	topicService.setTopicImage(posted.getId(), "/images/topic/"+imgname);
@@ -117,20 +117,23 @@ public class TopicController {
     	}
     	
     	//Questions
-    	LOGGER.debug("Topic Questions : ");
-    	if(topicdto.getQuestion() != null){
-    		LOGGER.debug("Questions found");
-    		LOGGER.debug(topicdto.getQuestion()[0]);
-    		LOGGER.debug("Creating questions!");
-    		Question que = topicService.createQuestions(posted, topicdto);
-    		
-    		if(que!=null){
-    			LOGGER.debug("Question creation successful!");
-    		}
-    		
-    	}
-    	
-    	eventPublisher.publishEvent(new TopicEvent(posted));
+    	LOGGER.debug("Topic Questions :");
+    	try {
+        	if(topicdto.getQuestion() != null){
+        		LOGGER.debug("Questions found");
+        		LOGGER.debug(topicdto.getQuestion()[0]);
+        		LOGGER.debug("Creating questions!");
+        		
+        		Question que = topicService.createQuestions(posted, topicdto);
+        		if(que!=null){
+        			LOGGER.debug("Question creation successful!");
+        		}
+        		
+        	}
+		} catch (ArrayIndexOutOfBoundsException e) {
+			LOGGER.debug("No question found!");
+		}
+    	//eventPublisher.publishEvent(new TopicEvent(posted));
     	LOGGER.debug(posted.toString());
     	return new GenericResponse(""+posted.getId());
     }
