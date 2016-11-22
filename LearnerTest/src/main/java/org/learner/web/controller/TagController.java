@@ -61,7 +61,7 @@ public class TagController {
 	
 	@PostMapping(value="/{topicId}/add", consumes="application/json")
 	@ResponseBody
-	public GenericResponse addTags(@PathVariable Long topicId,@RequestBody List<Tag> tags){
+	public GenericResponse addTags(@PathVariable("topicId") Long topicId, @RequestBody List<Tag> tags){
 		Topic topic = topicService.getTopicById(topicId);
 		
 		if(topic == null){
@@ -71,9 +71,11 @@ public class TagController {
 		System.out.println("Tags!");
 		for (Tag tag : tags) {
 			if(tag.getId() == null){
+				System.out.println("NULL ID");
 				Tag newtag = topicService.createTag(tag);
 				topicService.createTagToTopic(topic, newtag);
 			} else {
+				System.out.println("NON_NULL ID");
 				Tag existing = tagRepo.findOne(tag.getId());
 				topicService.createTagToTopic(topic, existing);
 			}
@@ -91,20 +93,26 @@ public class TagController {
 		System.out.println("Tag suggest v1!");
 		List<Tag> suggested = topicService.tagSuggest(query);
 		
-		System.out.println("Suggested : " + suggested.get(0).getName());
+		//System.out.println("Suggested : " + suggested.get(0).getName());
 		
 		System.out.println("Deserialize starts");
-		WikidataEntity wde = WikidataSearch.wikidataQuery(query);
-		List<WikidataSearchModel> wdsm = wde.getSearch();
 		
-		
-		for(WikidataSearchModel w: wdsm){
-			Tag t = new Tag();
-			t.setContext(w.getDescription());
-			t.setName(w.getLabel());
-			System.out.println("Wikidata TAgname : " + t.getName());
-			System.out.println("Wikidata TAgcontext : " + t.getContext());
-			suggested.add(t);
+		try {
+			WikidataEntity wde = WikidataSearch.wikidataQuery(query);
+			List<WikidataSearchModel> wdsm = wde.getSearch();
+			
+			
+			for(WikidataSearchModel w: wdsm){
+				Tag t = new Tag();
+				t.setContext(w.getDescription());
+				t.setName(w.getLabel());
+				System.out.println("Wikidata TAgname : " + t.getName());
+				System.out.println("Wikidata TAgcontext : " + t.getContext());
+				suggested.add(t);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		return suggested;
