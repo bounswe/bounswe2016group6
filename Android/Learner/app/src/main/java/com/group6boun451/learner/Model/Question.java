@@ -1,4 +1,8 @@
 package com.group6boun451.learner.model;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Question {
     private Long id;
     private String question;
@@ -6,6 +10,8 @@ public class Question {
     private String answerB;
     private String answerC;
     private int correct;
+    private String explanation;
+
     private Topic relatedTopic;
     public Long getId() {
         return id;
@@ -63,6 +69,11 @@ public class Question {
     }
 
 
+    public String getExplanation() {
+        return explanation;
+    }
 
-
+    public void setExplanation(String explanation) {
+        this.explanation = explanation;
+    }
 }

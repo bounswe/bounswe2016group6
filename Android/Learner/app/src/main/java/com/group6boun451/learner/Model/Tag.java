@@ -8,7 +8,6 @@ public class Tag {
     private String name;
     private String context;
     private Date createdAt;
-    private Date updatedAt;
     private List<Topic> relatedTopics;
 
     public Long getId() {
@@ -48,16 +47,6 @@ public class Tag {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
-    }
-
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
     }
 
 

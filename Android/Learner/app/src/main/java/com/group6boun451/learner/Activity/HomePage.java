@@ -353,7 +353,7 @@ public class HomePage extends AppCompatActivity{
 
     public void openDetails(View coverView, Topic topic) {
         final TextView description = Views.find(tabHost, R.id.details_text);
-        GlideHelper.loadImage((ImageView) Views.find(tabHost, R.id.details_image), topic);
+        GlideHelper.loadImage(this,(ImageView) Views.find(tabHost, R.id.details_image), topic);
         ((TextView)Views.find(tabHost, R.id.details_title)).setText(topic.getHeader());
 
         SpannableBuilder builder = new SpannableBuilder(this);
@@ -404,7 +404,7 @@ public class HomePage extends AppCompatActivity{
             ((TextView) v.findViewById(R.id.textDate)).setText(topic.getRevealDate().toString());
 
             final ImageView img = (ImageView) v.findViewById(R.id.imageTopic);
-            GlideHelper.loadImage(img, topic);
+            GlideHelper.loadImage(HomePage.this,img, topic);
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
