@@ -6,12 +6,12 @@ Licensed under MIT
 
 body {
  padding-top: 87px;
-  background: #F1F3FA;
+  background: gray;
 }
 
 /* Profile container */
 .profile {
-  margin: 200px 20;
+  margin: 10px 20;
   overflow: auto;
 }
 
@@ -27,20 +27,19 @@ body {
 }
 #narrow {
   width: 500px;
-  background: lightblue;
+  background: gray;
   /* Just so it's visible */
 }
 #wide {
   flex: 1;
   /* Grow to rest of container */
-  background: lightgreen;
+  background: gray;
   /* Just so it's visible */
 }
 .profile-userpic img {
   float: none;
   margin: 0 auto;
-  width: 50%;
-  height: 50%;
+  width: 70%;
   -webkit-border-radius: 50% !important;
   -moz-border-radius: 50% !important;
   border-radius: 50% !important;
