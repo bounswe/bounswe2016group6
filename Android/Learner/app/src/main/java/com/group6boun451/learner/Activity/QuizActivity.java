@@ -16,7 +16,6 @@ import android.widget.TextView;
 import com.group6boun451.learner.R;
 import com.group6boun451.learner.model.Question;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -126,44 +125,39 @@ public class QuizActivity extends AppCompatActivity {
         leftArrow = (Button) findViewById(R.id.btnArrowPrev);
         rightArrow = (Button) findViewById(R.id.btnArrowNext);
         inWhichQuestion = (TextView) findViewById(R.id.txtAtWhich);
-      //  finishQuiz = (Button) findViewById(R.id.btnFinishQuiz);
-//        finishQuiz.setTypeface(chalkFont);
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.quiz_layout);
         init();
-        if(getIntent().getExtras() != null){
-            Bundle bundle = getIntent().getExtras();
-            mQuestions =(ArrayList<Question>)((List)bundle.getParcelableArrayList("questions"));
-        }else{
 
-        }
+        mQuestions = HomePage.topics.get(HomePage.topicId-1).getQuestions();
 
-        Question q1 = new Question();
-        q1.setAnswerA("35");
-        q1.setAnswerB("23");
-        q1.setAnswerC("30");
-        q1.setQuestion("What is the best age to have children?");
 
-        Question q2 = new Question();
-        q2.setAnswerA("asdasd");
-        q2.setAnswerB("213123");
-        q2.setAnswerC("123125dsfsd");
-        q2.setQuestion("asdasdasd");
-
-        Question q3 = new Question();
-        q3.setAnswerA("asdasd");
-        q3.setAnswerB("213123");
-        q3.setAnswerC("123125dsfsd");
-        q3.setQuestion("asdasdasd");
-        mQuestions = new ArrayList<Question>();
-        mQuestions.add(q1);
-        mQuestions.add(q2);
-        mQuestions.add(q3);
+//        Question q1 = new Question();
+//        q1.setAnswerA("35");
+//        q1.setAnswerB("23");
+//        q1.setAnswerC("30");
+//        q1.setQuestion("What is the best age to have children?");
+//
+//        Question q2 = new Question();
+//        q2.setAnswerA("asdasd");
+//        q2.setAnswerB("213123");
+//        q2.setAnswerC("123125dsfsd");
+//        q2.setQuestion("asdasdasd");
+//
+//        Question q3 = new Question();
+//        q3.setAnswerA("asdasd");
+//        q3.setAnswerB("213123");
+//        q3.setAnswerC("123125dsfsd");
+//        q3.setQuestion("asdasdasd");
+//        mQuestions = new ArrayList<Question>();
+//        mQuestions.add(q1);
+//        mQuestions.add(q2);
+//        mQuestions.add(q3);
         numOfQuestion = mQuestions.size();
-        ViewPager questionsPager = (ViewPager) findViewById(R.id.quiz_viewpager);
+        final ViewPager questionsPager = (ViewPager) findViewById(R.id.quiz_viewpager);
 
 
         questionsPager.setAdapter(new QuestionPagerAdapter(this));
@@ -173,17 +167,14 @@ public class QuizActivity extends AppCompatActivity {
         answers = new int[numOfQuestion];
         Arrays.fill(answers,-1);
         questionsPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
+            @Override public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
 
             @Override
             public void onPageSelected(int position) {
                 if(position == 0){
                     rightArrow.setVisibility(View.VISIBLE);
                     leftArrow.setVisibility(View.INVISIBLE);
-                }else if(position == mQuestions.size()-1){
+                }else if(position == numOfQuestion-1){
                     leftArrow.setVisibility(View.VISIBLE);
                     rightArrow.setVisibility(View.INVISIBLE);
                 }else{
@@ -194,17 +185,22 @@ public class QuizActivity extends AppCompatActivity {
                 inWhichQuestion.setText( (position+1) + " / " + numOfQuestion);
 
             }
-
+            @Override public void onPageScrollStateChanged(int state) {}
+        });
+        leftArrow.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onPageScrollStateChanged(int state) {
-
+            public void onClick(View view) {
+                if(currentQuestion>0){questionsPager.setCurrentItem(currentQuestion-1);}
             }
         });
-
-
-
-
-
+        rightArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(currentQuestion<numOfQuestion-1){questionsPager.setCurrentItem(currentQuestion+1);
+                }else{//finish
+                }
+            }
+        });
 
     }
 

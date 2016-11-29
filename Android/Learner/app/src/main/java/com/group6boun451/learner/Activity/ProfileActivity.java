@@ -1,6 +1,5 @@
 package com.group6boun451.learner.Activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -14,8 +13,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
-import android.support.v4.view.ViewPager;
-import com.group6boun451.learner.Activity.HomePage;
+
 import com.group6boun451.learner.CommentContainer;
 import com.group6boun451.learner.CommentListAdapter;
 import com.group6boun451.learner.R;
@@ -97,7 +95,7 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         GlideHelper.loadImage(profileImageView,"https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAJlAAAAJGIxNDQ3YzhiLTYyZjUtNDU2NS04ZTg3LWYxZjFlNjg3NmE5MQ.jpg");
-        mailTextView.setText("esra.alinca@boun.edu.tr");
+        mailTextView.setText("esra@learner.com");
         nameTextView.setText("Esra Alınca");
 
         ListView comments = (ListView) findViewById(R.id.commentList);

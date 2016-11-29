@@ -22,6 +22,12 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".Activity.LocationSearchActivity"
+            android:label=""
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".Activity.HomePage"
             android:label="Home Page"
             android:screenOrientation="portrait" />

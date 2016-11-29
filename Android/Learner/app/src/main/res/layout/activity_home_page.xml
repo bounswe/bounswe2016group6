@@ -67,7 +67,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?actionBarSize"
-        android:background="@color/guillotine_background_dark"
+        android:background="@color/white"
         android:visibility="invisible">
         <LinearLayout
             android:layout_width="match_parent"
@@ -93,13 +93,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
-                    <Button
-                        android:text="@string/edit"
-                        android:visibility="gone"
-                        android:layout_width="match_parent"
-                        android:background="@null"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/edit_button" />
                     <ScrollView
                         android:id="@+id/details_scrollView"
                         android:layout_width="match_parent"
@@ -120,7 +113,7 @@
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="0.6dp"
-                                android:background="#fff" />
+                                android:background="@color/guillotine_background_dark" />
                             <!--user-->
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -137,8 +130,8 @@
                                     android:layout_marginRight="@dimen/default_margin"
                                     android:layout_marginTop="12dp"
                                     android:layout_weight="1"
-                                    android:textColor="#fff"
                                     android:textSize="22sp"
+                                    android:textColor="@color/guillotine_background_dark"
                                     android:gravity="center"/>
                             </LinearLayout>
 
@@ -148,11 +141,11 @@
                                 android:layout_height="0.6dp"
                                 android:layout_marginLeft="@dimen/default_margin"
                                 android:layout_marginRight="@dimen/default_margin"
-                                android:background="#fff" />
+                                android:background="@color/guillotine_background_dark" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:orientation="horizontal"
                                 android:gravity="center_vertical"
                                 android:layout_marginLeft="@dimen/default_margin"
@@ -160,52 +153,34 @@
                                 android:paddingRight="10dip"
                                 android:paddingLeft="10dip"
                                 android:background="#30ffffff">
-                                <LinearLayout
-                                    android:layout_width="10dip"
+                                <ImageView
+                                    android:id="@+id/imgTopicPageUserImage"
+                                    android:layout_width="36dp"
+                                    android:layout_height="36dp"
+                                    android:padding="4dp" />
+                                <TextView
+                                    android:id="@+id/txtTopicPageUserName"
+                                    android:textColor="@color/guillotine_background_dark"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+                                <Button
+                                    android:text="@string/edit"
+                                    android:visibility="gone"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:background="@null"
+                                    android:textColor="@color/guillotine_background_dark"
                                     android:layout_height="wrap_content"
-                                    android:orientation="horizontal"
-                                    android:layout_weight="6"
-                                    android:gravity="center_vertical">
-                                    <ImageView
-                                        android:id="@+id/imgTopicPageUserImage"
-                                        android:layout_width="36dp"
-                                        android:layout_height="36dp"
-                                        android:padding="4dp"
-                                        />
-                                    <TextView
-                                        android:id="@+id/txtTopicPageUserName"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="abdullah muaz ekici"
-
-                                        />
-                                </LinearLayout>
-
+                                    android:id="@+id/edit_button" />
                                 <TextView
                                     android:id="@+id/txtTopicPageDate"
-                                    android:layout_width="0dip"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="12.03.2016"
-                                    android:layout_weight="2"
-                                    android:gravity="right"
-                                   />
+                                    android:textColor="@color/guillotine_background_dark"/>
                             </LinearLayout>
-
-
-                            <TextView
-                                android:id="@+id/details_text"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginBottom="@dimen/default_margin"
-                                android:layout_marginLeft="@dimen/default_margin"
-                                android:layout_marginRight="@dimen/default_margin"
-                                android:layout_marginTop="14dp"
-                                android:lineSpacingExtra="4sp"
-                                android:textColor="#eee"
-                                android:textSize="14sp" />
-
                             <FrameLayout
                                 android:layout_width="match_parent"
+                                android:minHeight="200dp"
                                 android:layout_height="wrap_content">
                                 <com.group6boun451.learner.widget.Summernote
                                     android:id="@+id/summernote"
@@ -227,6 +202,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:id="@+id/comment_tab"
+                    android:background="@color/guillotine_background_dark"
                     android:orientation="vertical">
                     <ListView
                         android:id="@+id/topicPageCommentList"

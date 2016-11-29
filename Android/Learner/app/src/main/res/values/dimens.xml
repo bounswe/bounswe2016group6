@@ -25,5 +25,6 @@
     <dimen name="home_location_button_padding">10dp</dimen>
     <dimen name="end_padding">2dp</dimen>
     <dimen name="home_time_button_padding">30dp</dimen>
+    <dimen name="search_view_inset">5dp</dimen>
 
 </resources>

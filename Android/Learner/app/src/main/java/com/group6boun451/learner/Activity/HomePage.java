@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -35,7 +34,6 @@ import android.widget.ScrollView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
-import com.alexvasilkov.android.commons.texts.SpannableBuilder;
 import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.foldablelayout.UnfoldableView;
 import com.alexvasilkov.foldablelayout.shading.GlanceFoldShading;
@@ -43,6 +41,7 @@ import com.group6boun451.learner.CommentListAdapter;
 import com.group6boun451.learner.R;
 import com.group6boun451.learner.model.GenericResponse;
 import com.group6boun451.learner.model.Topic;
+import com.group6boun451.learner.model.User;
 import com.group6boun451.learner.utils.GlideHelper;
 import com.group6boun451.learner.widget.Summernote;
 import com.group6boun451.learner.widget.TouchyWebView;
@@ -89,14 +88,14 @@ public class HomePage extends AppCompatActivity{
     @BindView(R.id.content_hamburger) View contentHamburger;
     @BindView(R.id.topic_content_TouchyWebView) TouchyWebView contentView;
 
-    private List<Topic> topics;
+    public static List<Topic> topics;
     private String username;
     private boolean isTeacher = true;
     private boolean isSnackBarActive = false;
     private boolean isTopicActive= false;
     private boolean isGuillotineOpened = false;
     private GuillotineAnimation guillotineAnimation;
-    private int topicId = 0;
+    public static int topicId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +119,13 @@ public class HomePage extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(HomePage.this, ProfileActivity.class));
+                guillotineAnimation.close();
+            }
+        });
+        guillotineMenu.findViewById(R.id.activity_group).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(HomePage.this, LocationSearchActivity.class));
                 guillotineAnimation.close();
             }
         });
@@ -255,70 +261,6 @@ public class HomePage extends AppCompatActivity{
 
             }
         });
-
-//        //TODO test-> remove lines below in this method after test
-//        ListView comments = (ListView) findViewById(R.id.topicPageCommentList);
-//        CommentListAdapter cladap = new CommentListAdapter(this, (new CommentContainer(this)).getComments());
-//        comments.setAdapter(cladap);
-//
-//        comments.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                TextView txt = (TextView) view.findViewById(R.id.commentText);
-//                int numOfLines = txt.getMaxLines();
-//                if (numOfLines == 3) {
-//                    txt.setMaxLines(150);
-//                } else {
-//                    txt.setMaxLines(3);
-//                }
-//            }
-//        });
-//
-//        contentView.loadData("<HEAD>\n" +
-//                "<TITLE>Basic HTML Sample Page</TITLE>\n" +
-//                "</HEAD>\n" +
-//                "<BODY BGCOLOR=\"WHITE\">\n" +
-//                "<CENTER>\n" +
-//                "<H1>A Simple Sample Web Page</H1>\n" +
-//                " \n" +
-//                "  <IMG SRC=\"http://sheldonbrown.com/images/scb_eagle_contact.jpeg\">\n" +
-//                " \n" +
-//                "\n" +
-//                " \n" +
-//                "  <H4>By Sheldon Brown</H4>\n" +
-//                "<H2>Demonstrating a few HTML features</H2>\n" +
-//                "</CENTER>\n" +
-//                "HTML is really a very simple language. It consists of ordinary text, with commands that are enclosed by \"<\" and \">\" characters, or bewteen an \"&\" and a \";\". <P>\n" +
-//                " \n" +
-//                "You don't really need to know much HTML to create a page, because you can copy bits of HTML from other pages that do what you want, then change the text!<P>\n" +
-//                " \n" +
-//                "This page shows on the left as it appears in your browser, and the corresponding HTML code appears on the right. The HTML commands are linked to explanations of what they do.\n" +
-//                " \n" +
-//                " \n" +
-//                "<H3>Line Breaks</H3>\n" +
-//                "HTML doesn't normally use line breaks for ordinary text. A white space of any size is treated as a single space. This is because the author of the page has no way of knowing the size of the reader's screen, or what size type they will have their browser set for.<P>\n" +
-//                " \n" +
-//                "If you want to put a line break at a particular place, you can use the \"<BR>\" command, or, for a paragraph break, the \"<P>\" command, which will insert a blank line. The heading command (\"<4></4>\") puts a blank line above and below the heading text.\n" +
-//                " \n" +
-//                "<H4>Starting and Stopping Commands</H4>\n" +
-//                "Most HTML commands come in pairs: for example, \"<H4>\" marks the beginning of a size 4 heading, and \"</H4>\" marks the end of it. The closing command is always the same as the opening command, except for the addition of the \"/\".<P>\n" +
-//                " \n" +
-//                "Modifiers are sometimes included along with the basic command, inside the opening command's < >. The modifier does not need to be repeated in the closing command.\n" +
-//                " \n" +
-//                " \n" +
-//                "<H1>This is a size \"1\" heading</H1>\n" +
-//                "<H2>This is a size \"2\" heading</H2>\n" +
-//                "<H3>This is a size \"3\" heading</H3>\n" +
-//                "<H4>This is a size \"4\" heading</H4>\n" +
-//                "<H5>This is a size \"5\" heading</H5>\n" +
-//                "<H6>This is a size \"6\" heading</H6>\n" +
-//                "<center>\n" +
-//                "<H4>Copyright © 1997, by\n" +
-//                "<A HREF=\"http://sheldonbrown.com/index.html\">Sheldon Brown</A>\n" +
-//                "</H4>\n" +
-//                "If you would like to make a link or bookmark to this page, the URL is:<BR> http://sheldonbrown.com/web_sample1.html</body> ","text/html",null);
-
-
     }
 
     @Override
@@ -352,18 +294,10 @@ public class HomePage extends AppCompatActivity{
     }
 
     public void openDetails(View coverView, Topic topic) {
-        final TextView description = Views.find(tabHost, R.id.details_text);
         GlideHelper.loadImage(this,(ImageView) Views.find(tabHost, R.id.details_image), topic);
         ((TextView)Views.find(tabHost, R.id.details_title)).setText(topic.getHeader());
-
-        SpannableBuilder builder = new SpannableBuilder(this);
-        builder.append(R.string.by).append(" ").append(topic.getOwner().getFirstName()).append("\t")
-                .createStyle().setFont(Typeface.DEFAULT_BOLD).apply()
-                .append(R.string.date).append(" ")
-                .clearStyle()
-                .append(topic.getRevealDate().toString()).append("\n")
-                .createStyle().setFont(Typeface.DEFAULT_BOLD).apply();
-        description.setText(builder.build());
+        ((TextView)Views.find(tabHost, R.id.txtTopicPageUserName)).setText(topic.getOwner().getFirstName());
+        ((TextView)Views.find(tabHost, R.id.txtTopicPageDate)).setText(topic.getRevealDate().toString());
         contentView.loadData(topic.getContent(),"text/html",null);
 
         ListView comments = (ListView) findViewById(R.id.topicPageCommentList);
@@ -384,7 +318,6 @@ public class HomePage extends AppCompatActivity{
         if(topic.getOwner().getEmail().equalsIgnoreCase(username)){
             editButton.setVisibility(View.VISIBLE);
             summernote.setText(topic.getContent());
-
         }
         unfoldableView.unfold(coverView, tabHost);
     }
@@ -414,7 +347,7 @@ public class HomePage extends AppCompatActivity{
 
 
             final Button likeButton = (Button)v.findViewById(R.id.like_button);
-            if(topic.getLikedBy().contains(topic)) likeButton.setTextColor(getResources().getColor(R.color.mdtp_accent_color));
+            if(isLiked(topic.getLikedBy())) likeButton.setTextColor(getResources().getColor(R.color.mdtp_accent_color));
             likeButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -433,6 +366,10 @@ public class HomePage extends AppCompatActivity{
             return v;
         }
 
+        private boolean isLiked(List<User> likedBy) {
+            for (User u:likedBy){if(u.getEmail().equalsIgnoreCase(username))return true;} return false;
+        }
+
         @Override public void destroyItem(ViewGroup collection, int position, Object view) {collection.removeView((View) view);}
 
         @Override public int getCount() {return topics.size();}
@@ -446,7 +383,7 @@ public class HomePage extends AppCompatActivity{
 
     }
 //TODO merge asynctasks
-    public class FetchTopicsTask extends AsyncTask<Void, Void, com.group6boun451.learner.model.Topic[]> {
+    public class FetchTopicsTask extends AsyncTask<Void, Void, Topic[]> {
         private String username;
         private String password;
 
@@ -459,7 +396,7 @@ public class HomePage extends AppCompatActivity{
 
         @Override
         protected Topic[] doInBackground(Void... params) {
-            final String url = getString(R.string.base_url) + "topic/recommended";
+            final String url = getString(R.string.base_url) + "topic/recent";
 
             // Populate the HTTP Basic Authentitcation header with the username and password
             HttpAuthentication authHeader = new HttpBasicAuthentication(username, password);
@@ -573,13 +510,12 @@ public class HomePage extends AppCompatActivity{
             // Create a new RestTemplate instance
             RestTemplate restTemplate = new RestTemplate();
             restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
             try {
                 // Make the network request
                 Log.d(TAG, url);
                 ResponseEntity<GenericResponse> response = restTemplate.exchange(
-                        builder.build().encode().toUri(),
-                        HttpMethod.POST,
+                        url,
+                        HttpMethod.GET,
                         new HttpEntity<Object>(requestHeaders), GenericResponse.class);
                 Log.d("response",response.getBody().toString());
                 return response.getBody();

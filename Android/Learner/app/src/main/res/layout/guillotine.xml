@@ -31,7 +31,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/feed_group"
+        android:id="@+id/activity_group"
         style="@style/LinearLayout.GuillotineItem">
 
         <ImageView
@@ -39,12 +39,12 @@
             android:src="@drawable/ic_feed" />
 
         <com.group6boun451.learner.widget.CanaroTextView
-            style="@style/TextView.GuillotineItem.Selected"
-            android:text="@string/home" />
+            style="@style/TextView.GuillotineItem"
+            android:text="@string/search" />
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/activity_group"
+        android:id="@+id/feed_group"
         style="@style/LinearLayout.GuillotineItem">
 
         <ImageView
@@ -52,8 +52,8 @@
             android:src="@drawable/ic_activity_active" />
 
         <com.group6boun451.learner.widget.CanaroTextView
-            style="@style/TextView.GuillotineItem"
-            android:text="@string/search" />
+            style="@style/TextView.GuillotineItem.Selected"
+            android:text="@string/home" />
     </LinearLayout>
 
 

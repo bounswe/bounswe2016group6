@@ -2,8 +2,10 @@ package com.group6boun451.learner.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.io.Serializable;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Question {
+public class Question implements Serializable {
     private Long id;
     private String question;
     private String answerA;

@@ -26,9 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/imageTopic"
                 android:background="#90424242"
-
-                android:gravity="center_vertical"
-                >
+                android:gravity="center_vertical">
                 <TextView
                 android:layout_marginLeft="@dimen/md_keylines"
                 android:id="@+id/textTopicTitle"
