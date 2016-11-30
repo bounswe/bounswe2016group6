@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
@@ -28,47 +29,63 @@
                 android:background="#90424242"
                 android:gravity="center_vertical">
                 <TextView
-                android:layout_marginLeft="@dimen/md_keylines"
-                android:id="@+id/textTopicTitle"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/card_title_height"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:textColor="#ffffff"
-                android:gravity="center_vertical"
-
-                />
+                    android:layout_marginLeft="@dimen/md_keylines"
+                    android:id="@+id/textTopicTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/card_title_height"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                    android:textColor="#ffffff"
+                    android:gravity="center_vertical" />
             </LinearLayout>
 
-
-            <TextView
-                android:id="@+id/textAuthor"
+            <LinearLayout
+                android:id="@+id/user_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/imageTopic"
-                android:layout_marginBottom="@dimen/md_keylines"
-                android:layout_marginLeft="@dimen/md_keylines"
-                android:layout_marginRight="@dimen/md_keylines"
-                android:layout_marginTop="@dimen/md_keylines"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:textColor="@color/white"
-                android:textSize="@dimen/article_subheading" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="@dimen/default_margin"
+                android:layout_marginRight="@dimen/default_margin"
+                android:paddingRight="10dip"
+                android:paddingLeft="10dip">
+                <ImageView
+                    android:id="@+id/imgTopicPageUserImage"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:padding="4dp" />
+                <TextView
+                    android:id="@+id/textAuthor"
+                    android:textColor="@color/white"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/article_subheading" />
 
-            <LinearLayout
+                <TextView
+                    android:id="@+id/textDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="10sp"
+                    android:minLines="2"/>
+            </LinearLayout>
+            <com.doodle.android.chips.ChipsView
+                android:id="@+id/cv_contacts"
                 android:layout_width="match_parent"
-                android:layout_height="1dip"
-                android:layout_marginTop="4dip"
-                android:background="#d3d3d3"
-                android:layout_alignBottom="@+id/textAuthor"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"></LinearLayout>
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/user_layout"
+                android:overScrollMode="ifContentScrolls"
+                android:layout_margin="@dimen/md_keylines_mini"
+                app:cv_max_height="120dp"
+                app:cv_vertical_spacing="2dp"
+                app:cv_icon_placeholder="@drawable/ic_whatshot_black_24dp" />
 
             <Button
                 android:id="@+id/like_button"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/textAuthor"
+                android:layout_below="@+id/cv_contacts"
                 android:text="LIKE"
                 android:textColor="@color/white" />
 
@@ -77,24 +94,11 @@
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/textAuthor"
+                android:layout_below="@+id/cv_contacts"
                 android:layout_toEndOf="@id/like_button"
                 android:layout_toRightOf="@id/like_button"
                 android:text="COMMENT"
                 android:textColor="@color/white" />
-
-            <TextView
-                android:id="@+id/textDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/like_button"
-                android:layout_alignEnd="@+id/textAuthor"
-                android:layout_alignRight="@+id/textAuthor"
-                android:layout_below="@+id/textAuthor"
-                android:gravity="center"
-                android:text="date"
-                android:textColor="@color/white"
-                android:textSize="12sp" />
 
         </RelativeLayout>
     </android.support.v7.widget.CardView>

@@ -37,7 +37,7 @@ import java.util.Collections;
 /** Activity for location search page. Location search activity is used for retrieving the data
  * and returning it to the caller.
  */
-public class LocationSearchActivity extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity {
     protected static final String TAG = HomePage.class.getSimpleName();
     FetchTopicsTask f;
     private FloatingSearchView mSearchView;
@@ -45,7 +45,7 @@ public class LocationSearchActivity extends AppCompatActivity {
     private SearchResultsListAdapter mSearchResultsAdapter;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_location_search);
+        setContentView(R.layout.activity_search);
         String title = getString(R.string.search);
         ((TextView)findViewById(R.id.header)).setText(title);
         findViewById(R.id.search_suggestions_section).setLayoutParams(new LinearLayout.LayoutParams(0,0));
@@ -84,7 +84,7 @@ public class LocationSearchActivity extends AppCompatActivity {
         mSearchResultsAdapter.setItemsOnClickListener(new SearchResultsListAdapter.OnItemClickListener() {
             @Override
             public void onClick(Topic location) {
-//                Intent intent = new Intent(LocationSearchActivity.this, HomePageActivity.class);
+//                Intent intent = new Intent(SearchActivity.this, HomePageActivity.class);
 //                intent.putExtra(Constants.LOCATION_TYPE, locationType);
 //                intent.putExtra(Constants.LOCATION, location.getName());
 //                intent.putExtra(Constants.LOCATION_ID, location.getId());

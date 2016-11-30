@@ -37,9 +37,12 @@ import android.widget.TextView;
 import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.foldablelayout.UnfoldableView;
 import com.alexvasilkov.foldablelayout.shading.GlanceFoldShading;
+import com.doodle.android.chips.ChipsView;
+import com.doodle.android.chips.model.Contact;
 import com.group6boun451.learner.CommentListAdapter;
 import com.group6boun451.learner.R;
 import com.group6boun451.learner.model.GenericResponse;
+import com.group6boun451.learner.model.Tag;
 import com.group6boun451.learner.model.Topic;
 import com.group6boun451.learner.model.User;
 import com.group6boun451.learner.utils.GlideHelper;
@@ -125,7 +128,7 @@ public class HomePage extends AppCompatActivity{
         guillotineMenu.findViewById(R.id.activity_group).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(HomePage.this, LocationSearchActivity.class));
+                startActivity(new Intent(HomePage.this, SearchActivity.class));
                 guillotineAnimation.close();
             }
         });
@@ -298,11 +301,23 @@ public class HomePage extends AppCompatActivity{
         ((TextView)Views.find(tabHost, R.id.details_title)).setText(topic.getHeader());
         ((TextView)Views.find(tabHost, R.id.txtTopicPageUserName)).setText(topic.getOwner().getFirstName());
         ((TextView)Views.find(tabHost, R.id.txtTopicPageDate)).setText(topic.getRevealDate().toString());
+
+        ChipsView mChipsView = Views.find(tabHost,R.id.cv_contacts);
+        // change EditText config
+        mChipsView.getEditText().setFocusableInTouchMode(false);
+        for(ChipsView.Chip c: mChipsView.getChips()){
+            mChipsView.removeChipBy(c.getContact());
+        }
+        for(Tag t : topic.getTags()){
+            String tagName = t.getName();
+            Contact contact = new Contact(tagName, t.getContext(), t.getId()+"", tagName, null);
+            mChipsView.addChip(tagName, null, contact,true);
+        }
+
         contentView.loadData(topic.getContent(),"text/html",null);
 
         ListView comments = (ListView) findViewById(R.id.topicPageCommentList);
         comments.setAdapter(new CommentListAdapter(this, topic.getComments()));//TODO it might troublesome
-
         comments.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -335,6 +350,18 @@ public class HomePage extends AppCompatActivity{
             ((TextView) v.findViewById(R.id.textTopicTitle)).setText(topic.getHeader());
             ((TextView) v.findViewById(R.id.textAuthor)).setText(topic.getOwner().getFirstName());
             ((TextView) v.findViewById(R.id.textDate)).setText(topic.getRevealDate().toString());
+
+
+            ChipsView mChipsView = (ChipsView) v.findViewById(R.id.cv_contacts);
+            // change EditText config
+            mChipsView.getEditText().setVisibility(View.GONE);
+            for(ChipsView.Chip c: mChipsView.getChips()){mChipsView.removeChipBy(c.getContact());}
+            for(Tag t : topic.getTags()){
+                String tagName = t.getName();
+                Contact contact = new Contact(tagName, t.getContext(), t.getId()+"", tagName, null);
+                mChipsView.addChip(tagName, null, contact,true);
+            }
+
 
             final ImageView img = (ImageView) v.findViewById(R.id.imageTopic);
             GlideHelper.loadImage(HomePage.this,img, topic);

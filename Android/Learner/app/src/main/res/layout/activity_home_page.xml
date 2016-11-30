@@ -27,7 +27,7 @@
             <android.support.v4.view.ViewPager
                 android:id="@+id/activity_topic_pager_view_pager"
                 android:layout_width="match_parent"
-                android:layout_height="320dp" />
+                android:layout_height="340dp" />
 
             <TextView
                 style="?android:listSeparatorTextViewStyle"
@@ -40,7 +40,7 @@
             <android.support.v4.view.ViewPager
                 android:id="@+id/activity_topic_pager_view_pager_popular"
                 android:layout_width="match_parent"
-                android:layout_height="320dp" />
+                android:layout_height="340dp" />
 
             <TextView
                 style="?android:listSeparatorTextViewStyle"
@@ -53,7 +53,7 @@
             <android.support.v4.view.ViewPager
                 android:id="@+id/activity_topic_pager_view_pager_mostrecent"
                 android:layout_width="match_parent"
-                android:layout_height="320dp" />
+                android:layout_height="340dp" />
         </LinearLayout>
     </ScrollView>
     <View
@@ -67,7 +67,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?actionBarSize"
-        android:background="@color/white"
+        android:background="@color/guillotine_background"
         android:visibility="invisible">
         <LinearLayout
             android:layout_width="match_parent"
@@ -103,6 +103,14 @@
                             android:layout_height="wrap_content"
                             android:isScrollContainer="true"
                             android:orientation="vertical">
+                            <Button
+                                android:text="@string/edit"
+                                android:visibility="gone"
+                                android:layout_width="match_parent"
+                                android:gravity="center"
+                                android:background="@null"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/edit_button" />
                             <ImageView
                                 android:id="@+id/details_image"
                                 android:layout_width="match_parent"
@@ -113,7 +121,7 @@
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="0.6dp"
-                                android:background="@color/guillotine_background_dark" />
+                                android:background="@color/white" />
                             <!--user-->
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -131,7 +139,6 @@
                                     android:layout_marginTop="12dp"
                                     android:layout_weight="1"
                                     android:textSize="22sp"
-                                    android:textColor="@color/guillotine_background_dark"
                                     android:gravity="center"/>
                             </LinearLayout>
 
@@ -141,7 +148,7 @@
                                 android:layout_height="0.6dp"
                                 android:layout_marginLeft="@dimen/default_margin"
                                 android:layout_marginRight="@dimen/default_margin"
-                                android:background="@color/guillotine_background_dark" />
+                                android:background="@color/white" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -151,8 +158,7 @@
                                 android:layout_marginLeft="@dimen/default_margin"
                                 android:layout_marginRight="@dimen/default_margin"
                                 android:paddingRight="10dip"
-                                android:paddingLeft="10dip"
-                                android:background="#30ffffff">
+                                android:paddingLeft="10dip">
                                 <ImageView
                                     android:id="@+id/imgTopicPageUserImage"
                                     android:layout_width="36dp"
@@ -160,23 +166,41 @@
                                     android:padding="4dp" />
                                 <TextView
                                     android:id="@+id/txtTopicPageUserName"
-                                    android:textColor="@color/guillotine_background_dark"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content" />
-                                <Button
-                                    android:text="@string/edit"
-                                    android:visibility="gone"
                                     android:layout_width="0dp"
                                     android:layout_weight="1"
-                                    android:background="@null"
-                                    android:textColor="@color/guillotine_background_dark"
-                                    android:layout_height="wrap_content"
-                                    android:id="@+id/edit_button" />
+                                    android:layout_height="wrap_content" />
+
                                 <TextView
                                     android:id="@+id/txtTopicPageDate"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:textColor="@color/guillotine_background_dark"/>
+                                    android:textSize="8sp"
+                                    android:minLines="2"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="16dp"
+                                android:orientation="horizontal"
+                                android:background="@color/guillotine_background">
+
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginRight="8dp"
+                                    android:text="Tags:" />
+
+                                <com.doodle.android.chips.ChipsView
+                                    android:id="@+id/cv_contacts"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:overScrollMode="never"
+                                    app:cv_max_height="120dp"
+                                    app:cv_vertical_spacing="2dp"
+                                    app:cv_icon_placeholder="@drawable/ic_whatshot_black_24dp" />
+
                             </LinearLayout>
                             <FrameLayout
                                 android:layout_width="match_parent"
