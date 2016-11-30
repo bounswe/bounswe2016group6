@@ -52,7 +52,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
-<!--contentimage-->
+                <!--contentimage-->
                 <LinearLayout
                     android:id="@+id/topic_layout"
                     android:layout_width="match_parent"
@@ -97,7 +97,7 @@
                             android:textSize="@dimen/home_page_text_size" />
                     </LinearLayout>
                 </LinearLayout>
-<!--tags-->
+                <!--tags-->
                 <LinearLayout
                     android:id="@+id/tag_layout"
                     android:layout_width="match_parent"
@@ -114,7 +114,7 @@
                         android:background="@color/guillotine_background">
 
 
-                    <TextView
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
@@ -154,9 +154,37 @@
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/rv_contacts"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"/>
+                        android:layout_height="0dp"
+                        android:layout_weight="1"/>
+                    <LinearLayout
+                        android:id="@+id/button_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <Button
+                            android:id="@+id/back_button"
+                            android:layout_margin="@dimen/activity_horizontal_margin"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/border"
+                            android:onClick="backButton"
+                            android:text="@string/back_button"
+                            android:textSize="@dimen/home_page_text_size" />
+
+                        <Button
+                            android:id="@+id/finish_button"
+                            android:layout_margin="@dimen/activity_horizontal_margin"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/border"
+                            android:onClick="nextButton"
+                            android:text="@string/next_button"
+                            android:textSize="@dimen/home_page_text_size" />
+                    </LinearLayout>
                 </LinearLayout>
-<!--content-->
+                <!--content-->
                 <LinearLayout
                     android:id="@+id/editor_layout"
                     android:layout_width="match_parent"

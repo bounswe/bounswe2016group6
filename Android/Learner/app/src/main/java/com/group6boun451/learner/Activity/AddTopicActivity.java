@@ -68,10 +68,10 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
     protected static final String TAG = HomePage.class.getSimpleName();
     private static final int PICK_IMAGE = 2;
     private static final int EDITOR = 3;
-    FetchTopicsTask f;
+    SuggestTagTask f;
 
     private RecyclerView mContacts;
-    private ContactsAdapter mAdapter;
+    private TagsAdapter mAdapter;
     private ChipsView mChipsView;
 
     @BindView(R.id.summernote) Summernote summernote;
@@ -163,7 +163,7 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
 
         mContacts = (RecyclerView) findViewById(R.id.rv_contacts);
         mContacts.setLayoutManager(new LinearLayoutManager(AddTopicActivity.this));
-        mAdapter = new ContactsAdapter();
+        mAdapter = new TagsAdapter();
         mContacts.setAdapter(mAdapter);
 
         mChipsView = (ChipsView) findViewById(R.id.cv_contacts);
@@ -201,7 +201,7 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
 //                    mSearchView.hideProgress();
                 } else if(text.length()>2) {
 //                    mSearchView.showProgress();
-                    f = new FetchTopicsTask();
+                    f = new SuggestTagTask();
                     f.execute(text.toString());
                 }
             }
@@ -313,17 +313,13 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
 //        this.date[5]=second;
 //    }
 
-    public void nextButton(View view) {
-        tabHost.setCurrentTab(1);
-    }
+    public void nextButton(View view) {tabHost.setCurrentTab(tabHost.getCurrentTab()+1);}
 
     public void cancelButton(View view) {
         finish();
     }
 
-    public void backButton(View view) {
-        tabHost.setCurrentTab(0);
-    }
+    public void backButton(View view) {tabHost.setCurrentTab(tabHost.getCurrentTab()-1);}
 
     public void finishButton(View view) {
         if (validate()) {
@@ -331,15 +327,14 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
             newTopic.setContent(summernote.getText());
             newTopic.setRevealDate(new Date(date[0],date[1],date[2],date[3],date[4],date[5]));
             new PostMessageTask().execute();
-            //new AddContentTask().execute();
         }
     }
 
-    public class ContactsAdapter extends RecyclerView.Adapter<CheckableContactViewHolder> {
+    public class TagsAdapter extends RecyclerView.Adapter<CheckableContactViewHolder> {
 
         private List<Tag> mDataSet = new ArrayList<>();
 
-        public ContactsAdapter() {}
+        public TagsAdapter() {}
         public void swapData(List<Tag> mNewDataSet) {
             mDataSet = mNewDataSet;
             notifyDataSetChanged();
@@ -353,6 +348,7 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
         @Override
         public void onBindViewHolder(CheckableContactViewHolder holder, int position) {
             holder.name.setText(mDataSet.get(position).getName());
+            holder.description.setText(mDataSet.get(position).getContext());
         }
 
         @Override
@@ -363,12 +359,13 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
 
     public class CheckableContactViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public final TextView name;
+        public final TextView name,description;
         public final CheckBox selection;
 
         public CheckableContactViewHolder(View itemView) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.tv_contact_name);
+            description = (TextView) itemView.findViewById(R.id.tag_content);
             selection = (CheckBox) itemView.findViewById(R.id.cb_contact_selection);
             selection.setOnClickListener(this);
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -393,11 +390,19 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
         }
     }
 
+    // ***************************************
+    // Private methods
+    // ***************************************
+    private void showResult(GenericResponse result) {
+        if (result.getError() == null) {
+            // display a notification to the user with the response information
+            finish();
+        } else {
+            Snackbar.make(findViewById(android.R.id.content),  result.getError(), Snackbar.LENGTH_SHORT).show();
+        }
+    }
 
-
-
-
-    public class FetchTopicsTask extends AsyncTask<String, Void, Tag[]> {
+    public class SuggestTagTask extends AsyncTask<String, Void, Tag[]> {
         private String username;
         private String password;
 
@@ -449,19 +454,6 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
 //            viewpager.setAdapter(new HomePage.TopicPagerAdapter(HomePage.this));
 //            viewpager2.setAdapter(new HomePage.TopicPagerAdapter(HomePage.this));
 //            viewpager3.setAdapter(new HomePage.TopicPagerAdapter(HomePage.this));
-        }
-    }
-
-
-    // ***************************************
-    // Private methods
-    // ***************************************
-    private void showResult(GenericResponse result) {
-        if (result.getError() == null) {
-            // display a notification to the user with the response information
-            finish();
-        } else {
-            Snackbar.make(findViewById(android.R.id.content),  result.getError(), Snackbar.LENGTH_SHORT).show();
         }
     }
 
