@@ -77,7 +77,6 @@ public class LocationSearchActivity extends AppCompatActivity {
                     mSearchView.showProgress();
                     f = new FetchTopicsTask();
                     f.execute(newQuery);
-
                 }
             }
         });

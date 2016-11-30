@@ -17,7 +17,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,6 +32,7 @@ import com.doodle.android.chips.ChipsView;
 import com.doodle.android.chips.model.Contact;
 import com.group6boun451.learner.R;
 import com.group6boun451.learner.model.GenericResponse;
+import com.group6boun451.learner.model.Tag;
 import com.group6boun451.learner.model.Topic;
 import com.group6boun451.learner.utils.GlideHelper;
 import com.group6boun451.learner.widget.Summernote;
@@ -49,11 +49,14 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -65,6 +68,8 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
     protected static final String TAG = HomePage.class.getSimpleName();
     private static final int PICK_IMAGE = 2;
     private static final int EDITOR = 3;
+    FetchTopicsTask f;
+
     private RecyclerView mContacts;
     private ContactsAdapter mAdapter;
     private ChipsView mChipsView;
@@ -188,13 +193,19 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
 
             @Override
             public void onTextChanged(CharSequence text) {
-                mAdapter.filterItems(text);
+                if (f != null) {
+                    f.cancel(true);
+                }
+                if ( text.equals("")) {
+                    mAdapter.swapData(Collections.<Tag>emptyList());
+//                    mSearchView.hideProgress();
+                } else if(text.length()>2) {
+//                    mSearchView.showProgress();
+                    f = new FetchTopicsTask();
+                    f.execute(text.toString());
+                }
             }
         });
-
-
-
-
 
         summernote.setRequestCodeforFilepicker(EDITOR);
         date = new int[6];
@@ -326,22 +337,13 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
 
     public class ContactsAdapter extends RecyclerView.Adapter<CheckableContactViewHolder> {
 
-        private String[] data = new String[]{
-                "john@doe.com",
-                "at@doodle.com",
-                "asd@qwe.de",
-                "verylongaddress@verylongserver.com",
-                "thisIsMyEmail@address.com",
-                "test@testeration.de",
-                "short@short.com"
-        };
+        private List<Tag> mDataSet = new ArrayList<>();
 
-        private List<String> filteredList = new ArrayList<>();
-
-        public ContactsAdapter() {
-            Collections.addAll(filteredList, data);
+        public ContactsAdapter() {}
+        public void swapData(List<Tag> mNewDataSet) {
+            mDataSet = mNewDataSet;
+            notifyDataSetChanged();
         }
-
         @Override
         public CheckableContactViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(AddTopicActivity.this).inflate(R.layout.item_checkable_contact, parent, false);
@@ -350,31 +352,12 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
 
         @Override
         public void onBindViewHolder(CheckableContactViewHolder holder, int position) {
-            holder.name.setText(filteredList.get(position));
+            holder.name.setText(mDataSet.get(position).getName());
         }
 
         @Override
         public int getItemCount() {
-            return filteredList.size();
-        }
-
-        public void filterItems(CharSequence text) {
-            filteredList.clear();
-            if (TextUtils.isEmpty(text)) {
-                Collections.addAll(filteredList, data);
-            } else {
-                for (String s : data) {
-                    if (s.contains(text)) {
-                        filteredList.add(s);
-                    }
-                }
-            }
-            notifyDataSetChanged();
-        }
-
-        @Override
-        public int getItemViewType(int position) {
-            return Math.abs(filteredList.get(position).hashCode());
+            return mDataSet.size();
         }
     }
 
@@ -414,6 +397,60 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
 
 
 
+    public class FetchTopicsTask extends AsyncTask<String, Void, Tag[]> {
+        private String username;
+        private String password;
+
+        @Override
+        protected void onPreExecute() {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            username = preferences.getString(getString(R.string.user_name), " ");
+            password = preferences.getString(getString(R.string.password), " ");
+        }
+
+        @Override
+        protected Tag[] doInBackground(String... params) {
+            final String url = getString(R.string.base_url) + "tag/suggest";
+
+            // Populate the HTTP Basic Authentitcation header with the username and password
+            HttpAuthentication authHeader = new HttpBasicAuthentication(username, password);
+            HttpHeaders requestHeaders = new HttpHeaders();
+            Log.d(TAG + " username", username + ", " + password);
+            requestHeaders.setAuthorization(authHeader);
+            requestHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+
+            // Create a new RestTemplate instance
+            RestTemplate restTemplate = new RestTemplate();
+            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("query",params[0]);
+
+            try {
+                // Make the network request
+                Log.d(TAG, url);
+                ResponseEntity<Tag[]> response = restTemplate.exchange(builder.build().encode().toUri(),
+                        HttpMethod.GET, new HttpEntity<Object>(requestHeaders), Tag[].class);
+                // Log.d("response",response.getBody());
+                return response.getBody();
+            } catch (Exception e) {
+                Log.e(TAG, e.getLocalizedMessage(), e);
+                return new Tag[0];
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Tag[] result) {
+            if (result!=null) {
+                mAdapter.swapData(Arrays.asList(result));
+            }
+//            mSearchView.hideProgress();
+
+//            topics = new ArrayList(Arrays.asList(result));
+//            //TODO handle this
+//            viewpager.setAdapter(new HomePage.TopicPagerAdapter(HomePage.this));
+//            viewpager2.setAdapter(new HomePage.TopicPagerAdapter(HomePage.this));
+//            viewpager3.setAdapter(new HomePage.TopicPagerAdapter(HomePage.this));
+        }
+    }
 
 
     // ***************************************
