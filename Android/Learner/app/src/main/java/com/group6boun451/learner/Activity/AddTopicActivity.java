@@ -49,6 +49,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -63,6 +64,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
 
 public class AddTopicActivity extends AppCompatActivity {//implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
     protected static final String TAG = HomePage.class.getSimpleName();
@@ -326,7 +328,7 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
             newTopic.setHeader(topicNameEditText.getText().toString());
             newTopic.setContent(summernote.getText());
             newTopic.setRevealDate(new Date(date[0],date[1],date[2],date[3],date[4],date[5]));
-            new PostMessageTask().execute();
+            new AddTopicTask().execute();
         }
     }
 
@@ -349,6 +351,7 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
         public void onBindViewHolder(CheckableContactViewHolder holder, int position) {
             holder.name.setText(mDataSet.get(position).getName());
             holder.description.setText(mDataSet.get(position).getContext());
+            holder.tagId = mDataSet.get(position).getId();
         }
 
         @Override
@@ -361,6 +364,7 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
 
         public final TextView name,description;
         public final CheckBox selection;
+        public Long tagId;
 
         public CheckableContactViewHolder(View itemView) {
             super(itemView);
@@ -378,12 +382,11 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
 
         @Override
         public void onClick(View v) {
-            String email = name.getText().toString();
-            Uri imgUrl = Math.random() > .7d ? null : Uri.parse("https://robohash.org/" + Math.abs(email.hashCode()));
-            Contact contact = new Contact(null, null, null, email, imgUrl);
+            String tagName = name.getText().toString();
+            Contact contact = new Contact(tagName, description.getText().toString(), tagId+"", tagName, null);
 
             if (selection.isChecked()) {
-                mChipsView.addChip(email, imgUrl, contact);
+                mChipsView.addChip(tagName, "", contact);
             } else {
                 mChipsView.removeChipBy(contact);
             }
@@ -393,12 +396,13 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
     // ***************************************
     // Private methods
     // ***************************************
-    private void showResult(GenericResponse result) {
-        if (result.getError() == null) {
-            // display a notification to the user with the response information
+    private boolean showResult(GenericResponse result) {
+        if (result.getError() == null) {// display a notification to the user with the response information
             finish();
+            return true;
         } else {
             Snackbar.make(findViewById(android.R.id.content),  result.getError(), Snackbar.LENGTH_SHORT).show();
+            return false;
         }
     }
 
@@ -460,7 +464,7 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
     // ***************************************
     // Private classes
     // ***************************************
-    private class PostMessageTask extends AsyncTask<Void, Void, GenericResponse> {
+    private class AddTopicTask extends AsyncTask<Void, Void, GenericResponse> {
 
         private MultiValueMap<String, Object> formData;
         private String username;
@@ -495,8 +499,7 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
                 requestHeaders.setContentType(MediaType.MULTIPART_FORM_DATA);
 
                 // Populate the MultiValueMap being serialized and headers in an HttpEntity object to use for the request
-                HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<MultiValueMap<String, Object>>(
-                        formData, requestHeaders);
+                HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<MultiValueMap<String, Object>>(formData, requestHeaders);
 
                 // Create a new RestTemplate instance
                 RestTemplate restTemplate = new RestTemplate(true);
@@ -515,9 +518,73 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
 
         @Override
         protected void onPostExecute(GenericResponse result) {
+            if(!showResult(result))return;
+//            dismissProgressDialog();
+            Tag[] tags = new Tag[mChipsView.getChips().size()];
+            int i = 0;
+            for(ChipsView.Chip c: mChipsView.getChips()){
+                Tag t = new Tag();
+                t.setName(c.getContact().getFirstName());
+                t.setContext(c.getContact().getLastName());
+                if(!c.getContact().getDisplayName().equalsIgnoreCase("null"))t.setId(Long.parseLong(c.getContact().getDisplayName()));
+                tags[i++] = t;
+
+            }
+            String[] topicId = {result.getMessage()};
+            new AddTagTask().execute(tags,topicId);
+        }
+
+    }
+
+    private class AddTagTask extends AsyncTask<Object[], Void, GenericResponse> {
+        private String username;
+        private String password;
+
+        @Override
+        protected void onPreExecute() {
+//            showLoadingProgressDialog();
+
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            username = preferences.getString(getString(R.string.user_name), " ");
+            password = preferences.getString(getString(R.string.password), " ");
+            // build the message object
+        }
+
+        @Override
+        protected GenericResponse doInBackground(Object[]... params) {
+            try {
+                if (params.length <= 0) {
+                    return null;
+                }
+                // The URL for making the POST request
+                final String url = getString(R.string.base_url) + "tag/"+params[1][0]+"/add";
+                // Populate the HTTP Basic Authentitcation header with the username and password
+                HttpAuthentication authHeader = new HttpBasicAuthentication(username, password);
+                HttpHeaders requestHeaders = new HttpHeaders();
+                requestHeaders.setAuthorization(authHeader);
+                // Sending a JSON or XML object i.e. "application/json" or "application/xml"
+                requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+                // Populate the Message object to serialize and headers in an
+                // HttpEntity object to use for the request
+                HttpEntity<Tag[]> requestEntity = new HttpEntity<>((Tag[]) params[0], requestHeaders);
+                // Create a new RestTemplate instance
+                RestTemplate restTemplate = new RestTemplate();
+                restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
+                restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+                // Make the network request, posting the message, expecting a String in response from the server
+                ResponseEntity<GenericResponse> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, GenericResponse.class);
+                // Return the response body to display to the user
+                return response.getBody();
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage(), e);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(GenericResponse result) {
 //            dismissProgressDialog();
             showResult(result);
         }
-
     }
 }

@@ -10,6 +10,7 @@ public class Tag {
     private Date createdAt;
     private List<Topic> relatedTopics;
 
+    public Tag(){}
     public Long getId() {
         return id;
     }
