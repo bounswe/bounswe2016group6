@@ -52,13 +52,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
+<!--contentimage-->
                 <LinearLayout
                     android:id="@+id/topic_layout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:background="@color/guillotine_background_dark">
-
                     <ImageButton
                         android:id="@+id/content_image_button"
                         android:layout_width="match_parent"
@@ -68,7 +68,6 @@
                         android:src="@drawable/almond_blossoms"
                         android:text="@string/content_image"
                         android:textSize="@dimen/home_page_text_size" />
-                    <!--TODO add tag-->
 
                     <LinearLayout
                         android:id="@+id/relative_layout"
@@ -98,7 +97,66 @@
                             android:textSize="@dimen/home_page_text_size" />
                     </LinearLayout>
                 </LinearLayout>
+<!--tags-->
+                <LinearLayout
+                    android:id="@+id/tag_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:background="@color/guillotine_background_dark">
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="16dp"
+                        android:elevation="6dp"
+                        android:orientation="horizontal"
+                        android:background="@color/guillotine_background">
+
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="8dp"
+                            android:text="Tags:"
+                            />
+
+                        <com.doodle.android.chips.ChipsView
+                            android:id="@+id/cv_contacts"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:overScrollMode="never"
+                            app:cv_max_height="120dp"
+                            app:cv_vertical_spacing="2dp"
+                            />
+
+                        <!--
+                            customize with: .. xmlns:app="http://schemas.android.com/apk/res-auto" ..
+                            app:cv_max_height="120dp"
+                            app:cv_vertical_spacing="2dp"
+                            app:cv_bg_color="#f00"
+                            app:cv_bg_color_clicked="#0f0"
+                            app:cv_color="#00f"
+                            app:cv_color_clicked="#721"
+                            app:cv_text_color="#199"
+                            app:cv_text_color_clicked="#180"
+                            app:cv_icon_placeholder="@drawable/ic_bug_report_24dp"
+                            app:cv_icon_delete="@drawable/ic_close_24dp"
+                            app:cv_dialog_title="This is the title"
+                            app:cv_dialog_et_placeholder="email2"
+                            app:cv_dialog_confirm="confirm2"
+                            app:cv_dialog_cancel="cancel2"
+                            -->
+
+                    </LinearLayout>
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_contacts"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+                </LinearLayout>
+<!--content-->
                 <LinearLayout
                     android:id="@+id/editor_layout"
                     android:layout_width="match_parent"
