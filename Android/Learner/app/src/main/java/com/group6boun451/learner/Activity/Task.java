@@ -7,7 +7,6 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.group6boun451.learner.R;
-import com.group6boun451.learner.model.GenericResponse;
 
 import org.springframework.http.HttpAuthentication;
 import org.springframework.http.HttpBasicAuthentication;
@@ -25,7 +24,7 @@ import java.util.Collections;
 /**
  * Created by Ahmet Zorer on 12/5/2016.
  */
-class Task<T> extends AsyncTask<T,Void,GenericResponse> {
+class Task<T> extends AsyncTask<T,Void,String> {
     private String username;
     private String password;
     private Context context;
@@ -43,7 +42,7 @@ class Task<T> extends AsyncTask<T,Void,GenericResponse> {
     }
 
     @Override
-    protected GenericResponse doInBackground(T... params) {
+    protected String doInBackground(T... params) {
         // Populate the HTTP Basic Authentitcation header with the username and password
         HttpAuthentication authHeader = new HttpBasicAuthentication(username, password);
         HttpHeaders requestHeaders = new HttpHeaders();
@@ -54,11 +53,11 @@ class Task<T> extends AsyncTask<T,Void,GenericResponse> {
         restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
         try {
             // Make the network request
-            ResponseEntity<GenericResponse> response = null;
+            ResponseEntity<String> response = null;
             if(params[0] instanceof String) {
-                response = restTemplate.exchange((String) params[0], HttpMethod.GET, new HttpEntity<Object>(requestHeaders), GenericResponse.class);
+                response = restTemplate.exchange((String) params[0], HttpMethod.GET, new HttpEntity<Object>(requestHeaders), String.class);
             } else{
-                response = restTemplate.exchange((URI) params[0], HttpMethod.POST, new HttpEntity<Object>(requestHeaders), GenericResponse.class);
+                response = restTemplate.exchange((URI) params[0], HttpMethod.POST, new HttpEntity<Object>(requestHeaders), String.class);
             }
             return response.getBody();
         }  catch (Exception e) {
@@ -67,12 +66,11 @@ class Task<T> extends AsyncTask<T,Void,GenericResponse> {
         return null;
     }
     @Override
-    protected void onPostExecute(GenericResponse result) {
+    protected void onPostExecute(String result) {
         callback.onResult(result);
-
     }
 }
 
 interface Callback{
-    void onResult(GenericResponse result);
+    void onResult(String result);
 }

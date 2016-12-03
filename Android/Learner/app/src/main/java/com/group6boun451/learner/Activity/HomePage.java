@@ -261,7 +261,7 @@ public class HomePage extends AppCompatActivity{
                         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getString(R.string.base_url) + "topic/edit/"+t.getId()).queryParam("header",t.getHeader()).queryParam("content",content);
                         new Task<URI>(HomePage.this, new Callback() {
                             @Override
-                            public void onResult(GenericResponse result) {showResult(result);}
+                            public void onResult(String result) {showResult(result);}
                         }).execute(builder.build().encode().toUri());
                     }
                     contentView.loadDataWithBaseURL("https://www.youtube.com/embed/", content,
@@ -282,7 +282,7 @@ public class HomePage extends AppCompatActivity{
                             .queryParam("topicId",t.getId()).queryParam("content",commentContent);
                     new Task<URI>(HomePage.this, new Callback() {
                         @Override
-                        public void onResult(GenericResponse result) {
+                        public void onResult(String result) {
                             if(showResult(result)) {
                                 ((CommentListAdapter)comments.getAdapter()).add(new Comment(commentContent));
                             }
@@ -406,9 +406,17 @@ public class HomePage extends AppCompatActivity{
         return getResources().getAssets();
     }
 
-    private boolean showResult(GenericResponse result) {
-        if(result==null) return false;
-        if (result.getError() == null) {// display a notification to the user with the response information
+    private boolean showResult(String resultString) {
+        GenericResponse result = null;
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            result = mapper.readValue(resultString, GenericResponse.class);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        if(result==null) {
+            return false;
+        }else if (result.getError() == null) {// display a notification to the user with the response information
             Snackbar.make(findViewById(android.R.id.content),  result.getMessage(), Snackbar.LENGTH_SHORT).show();
             return true;
         } else {
@@ -463,7 +471,7 @@ public class HomePage extends AppCompatActivity{
                 public void onClick(View view) {
                     Task<String> likeTask = new Task<>(HomePage.this, new Callback() {
                         @Override
-                        public void onResult(GenericResponse result) {showResult(result);}
+                        public void onResult(String result) {showResult(result);}
                     });
                     if(likeButton.getCurrentTextColor()!=getResources().getColor(R.color.mdtp_accent_color)) {
                         likeTask.execute(getString(R.string.base_url) + "topic/like/"+topic.getId());
