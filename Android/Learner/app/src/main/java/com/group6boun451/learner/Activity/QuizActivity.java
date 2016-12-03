@@ -20,10 +20,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class QuizActivity extends AppCompatActivity {
-
-
-
-
     //adapter for pager
     private class QuestionPagerAdapter extends PagerAdapter{
         Context mContext;
@@ -116,8 +112,7 @@ public class QuizActivity extends AppCompatActivity {
     private List<Question> mQuestions;
     private Typeface chalkFont;
     private TextView inWhichQuestion;
-    private int numOfQuestion;
-    private int currentQuestion;
+    private int numOfQuestion, currentQuestion;
     private int[] answers;
 
     private void init(){
@@ -132,14 +127,9 @@ public class QuizActivity extends AppCompatActivity {
         setContentView(R.layout.quiz_layout);
         init();
 
-        mQuestions = HomePage.topics.get(HomePage.topicId-1).getQuestions();
-
-
-
+        mQuestions = HomePage.currentTopic.getQuestions();
         numOfQuestion = mQuestions.size();
         final ViewPager questionsPager = (ViewPager) findViewById(R.id.quiz_viewpager);
-
-
         questionsPager.setAdapter(new QuestionPagerAdapter(this));
         leftArrow.setVisibility(View.INVISIBLE);
         inWhichQuestion.setText("1 / "+numOfQuestion);

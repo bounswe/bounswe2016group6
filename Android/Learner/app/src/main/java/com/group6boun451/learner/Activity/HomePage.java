@@ -46,7 +46,6 @@ import com.group6boun451.learner.CommentListAdapter;
 import com.group6boun451.learner.R;
 import com.group6boun451.learner.model.Comment;
 import com.group6boun451.learner.model.GenericResponse;
-import com.group6boun451.learner.model.Question;
 import com.group6boun451.learner.model.Tag;
 import com.group6boun451.learner.model.Topic;
 import com.group6boun451.learner.model.User;
@@ -80,7 +79,6 @@ import butterknife.ButterKnife;
 public class HomePage extends AppCompatActivity{
     protected static final String TAG = HomePage.class.getSimpleName();
     private static final int EDITOR = 3;
-    public static User user;
 
     @BindView(R.id.touch_interceptor_view) View listTouchInterceptor;
     @BindView(R.id.summernote) Summernote summernote;
@@ -108,7 +106,8 @@ public class HomePage extends AppCompatActivity{
     private boolean isGuillotineOpened = false;
     private boolean isThereQuiz = false;
     private GuillotineAnimation guillotineAnimation;
-    public static int topicId = 0;
+    public static User user;
+    public static Topic currentTopic = null;
 
 
     @Override
@@ -254,7 +253,7 @@ public class HomePage extends AppCompatActivity{
                 }else {
                     editDone();
                     String content = summernote.getText();
-                    Topic t = topics.get(topicId);
+                    Topic t = currentTopic;
                     if(!t.getContent().equals(content)){
                         t.setContent(content);
                         new EditTopicTask().execute(t.getHeader(),content,""+t.getId());
@@ -272,7 +271,7 @@ public class HomePage extends AppCompatActivity{
                 String commentContent = commentText.getText().toString();
                 if(commentContent.length() < 9){Snackbar.make(findViewById(android.R.id.content),"Comment is too short",Snackbar.LENGTH_SHORT).show();
                 }else{
-                    Topic t = topics.get(topicId);
+                    Topic t = currentTopic;
                     new SendCommentTask().execute(""+t.getId(),commentContent);
                     commentText.setText("");
                     commentView(view);
@@ -345,16 +344,18 @@ public class HomePage extends AppCompatActivity{
     }
 
     public void openDetails(View coverView, Topic topic) {
+        currentTopic = topic;
+        Log.d("topic",currentTopic.getId()+"");
         GlideHelper.loadImage(this,(ImageView) Views.find(tabHost, R.id.details_image), topic);
         ((TextView)Views.find(tabHost, R.id.details_title)).setText(topic.getHeader());
         ((TextView)Views.find(tabHost, R.id.txtTopicPageUserName)).setText(topic.getOwner().getFirstName());
         ((TextView)Views.find(tabHost, R.id.txtTopicPageDate)).setText(topic.getRevealDate().toString());
 
-
+//tags
         ChipsView mChipsView = Views.find(tabHost,R.id.cv_contacts);
         // change EditText config
         mChipsView.getEditText().setFocusableInTouchMode(false);
-        int k =mChipsView.getChips().size();
+        int k = mChipsView.getChips().size();
         Contact c = new Contact(null,null,null,"",null);
         for(int i =0;i<k;i++){mChipsView.removeChipBy(c);}
         for(Tag t : topic.getTags()){
@@ -362,8 +363,10 @@ public class HomePage extends AppCompatActivity{
             Contact contact = new Contact(tagName, t.getContext(), t.getId()+"", "", null);
             mChipsView.addChip(tagName, null, contact,true);
         }
+//content
         contentView.loadDataWithBaseURL("https://www.youtube.com/embed/", topic.getContent(),
                 "text/html; charset=utf-8", "UTF-8", null);
+//comments
         comments.setAdapter(new CommentListAdapter(this, topic.getComments()));//TODO it might troublesome
         comments.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -394,40 +397,12 @@ public class HomePage extends AppCompatActivity{
 
         @Override
         public Object instantiateItem(ViewGroup collection, int position) {
-            topicId = position;
             final Topic topic = topics.get(position);
-            //for testing quiz
-            if(position == 0){
-                List<Question> mQuestions = new ArrayList<Question>();
-                Question q1 = new Question();
-                q1.setAnswerA("35");
-                q1.setAnswerB("23");
-                q1.setAnswerC("30");
-                q1.setQuestion("What is the best age to have children?");
-
-                Question q2 = new Question();
-                q2.setAnswerA("asdasd");
-                q2.setAnswerB("213123");
-                q2.setAnswerC("123125dsfsd");
-                q2.setQuestion("asdasdasd");
-
-                Question q3 = new Question();
-                q3.setAnswerA("asdasd");
-                q3.setAnswerB("213123");
-                q3.setAnswerC("123125dsfsd");
-                q3.setQuestion("asdasdasd");
-                mQuestions = new ArrayList<Question>();
-                mQuestions.add(q1);
-                mQuestions.add(q2);
-                mQuestions.add(q3);
-                topic.setQuestions(mQuestions);
-            }
             LayoutInflater inflater = LayoutInflater.from(mContext);
             ViewGroup v = (ViewGroup) inflater.inflate(R.layout.topic_item_home, collection, false);
             ((TextView) v.findViewById(R.id.textTopicTitle)).setText(topic.getHeader());
             ((TextView) v.findViewById(R.id.textAuthor)).setText(topic.getOwner().getFirstName());
             ((TextView) v.findViewById(R.id.textDate)).setText(topic.getRevealDate().toString());
-
 
             ChipsView mChipsView = (ChipsView) v.findViewById(R.id.cv_contacts);
             // change EditText config
@@ -488,7 +463,6 @@ public class HomePage extends AppCompatActivity{
         public CharSequence getPageTitle(int position) {
             return "";
         }
-
     }
 //TODO merge asynctasks
     public class FetchTopicsTask extends AsyncTask<Void, Void, Topic[]> {
@@ -567,7 +541,7 @@ public class HomePage extends AppCompatActivity{
             // Create a new RestTemplate instance
             RestTemplate restTemplate = new RestTemplate();
             restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("topicId",Long.parseLong(params[0])).queryParam("content",(String)params[1]);
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("topicPosition",Long.parseLong(params[0])).queryParam("content",(String)params[1]);
             try {
                 // Make the network request
                 ResponseEntity<GenericResponse> response = restTemplate.exchange(
