@@ -391,6 +391,17 @@ public class HomePage extends AppCompatActivity{
         return getResources().getAssets();
     }
 
+    private boolean showResult(GenericResponse result) {
+        if(result==null) return false;
+        if (result.getError() == null) {// display a notification to the user with the response information
+            Snackbar.make(findViewById(android.R.id.content),  result.getMessage(), Snackbar.LENGTH_SHORT).show();
+            return true;
+        } else {
+            Snackbar.make(findViewById(android.R.id.content),  result.getError(), Snackbar.LENGTH_SHORT).show();
+            return false;
+        }
+    }
+
     public class TopicPagerAdapter extends PagerAdapter {
         private Context mContext;
         TopicPagerAdapter(Context context) {mContext = context;}
@@ -436,10 +447,10 @@ public class HomePage extends AppCompatActivity{
                 @Override
                 public void onClick(View view) {
                     if(likeButton.getCurrentTextColor()!=getResources().getColor(R.color.mdtp_accent_color)) {
-                        new LikeTopicTask().execute(""+topic.getId(),"like");
+                        new Task<String,GenericResponse>(HomePage.this).execute(getString(R.string.base_url) + "topic/like/"+topic.getId());
                         likeButton.setTextColor(getResources().getColor(R.color.mdtp_accent_color));
                     }else {
-                       new LikeTopicTask().execute(""+topic.getId(),"");
+                        new Task<String,GenericResponse>(HomePage.this).execute(getString(R.string.base_url) + "topic/unlike/"+topic.getId());
                         likeButton.setTextColor(getResources().getColor(R.color.white));
                     }
                 }
@@ -464,7 +475,7 @@ public class HomePage extends AppCompatActivity{
             return "";
         }
     }
-//TODO merge asynctasks
+    //TODO merge asynctasks
     public class FetchTopicsTask extends AsyncTask<Void, Void, Topic[]> {
         private String username;
         private String password;
@@ -597,62 +608,12 @@ public class HomePage extends AppCompatActivity{
             } catch (Exception e) {
                 Log.e(TAG, e.getLocalizedMessage(), e);
             }
-                return new GenericResponse();
-        }
-
-        @Override
-        protected void onPostExecute(GenericResponse result) {showResult(result);}
-    }
-    public class LikeTopicTask extends AsyncTask<String, Void, GenericResponse> {
-        private String username;
-        private String password;
-
-        @Override
-        protected void onPreExecute() {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            username = preferences.getString(getString(R.string.user_name), " ");
-            password = preferences.getString(getString(R.string.password), " ");
-        }
-
-        @Override
-        protected GenericResponse doInBackground(String... params) {
-            String un =(params[1].equalsIgnoreCase("like"))?"":"un";
-            final String url = getString(R.string.base_url) + "topic/"+un+"like/"+params[0];
-
-            // Populate the HTTP Basic Authentitcation header with the username and password
-            HttpAuthentication authHeader = new HttpBasicAuthentication(username, password);
-            HttpHeaders requestHeaders = new HttpHeaders();
-            requestHeaders.setAuthorization(authHeader);
-            requestHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-            // Create a new RestTemplate instance
-            RestTemplate restTemplate = new RestTemplate();
-            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-            try {
-                // Make the network request
-                Log.d(TAG, url);
-                ResponseEntity<GenericResponse> response = restTemplate.exchange(
-                        url,
-                        HttpMethod.GET,
-                        new HttpEntity<Object>(requestHeaders), GenericResponse.class);
-                Log.d("response",response.getBody().toString());
-                return response.getBody();
-            }  catch (Exception e) {
-                Log.e(TAG, e.getLocalizedMessage(), e);
-            }
             return new GenericResponse();
         }
 
         @Override
         protected void onPostExecute(GenericResponse result) {showResult(result);}
     }
-    private boolean showResult(GenericResponse result) {
-        if (result.getError() == null) {// display a notification to the user with the response information
-            Snackbar.make(findViewById(android.R.id.content),  result.getMessage(), Snackbar.LENGTH_SHORT).show();
-            return true;
-        } else {
-            Snackbar.make(findViewById(android.R.id.content),  result.getError(), Snackbar.LENGTH_SHORT).show();
-            return false;
-        }
-    }
+
 
 }
