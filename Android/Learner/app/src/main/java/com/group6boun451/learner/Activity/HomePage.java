@@ -337,17 +337,16 @@ public class HomePage extends AppCompatActivity{
         ChipsView mChipsView = Views.find(tabHost,R.id.cv_contacts);
         // change EditText config
         mChipsView.getEditText().setFocusableInTouchMode(false);
-        for(ChipsView.Chip c: mChipsView.getChips()){
-            mChipsView.removeChipBy(c.getContact());
-        }
+        int k =mChipsView.getChips().size();
+        Contact c = new Contact(null,null,null,"",null);
+        for(int i =0;i<k;i++){mChipsView.removeChipBy(c);}
         for(Tag t : topic.getTags()){
             String tagName = t.getName();
-            Contact contact = new Contact(tagName, t.getContext(), t.getId()+"", tagName, null);
+            Contact contact = new Contact(tagName, t.getContext(), t.getId()+"", "", null);
             mChipsView.addChip(tagName, null, contact,true);
         }
-
-        contentView.loadData(topic.getContent(),"text/html",null);
-
+        contentView.loadDataWithBaseURL("https://www.youtube.com/embed/", topic.getContent(),
+                "text/html; charset=utf-8", "UTF-8", null);
         ListView comments = (ListView) findViewById(R.id.topicPageCommentList);
         comments.setAdapter(new CommentListAdapter(this, topic.getComments()));//TODO it might troublesome
         comments.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -417,7 +416,7 @@ public class HomePage extends AppCompatActivity{
             ChipsView mChipsView = (ChipsView) v.findViewById(R.id.cv_contacts);
             // change EditText config
             mChipsView.getEditText().setVisibility(View.GONE);
-            int k = mChipsView.getChildCount();
+            int k = mChipsView.getChips().size();
             Contact c = new Contact(null,null,null,"",null);
             for(int i =0;i<k;i++){mChipsView.removeChipBy(c);}
             for(Tag t : topic.getTags()){
