@@ -378,8 +378,7 @@ public class HomePage extends AppCompatActivity{
             likeButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                   //TODO likes
-                    if(!topic.getLikedBy().contains(topic)) {
+                    if(!isLiked(topic.getLikedBy())) {
                         new LikeTopicTask().execute(""+topic.getId(),"like");
                         likeButton.setTextColor(getResources().getColor(R.color.mdtp_accent_color));
                     }else {
