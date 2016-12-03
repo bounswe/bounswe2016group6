@@ -49,13 +49,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -70,13 +69,14 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
     protected static final String TAG = HomePage.class.getSimpleName();
     private static final int PICK_IMAGE = 2;
     private static final int EDITOR = 3;
-    SuggestTagTask f;
+    Task<URI> f;
 
     private RecyclerView mContacts;
     private TagsAdapter mAdapter;
     private ChipsView mChipsView;
 
-    @BindView(R.id.summernote) Summernote summernote;
+    @BindView(R.id.summernote)
+    Summernote summernote;
     @BindView(R.id.content_hamburger) View contentHamburger;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.topic_name_layout) TextInputLayout topicNameLayout;
@@ -134,7 +134,7 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
                 Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
                 getIntent.setType("image/*");
 
-                Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                Intent pickIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 pickIntent.setType("image/*");
 
                 Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
@@ -203,8 +203,19 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
 //                    mSearchView.hideProgress();
                 } else if(text.length()>2) {
 //                    mSearchView.showProgress();
-                    f = new SuggestTagTask();
-                    f.execute(text.toString());
+                    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getString(R.string.base_url) + "tag/suggest")
+                            .queryParam("query",text.toString());
+
+                    f = new Task<>(AddTopicActivity.this, new Callback() {
+                        @Override
+                        public void onResult(String resultString) {
+                            Tag[] result =  Task.getResult(resultString, Tag[].class);
+                            if (result!=null) {
+                                mAdapter.swapData(Arrays.asList(result));
+                            }
+                        }
+                    });
+                    f.execute(builder.build().encode().toUri());
                 }
             }
         });
@@ -214,6 +225,8 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
 //        setDatePicker();
 //        setTimePicker();
       }
+
+
 
 
 //    private void setDatePicker() {
@@ -406,61 +419,6 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
         }
     }
 
-    public class SuggestTagTask extends AsyncTask<String, Void, Tag[]> {
-        private String username;
-        private String password;
-
-        @Override
-        protected void onPreExecute() {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            username = preferences.getString(getString(R.string.user_name), " ");
-            password = preferences.getString(getString(R.string.password), " ");
-        }
-
-        @Override
-        protected Tag[] doInBackground(String... params) {
-            final String url = getString(R.string.base_url) + "tag/suggest";
-
-            // Populate the HTTP Basic Authentitcation header with the username and password
-            HttpAuthentication authHeader = new HttpBasicAuthentication(username, password);
-            HttpHeaders requestHeaders = new HttpHeaders();
-            Log.d(TAG + " username", username + ", " + password);
-            requestHeaders.setAuthorization(authHeader);
-            requestHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-
-            // Create a new RestTemplate instance
-            RestTemplate restTemplate = new RestTemplate();
-            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("query",params[0]);
-
-            try {
-                // Make the network request
-                Log.d(TAG, url);
-                ResponseEntity<Tag[]> response = restTemplate.exchange(builder.build().encode().toUri(),
-                        HttpMethod.GET, new HttpEntity<Object>(requestHeaders), Tag[].class);
-                // Log.d("response",response.getBody());
-                return response.getBody();
-            } catch (Exception e) {
-                Log.e(TAG, e.getLocalizedMessage(), e);
-                return new Tag[0];
-            }
-        }
-
-        @Override
-        protected void onPostExecute(Tag[] result) {
-            if (result!=null) {
-                mAdapter.swapData(Arrays.asList(result));
-            }
-//            mSearchView.hideProgress();
-
-//            topics = new ArrayList(Arrays.asList(result));
-//            //TODO handle this
-//            viewpager.setAdapter(new HomePage.TopicPagerAdapter(HomePage.this));
-//            viewpager2.setAdapter(new HomePage.TopicPagerAdapter(HomePage.this));
-//            viewpager3.setAdapter(new HomePage.TopicPagerAdapter(HomePage.this));
-        }
-    }
-
     // ***************************************
     // Private classes
     // ***************************************
@@ -528,63 +486,15 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
                 t.setContext(c.getContact().getLastName());
                 if(!c.getContact().getDisplayName().equalsIgnoreCase("null"))t.setId(Long.parseLong(c.getContact().getDisplayName()));
                 tags[i++] = t;
-
             }
-            String[] topicId = {result.getMessage()};
-            new AddTagTask().execute(tags,topicId);
+
+            if (tags.length== 0) return;
+            new Task<>(AddTopicActivity.this, new Callback() {
+                @Override
+                public void onResult(String result) {showResult(Task.getResult(result,GenericResponse.class));}
+            })
+                    .execute(getString(R.string.base_url) + "tag/"+result.getMessage()+"/add",tags);
         }
 
-    }
-
-    private class AddTagTask extends AsyncTask<Object[], Void, GenericResponse> {
-        private String username;
-        private String password;
-
-        @Override
-        protected void onPreExecute() {
-//            showLoadingProgressDialog();
-
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            username = preferences.getString(getString(R.string.user_name), " ");
-            password = preferences.getString(getString(R.string.password), " ");
-            // build the message object
-        }
-
-        @Override
-        protected GenericResponse doInBackground(Object[]... params) {
-            try {
-                if (params.length <= 0) {
-                    return null;
-                }
-                // The URL for making the POST request
-                final String url = getString(R.string.base_url) + "tag/"+params[1][0]+"/add";
-                // Populate the HTTP Basic Authentitcation header with the username and password
-                HttpAuthentication authHeader = new HttpBasicAuthentication(username, password);
-                HttpHeaders requestHeaders = new HttpHeaders();
-                requestHeaders.setAuthorization(authHeader);
-                // Sending a JSON or XML object i.e. "application/json" or "application/xml"
-                requestHeaders.setContentType(MediaType.APPLICATION_JSON);
-                // Populate the Message object to serialize and headers in an
-                // HttpEntity object to use for the request
-                HttpEntity<Tag[]> requestEntity = new HttpEntity<>((Tag[]) params[0], requestHeaders);
-                // Create a new RestTemplate instance
-                RestTemplate restTemplate = new RestTemplate();
-                restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
-                restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-                // Make the network request, posting the message, expecting a String in response from the server
-                ResponseEntity<GenericResponse> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, GenericResponse.class);
-                // Return the response body to display to the user
-                return response.getBody();
-            } catch (Exception e) {
-                Log.e(TAG, e.getMessage(), e);
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(GenericResponse result) {
-//            dismissProgressDialog();
-            showResult(result);
-        }
     }
 }

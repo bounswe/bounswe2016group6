@@ -6,7 +6,9 @@ import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.group6boun451.learner.R;
+import com.group6boun451.learner.model.Tag;
 
 import org.springframework.http.HttpAuthentication;
 import org.springframework.http.HttpBasicAuthentication;
@@ -15,6 +17,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
@@ -23,6 +26,7 @@ import java.util.Collections;
 
 /**
  * Created by Ahmet Zorer on 12/5/2016.
+ *
  */
 class Task<T> extends AsyncTask<T,Void,String> {
     private String username;
@@ -54,9 +58,12 @@ class Task<T> extends AsyncTask<T,Void,String> {
         try {
             // Make the network request
             ResponseEntity<String> response = null;
-            if(params[0] instanceof String) {
+            if(params.length>1) {
+                restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
+                response = restTemplate.exchange((String) params[0], HttpMethod.POST, new HttpEntity<>((Tag[]) params[1], requestHeaders), String.class);
+            } else if(params[0] instanceof String) {
                 response = restTemplate.exchange((String) params[0], HttpMethod.GET, new HttpEntity<Object>(requestHeaders), String.class);
-            } else{
+            } else {
                 response = restTemplate.exchange((URI) params[0], HttpMethod.POST, new HttpEntity<Object>(requestHeaders), String.class);
             }
             return response.getBody();
@@ -68,6 +75,16 @@ class Task<T> extends AsyncTask<T,Void,String> {
     @Override
     protected void onPostExecute(String result) {
         callback.onResult(result);
+    }
+    public static <T> T getResult(String resultString, Class<T> aClass) {
+        T result = null;
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            result = mapper.readValue(resultString, aClass);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }
 

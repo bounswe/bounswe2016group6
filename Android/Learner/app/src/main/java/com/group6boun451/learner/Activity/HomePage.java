@@ -39,7 +39,6 @@ import com.alexvasilkov.foldablelayout.UnfoldableView;
 import com.alexvasilkov.foldablelayout.shading.GlanceFoldShading;
 import com.doodle.android.chips.ChipsView;
 import com.doodle.android.chips.model.Contact;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.group6boun451.learner.CommentListAdapter;
 import com.group6boun451.learner.R;
 import com.group6boun451.learner.model.Comment;
@@ -68,7 +67,8 @@ public class HomePage extends AppCompatActivity{
     private static final int EDITOR = 3;
 
     @BindView(R.id.touch_interceptor_view) View listTouchInterceptor;
-    @BindView(R.id.summernote) Summernote summernote;
+    @BindView(R.id.summernote)
+    Summernote summernote;
     @BindView(R.id.topic_TabHost) TabHost tabHost;
     @BindView(R.id.details_scrollView) ScrollView detailsScrollView;
     @BindView(R.id.unfoldable_view) UnfoldableView unfoldableView;
@@ -83,7 +83,8 @@ public class HomePage extends AppCompatActivity{
     @BindView(R.id.topicPage_comment_text_area) EditText commentText;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.content_hamburger) View contentHamburger;
-    @BindView(R.id.topic_content_TouchyWebView) TouchyWebView contentView;
+    @BindView(R.id.topic_content_TouchyWebView)
+    TouchyWebView contentView;
 
     public static List<Topic> topics;
     private String username;
@@ -103,17 +104,13 @@ public class HomePage extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
         ButterKnife.bind(this);
-        initUser();
+        user = Task.getResult(getIntent().getStringExtra("user"),User.class);
         username = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString(getString(R.string.user_name), " ");
 //        fetch topics
         new Task<String>(this, new Callback() {
             @Override
             public void onResult(String resultString) {
-                Topic[] result = null;
-                ObjectMapper mapper = new ObjectMapper();
-                try {
-                    result = mapper.readValue(resultString, Topic[].class);
-                }catch (Exception e) {e.printStackTrace();}
+                Topic[] result = Task.getResult(resultString,Topic[].class);
                 topics = new ArrayList(Arrays.asList(result));
                 //TODO handle this
                 viewpager.setAdapter(new TopicPagerAdapter(HomePage.this));
@@ -297,16 +294,6 @@ public class HomePage extends AppCompatActivity{
         });
     }
 
-    private void initUser() {
-        Intent intent = getIntent();
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            user = mapper.readValue(intent.getStringExtra("user"), User.class);
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     private void commentView(View view) {
         LinearLayout lyt = (LinearLayout) findViewById(R.id.new_comment_snack);
         if(isSnackBarActive) {
@@ -369,7 +356,7 @@ public class HomePage extends AppCompatActivity{
         ((TextView)Views.find(tabHost, R.id.txtTopicPageDate)).setText(topic.getRevealDate().toString());
 
 //tags
-        ChipsView mChipsView = Views.find(tabHost,R.id.cv_contacts);
+        ChipsView mChipsView = Views.find(tabHost, R.id.cv_contacts);
         // change EditText config
         mChipsView.getEditText().setFocusableInTouchMode(false);
         int k = mChipsView.getChips().size();
@@ -409,13 +396,7 @@ public class HomePage extends AppCompatActivity{
     }
 
     private boolean showResult(String resultString) {
-        GenericResponse result = null;
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            result = mapper.readValue(resultString, GenericResponse.class);
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
+        GenericResponse result = Task.getResult(resultString,GenericResponse.class);
         if(result==null) {
             return false;
         }else if (result.getError() == null) {// display a notification to the user with the response information
@@ -504,4 +485,5 @@ public class HomePage extends AppCompatActivity{
             return "";
         }
     }
+
 }
