@@ -2,12 +2,9 @@ package com.group6boun451.learner.Activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -33,7 +30,6 @@ import com.doodle.android.chips.model.Contact;
 import com.group6boun451.learner.R;
 import com.group6boun451.learner.model.GenericResponse;
 import com.group6boun451.learner.model.Tag;
-import com.group6boun451.learner.model.Topic;
 import com.group6boun451.learner.utils.GlideHelper;
 import com.group6boun451.learner.widget.Summernote;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
@@ -42,23 +38,14 @@ import com.yalantis.guillotine.animation.GuillotineAnimation;
 import com.yalantis.guillotine.interfaces.GuillotineListener;
 
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.http.HttpAuthentication;
-import org.springframework.http.HttpBasicAuthentication;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -88,15 +75,14 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
     private DatePickerDialog pickUpDatePicker;
     private TimePickerDialog pickUpTimePicker;
     private int date[];
+
     private GuillotineAnimation guillotineAnimation;
     private boolean isGuillotineOpened = false;
-    Topic newTopic;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_topic);
         ButterKnife.bind(this);
-        newTopic = new Topic();
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setTitle(null);
@@ -272,7 +258,7 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
                 return;
             }
             GlideHelper.loadImage(contentImageButton,data.getData().toString());
-            newTopic.setHeaderImage(getPath(data.getData()));
+            contentImageButton.setTag(getPath(data.getData()));
         } else if(requestCode==EDITOR && resultCode == Activity.RESULT_OK){
             summernote.onActivityResult(requestCode, resultCode, data);
         }
@@ -338,10 +324,37 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
 
     public void finishButton(View view) {
         if (validate()) {
-            newTopic.setHeader(topicNameEditText.getText().toString());
-            newTopic.setContent(summernote.getText());
-            newTopic.setRevealDate(new Date(date[0],date[1],date[2],date[3],date[4],date[5]));
-            new AddTopicTask().execute();
+            // populate the data to post
+            MultiValueMap<String, Object> formData = new LinkedMultiValueMap<String, Object>();
+            formData.add("header",topicNameEditText.getText().toString());
+            formData.add("content",summernote.getText());
+            if(contentImageButton.getTag()!=null)
+            formData.add("image", new FileSystemResource(contentImageButton.getTag().toString()));
+//           create topic task
+            new Task<>(AddTopicActivity.this, new Callback() {
+                @Override
+                public void onResult(String resultString) {
+                    GenericResponse result = Task.getResult(resultString,GenericResponse.class);
+                    if(!showResult(result))return;
+//                     dismissProgressDialog();
+                    Tag[] tags = new Tag[mChipsView.getChips().size()];
+                    int i = 0;
+                    for(ChipsView.Chip c: mChipsView.getChips()){
+                        Tag t = new Tag();
+                        t.setName(c.getContact().getFirstName());
+                        t.setContext(c.getContact().getLastName());
+                        if(!c.getContact().getDisplayName().equalsIgnoreCase("null"))t.setId(Long.parseLong(c.getContact().getDisplayName()));
+                        tags[i++] = t;
+                    }
+
+                    if (tags.length== 0) return;
+//                    add tag task
+                    new Task<>(AddTopicActivity.this, new Callback() {
+                        @Override
+                        public void onResult(String result) {showResult(Task.getResult(result,GenericResponse.class));}
+                    }).execute(getString(R.string.base_url) + "tag/"+result.getMessage()+"/add",tags);
+                }
+            }).execute(getString(R.string.base_url) +  "topic/create",formData);
         }
     }
 
@@ -406,9 +419,6 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
         }
     }
 
-    // ***************************************
-    // Private methods
-    // ***************************************
     private boolean showResult(GenericResponse result) {
         if (result.getError() == null) {// display a notification to the user with the response information
             finish();
@@ -417,84 +427,5 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
             Snackbar.make(findViewById(android.R.id.content),  result.getError(), Snackbar.LENGTH_SHORT).show();
             return false;
         }
-    }
-
-    // ***************************************
-    // Private classes
-    // ***************************************
-    private class AddTopicTask extends AsyncTask<Void, Void, GenericResponse> {
-
-        private MultiValueMap<String, Object> formData;
-        private String username;
-        private String password;
-
-        @Override
-        protected void onPreExecute() {
-//            showLoadingProgressDialog();
-
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            username = preferences.getString(getString(R.string.user_name), " ");
-            password = preferences.getString(getString(R.string.password), " ");
-
-            // populate the data to post
-            formData = new LinkedMultiValueMap<String, Object>();
-            formData.add("header",newTopic.getHeader());
-            formData.add("content",newTopic.getContent());
-            formData.add("image", new FileSystemResource(newTopic.getHeaderImage()));
-        }
-
-        @Override
-        protected GenericResponse doInBackground(Void... params) {
-            try {
-                // The URL for making the POST request
-                final String url = getString(R.string.base_url) + "topic/create";
-                // Populate the HTTP Basic Authentitcation header with the username and password
-                HttpAuthentication authHeader = new HttpBasicAuthentication(username, password);
-                HttpHeaders requestHeaders = new HttpHeaders();
-                requestHeaders.setAuthorization(authHeader);
-
-                // Sending multipart/form-data
-                requestHeaders.setContentType(MediaType.MULTIPART_FORM_DATA);
-
-                // Populate the MultiValueMap being serialized and headers in an HttpEntity object to use for the request
-                HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<MultiValueMap<String, Object>>(formData, requestHeaders);
-
-                // Create a new RestTemplate instance
-                RestTemplate restTemplate = new RestTemplate(true);
-
-                // Make the network request, posting the message, expecting a String in response from the server
-                ResponseEntity<GenericResponse> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, GenericResponse.class);
-
-                // Return the response body to display to the user
-                return response.getBody();
-            } catch (Exception e) {
-                Log.e(TAG, e.getMessage(), e);
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(GenericResponse result) {
-            if(!showResult(result))return;
-//            dismissProgressDialog();
-            Tag[] tags = new Tag[mChipsView.getChips().size()];
-            int i = 0;
-            for(ChipsView.Chip c: mChipsView.getChips()){
-                Tag t = new Tag();
-                t.setName(c.getContact().getFirstName());
-                t.setContext(c.getContact().getLastName());
-                if(!c.getContact().getDisplayName().equalsIgnoreCase("null"))t.setId(Long.parseLong(c.getContact().getDisplayName()));
-                tags[i++] = t;
-            }
-
-            if (tags.length== 0) return;
-            new Task<>(AddTopicActivity.this, new Callback() {
-                @Override
-                public void onResult(String result) {showResult(Task.getResult(result,GenericResponse.class));}
-            })
-                    .execute(getString(R.string.base_url) + "tag/"+result.getMessage()+"/add",tags);
-        }
-
     }
 }

@@ -8,7 +8,6 @@ import android.util.Log;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.group6boun451.learner.R;
-import com.group6boun451.learner.model.Tag;
 
 import org.springframework.http.HttpAuthentication;
 import org.springframework.http.HttpBasicAuthentication;
@@ -60,7 +59,7 @@ class Task<T> extends AsyncTask<T,Void,String> {
             ResponseEntity<String> response = null;
             if(params.length>1) {
                 restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
-                response = restTemplate.exchange((String) params[0], HttpMethod.POST, new HttpEntity<>((Tag[]) params[1], requestHeaders), String.class);
+                response = restTemplate.exchange((String) params[0], HttpMethod.POST, new HttpEntity<>( params[1], requestHeaders), String.class);
             } else if(params[0] instanceof String) {
                 response = restTemplate.exchange((String) params[0], HttpMethod.GET, new HttpEntity<Object>(requestHeaders), String.class);
             } else {
