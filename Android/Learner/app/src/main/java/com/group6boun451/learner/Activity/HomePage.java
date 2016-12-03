@@ -259,7 +259,10 @@ public class HomePage extends AppCompatActivity{
                     if(!t.getContent().equals(content)){
                         t.setContent(content);
                         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getString(R.string.base_url) + "topic/edit/"+t.getId()).queryParam("header",t.getHeader()).queryParam("content",content);
-                        new Task<URI>(HomePage.this).execute(builder.build().encode().toUri());
+                        new Task<URI>(HomePage.this, new Callback() {
+                            @Override
+                            public void onResult(GenericResponse result) {showResult(result);}
+                        }).execute(builder.build().encode().toUri());
                     }
                     contentView.loadDataWithBaseURL("https://www.youtube.com/embed/", content,
                             "text/html; charset=utf-8", "UTF-8", null);
@@ -277,7 +280,14 @@ public class HomePage extends AppCompatActivity{
                     Topic t = currentTopic;
                     UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getString(R.string.base_url) + "topic/comment/create")
                             .queryParam("topicId",t.getId()).queryParam("content",commentContent);
-                    new SendCommentTask(HomePage.this).execute(builder.build().encode().toUri());
+                    new Task<URI>(HomePage.this, new Callback() {
+                        @Override
+                        public void onResult(GenericResponse result) {
+                            if(showResult(result)) {
+                                ((CommentListAdapter)comments.getAdapter()).add(new Comment(commentContent));
+                            }
+                        }
+                    }).execute(builder.build().encode().toUri());
                     commentText.setText("");
                     commentView(view);
                 }
@@ -451,11 +461,15 @@ public class HomePage extends AppCompatActivity{
             likeButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Task<String> likeTask = new Task<>(HomePage.this, new Callback() {
+                        @Override
+                        public void onResult(GenericResponse result) {showResult(result);}
+                    });
                     if(likeButton.getCurrentTextColor()!=getResources().getColor(R.color.mdtp_accent_color)) {
-                        new Task<String>(HomePage.this).execute(getString(R.string.base_url) + "topic/like/"+topic.getId());
+                        likeTask.execute(getString(R.string.base_url) + "topic/like/"+topic.getId());
                         likeButton.setTextColor(getResources().getColor(R.color.mdtp_accent_color));
                     }else {
-                        new Task<String>(HomePage.this).execute(getString(R.string.base_url) + "topic/unlike/"+topic.getId());
+                        likeTask.execute(getString(R.string.base_url) + "topic/unlike/"+topic.getId());
                         likeButton.setTextColor(getResources().getColor(R.color.white));
                     }
                 }
@@ -533,22 +547,5 @@ public class HomePage extends AppCompatActivity{
             viewpager3.setAdapter(new TopicPagerAdapter(HomePage.this));
         }
     }
-    public class SendCommentTask extends Task<URI> {
 
-        public SendCommentTask(Context context) {
-            super(context);
-        }
-
-        @Override
-        protected GenericResponse doInBackground(URI... params) {
-            return super.doInBackground(params);
-        }
-
-        @Override
-        protected void onPostExecute(GenericResponse result) {
-            if(showResult(result)) {
-                ((CommentListAdapter)comments.getAdapter()).add(new Comment(commentContent));
-            }
-        }
-    }
 }

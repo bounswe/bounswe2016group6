@@ -1,11 +1,9 @@
 package com.group6boun451.learner.Activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
 
 import com.group6boun451.learner.R;
@@ -31,10 +29,10 @@ class Task<T> extends AsyncTask<T,Void,GenericResponse> {
     private String username;
     private String password;
     private Context context;
-    private GenericResponse result;
-
-    public Task(Context context){
+    Callback callback;
+    public Task(Context context, Callback callback){
         this.context = context;
+        this.callback = callback;
     }
 
     @Override
@@ -70,23 +68,11 @@ class Task<T> extends AsyncTask<T,Void,GenericResponse> {
     }
     @Override
     protected void onPostExecute(GenericResponse result) {
-        this.result = result;
-        showResult(result);
+        callback.onResult(result);
 
     }
+}
 
-    public GenericResponse getResult() {
-        return result;
-    }
-    private boolean showResult(GenericResponse result) {
-        if(result==null) return false;
-        if (result.getError() == null) {// display a notification to the user with the response information
-            Snackbar.make(((Activity)context).findViewById(android.R.id.content),  result.getMessage(), Snackbar.LENGTH_SHORT).show();
-            return true;
-        } else {
-            Snackbar.make(((Activity)context).findViewById(android.R.id.content),  result.getError(), Snackbar.LENGTH_SHORT).show();
-            return false;
-        }
-    }
-
+interface Callback{
+    void onResult(GenericResponse result);
 }
