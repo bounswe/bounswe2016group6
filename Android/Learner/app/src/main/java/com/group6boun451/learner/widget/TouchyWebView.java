@@ -4,7 +4,10 @@ import android.content.Context;
 import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 /**
  * Created by Ahmet Zorer on 11/16/2016.
@@ -14,14 +17,25 @@ public class TouchyWebView extends WebView {
 
     public TouchyWebView(Context context) {
         super(context);
+        initialize();
+    }
+
+    private void initialize() {
+        this.setWebChromeClient(new WebChromeClient());
+        this.getSettings().setPluginState(WebSettings.PluginState.ON);
+        this.getSettings().setPluginState(WebSettings.PluginState.ON_DEMAND);
+        this.setWebViewClient(new WebViewClient());
+        this.getSettings().setJavaScriptEnabled(true);
     }
 
     public TouchyWebView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        initialize();
     }
 
     public TouchyWebView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        initialize();
     }
 
     @Override

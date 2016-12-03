@@ -12,7 +12,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-public class Summernote extends WebView  {
+public class Summernote extends TouchyWebView  {
     String text="";
     private int REQUEST_FILE_PICKER = 1;
     private ValueCallback<Uri> mFilePathCallback4;
@@ -44,6 +44,14 @@ public class Summernote extends WebView  {
             this.getSettings().setAllowFileAccessFromFileURLs(true);
             this.getSettings().setAllowUniversalAccessFromFileURLs(true);
         }
+
+        this.setWebChromeClient(new WebChromeClient());
+        this.getSettings().setPluginState(WebSettings.PluginState.ON);
+        this.getSettings().setPluginState(WebSettings.PluginState.ON_DEMAND);
+        this.setWebViewClient(new WebViewClient());
+
+        this.loadDataWithBaseURL("https://www.youtube.com/embed/", "",
+                "text/html; charset=utf-8", "UTF-8", null);
         this.loadUrl("file:///android_asset/summernote.html");
         setWebChromeClient(new WebChromeClient() {
             public void openFileChooser(ValueCallback<Uri> filePathCallback) {

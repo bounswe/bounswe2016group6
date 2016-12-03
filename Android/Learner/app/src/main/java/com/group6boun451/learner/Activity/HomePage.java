@@ -4,6 +4,7 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -11,6 +12,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -237,6 +239,7 @@ public class HomePage extends AppCompatActivity{
                 isTopicActive = false;
                 fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_add_black_24dp));
                 fabQuiz.setVisibility(View.INVISIBLE);
+                editDone();
             }
         });
 
@@ -248,22 +251,25 @@ public class HomePage extends AppCompatActivity{
                     contentView.setVisibility(View.INVISIBLE);
                     editButton.setText(getString(R.string.done));
                 }else {
-                    contentView.setVisibility(View.VISIBLE);
-                    summernote.setVisibility(View.INVISIBLE);
+                    editDone();
                     String content = summernote.getText();
                     Topic t = topics.get(topicId);
                     if(!t.getContent().equals(content)){
-                        topics.get(topicId).setContent(content);
-                        new EditTopicTask().execute(topics.get(topicId).getHeader(),summernote.getText(),""+t.getId());
-                      //TODO edit the content animation
+                        t.setContent(content);
+                        new EditTopicTask().execute(t.getHeader(),content,""+t.getId());
                     }
-                    contentView.loadData(content,"text/html",null);
-                    editButton.setText(getString(R.string.edit));
-
+                    contentView.loadDataWithBaseURL("https://www.youtube.com/embed/", content,
+                            "text/html; charset=utf-8", "UTF-8", null);
                 }
 
             }
         });
+    }
+
+    private void editDone() {
+        contentView.setVisibility(View.VISIBLE);
+        summernote.setVisibility(View.INVISIBLE);
+        editButton.setText(getString(R.string.edit));
     }
 
     @Override
@@ -305,17 +311,16 @@ public class HomePage extends AppCompatActivity{
         ChipsView mChipsView = Views.find(tabHost,R.id.cv_contacts);
         // change EditText config
         mChipsView.getEditText().setFocusableInTouchMode(false);
-        for(ChipsView.Chip c: mChipsView.getChips()){
-            mChipsView.removeChipBy(c.getContact());
-        }
+        int k =mChipsView.getChildCount();
+        Contact c = new Contact(null,null,null,"",null);
+        for(int i =0;i<k;i++){mChipsView.removeChipBy(c);}
         for(Tag t : topic.getTags()){
             String tagName = t.getName();
-            Contact contact = new Contact(tagName, t.getContext(), t.getId()+"", tagName, null);
+            Contact contact = new Contact(tagName, t.getContext(), t.getId()+"", "", null);
             mChipsView.addChip(tagName, null, contact,true);
         }
-
-        contentView.loadData(topic.getContent(),"text/html",null);
-
+        contentView.loadDataWithBaseURL("https://www.youtube.com/embed/", topic.getContent(),
+                "text/html; charset=utf-8", "UTF-8", null);
         ListView comments = (ListView) findViewById(R.id.topicPageCommentList);
         comments.setAdapter(new CommentListAdapter(this, topic.getComments()));//TODO it might troublesome
         comments.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -336,6 +341,10 @@ public class HomePage extends AppCompatActivity{
         }
         unfoldableView.unfold(coverView, tabHost);
     }
+    @Override
+    public AssetManager getAssets() {
+        return getResources().getAssets();
+    }
 
     public class TopicPagerAdapter extends PagerAdapter {
         private Context mContext;
@@ -355,7 +364,9 @@ public class HomePage extends AppCompatActivity{
             ChipsView mChipsView = (ChipsView) v.findViewById(R.id.cv_contacts);
             // change EditText config
             mChipsView.getEditText().setVisibility(View.GONE);
-            for(ChipsView.Chip c: mChipsView.getChips()){mChipsView.removeChipBy(c.getContact());}
+            int k = mChipsView.getChildCount();
+            Contact c = new Contact(null,null,null,"",null);
+            for(int i =0;i<k;i++){mChipsView.removeChipBy(c);}
             for(Tag t : topic.getTags()){
                 String tagName = t.getName();
                 Contact contact = new Contact(tagName, t.getContext(), t.getId()+"", tagName, null);
@@ -487,30 +498,19 @@ public class HomePage extends AppCompatActivity{
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("header",params[0]).queryParam("content",params[1]);
             try {
                 // Make the network request
-                Log.d(TAG, url);
                 ResponseEntity<GenericResponse> response = restTemplate.exchange(
                         builder.build().encode().toUri(),
                         HttpMethod.POST,
                         new HttpEntity<Object>(requestHeaders), GenericResponse.class);
-                 Log.d("response",response.getBody().toString());
                 return response.getBody();
-            } catch (HttpClientErrorException e) {
-                Log.e(TAG, e.getLocalizedMessage(), e);
-                return new GenericResponse();
-            } catch (ResourceAccessException e) {
-                Log.e(TAG, e.getLocalizedMessage(), e);
-                return new GenericResponse();
             } catch (Exception e) {
                 Log.e(TAG, e.getLocalizedMessage(), e);
-                return new GenericResponse();
             }
+                return new GenericResponse();
         }
 
         @Override
-        protected void onPostExecute(GenericResponse result) {
-//            if(result.getError()==null)
-//            Snackbar.make(findViewById(android.R.id.content),result.getMessage().toString(),Snackbar.LENGTH_SHORT).show();
-        }
+        protected void onPostExecute(GenericResponse result) {showResult(result);}
     }
     public class LikeTopicTask extends AsyncTask<String, Void, GenericResponse> {
         private String username;
@@ -545,24 +545,23 @@ public class HomePage extends AppCompatActivity{
                         new HttpEntity<Object>(requestHeaders), GenericResponse.class);
                 Log.d("response",response.getBody().toString());
                 return response.getBody();
-            } catch (HttpClientErrorException e) {
+            }  catch (Exception e) {
                 Log.e(TAG, e.getLocalizedMessage(), e);
-                return new GenericResponse();
-            } catch (ResourceAccessException e) {
-                Log.e(TAG, e.getLocalizedMessage(), e);
-                return new GenericResponse();
-            } catch (Exception e) {
-                Log.e(TAG, e.getLocalizedMessage(), e);
-                return new GenericResponse();
             }
+            return new GenericResponse();
         }
 
         @Override
-        protected void onPostExecute(GenericResponse result) {
-//            if(result.getError()==null)
-//                Snackbar.make(findViewById(android.R.id.content),result.getMessage().toString(),Snackbar.LENGTH_SHORT).show();
+        protected void onPostExecute(GenericResponse result) {showResult(result);}
+    }
+    private boolean showResult(GenericResponse result) {
+        if (result.getError() == null) {// display a notification to the user with the response information
+            Snackbar.make(findViewById(android.R.id.content),  result.getMessage(), Snackbar.LENGTH_SHORT).show();
+            return true;
+        } else {
+            Snackbar.make(findViewById(android.R.id.content),  result.getError(), Snackbar.LENGTH_SHORT).show();
+            return false;
         }
     }
-
 
 }
