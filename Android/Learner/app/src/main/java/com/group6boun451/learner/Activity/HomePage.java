@@ -435,7 +435,7 @@ public class HomePage extends AppCompatActivity{
             likeButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(!isLiked(topic.getLikedBy())) {
+                    if(likeButton.getCurrentTextColor()!=getResources().getColor(R.color.mdtp_accent_color)) {
                         new LikeTopicTask().execute(""+topic.getId(),"like");
                         likeButton.setTextColor(getResources().getColor(R.color.mdtp_accent_color));
                     }else {
@@ -541,7 +541,7 @@ public class HomePage extends AppCompatActivity{
             // Create a new RestTemplate instance
             RestTemplate restTemplate = new RestTemplate();
             restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("topicPosition",Long.parseLong(params[0])).queryParam("content",(String)params[1]);
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("topicId",Long.parseLong(params[0])).queryParam("content",(String)params[1]);
             try {
                 // Make the network request
                 ResponseEntity<GenericResponse> response = restTemplate.exchange(
