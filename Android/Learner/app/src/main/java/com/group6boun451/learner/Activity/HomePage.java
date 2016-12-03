@@ -3,11 +3,9 @@ package com.group6boun451.learner.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.CoordinatorLayout;
@@ -55,23 +53,11 @@ import com.group6boun451.learner.widget.TouchyWebView;
 import com.yalantis.guillotine.animation.GuillotineAnimation;
 import com.yalantis.guillotine.interfaces.GuillotineListener;
 
-import org.springframework.http.HttpAuthentication;
-import org.springframework.http.HttpBasicAuthentication;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.ResourceAccessException;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -119,7 +105,23 @@ public class HomePage extends AppCompatActivity{
         ButterKnife.bind(this);
         initUser();
         username = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString(getString(R.string.user_name), " ");
-        new FetchTopicsTask().execute();
+//        fetch topics
+        new Task<String>(this, new Callback() {
+            @Override
+            public void onResult(String resultString) {
+                Topic[] result = null;
+                ObjectMapper mapper = new ObjectMapper();
+                try {
+                    result = mapper.readValue(resultString, Topic[].class);
+                }catch (Exception e) {e.printStackTrace();}
+                topics = new ArrayList(Arrays.asList(result));
+                //TODO handle this
+                viewpager.setAdapter(new TopicPagerAdapter(HomePage.this));
+                viewpager2.setAdapter(new TopicPagerAdapter(HomePage.this));
+                viewpager3.setAdapter(new TopicPagerAdapter(HomePage.this));
+            }
+        }).execute(getString(R.string.base_url) + "topic/recent");
+
         summernote.setRequestCodeforFilepicker(EDITOR);
 
 //        toolbar
@@ -502,58 +504,4 @@ public class HomePage extends AppCompatActivity{
             return "";
         }
     }
-    //TODO merge asynctasks
-    public class FetchTopicsTask extends AsyncTask<Void, Void, Topic[]> {
-        private String username;
-        private String password;
-
-        @Override
-        protected void onPreExecute() {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            username = preferences.getString(getString(R.string.user_name), " ");
-            password = preferences.getString(getString(R.string.password), " ");
-        }
-
-        @Override
-        protected Topic[] doInBackground(Void... params) {
-            final String url = getString(R.string.base_url) + "topic/recent";
-
-            // Populate the HTTP Basic Authentitcation header with the username and password
-            HttpAuthentication authHeader = new HttpBasicAuthentication(username, password);
-            HttpHeaders requestHeaders = new HttpHeaders();
-            Log.d(TAG + " username", username + ", " + password);
-            requestHeaders.setAuthorization(authHeader);
-            requestHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-
-            // Create a new RestTemplate instance
-            RestTemplate restTemplate = new RestTemplate();
-            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-            try {
-                // Make the network request
-                Log.d(TAG, url);
-                ResponseEntity<Topic[]> response = restTemplate.exchange(url, HttpMethod.GET, new HttpEntity<Object>(requestHeaders), Topic[].class);
-                // Log.d("response",response.getBody());
-                return response.getBody();
-            } catch (HttpClientErrorException e) {
-                Log.e(TAG, e.getLocalizedMessage(), e);
-                return new Topic[0];
-            } catch (ResourceAccessException e) {
-                Log.e(TAG, e.getLocalizedMessage(), e);
-                return new Topic[0];
-            } catch (Exception e) {
-                Log.e(TAG, e.getLocalizedMessage(), e);
-                return new Topic[0];
-            }
-        }
-
-        @Override
-        protected void onPostExecute(Topic[] result) {
-            topics = new ArrayList(Arrays.asList(result));
-            //TODO handle this
-            viewpager.setAdapter(new TopicPagerAdapter(HomePage.this));
-            viewpager2.setAdapter(new TopicPagerAdapter(HomePage.this));
-            viewpager3.setAdapter(new TopicPagerAdapter(HomePage.this));
-        }
-    }
-
 }
