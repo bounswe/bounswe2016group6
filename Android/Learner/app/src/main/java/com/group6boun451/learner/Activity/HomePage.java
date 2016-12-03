@@ -68,6 +68,7 @@ import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -256,7 +257,8 @@ public class HomePage extends AppCompatActivity{
                     Topic t = currentTopic;
                     if(!t.getContent().equals(content)){
                         t.setContent(content);
-                        new EditTopicTask().execute(t.getHeader(),content,""+t.getId());
+                        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getString(R.string.base_url) + "topic/edit/"+t.getId()).queryParam("header",t.getHeader()).queryParam("content",content);
+                        new Task<URI>(HomePage.this).execute(builder.build().encode().toUri());
                     }
                     contentView.loadDataWithBaseURL("https://www.youtube.com/embed/", content,
                             "text/html; charset=utf-8", "UTF-8", null);
@@ -447,10 +449,10 @@ public class HomePage extends AppCompatActivity{
                 @Override
                 public void onClick(View view) {
                     if(likeButton.getCurrentTextColor()!=getResources().getColor(R.color.mdtp_accent_color)) {
-                        new Task<String,GenericResponse>(HomePage.this).execute(getString(R.string.base_url) + "topic/like/"+topic.getId());
+                        new Task<String>(HomePage.this).execute(getString(R.string.base_url) + "topic/like/"+topic.getId());
                         likeButton.setTextColor(getResources().getColor(R.color.mdtp_accent_color));
                     }else {
-                        new Task<String,GenericResponse>(HomePage.this).execute(getString(R.string.base_url) + "topic/unlike/"+topic.getId());
+                        new Task<String>(HomePage.this).execute(getString(R.string.base_url) + "topic/unlike/"+topic.getId());
                         likeButton.setTextColor(getResources().getColor(R.color.white));
                     }
                 }
@@ -573,47 +575,4 @@ public class HomePage extends AppCompatActivity{
             }
         }
     }
-    public class EditTopicTask extends AsyncTask<String, Void, GenericResponse> {
-        private String username;
-        private String password;
-
-        @Override
-        protected void onPreExecute() {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            username = preferences.getString(getString(R.string.user_name), " ");
-            password = preferences.getString(getString(R.string.password), " ");
-        }
-
-        @Override
-        protected GenericResponse doInBackground(String... params) {
-            final String url = getString(R.string.base_url) + "topic/edit/"+params[2];
-
-            // Populate the HTTP Basic Authentitcation header with the username and password
-            HttpAuthentication authHeader = new HttpBasicAuthentication(username, password);
-            HttpHeaders requestHeaders = new HttpHeaders();
-            requestHeaders.setAuthorization(authHeader);
-            requestHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-            // Create a new RestTemplate instance
-            RestTemplate restTemplate = new RestTemplate();
-            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("header",params[0]).queryParam("content",params[1]);
-
-            try {
-                // Make the network request
-                ResponseEntity<GenericResponse> response = restTemplate.exchange(
-                        builder.build().encode().toUri(),
-                        HttpMethod.POST,
-                        new HttpEntity<Object>(requestHeaders), GenericResponse.class);
-                return response.getBody();
-            } catch (Exception e) {
-                Log.e(TAG, e.getLocalizedMessage(), e);
-            }
-            return new GenericResponse();
-        }
-
-        @Override
-        protected void onPostExecute(GenericResponse result) {showResult(result);}
-    }
-
-
 }
