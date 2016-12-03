@@ -65,4 +65,10 @@ public class CommentListAdapter extends BaseAdapter {
 
 
     }
+
+    public void add(Comment comment) {
+        comments.add(comment);
+        notifyDataSetChanged();
+        notifyDataSetInvalidated();
+    }
 }

@@ -1,5 +1,7 @@
 package com.group6boun451.learner.model;
 
+import com.group6boun451.learner.Activity.HomePage;
+
 import java.util.Date;
 
 public class Comment {
@@ -14,9 +16,13 @@ public class Comment {
     }
     // constructor
     public Comment( long id1){
-
         this.id = id1;
+    }
 
+    public Comment(String content){
+        this.content= content;
+        this.owner = HomePage.user;
+        this.createdAt = new Date();
     }
 
     public Long getId() {

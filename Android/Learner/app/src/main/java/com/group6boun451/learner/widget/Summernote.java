@@ -36,7 +36,7 @@ public class Summernote extends TouchyWebView  {
     public void enable_summernote(){
         this.getSettings().setJavaScriptEnabled(true);
         this.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
-        //this.getSettings().setBuiltInZoomControls(true);
+        this.getSettings().setBuiltInZoomControls(true);
         this.addJavascriptInterface(new MyJavaScriptInterface(), "android");
         this. getSettings().setLoadWithOverviewMode(true);
         this. getSettings().setUseWideViewPort(true);
@@ -79,7 +79,7 @@ public class Summernote extends TouchyWebView  {
             }
 
             @Override
-            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams) {
+            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
                 mFilePathCallback5 = filePathCallback;
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.addCategory(Intent.CATEGORY_OPENABLE);

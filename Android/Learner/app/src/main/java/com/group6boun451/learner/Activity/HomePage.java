@@ -35,15 +35,16 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TabHost;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.foldablelayout.UnfoldableView;
 import com.alexvasilkov.foldablelayout.shading.GlanceFoldShading;
 import com.doodle.android.chips.ChipsView;
 import com.doodle.android.chips.model.Contact;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.group6boun451.learner.CommentListAdapter;
 import com.group6boun451.learner.R;
+import com.group6boun451.learner.model.Comment;
 import com.group6boun451.learner.model.GenericResponse;
 import com.group6boun451.learner.model.Question;
 import com.group6boun451.learner.model.Tag;
@@ -79,6 +80,7 @@ import butterknife.ButterKnife;
 public class HomePage extends AppCompatActivity{
     protected static final String TAG = HomePage.class.getSimpleName();
     private static final int EDITOR = 3;
+    public static User user;
 
     @BindView(R.id.touch_interceptor_view) View listTouchInterceptor;
     @BindView(R.id.summernote) Summernote summernote;
@@ -91,6 +93,7 @@ public class HomePage extends AppCompatActivity{
     @BindView(R.id.fab) FloatingActionButton fab;
     @BindView(R.id.fab2) FloatingActionButton fabQuiz;
     @BindView(R.id.edit_button) Button editButton;
+    @BindView(R.id.topicPageCommentList) ListView comments;
     @BindView(R.id.send_comment_button) Button sendCommentButton;
     @BindView(R.id.topicPage_comment_text_area) EditText commentText;
     @BindView(R.id.toolbar) Toolbar toolbar;
@@ -113,6 +116,7 @@ public class HomePage extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
         ButterKnife.bind(this);
+        initUser();
         username = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString(getString(R.string.user_name), " ");
         new FetchTopicsTask().execute();
         summernote.setRequestCodeforFilepicker(EDITOR);
@@ -180,22 +184,8 @@ public class HomePage extends AppCompatActivity{
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                       if(isTopicActive){
-                    LinearLayout lyt = (LinearLayout) findViewById(R.id.new_comment_snack);
-                    if(isSnackBarActive) {
-                        lyt.setVisibility(View.INVISIBLE);
-                        fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_floatmenu_comment));
-                        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                        isSnackBarActive = false;
-                    }else{
-                        lyt.setVisibility(View.VISIBLE);
-                        EditText textArea = (EditText) findViewById(R.id.topicPage_comment_text_area);
-                        textArea.requestFocus();
-                        fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_floatmenu_comment_quit));
-                        isSnackBarActive= true;
-                    }
-                }else {startActivity(new Intent(HomePage.this, AddTopicActivity.class));}
+                if(isTopicActive){commentView(view);}
+                else {startActivity(new Intent(HomePage.this, AddTopicActivity.class));}
             }
         });
 
@@ -280,15 +270,42 @@ public class HomePage extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 String commentContent = commentText.getText().toString();
-                if(commentContent.length() < 9){
-                    Toast.makeText(HomePage.this,"Comment is too short",Toast.LENGTH_LONG);
+                if(commentContent.length() < 9){Snackbar.make(findViewById(android.R.id.content),"Comment is too short",Snackbar.LENGTH_SHORT).show();
                 }else{
                     Topic t = topics.get(topicId);
-                    new SendCommentTask().execute(commentContent,""+t.getId());
+                    new SendCommentTask().execute(""+t.getId(),commentContent);
                     commentText.setText("");
+                    commentView(view);
                 }
             }
         });
+    }
+
+    private void initUser() {
+        Intent intent = getIntent();
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            user = mapper.readValue(intent.getStringExtra("user"), User.class);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void commentView(View view) {
+        LinearLayout lyt = (LinearLayout) findViewById(R.id.new_comment_snack);
+        if(isSnackBarActive) {
+            lyt.setVisibility(View.INVISIBLE);
+            fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_floatmenu_comment));
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            isSnackBarActive = false;
+        }else{
+            lyt.setVisibility(View.VISIBLE);
+            EditText textArea = (EditText) findViewById(R.id.topicPage_comment_text_area);
+            textArea.requestFocus();
+            fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_floatmenu_comment_quit));
+            isSnackBarActive= true;
+        }
     }
 
     private void editDone() {
@@ -347,7 +364,6 @@ public class HomePage extends AppCompatActivity{
         }
         contentView.loadDataWithBaseURL("https://www.youtube.com/embed/", topic.getContent(),
                 "text/html; charset=utf-8", "UTF-8", null);
-        ListView comments = (ListView) findViewById(R.id.topicPageCommentList);
         comments.setAdapter(new CommentListAdapter(this, topic.getComments()));//TODO it might troublesome
         comments.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -433,11 +449,7 @@ public class HomePage extends AppCompatActivity{
                 public void onClick(View v) {
                     ((HomePage) v.getContext()).openDetails(v.findViewById(R.id.card_view), topic);
                     //check is there quiz
-                    if(topic.getQuestions().size() == 0){
-                        isThereQuiz = false;
-                    }else{
-                        isThereQuiz = true;
-                    }
+                    isThereQuiz = topic.getQuestions().size() != 0;
 
                 }
             });
@@ -534,6 +546,7 @@ public class HomePage extends AppCompatActivity{
     public class SendCommentTask extends AsyncTask<String,Void,GenericResponse> {
         private String username;
         private String password;
+        private String content;
 
         @Override
         protected void onPreExecute() {
@@ -544,8 +557,8 @@ public class HomePage extends AppCompatActivity{
 
         @Override
         protected GenericResponse doInBackground(String... params) {
-            final String url = getString(R.string.base_url) + "topic/comment/create"+params[1];
-
+            final String url = getString(R.string.base_url) + "topic/comment/create";
+            content = params[1];
             // Populate the HTTP Basic Authentitcation header with the username and password
             HttpAuthentication authHeader = new HttpBasicAuthentication(username, password);
             HttpHeaders requestHeaders = new HttpHeaders();
@@ -554,7 +567,7 @@ public class HomePage extends AppCompatActivity{
             // Create a new RestTemplate instance
             RestTemplate restTemplate = new RestTemplate();
             restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("content",params[0]);
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("topicId",Long.parseLong(params[0])).queryParam("content",(String)params[1]);
             try {
                 // Make the network request
                 ResponseEntity<GenericResponse> response = restTemplate.exchange(
@@ -569,7 +582,11 @@ public class HomePage extends AppCompatActivity{
         }
 
         @Override
-        protected void onPostExecute(GenericResponse result) {showResult(result);}
+        protected void onPostExecute(GenericResponse result) {
+            if(showResult(result)) {
+                ((CommentListAdapter)comments.getAdapter()).add(new Comment(content));
+            }
+        }
     }
     public class EditTopicTask extends AsyncTask<String, Void, GenericResponse> {
         private String username;
