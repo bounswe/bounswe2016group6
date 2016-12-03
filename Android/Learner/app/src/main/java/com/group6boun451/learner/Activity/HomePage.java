@@ -109,6 +109,7 @@ public class HomePage extends AppCompatActivity{
     private GuillotineAnimation guillotineAnimation;
     public static User user;
     public static Topic currentTopic = null;
+    private String commentContent;
 
 
     @Override
@@ -270,11 +271,13 @@ public class HomePage extends AppCompatActivity{
         sendCommentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String commentContent = commentText.getText().toString();
+                commentContent = commentText.getText().toString();
                 if(commentContent.length() < 9){Snackbar.make(findViewById(android.R.id.content),"Comment is too short",Snackbar.LENGTH_SHORT).show();
                 }else{
                     Topic t = currentTopic;
-                    new SendCommentTask().execute(""+t.getId(),commentContent);
+                    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getString(R.string.base_url) + "topic/comment/create")
+                            .queryParam("topicId",t.getId()).queryParam("content",commentContent);
+                    new SendCommentTask(HomePage.this).execute(builder.build().encode().toUri());
                     commentText.setText("");
                     commentView(view);
                 }
@@ -530,48 +533,21 @@ public class HomePage extends AppCompatActivity{
             viewpager3.setAdapter(new TopicPagerAdapter(HomePage.this));
         }
     }
-    public class SendCommentTask extends AsyncTask<String,Void,GenericResponse> {
-        private String username;
-        private String password;
-        private String content;
+    public class SendCommentTask extends Task<URI> {
 
-        @Override
-        protected void onPreExecute() {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            username = preferences.getString(getString(R.string.user_name), " ");
-            password = preferences.getString(getString(R.string.password), " ");
+        public SendCommentTask(Context context) {
+            super(context);
         }
 
         @Override
-        protected GenericResponse doInBackground(String... params) {
-            final String url = getString(R.string.base_url) + "topic/comment/create";
-            content = params[1];
-            // Populate the HTTP Basic Authentitcation header with the username and password
-            HttpAuthentication authHeader = new HttpBasicAuthentication(username, password);
-            HttpHeaders requestHeaders = new HttpHeaders();
-            requestHeaders.setAuthorization(authHeader);
-            requestHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-            // Create a new RestTemplate instance
-            RestTemplate restTemplate = new RestTemplate();
-            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("topicId",Long.parseLong(params[0])).queryParam("content",(String)params[1]);
-            try {
-                // Make the network request
-                ResponseEntity<GenericResponse> response = restTemplate.exchange(
-                        builder.build().encode().toUri(),
-                        HttpMethod.POST,
-                        new HttpEntity<Object>(requestHeaders), GenericResponse.class);
-                return response.getBody();
-            } catch (Exception e) {
-                Log.e(TAG, e.getLocalizedMessage(), e);
-            }
-            return new GenericResponse();
+        protected GenericResponse doInBackground(URI... params) {
+            return super.doInBackground(params);
         }
 
         @Override
         protected void onPostExecute(GenericResponse result) {
             if(showResult(result)) {
-                ((CommentListAdapter)comments.getAdapter()).add(new Comment(content));
+                ((CommentListAdapter)comments.getAdapter()).add(new Comment(commentContent));
             }
         }
     }
