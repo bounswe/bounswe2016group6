@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.learner.persistence.model.Tag;
 import org.learner.persistence.model.Topic;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -33,6 +34,12 @@ public interface TopicRepository extends JpaRepository<Topic, Long> {
 	
 	public List<Topic> findByTagsIn(List<Tag> thetags);
 	
+	
+	@Query("select distinct tp from Topic tp "
+			+ "left join tp.likedBy likeusers "
+			+ "where size(tp.likedBy) > 1 "
+			+ "order by size(tp.likedBy) desc")
+	public List<Topic> popularTopics(Pageable pageable);
     @Override
     void delete(Topic topic);
 

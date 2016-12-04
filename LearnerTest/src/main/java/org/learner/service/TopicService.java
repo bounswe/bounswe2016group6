@@ -20,6 +20,7 @@ import org.learner.persistence.model.Topic;
 import org.learner.persistence.model.User;
 import org.learner.web.dto.TopicDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -318,7 +319,7 @@ public class TopicService implements ITopicService{
 
 	@Override
 	public List<Topic> getPopularTopics() {
-		List<Topic> popular = repository.findTop5ByOrderByCreatedAtDesc();
+		List<Topic> popular = repository.popularTopics(new PageRequest(0, 7));
 		return popular;
 	}
 	

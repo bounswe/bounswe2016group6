@@ -72,6 +72,10 @@ public interface ITopicService {
 	Topic unlikeTopic(long topicId);
 	
 	List<Topic> searchSuggest(String q);
+
+	List<Topic> getPopularTopics();
+
+	List<Topic> getTopicsWithCommonTag(Topic topic);
 	
 	
 }
