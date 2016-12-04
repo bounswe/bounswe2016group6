@@ -75,9 +75,6 @@
                         <a sec:authentication="name" href="/profile">Profile</a>
                     </li>
                     <li>
-                        <a href="/home">Sample Post</a>
-                    </li>
-                    <li>
                         <a href="/logout">Logout</a>
                     </li>
                 </ul>
@@ -113,7 +110,7 @@
 	
 	            <h3 class="quizLevel"><strong>Ranking:</strong> <span><!-- where the quiz ranking level goes --></span></h3>
 				<br><br>
-				<a class="btn btn-primary">Back to topic page</a>
+				<a th:href="'/topic/' + ${topicId}" class="btn btn-primary">Back to topic page</a>
 	            <div class="quizResultsCopy">
 	                <!-- where the quiz result copy goes -->
 	            </div>
