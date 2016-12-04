@@ -439,12 +439,15 @@ public class HomePage extends AppCompatActivity{
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((HomePage) v.getContext()).openDetails(v.findViewById(R.id.card_view), topic);
+                    ((HomePage) v.getContext()).openDetails(v.findViewById(R.id.card_view2), topic);
                     //check is there quiz
                     isThereQuiz = topic.getQuestions().size() != 0;
 
                 }
             });
+
+            final ImageView imgProfile = (ImageView) v.findViewById(R.id.imgTopicPageUserImage);
+            imgProfile.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_profile));
 
 
             final Button likeButton = (Button)v.findViewById(R.id.like_button);
