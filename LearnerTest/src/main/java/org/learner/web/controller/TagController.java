@@ -134,4 +134,13 @@ public class TagController {
 		return new GenericResponse("Tag removal successful!");
 	}
 	
+	
+	@RequestMapping(value="/{tagId}")
+	@ResponseBody
+	public List<Topic> topicsHavingTags(@PathVariable Long tagId){
+		List<Topic> relatedTopics = topicService.getRelatedTopicsViaTags(tagId);
+		for(Topic ttt : relatedTopics)
+			System.out.println(" h : " + ttt.getHeader());
+		return relatedTopics;
+	}
 }
