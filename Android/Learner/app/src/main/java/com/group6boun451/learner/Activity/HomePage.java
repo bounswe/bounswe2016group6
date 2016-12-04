@@ -47,6 +47,7 @@ import com.group6boun451.learner.model.Tag;
 import com.group6boun451.learner.model.Topic;
 import com.group6boun451.learner.model.User;
 import com.group6boun451.learner.utils.GlideHelper;
+import com.group6boun451.learner.widget.CanaroTextView;
 import com.group6boun451.learner.widget.Summernote;
 import com.group6boun451.learner.widget.TouchyWebView;
 import com.yalantis.guillotine.animation.GuillotineAnimation;
@@ -168,7 +169,7 @@ public class HomePage extends AppCompatActivity{
 
 //       tabs on a topic
         tabHost.setup();
-        tabHost.addTab(tabHost.newTabSpec("Tab One").setContent(R.id.topic_tab).setIndicator("Example"));
+        tabHost.addTab(tabHost.newTabSpec("Tab One").setContent(R.id.topic_tab).setIndicator("Topic"));
         tabHost.addTab(tabHost.newTabSpec("Tab Two").setContent(R.id.comment_tab).setIndicator("Discussion"));
 
         detailsScrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
@@ -351,9 +352,9 @@ public class HomePage extends AppCompatActivity{
         currentTopic = topic;
         Log.d("topic",currentTopic.getId()+"");
         GlideHelper.loadImage(this,(ImageView) Views.find(tabHost, R.id.details_image), topic);
-        ((TextView)Views.find(tabHost, R.id.details_title)).setText(topic.getHeader());
-        ((TextView)Views.find(tabHost, R.id.txtTopicPageUserName)).setText(topic.getOwner().getFirstName());
-        ((TextView)Views.find(tabHost, R.id.txtTopicPageDate)).setText(topic.getRevealDate().toString());
+        ((CanaroTextView)Views.find(tabHost, R.id.details_title)).setText(topic.getHeader());
+        ((CanaroTextView)Views.find(tabHost, R.id.txtTopicPageUserName)).setText(topic.getOwner().getFirstName());
+        ((CanaroTextView)Views.find(tabHost, R.id.txtTopicPageDate)).setText(topic.getRevealDate().toString());
 
 //tags
         ChipsView mChipsView = Views.find(tabHost, R.id.cv_contacts);

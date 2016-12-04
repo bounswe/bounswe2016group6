@@ -11,7 +11,6 @@ import com.group6boun451.learner.model.Topic;
 public class GlideHelper {
 
     private GlideHelper() {}
-
     public static void loadImage(Context context, ImageView image, Topic topic) {
         loadImage(image,context.getString(R.string.base_url)+topic.getHeaderImage());
     }
