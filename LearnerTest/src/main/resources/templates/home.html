@@ -28,8 +28,13 @@
    background-repeat: no-repeat;
   background-position: center; 
   
+  
+  
 }
-
+.popular {
+border-radius: 5px ;
+border: 1px solid #A4A4A4;
+}
 .carousel-inner > .item > img {
 
 }
@@ -102,12 +107,10 @@
 		        };
 		    }
 		});
-		
-		
 	});
 </script>
 </head>
-<body>
+<body >
 
 <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
         <div class="container-fluid">
@@ -151,10 +154,7 @@
                         <a href="/">Home</a>
                     </li>
                     <li>
-                        <a th:text="${username}" href="/profile">About</a>
-                    </li>
-                    <li>
-                        <a href="/home">Sample Post</a>
+                        <a sec:authentication="name" href="/profile">Profile</a>
                     </li>
                     <li>
                         <a href="/logout">Logout</a>
@@ -207,7 +207,7 @@
 
 <div class="container">
 	<div class="row">
-		<div class="col-md-2">
+		<div class="col-md-1">
 
 		</div>
 		
@@ -251,11 +251,19 @@
 		</div>
 			
 		
-		<div class="col-md-2">
+		<div class="sidebar col-md-3">
 			<div sec:authorize="hasAuthority('TEACHER_PRIVILEGE')" class="container">
 				<a th:href="'/topic/create'" class="btn btn-info btn-lg">Create Topic</a>
 			</div>
+			
+			<h4>Popular topics</h4>
+			<div  th:each="poptop,itstat :${popular}" th:unless="${itstat.index >6}">
+				<p>
+				<a th:text="${poptop.header}"  th:href="'/topic/' + ${poptop.id}" style="font-size:14px; text-decoration:none" > header</a>
+				</p>			
+			</div>
 		</div>
+		
 	</div>
 </div>
 
