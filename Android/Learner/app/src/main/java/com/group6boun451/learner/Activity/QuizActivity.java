@@ -135,27 +135,7 @@ public class QuizActivity extends AppCompatActivity {
         mQuestions = HomePage.topics.get(HomePage.topicId-1).getQuestions();
 
 
-//        Question q1 = new Question();
-//        q1.setAnswerA("35");
-//        q1.setAnswerB("23");
-//        q1.setAnswerC("30");
-//        q1.setQuestion("What is the best age to have children?");
-//
-//        Question q2 = new Question();
-//        q2.setAnswerA("asdasd");
-//        q2.setAnswerB("213123");
-//        q2.setAnswerC("123125dsfsd");
-//        q2.setQuestion("asdasdasd");
-//
-//        Question q3 = new Question();
-//        q3.setAnswerA("asdasd");
-//        q3.setAnswerB("213123");
-//        q3.setAnswerC("123125dsfsd");
-//        q3.setQuestion("asdasdasd");
-//        mQuestions = new ArrayList<Question>();
-//        mQuestions.add(q1);
-//        mQuestions.add(q2);
-//        mQuestions.add(q3);
+
         numOfQuestion = mQuestions.size();
         final ViewPager questionsPager = (ViewPager) findViewById(R.id.quiz_viewpager);
 

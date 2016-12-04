@@ -35,6 +35,7 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.foldablelayout.UnfoldableView;
@@ -44,6 +45,7 @@ import com.doodle.android.chips.model.Contact;
 import com.group6boun451.learner.CommentListAdapter;
 import com.group6boun451.learner.R;
 import com.group6boun451.learner.model.GenericResponse;
+import com.group6boun451.learner.model.Question;
 import com.group6boun451.learner.model.Tag;
 import com.group6boun451.learner.model.Topic;
 import com.group6boun451.learner.model.User;
@@ -89,6 +91,8 @@ public class HomePage extends AppCompatActivity{
     @BindView(R.id.fab) FloatingActionButton fab;
     @BindView(R.id.fab2) FloatingActionButton fabQuiz;
     @BindView(R.id.edit_button) Button editButton;
+    @BindView(R.id.send_comment_button) Button sendCommentButton;
+    @BindView(R.id.topicPage_comment_text_area) EditText commentText;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.content_hamburger) View contentHamburger;
     @BindView(R.id.topic_content_TouchyWebView) TouchyWebView contentView;
@@ -99,8 +103,10 @@ public class HomePage extends AppCompatActivity{
     private boolean isSnackBarActive = false;
     private boolean isTopicActive= false;
     private boolean isGuillotineOpened = false;
+    private boolean isThereQuiz = false;
     private GuillotineAnimation guillotineAnimation;
     public static int topicId = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -196,6 +202,7 @@ public class HomePage extends AppCompatActivity{
         fabQuiz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Intent intent = new Intent(HomePage.this,QuizActivity.class);
                 startActivity(intent);
             }
@@ -219,7 +226,9 @@ public class HomePage extends AppCompatActivity{
                     unfoldableView.setGesturesEnabled(false);
                 isTopicActive = true;
                 fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_floatmenu_comment));
-                fabQuiz.setVisibility(View.VISIBLE);
+                if(isThereQuiz){
+                    fabQuiz.setVisibility(View.VISIBLE);
+                }
                 //TODO make fab animation here
             }
 
@@ -238,7 +247,9 @@ public class HomePage extends AppCompatActivity{
                 editButton.setVisibility(View.GONE);
                 isTopicActive = false;
                 fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_add_black_24dp));
-                fabQuiz.setVisibility(View.INVISIBLE);
+                if(isThereQuiz){
+                    fabQuiz.setVisibility(View.INVISIBLE);
+                }
                 editDone();
             }
         });
@@ -262,6 +273,20 @@ public class HomePage extends AppCompatActivity{
                             "text/html; charset=utf-8", "UTF-8", null);
                 }
 
+            }
+        });
+
+        sendCommentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String commentContent = commentText.getText().toString();
+                if(commentContent.length() < 9){
+                    Toast.makeText(HomePage.this,"Comment is too short",Toast.LENGTH_LONG);
+                }else{
+                    Topic t = topics.get(topicId);
+                    new SendCommentTask().execute(commentContent,""+t.getId());
+                    commentText.setText("");
+                }
             }
         });
     }
@@ -308,19 +333,21 @@ public class HomePage extends AppCompatActivity{
         ((TextView)Views.find(tabHost, R.id.txtTopicPageUserName)).setText(topic.getOwner().getFirstName());
         ((TextView)Views.find(tabHost, R.id.txtTopicPageDate)).setText(topic.getRevealDate().toString());
 
+
         ChipsView mChipsView = Views.find(tabHost,R.id.cv_contacts);
         // change EditText config
         mChipsView.getEditText().setFocusableInTouchMode(false);
-        int k =mChipsView.getChildCount();
-        Contact c = new Contact(null,null,null,"",null);
-        for(int i =0;i<k;i++){mChipsView.removeChipBy(c);}
+        for(ChipsView.Chip c: mChipsView.getChips()){
+            mChipsView.removeChipBy(c.getContact());
+        }
         for(Tag t : topic.getTags()){
             String tagName = t.getName();
-            Contact contact = new Contact(tagName, t.getContext(), t.getId()+"", "", null);
+            Contact contact = new Contact(tagName, t.getContext(), t.getId()+"", tagName, null);
             mChipsView.addChip(tagName, null, contact,true);
         }
-        contentView.loadDataWithBaseURL("https://www.youtube.com/embed/", topic.getContent(),
-                "text/html; charset=utf-8", "UTF-8", null);
+
+        contentView.loadData(topic.getContent(),"text/html",null);
+
         ListView comments = (ListView) findViewById(R.id.topicPageCommentList);
         comments.setAdapter(new CommentListAdapter(this, topic.getComments()));//TODO it might troublesome
         comments.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -354,6 +381,32 @@ public class HomePage extends AppCompatActivity{
         public Object instantiateItem(ViewGroup collection, int position) {
             topicId = position;
             final Topic topic = topics.get(position);
+            //for testing quiz
+            if(position == 0){
+                List<Question> mQuestions = new ArrayList<Question>();
+                Question q1 = new Question();
+                q1.setAnswerA("35");
+                q1.setAnswerB("23");
+                q1.setAnswerC("30");
+                q1.setQuestion("What is the best age to have children?");
+
+                Question q2 = new Question();
+                q2.setAnswerA("asdasd");
+                q2.setAnswerB("213123");
+                q2.setAnswerC("123125dsfsd");
+                q2.setQuestion("asdasdasd");
+
+                Question q3 = new Question();
+                q3.setAnswerA("asdasd");
+                q3.setAnswerB("213123");
+                q3.setAnswerC("123125dsfsd");
+                q3.setQuestion("asdasdasd");
+                mQuestions = new ArrayList<Question>();
+                mQuestions.add(q1);
+                mQuestions.add(q2);
+                mQuestions.add(q3);
+                topic.setQuestions(mQuestions);
+            }
             LayoutInflater inflater = LayoutInflater.from(mContext);
             ViewGroup v = (ViewGroup) inflater.inflate(R.layout.topic_item_home, collection, false);
             ((TextView) v.findViewById(R.id.textTopicTitle)).setText(topic.getHeader());
@@ -380,6 +433,13 @@ public class HomePage extends AppCompatActivity{
                 @Override
                 public void onClick(View v) {
                     ((HomePage) v.getContext()).openDetails(v.findViewById(R.id.card_view), topic);
+                    //check is there quiz
+                    if(topic.getQuestions().size() == 0){
+                        isThereQuiz = false;
+                    }else{
+                        isThereQuiz = true;
+                    }
+
                 }
             });
 
@@ -472,6 +532,46 @@ public class HomePage extends AppCompatActivity{
             viewpager3.setAdapter(new TopicPagerAdapter(HomePage.this));
         }
     }
+    public class SendCommentTask extends AsyncTask<String,Void,GenericResponse> {
+        private String username;
+        private String password;
+
+        @Override
+        protected void onPreExecute() {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            username = preferences.getString(getString(R.string.user_name), " ");
+            password = preferences.getString(getString(R.string.password), " ");
+        }
+
+        @Override
+        protected GenericResponse doInBackground(String... params) {
+            final String url = getString(R.string.base_url) + "topic/comment/create"+params[1];
+
+            // Populate the HTTP Basic Authentitcation header with the username and password
+            HttpAuthentication authHeader = new HttpBasicAuthentication(username, password);
+            HttpHeaders requestHeaders = new HttpHeaders();
+            requestHeaders.setAuthorization(authHeader);
+            requestHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            // Create a new RestTemplate instance
+            RestTemplate restTemplate = new RestTemplate();
+            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("content",params[0]);
+            try {
+                // Make the network request
+                ResponseEntity<GenericResponse> response = restTemplate.exchange(
+                        builder.build().encode().toUri(),
+                        HttpMethod.POST,
+                        new HttpEntity<Object>(requestHeaders), GenericResponse.class);
+                return response.getBody();
+            } catch (Exception e) {
+                Log.e(TAG, e.getLocalizedMessage(), e);
+            }
+            return new GenericResponse();
+        }
+
+        @Override
+        protected void onPostExecute(GenericResponse result) {showResult(result);}
+    }
     public class EditTopicTask extends AsyncTask<String, Void, GenericResponse> {
         private String username;
         private String password;
@@ -496,6 +596,7 @@ public class HomePage extends AppCompatActivity{
             RestTemplate restTemplate = new RestTemplate();
             restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("header",params[0]).queryParam("content",params[1]);
+
             try {
                 // Make the network request
                 ResponseEntity<GenericResponse> response = restTemplate.exchange(
