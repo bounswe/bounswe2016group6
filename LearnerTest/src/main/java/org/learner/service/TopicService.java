@@ -2,7 +2,9 @@ package org.learner.service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -177,7 +179,7 @@ public class TopicService implements ITopicService{
 
 	@Override
 	public List<Topic> getRecentTopics() {
-		return repository.findTop3ByOrderByCreatedAtDesc();
+		return repository.findTop5ByOrderByCreatedAtDesc();
 	}
 
 	@Override
@@ -213,8 +215,12 @@ public class TopicService implements ITopicService{
 
 	@Override
 	public List<Topic> getRelatedTopicsViaTags(long tagid) {
-		// TODO Auto-generated method stub
-		return null;
+		Tag tag = tagRepo.findOne(tagid);
+		
+		if(tag == null) return null;
+		
+		
+		return tag.getRelatedTopics();
 	}
 
 	@Override
@@ -309,6 +315,28 @@ public class TopicService implements ITopicService{
 		questionRepo.save(ques);
 		return ques.get(0);
 	}
+
+	@Override
+	public List<Topic> getPopularTopics() {
+		List<Topic> popular = repository.findTop5ByOrderByCreatedAtDesc();
+		return popular;
+	}
 	
+	@Override
+	//TODO find topics with common tags
+	public List<Topic> getTopicsWithCommonTag(Topic topic) {
+		if(topic == null) return null;
+		List<Tag> ttags = topic.getTags();
+		//List<Long> tagids = ttags.stream().map(u -> u.getId()).collect(Collectors.toList());
+		for(Tag t : ttags){
+			System.out.println(t.getId() + " " + t.getName());
+		}
+	    
+
+		if(ttags.isEmpty()) System.out.println("Empty!!!");
+		
+		List<Topic> popular = repository.topicsWithCommonTags(ttags,topic.getId());
+		return popular;
+	}
 	
 }

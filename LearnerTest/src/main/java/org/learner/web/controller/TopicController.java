@@ -204,7 +204,7 @@ public class TopicController {
     		return null;
     	}
     	List<Question> questions = topic.getQuestions();
-    	LOGGER.debug("Question 1 : " + questions.get(0).getQuestion());
+    	//LOGGER.debug("Question 1 : " + questions.get(0).getQuestion());
     	return questions;
     }
     
@@ -220,6 +220,12 @@ public class TopicController {
     @ResponseBody
     public Collection<Topic> topicList(){
     	return topicService.getAllTopics();
+    }
+    
+    @RequestMapping(value="/popular")
+    @ResponseBody
+    public List<Topic> popularTopics(){
+    	return topicService.getPopularTopics();
     }
     
     @RequestMapping(value="/{id}")
