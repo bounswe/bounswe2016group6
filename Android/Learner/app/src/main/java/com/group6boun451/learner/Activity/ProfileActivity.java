@@ -1,6 +1,9 @@
 package com.group6boun451.learner.Activity;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -59,6 +62,25 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                     finish();
+            }
+        });
+        guillotineMenu.findViewById(R.id.activity_group).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(ProfileActivity.this, SearchActivity.class));
+                guillotineAnimation.close();
+                finish();
+            }
+        });
+        guillotineMenu.findViewById(R.id.activity_log_out).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
+                editor.putString(getString(R.string.user_name), "");
+                editor.putString(getString(R.string.password), "");
+                editor.commit();
+                guillotineAnimation.close();
+                finish();
             }
         });
         guillotineAnimation = new GuillotineAnimation.GuillotineBuilder(guillotineMenu, guillotineMenu.findViewById(R.id.guillotine_hamburger), contentHamburger)

@@ -34,6 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_menu_edit" />
+        app:backgroundTint="@color/guillotine_background"
+        android:src="@drawable/ic_menu_exit" />
 
 </android.support.design.widget.CoordinatorLayout>

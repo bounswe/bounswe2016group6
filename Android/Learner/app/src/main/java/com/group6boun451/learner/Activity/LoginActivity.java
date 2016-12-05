@@ -45,6 +45,11 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if(preferences.getString(getString(R.string.user_name), "").length()>0){
+            new LoginTask().execute();
+            return;
+        }
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         userNameEditText.setText("test@test.com");
@@ -60,8 +65,15 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            username = userNameEditText.getText().toString();
-            password = passwordEditText.getText().toString();
+            if(userNameEditText!=null){
+                username = userNameEditText.getText().toString();
+                password = passwordEditText.getText().toString();
+            } else{
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
+                username = preferences.getString(LoginActivity.this.getString(R.string.user_name), " ");
+                password = preferences.getString(LoginActivity.this.getString(R.string.password), " ");
+            }
+
         }
 
         @Override
@@ -96,8 +108,8 @@ public class LoginActivity extends AppCompatActivity {
             }
             SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
             //TODO check if those are empty
-            editor.putString(getString(R.string.user_name), userNameEditText.getText().toString());
-            editor.putString(getString(R.string.password), passwordEditText.getText().toString());
+            editor.putString(getString(R.string.user_name), username);
+            editor.putString(getString(R.string.password),password);
             editor.commit();
             Intent intent = new Intent(LoginActivity.this, HomePage.class);
             String userString = null;
@@ -108,6 +120,7 @@ public class LoginActivity extends AppCompatActivity {
             }
             intent.putExtra("user",userString);
             startActivity(intent);
+            finish();
         }
     }
 }

@@ -63,7 +63,7 @@
         android:layout_height="@dimen/guillotine_divider_height" />
 
     <LinearLayout
-        android:id="@+id/activity_settings"
+        android:id="@+id/activity_log_out"
         style="@style/LinearLayout.GuillotineItem">
 
         <ImageView

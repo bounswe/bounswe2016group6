@@ -3,6 +3,7 @@ package com.group6boun451.learner.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -143,6 +144,18 @@ public class HomePage extends AppCompatActivity{
             public void onClick(View view) {
                 startActivity(new Intent(HomePage.this, SearchActivity.class));
                 guillotineAnimation.close();
+            }
+        });
+        guillotineMenu.findViewById(R.id.activity_log_out).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
+                //TODO check if those are empty
+                editor.putString(getString(R.string.user_name), "");
+                editor.putString(getString(R.string.password), "");
+                editor.commit();
+                guillotineAnimation.close();
+                finish();
             }
         });
         guillotineAnimation = new GuillotineAnimation.GuillotineBuilder(guillotineMenu, guillotineMenu.findViewById(R.id.guillotine_hamburger), contentHamburger)
