@@ -39,5 +39,10 @@
     <string name="edit">edit</string>
     <string name="done">done</string>
     <string name="locationSearch">search...</string>
+    <string name="select_role">Select Role</string>
+    <string-array name="register_roles">
+        <item>Student</item>
+        <item>Teacher</item>
+    </string-array>
 
 </resources>

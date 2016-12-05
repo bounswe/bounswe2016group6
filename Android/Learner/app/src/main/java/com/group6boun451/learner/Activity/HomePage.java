@@ -172,7 +172,7 @@ public class HomePage extends AppCompatActivity{
                     @Override
                     public void onGuillotineClosed() {
                         isGuillotineOpened=false;
-                        if(isTopicActive) fabQuiz.setVisibility(View.VISIBLE);
+                        if(isTopicActive && isThereQuiz) fabQuiz.setVisibility(View.VISIBLE);
                         if(isTeacher||isTopicActive) fab.setVisibility(View.VISIBLE);
 
                     }

@@ -59,6 +59,11 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {new LoginTask().execute();}});
 
     }
+    //button register click
+    public void btnRegisterClicked(View view){
+        Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+        startActivity(intent);
+    }
     public class LoginTask extends AsyncTask<Void,Void,User> {
         private String username;
         private String password;
