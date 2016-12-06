@@ -38,6 +38,6 @@
     <string name="finish_button">FINISH</string>
     <string name="edit">edit</string>
     <string name="done">done</string>
-    <string name="locationSearch">search...</string>
+    <string name="search_hint">search...</string>
 
 </resources>

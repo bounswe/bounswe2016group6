@@ -43,7 +43,7 @@
                 app:floatingSearch_leftActionMode="showSearch"
                 app:floatingSearch_searchBarMarginLeft="@dimen/search_view_inset"
                 app:floatingSearch_searchBarMarginRight="@dimen/search_view_inset"
-                app:floatingSearch_searchHint="@string/locationSearch"
+                app:floatingSearch_searchHint="@string/search_hint"
                 app:floatingSearch_showSearchKey="true"
                 app:floatingSearch_dimBackground="false"/>
         </android.support.design.widget.AppBarLayout>

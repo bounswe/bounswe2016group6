@@ -58,11 +58,14 @@ class Task<T> extends AsyncTask<T,Void,String> {
             // Make the network request
             ResponseEntity<String> response = null;
             if(params.length>1) {
+                Log.d("call", (String) params[0]);
                 restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
                 response = restTemplate.exchange((String) params[0], HttpMethod.POST, new HttpEntity<>( params[1], requestHeaders), String.class);
             } else if(params[0] instanceof String) {
+                Log.d("call", (String) params[0]);
                 response = restTemplate.exchange((String) params[0], HttpMethod.GET, new HttpEntity<Object>(requestHeaders), String.class);
             } else {
+                Log.d("call", String.valueOf(params[0]));
                 response = restTemplate.exchange((URI) params[0], HttpMethod.POST, new HttpEntity<Object>(requestHeaders), String.class);
             }
             return response.getBody();

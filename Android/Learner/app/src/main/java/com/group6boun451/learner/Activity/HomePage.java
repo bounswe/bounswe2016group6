@@ -1,6 +1,5 @@
 package com.group6boun451.learner.Activity;
 
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,15 +11,15 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -54,11 +53,16 @@ import com.group6boun451.learner.widget.TouchyWebView;
 import com.yalantis.guillotine.animation.GuillotineAnimation;
 import com.yalantis.guillotine.interfaces.GuillotineListener;
 
+import net.danlew.android.joda.JodaTimeAndroid;
+
+import org.joda.time.DateTime;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -106,6 +110,7 @@ public class HomePage extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
         ButterKnife.bind(this);
+        JodaTimeAndroid.init(this);
         user = Task.getResult(getIntent().getStringExtra("user"),User.class);
         username = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString(getString(R.string.user_name), " ");
 //        fetch topics
@@ -354,11 +359,18 @@ public class HomePage extends AppCompatActivity{
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home_page, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
-        SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        return true;
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_search:
+                startActivity(new Intent(HomePage.this, SearchActivity.class));
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+
     }
 
     public void openDetails(View coverView, Topic topic) {
@@ -367,7 +379,9 @@ public class HomePage extends AppCompatActivity{
         GlideHelper.loadImage(this,(ImageView) Views.find(tabHost, R.id.details_image), topic);
         ((CanaroTextView)Views.find(tabHost, R.id.details_title)).setText(topic.getHeader());
         ((CanaroTextView)Views.find(tabHost, R.id.txtTopicPageUserName)).setText(topic.getOwner().getFirstName());
-        ((CanaroTextView)Views.find(tabHost, R.id.txtTopicPageDate)).setText(topic.getRevealDate().toString());
+
+
+        ((CanaroTextView)Views.find(tabHost, R.id.txtTopicPageDate)).setText(getReadableDateFromDate(topic.getRevealDate()));
 
 //tags
         ChipsView mChipsView = Views.find(tabHost, R.id.cv_contacts);
@@ -404,6 +418,24 @@ public class HomePage extends AppCompatActivity{
         }
         unfoldableView.unfold(coverView, tabHost);
     }
+
+    private String getReadableDateFromDate(Date revealDate) {
+        //DATE Android DateUtils
+        String s = DateUtils.getRelativeDateTimeString(HomePage.this,revealDate.getTime(),
+                DateUtils.DAY_IN_MILLIS,DateUtils.WEEK_IN_MILLIS, 0).toString();
+
+        String[] datetime = s.split(",");
+        String date = datetime[0];
+
+        //TIME JodaTime DateUtils
+        Calendar cc = Calendar.getInstance();
+        cc.set(Calendar.HOUR_OF_DAY,revealDate.getHours());
+        cc.set(Calendar.MINUTE, revealDate.getMinutes());
+        DateTime dt = new DateTime(cc.getTimeInMillis());
+        String time = net.danlew.android.joda.DateUtils.getRelativeTimeSpanString(HomePage.this, dt, true).toString();
+        return date+ ", " + time;
+    }
+
     @Override
     public AssetManager getAssets() {
         return getResources().getAssets();
@@ -432,8 +464,8 @@ public class HomePage extends AppCompatActivity{
             LayoutInflater inflater = LayoutInflater.from(mContext);
             ViewGroup v = (ViewGroup) inflater.inflate(R.layout.topic_item_home, collection, false);
             ((TextView) v.findViewById(R.id.textTopicTitle)).setText(topic.getHeader());
-            ((TextView) v.findViewById(R.id.textAuthor)).setText(topic.getOwner().getFirstName());
-            ((TextView) v.findViewById(R.id.textDate)).setText(topic.getRevealDate().toString());
+            ((CanaroTextView) v.findViewById(R.id.textAuthor)).setText(topic.getOwner().getFirstName());
+            ((CanaroTextView) v.findViewById(R.id.textDate)).setText(getReadableDateFromDate(topic.getRevealDate()));
 
             ChipsView mChipsView = (ChipsView) v.findViewById(R.id.cv_contacts);
             // change EditText config
@@ -465,7 +497,7 @@ public class HomePage extends AppCompatActivity{
 
 
             final Button likeButton = (Button)v.findViewById(R.id.like_button);
-            if(isLiked(topic.getLikedBy())) likeButton.setTextColor(getResources().getColor(R.color.mdtp_accent_color));
+            if(isLiked(topic.getLikedBy())) likeButton.setTextColor(getResources().getColor(R.color.selected_item_color));
             likeButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -473,9 +505,9 @@ public class HomePage extends AppCompatActivity{
                         @Override
                         public void onResult(String result) {showResult(result);}
                     });
-                    if(likeButton.getCurrentTextColor()!=getResources().getColor(R.color.mdtp_accent_color)) {
+                    if(likeButton.getCurrentTextColor()!=getResources().getColor(R.color.selected_item_color)) {
                         likeTask.execute(getString(R.string.base_url) + "topic/like/"+topic.getId());
-                        likeButton.setTextColor(getResources().getColor(R.color.mdtp_accent_color));
+                        likeButton.setTextColor(getResources().getColor(R.color.selected_item_color));
                     }else {
                         likeTask.execute(getString(R.string.base_url) + "topic/unlike/"+topic.getId());
                         likeButton.setTextColor(getResources().getColor(R.color.white));

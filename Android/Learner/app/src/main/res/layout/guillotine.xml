@@ -68,7 +68,7 @@
 
         <ImageView
             style="@style/ImageView.GuillotineItem"
-            android:src="@drawable/ic_settings" />
+            android:src="@drawable/ic_floatmenu_comment_quit" />
 
         <com.group6boun451.learner.widget.CanaroTextView
             style="@style/TextView.GuillotineItem"
