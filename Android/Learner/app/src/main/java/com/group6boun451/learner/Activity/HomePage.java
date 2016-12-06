@@ -11,11 +11,9 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -47,6 +45,7 @@ import com.group6boun451.learner.model.Tag;
 import com.group6boun451.learner.model.Topic;
 import com.group6boun451.learner.model.User;
 import com.group6boun451.learner.utils.GlideHelper;
+import com.group6boun451.learner.utils.TopicPagerAdapter;
 import com.group6boun451.learner.widget.CanaroTextView;
 import com.group6boun451.learner.widget.Summernote;
 import com.group6boun451.learner.widget.TouchyWebView;
@@ -55,18 +54,17 @@ import com.yalantis.guillotine.interfaces.GuillotineListener;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
-import org.joda.time.DateTime;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.group6boun451.learner.utils.GlideHelper.getReadableDateFromDate;
 
 public class HomePage extends AppCompatActivity{
     protected static final String TAG = HomePage.class.getSimpleName();
@@ -93,12 +91,12 @@ public class HomePage extends AppCompatActivity{
     TouchyWebView contentView;
 
     public static List<Topic> topics;
-    private String username;
+    public static String username;
     private boolean isTeacher = true;
     private boolean isSnackBarActive = false;
     private boolean isTopicActive= false;
     private boolean isGuillotineOpened = false;
-    private boolean isThereQuiz = false;
+    public static boolean isThereQuiz = false;
     private GuillotineAnimation guillotineAnimation;
     public static User user;
     public static Topic currentTopic = null;
@@ -114,15 +112,15 @@ public class HomePage extends AppCompatActivity{
         user = Task.getResult(getIntent().getStringExtra("user"),User.class);
         username = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString(getString(R.string.user_name), " ");
 //        fetch topics
-        new Task<String>(this, new Callback() {
+        new Task<String>(this, new Task.Callback() {
             @Override
             public void onResult(String resultString) {
                 Topic[] result = Task.getResult(resultString,Topic[].class);
                 topics = new ArrayList(Arrays.asList(result));
                 //TODO handle this
-                viewpager.setAdapter(new TopicPagerAdapter(HomePage.this));
-                viewpager2.setAdapter(new TopicPagerAdapter(HomePage.this));
-                viewpager3.setAdapter(new TopicPagerAdapter(HomePage.this));
+                viewpager.setAdapter(new TopicPagerAdapter(HomePage.this,topics));
+                viewpager2.setAdapter(new TopicPagerAdapter(HomePage.this,topics));
+                viewpager3.setAdapter(new TopicPagerAdapter(HomePage.this,topics));
             }
         }).execute(getString(R.string.base_url) + "topic/recent");
 
@@ -277,7 +275,7 @@ public class HomePage extends AppCompatActivity{
                     if(!t.getContent().equals(content)){
                         t.setContent(content);
                         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getString(R.string.base_url) + "topic/edit/"+t.getId()).queryParam("header",t.getHeader()).queryParam("content",content);
-                        new Task<URI>(HomePage.this, new Callback() {
+                        new Task<URI>(HomePage.this, new Task.Callback() {
                             @Override
                             public void onResult(String result) {showResult(result);}
                         }).execute(builder.build().encode().toUri());
@@ -298,7 +296,7 @@ public class HomePage extends AppCompatActivity{
                     Topic t = currentTopic;
                     UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getString(R.string.base_url) + "topic/comment/create")
                             .queryParam("topicId",t.getId()).queryParam("content",commentContent);
-                    new Task<URI>(HomePage.this, new Callback() {
+                    new Task<URI>(HomePage.this, new Task.Callback() {
                         @Override
                         public void onResult(String result) {
                             if(showResult(result)) {
@@ -381,7 +379,7 @@ public class HomePage extends AppCompatActivity{
         ((CanaroTextView)Views.find(tabHost, R.id.txtTopicPageUserName)).setText(topic.getOwner().getFirstName());
 
 
-        ((CanaroTextView)Views.find(tabHost, R.id.txtTopicPageDate)).setText(getReadableDateFromDate(topic.getRevealDate()));
+        ((CanaroTextView)Views.find(tabHost, R.id.txtTopicPageDate)).setText(getReadableDateFromDate(HomePage.this,topic.getRevealDate()));
 
 //tags
         ChipsView mChipsView = Views.find(tabHost, R.id.cv_contacts);
@@ -419,22 +417,7 @@ public class HomePage extends AppCompatActivity{
         unfoldableView.unfold(coverView, tabHost);
     }
 
-    private String getReadableDateFromDate(Date revealDate) {
-        //DATE Android DateUtils
-        String s = DateUtils.getRelativeDateTimeString(HomePage.this,revealDate.getTime(),
-                DateUtils.DAY_IN_MILLIS,DateUtils.WEEK_IN_MILLIS, 0).toString();
 
-        String[] datetime = s.split(",");
-        String date = datetime[0];
-
-        //TIME JodaTime DateUtils
-        Calendar cc = Calendar.getInstance();
-        cc.set(Calendar.HOUR_OF_DAY,revealDate.getHours());
-        cc.set(Calendar.MINUTE, revealDate.getMinutes());
-        DateTime dt = new DateTime(cc.getTimeInMillis());
-        String time = net.danlew.android.joda.DateUtils.getRelativeTimeSpanString(HomePage.this, dt, true).toString();
-        return date+ ", " + time;
-    }
 
     @Override
     public AssetManager getAssets() {
@@ -454,85 +437,5 @@ public class HomePage extends AppCompatActivity{
         }
     }
 
-    public class TopicPagerAdapter extends PagerAdapter {
-        private Context mContext;
-        TopicPagerAdapter(Context context) {mContext = context;}
-
-        @Override
-        public Object instantiateItem(ViewGroup collection, int position) {
-            final Topic topic = topics.get(position);
-            LayoutInflater inflater = LayoutInflater.from(mContext);
-            ViewGroup v = (ViewGroup) inflater.inflate(R.layout.topic_item_home, collection, false);
-            ((TextView) v.findViewById(R.id.textTopicTitle)).setText(topic.getHeader());
-            ((CanaroTextView) v.findViewById(R.id.textAuthor)).setText(topic.getOwner().getFirstName());
-            ((CanaroTextView) v.findViewById(R.id.textDate)).setText(getReadableDateFromDate(topic.getRevealDate()));
-
-            ChipsView mChipsView = (ChipsView) v.findViewById(R.id.cv_contacts);
-            // change EditText config
-            mChipsView.getEditText().setVisibility(View.GONE);
-            int k = mChipsView.getChips().size();
-            Contact c = new Contact(null,null,null,"",null);
-            for(int i =0;i<k;i++){mChipsView.removeChipBy(c);}
-            for(Tag t : topic.getTags()){
-                String tagName = t.getName();
-                Contact contact = new Contact(tagName, t.getContext(), t.getId()+"", tagName, null);
-                mChipsView.addChip(tagName, null, contact,true);
-            }
-
-
-            final ImageView img = (ImageView) v.findViewById(R.id.imageTopic);
-            GlideHelper.loadImage(HomePage.this,img, topic);
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ((HomePage) v.getContext()).openDetails(v.findViewById(R.id.card_view2), topic);
-                    //check is there quiz
-                    isThereQuiz = topic.getQuestions().size() != 0;
-
-                }
-            });
-
-            final ImageView imgProfile = (ImageView) v.findViewById(R.id.imgTopicPageUserImage);
-            imgProfile.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_profile));
-
-
-            final Button likeButton = (Button)v.findViewById(R.id.like_button);
-            if(isLiked(topic.getLikedBy())) likeButton.setTextColor(getResources().getColor(R.color.selected_item_color));
-            likeButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Task<String> likeTask = new Task<>(HomePage.this, new Callback() {
-                        @Override
-                        public void onResult(String result) {showResult(result);}
-                    });
-                    if(likeButton.getCurrentTextColor()!=getResources().getColor(R.color.selected_item_color)) {
-                        likeTask.execute(getString(R.string.base_url) + "topic/like/"+topic.getId());
-                        likeButton.setTextColor(getResources().getColor(R.color.selected_item_color));
-                    }else {
-                        likeTask.execute(getString(R.string.base_url) + "topic/unlike/"+topic.getId());
-                        likeButton.setTextColor(getResources().getColor(R.color.white));
-                    }
-                }
-            });
-
-            collection.addView(v);
-            return v;
-        }
-
-        private boolean isLiked(List<User> likedBy) {
-            for (User u:likedBy){if(u.getEmail().equalsIgnoreCase(username))return true;} return false;
-        }
-
-        @Override public void destroyItem(ViewGroup collection, int position, Object view) {collection.removeView((View) view);}
-
-        @Override public int getCount() {return topics.size();}
-
-        @Override public boolean isViewFromObject(View view, Object object) {return view == object;}
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return "";
-        }
-    }
 
 }

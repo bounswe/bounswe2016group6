@@ -192,7 +192,7 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
                     UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getString(R.string.base_url) + "tag/suggest")
                             .queryParam("query",text.toString());
 
-                    f = new Task<>(AddTopicActivity.this, new Callback() {
+                    f = new Task<>(AddTopicActivity.this, new Task.Callback() {
                         @Override
                         public void onResult(String resultString) {
                             Tag[] result =  Task.getResult(resultString, Tag[].class);
@@ -331,7 +331,7 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
             if(contentImageButton.getTag()!=null)
             formData.add("image", new FileSystemResource(contentImageButton.getTag().toString()));
 //           create topic task
-            new Task<>(AddTopicActivity.this, new Callback() {
+            new Task<>(AddTopicActivity.this, new Task.Callback() {
                 @Override
                 public void onResult(String resultString) {
                     GenericResponse result = Task.getResult(resultString,GenericResponse.class);
@@ -349,7 +349,7 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
 
                     if (tags.length== 0) return;
 //                    add tag task
-                    new Task<>(AddTopicActivity.this, new Callback() {
+                    new Task<>(AddTopicActivity.this, new Task.Callback() {
                         @Override
                         public void onResult(String result) {showResult(Task.getResult(result,GenericResponse.class));}
                     }).execute(getString(R.string.base_url) + "tag/"+result.getMessage()+"/add",tags);

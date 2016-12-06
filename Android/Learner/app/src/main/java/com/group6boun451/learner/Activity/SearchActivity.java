@@ -30,6 +30,7 @@ import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -39,7 +40,7 @@ import java.util.Collections;
  */
 public class SearchActivity extends AppCompatActivity {
     protected static final String TAG = HomePage.class.getSimpleName();
-    FetchTopicsTask f;
+    Task<URI> f;
     private FloatingSearchView mSearchView;
 
     private SearchResultsListAdapter mSearchResultsAdapter;
@@ -75,8 +76,21 @@ public class SearchActivity extends AppCompatActivity {
                     mSearchView.hideProgress();
                 } else if(newQuery.length()>2) {
                     mSearchView.showProgress();
-                    f = new FetchTopicsTask();
-                    f.execute(newQuery);
+                    //        fetch results
+                    f =  new Task<>(SearchActivity.this, new Task.Callback() {
+                                @Override
+                                public void onResult(String resultString) {
+                                    Topic[] result = Task.getResult(resultString, Topic[].class);
+                                    if (result != null) {
+                                        mSearchResultsAdapter.swapData(Arrays.asList(result));
+                                    }
+                                    mSearchView.hideProgress();
+                                }
+                            });
+                    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getString(R.string.base_url) + "search/keyword")
+                            .queryParam("keyword",newQuery);
+
+                    f.execute(builder.build().encode().toUri());
                 }
             }
         });
@@ -141,19 +155,6 @@ public class SearchActivity extends AppCompatActivity {
             }
         }
 
-        @Override
-        protected void onPostExecute(Topic[] result) {
-            if (result!=null) {
-                mSearchResultsAdapter.swapData(Arrays.asList(result));
-            }
-            mSearchView.hideProgress();
-
-//            topics = new ArrayList(Arrays.asList(result));
-//            //TODO handle this
-//            viewpager.setAdapter(new HomePage.TopicPagerAdapter(HomePage.this));
-//            viewpager2.setAdapter(new HomePage.TopicPagerAdapter(HomePage.this));
-//            viewpager3.setAdapter(new HomePage.TopicPagerAdapter(HomePage.this));
-        }
     }
 
 }

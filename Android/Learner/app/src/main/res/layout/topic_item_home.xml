@@ -97,7 +97,7 @@
     </android.support.v7.widget.CardView>
     <com.doodle.android.chips.ChipsView
         android:id="@+id/cv_contacts"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:overScrollMode="ifContentScrolls"
         android:layout_marginLeft="@dimen/md_keylines_mini"

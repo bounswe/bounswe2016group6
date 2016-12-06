@@ -17,7 +17,7 @@
     <dimen name="guillotine_actionbar_background_view_height">35dp</dimen>
     <dimen name="md_keylines">12dp</dimen>
     <dimen name="md_keylines_mini">6dp</dimen>
-    <dimen name="card_height">284dp</dimen>
+    <dimen name="card_height">280dp</dimen>
     <dimen name="article_subheading">16sp</dimen>
     <dimen name="card_title_height">40dp</dimen>
     <dimen name="card_image_height">200dp</dimen>

@@ -27,7 +27,7 @@ import java.util.Collections;
  * Created by Ahmet Zorer on 12/5/2016.
  *
  */
-class Task<T> extends AsyncTask<T,Void,String> {
+public class Task<T> extends AsyncTask<T,Void,String> {
     private String username;
     private String password;
     private Context context;
@@ -88,8 +88,8 @@ class Task<T> extends AsyncTask<T,Void,String> {
         }
         return result;
     }
+    public interface Callback{
+        void onResult(String result);
+    }
 }
 
-interface Callback{
-    void onResult(String result);
-}
