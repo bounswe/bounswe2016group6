@@ -89,6 +89,7 @@
         android:layout_marginBottom="10dip"
         android:gravity="center"
         android:text="Register?"
+        android:onClick="btnRegisterClicked"
         android:textColor="@color/white"/>
     </LinearLayout>
 </LinearLayout>

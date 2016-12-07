@@ -121,6 +121,11 @@ public class QuizActivity extends AppCompatActivity {
         rightArrow = (Button) findViewById(R.id.btnArrowNext);
         inWhichQuestion = (TextView) findViewById(R.id.txtAtWhich);
     }
+
+    // when quiz finshed
+    private void clickBtnFinishQuiz(View view){
+
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
