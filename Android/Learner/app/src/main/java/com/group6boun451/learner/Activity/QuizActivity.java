@@ -1,6 +1,7 @@
 package com.group6boun451.learner.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -60,6 +61,7 @@ public class QuizActivity extends AppCompatActivity {
             final Button choiceC = (Button) v.findViewById(R.id.btnQuizChoiceC);
             final Drawable drw = QuizActivity.this.getResources().getDrawable(R.drawable.quiz_marked);
 
+
             int tmp = answers[position];
             if(tmp != -1){
                 if(tmp == 0){
@@ -108,23 +110,45 @@ public class QuizActivity extends AppCompatActivity {
 
     }
 
-    private Button leftArrow,rightArrow,finishQuiz;
+    private Button leftArrow,rightArrow,finishQuiz,finishAndQuit,checkAnswers;
     private List<Question> mQuestions;
     private Typeface chalkFont;
-    private TextView inWhichQuestion;
+    private ViewPager questionsPager;
+    private TextView inWhichQuestion,txtCorrectAnswer;
     private int numOfQuestion, currentQuestion;
     private int[] answers;
+    private boolean isQuizFinished;
 
     private void init(){
         chalkFont = Typeface.createFromAsset(getAssets(),"fonts/chalk_font.ttf");
         leftArrow = (Button) findViewById(R.id.btnArrowPrev);
         rightArrow = (Button) findViewById(R.id.btnArrowNext);
         inWhichQuestion = (TextView) findViewById(R.id.txtAtWhich);
+        finishQuiz = (Button) findViewById(R.id.btnFinishQuiz);
+        finishAndQuit = (Button) findViewById(R.id.btnQuitQuiz);
+        checkAnswers = (Button) findViewById(R.id.btnCheckAnswers);
+        questionsPager = (ViewPager) findViewById(R.id.quiz_viewpager);
+        txtCorrectAnswer = (TextView) findViewById(R.id.correctAnswer);
+        isQuizFinished = false;
     }
 
     // when quiz finshed
-    private void clickBtnFinishQuiz(View view){
+    public void clickBtnFinishQuiz(View view){
+        isQuizFinished = true;
 
+        questionsPager.setCurrentItem(0);
+        questionsPager.setVisibility(View.VISIBLE);
+    }
+
+    public void clickBtnCheckAnswers(View view){
+        questionsPager.setCurrentItem(0);
+        questionsPager.setVisibility(View.VISIBLE);
+    }
+
+    public void clickBtnFinishQuit(View view){
+        Intent intent=new Intent();
+        setResult(31415,intent);
+        finish();
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,11 +157,14 @@ public class QuizActivity extends AppCompatActivity {
         init();
 
         mQuestions = HomePage.currentTopic.getQuestions();
+        Question q1 = new Question();
+        q1.setAnswerA("A   "); q1.setAnswerB("b   "); q1.setAnswerC("c  "); q1.setCorrect(0); q1.setQuestion("testtest"); mQuestions.add(q1);
         numOfQuestion = mQuestions.size();
-        final ViewPager questionsPager = (ViewPager) findViewById(R.id.quiz_viewpager);
+
         questionsPager.setAdapter(new QuestionPagerAdapter(this));
+
         leftArrow.setVisibility(View.INVISIBLE);
-        inWhichQuestion.setText("1 / "+numOfQuestion);
+        inWhichQuestion.setText("1 / "+(numOfQuestion-1));
         currentQuestion = 0;
         answers = new int[numOfQuestion];
         Arrays.fill(answers,-1);
@@ -149,15 +176,43 @@ public class QuizActivity extends AppCompatActivity {
                 if(position == 0){
                     rightArrow.setVisibility(View.VISIBLE);
                     leftArrow.setVisibility(View.INVISIBLE);
+                    finishQuiz.setVisibility(View.GONE);
+                    finishAndQuit.setVisibility(View.GONE);
+                    checkAnswers.setVisibility(View.GONE);
                 }else if(position == numOfQuestion-1){
-                    leftArrow.setVisibility(View.VISIBLE);
+                    leftArrow.setVisibility(View.INVISIBLE);
                     rightArrow.setVisibility(View.INVISIBLE);
+                    finishQuiz.setVisibility(View.VISIBLE);
+                    finishAndQuit.setVisibility(View.VISIBLE);
+                    checkAnswers.setVisibility(View.VISIBLE);
+                    txtCorrectAnswer.setVisibility(View.GONE);
+                    questionsPager.setVisibility(View.GONE);
                 }else{
                     rightArrow.setVisibility(View.VISIBLE);
                     leftArrow.setVisibility(View.VISIBLE);
+                    finishQuiz.setVisibility(View.GONE);
+                    finishAndQuit.setVisibility(View.GONE);
+                    checkAnswers.setVisibility(View.GONE);
                 }
                 currentQuestion = position;
-                inWhichQuestion.setText( (position+1) + " / " + numOfQuestion);
+                inWhichQuestion.setText( (position+1) + " / " + (numOfQuestion-1));
+                if(position == numOfQuestion-1){
+                    inWhichQuestion.setText("Finish");
+                }
+                if(isQuizFinished){
+                    if(position != mQuestions.size() -1) {
+                        txtCorrectAnswer.setVisibility(View.VISIBLE);
+                    }
+                    int ans = mQuestions.get(position).getCorrect();
+                    if(ans == 0){
+                        txtCorrectAnswer.setText("Correct : A");
+                    }else if(ans == 1){
+                        txtCorrectAnswer.setText("Correct : B");
+                    }else if(ans == 2){
+                        txtCorrectAnswer.setText("Correct : C");
+                    }
+
+                }
 
             }
             @Override public void onPageScrollStateChanged(int state) {}

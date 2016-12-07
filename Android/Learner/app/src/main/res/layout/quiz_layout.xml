@@ -13,11 +13,30 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Finish Quiz"
+        android:text="Finish Quiz And See Answer"
         android:textAllCaps="false"
         android:alpha="0.8"
         android:id="@+id/btnFinishQuiz"
+        android:visibility="gone"
         android:onClick="clickBtnFinishQuiz"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Finish And Quit"
+        android:textAllCaps="false"
+        android:alpha="0.8"
+        android:id="@+id/btnQuitQuiz"
+        android:visibility="gone"
+        android:onClick="clickBtnFinishQuit"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Check Answers"
+        android:textAllCaps="false"
+        android:alpha="0.8"
+        android:id="@+id/btnCheckAnswers"
+        android:visibility="gone"
+        android:onClick="clickBtnCheckAnswers"/>
    <LinearLayout
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
@@ -60,6 +79,13 @@
         android:textSize="22sp"
         android:gravity="center"
         android:id="@+id/txtAtWhich"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="22sp"
+        android:gravity="center"
+        android:id="@+id/correctAnswer"
+        android:visibility="gone"/>
 
     <android.support.v4.view.ViewPager
         android:layout_marginTop="45dip"

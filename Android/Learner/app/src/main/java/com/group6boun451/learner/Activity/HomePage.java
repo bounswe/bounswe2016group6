@@ -40,6 +40,7 @@ import com.doodle.android.chips.model.Contact;
 import com.group6boun451.learner.CommentListAdapter;
 import com.group6boun451.learner.R;
 import com.group6boun451.learner.model.Comment;
+import com.group6boun451.learner.model.Question;
 import com.group6boun451.learner.model.Tag;
 import com.group6boun451.learner.model.Topic;
 import com.group6boun451.learner.model.User;
@@ -106,13 +107,13 @@ public class HomePage extends AppCompatActivity{
         setContentView(R.layout.activity_home_page);
         ButterKnife.bind(this);
         JodaTimeAndroid.init(this);
-        user = Task.getResult(getIntent().getStringExtra("user"),User.class);
+        user = com.group6boun451.learner.activity.Task.getResult(getIntent().getStringExtra("user"),User.class);
         username = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString(getString(R.string.user_name), " ");
 //        fetch topics
-        new Task<String>(this, new Task.Callback() {
+        new com.group6boun451.learner.activity.Task<String>(this, new com.group6boun451.learner.activity.Task.Callback() {
             @Override
             public void onResult(String resultString) {
-                Topic[] result = Task.getResult(resultString,Topic[].class);
+                Topic[] result = com.group6boun451.learner.activity.Task.getResult(resultString,Topic[].class);
                 topics = new ArrayList(Arrays.asList(result));
                 //TODO handle this
                 viewpager.setAdapter(new TopicPagerAdapter(HomePage.this,topics));
@@ -135,14 +136,14 @@ public class HomePage extends AppCompatActivity{
         guillotineMenu.findViewById(R.id.profile_group).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(HomePage.this, ProfileActivity.class));
+                startActivity(new Intent(HomePage.this, com.group6boun451.learner.activity.ProfileActivity.class));
                 guillotineAnimation.close();
             }
         });
         guillotineMenu.findViewById(R.id.activity_group).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(HomePage.this, SearchActivity.class));
+                startActivity(new Intent(HomePage.this, com.group6boun451.learner.activity.SearchActivity.class));
                 guillotineAnimation.close();
             }
         });
@@ -155,7 +156,7 @@ public class HomePage extends AppCompatActivity{
                 editor.putString(getString(R.string.password), "");
                 editor.commit();
                 guillotineAnimation.close();
-                startActivity(new Intent(HomePage.this, LoginActivity.class));
+                startActivity(new Intent(HomePage.this, com.group6boun451.learner.activity.LoginActivity.class));
                 finish();
             }
         });
@@ -200,7 +201,7 @@ public class HomePage extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 if(isTopicActive){commentView(view);}
-                else {startActivity(new Intent(HomePage.this, AddTopicActivity.class));}
+                else {startActivity(new Intent(HomePage.this, com.group6boun451.learner.activity.AddTopicActivity.class));}
             }
         });
 
@@ -208,10 +209,12 @@ public class HomePage extends AppCompatActivity{
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(HomePage.this,QuizActivity.class);
-                startActivity(intent);
+                Intent intent = new Intent(HomePage.this, com.group6boun451.learner.activity.QuizActivity.class);
+                startActivityForResult(intent,31415);
             }
         });
+
+
 
 //      opening animation of a topic
         listTouchInterceptor.setClickable(false);
@@ -273,7 +276,7 @@ public class HomePage extends AppCompatActivity{
                     if(!t.getContent().equals(content)){
                         t.setContent(content);
                         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getString(R.string.base_url) + "topic/edit/"+t.getId()).queryParam("header",t.getHeader()).queryParam("content",content);
-                        new Task<URI>(HomePage.this, new Task.Callback() {
+                        new com.group6boun451.learner.activity.Task<URI>(HomePage.this, new com.group6boun451.learner.activity.Task.Callback() {
                             @Override
                             public void onResult(String result) {GlideHelper.showResult(HomePage.this,result);}
                         }).execute(builder.build().encode().toUri());
@@ -294,7 +297,7 @@ public class HomePage extends AppCompatActivity{
                     Topic t = currentTopic;
                     UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getString(R.string.base_url) + "topic/comment/create")
                             .queryParam("topicId",t.getId()).queryParam("content",commentContent);
-                    new Task<URI>(HomePage.this, new Task.Callback() {
+                    new com.group6boun451.learner.activity.Task<URI>(HomePage.this, new com.group6boun451.learner.activity.Task.Callback() {
                         @Override
                         public void onResult(String result) {
                             if(GlideHelper.showResult(HomePage.this,result)) {
@@ -334,6 +337,12 @@ public class HomePage extends AppCompatActivity{
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == 31415){
+            //quiz finished
+                Log.d(TAG,"quiz finished");
+
+            return;
+        }
         super.onActivityResult(requestCode, resultCode, data);
         summernote.onActivityResult(requestCode, resultCode, data);
     }
@@ -362,7 +371,7 @@ public class HomePage extends AppCompatActivity{
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_search:
-                startActivity(new Intent(HomePage.this, SearchActivity.class));
+                startActivity(new Intent(HomePage.this, com.group6boun451.learner.activity.SearchActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -370,6 +379,32 @@ public class HomePage extends AppCompatActivity{
     }
 
     public void openDetails(View coverView, Topic topic) {
+        //test Quiz
+        List<Question> mQues = new ArrayList<Question>();
+        Question q1 = new Question();
+        q1.setAnswerA("q1aassdaasd");
+        q1.setAnswerB("sadasa");
+        q1.setAnswerC("adfasdasd");
+        q1.setCorrect(1);
+        q1.setQuestion("asdasdashdjnaksflmdasdöasdasd");
+        mQues.add(q1);
+        Question q2 = new Question();
+        q2.setAnswerA("q2aassdaasd");
+        q2.setAnswerB("sadasa");
+        q2.setAnswerC("adfasdasd");
+        q2.setCorrect(2);
+        q2.setQuestion("asdasdashdjnaksflmdasdöasdasd");
+        mQues.add(q2);
+        Question q3 = new Question();
+        q3.setAnswerA("q3aassdaasd");
+        q3.setAnswerB("sadasa");
+        q3.setAnswerC("adfasdasd");
+        q3.setCorrect(1);
+        q3.setQuestion("asdasdashdjnaksflmdasdöasdasd");
+        mQues.add(q3);
+
+        topic.setQuestions(mQues);
+        //test finish
         currentTopic = topic;
         Log.d("topic",currentTopic.getId()+"");
         GlideHelper.loadImage(this,(ImageView) Views.find(tabHost, R.id.details_image), topic);
