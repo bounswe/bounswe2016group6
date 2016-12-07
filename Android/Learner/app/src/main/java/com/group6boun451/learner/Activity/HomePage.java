@@ -1,4 +1,4 @@
-package com.group6boun451.learner.Activity;
+package com.group6boun451.learner.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -155,6 +155,7 @@ public class HomePage extends AppCompatActivity{
                 editor.putString(getString(R.string.password), "");
                 editor.commit();
                 guillotineAnimation.close();
+                startActivity(new Intent(HomePage.this, LoginActivity.class));
                 finish();
             }
         });

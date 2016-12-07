@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
 
@@ -12,143 +13,117 @@
 
     <com.group6boun451.learner.widget.CanaroTextView
         android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="38dip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Learner"
         android:layout_gravity="center"
         android:textColor="@color/white"
         android:textSize="30sp"/>
 
-    <LinearLayout
+    <View
         android:layout_width="match_parent"
         android:layout_height="1dip"
-        android:background="#ffffff"
-       ></LinearLayout>
+        android:background="#ffffff" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/StudentContainer"
-        android:padding="15dip">
+        android:layout_margin="15dip">
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/btnSelectRole"
-        android:text="Select Your Role"
-        android:onClick="btnSelectRoleClicked"
-        android:textAllCaps="false"
-        android:alpha="0.8"
-        android:layout_marginTop="25dip"
-        android:layout_marginRight="20dip"
-        android:layout_marginLeft="20dip"
-        android:layout_marginBottom="15dip"
-        android:textSize="22sp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/btnSelectRole"
+                android:text="Select Your Role"
+                android:onClick="btnSelectRoleClicked"
+                android:textAllCaps="false"
+                android:layout_marginTop="25dip"
+                android:layout_marginRight="20dip"
+                android:layout_marginLeft="20dip"
+                android:layout_marginBottom="15dip"
+                android:textSize="22sp"/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="First Name"
-        android:layout_marginRight="12dip"
-        android:layout_marginLeft="17dip"
-        />
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="12dip"
-            android:layout_marginLeft="12dip"
-            android:layout_marginBottom="12dip"
-            android:hint="First Name"
-            android:id="@+id/usrFirstName"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="First Name" />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dip"
+                android:hint="First Name"
+                android:id="@+id/usrFirstName"/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Surname"
-        android:layout_marginRight="12dip"
-        android:layout_marginLeft="17dip"
-        />
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="12dip"
-            android:layout_marginLeft="12dip"
-            android:layout_marginBottom="12dip"
-            android:hint="Surname"
-            android:id="@+id/usrSurname"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Email"
-        android:layout_marginRight="12dip"
-        android:layout_marginLeft="17dip"
-        />
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="12dip"
-            android:layout_marginLeft="12dip"
-            android:layout_marginBottom="12dip"
-            android:hint="Email"
-            android:inputType="textEmailAddress"
-            android:id="@+id/usrEmail"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Password"
-        android:layout_marginRight="12dip"
-        android:layout_marginLeft="17dip"
-        />
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="12dip"
-            android:layout_marginLeft="12dip"
-            android:layout_marginBottom="12dip"
-            android:hint="Password"
-            android:inputType="textPassword"
-            android:id="@+id/usrPass1"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Password(again)"
-        android:layout_marginRight="12dip"
-        android:layout_marginLeft="17dip"
-        />
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="12dip"
-            android:layout_marginLeft="12dip"
-            android:layout_marginBottom="12dip"
-            android:hint="Re-enter Password"
-            android:inputType="textPassword"
-            android:id="@+id/usrPass2"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="1dip"
-        android:background="#ffffff"
-        android:layout_marginBottom="5dip"></LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Surname" />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dip"
+                android:hint="Surname"
+                android:id="@+id/usrSurname"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Email" />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dip"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+                android:id="@+id/usrEmail"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Password" />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:id="@+id/usrPass1"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Password(again)"
+                />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:hint="Re-enter Password"
+                android:inputType="textPassword"
+                android:id="@+id/usrPass2"/>
 
-    <Button
-        android:id="@+id/btnCreateAccount"
-        android:layout_width="match_parent"
-        android:layout_height="60dip"
-        android:layout_marginTop="15dip"
-        android:layout_marginBottom="15dip"
-        android:layout_marginLeft="30dip"
-        android:layout_marginRight="30dip"
-        android:background="@color/colorAccent"
-        android:text="Create Account"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="23sp"
-        android:onClick="btnCreateAccountClicked"/>
-</LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#ffffff"
+                android:layout_marginBottom="5dp" />
+
+            <Button
+                android:id="@+id/btnCreateAccount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:background="@color/colorAccent"
+                android:text="Create Account"
+                android:textColor="@color/white"
+                android:textSize="23sp"
+                android:onClick="btnCreateAccountClicked"/>
+        </LinearLayout>
 
     </ScrollView>
 

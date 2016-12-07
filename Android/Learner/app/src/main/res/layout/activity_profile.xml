@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.group6boun451.learner.Activity.ProfileActivity">
+    tools:context="com.group6boun451.learner.activity.ProfileActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"

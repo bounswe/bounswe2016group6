@@ -1,4 +1,4 @@
-package com.group6boun451.learner.Activity;
+package com.group6boun451.learner.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -80,6 +80,7 @@ public class ProfileActivity extends AppCompatActivity {
                 editor.putString(getString(R.string.password), "");
                 editor.commit();
                 guillotineAnimation.close();
+                startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
                 finish();
             }
         });

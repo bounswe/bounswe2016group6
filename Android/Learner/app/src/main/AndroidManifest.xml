@@ -13,33 +13,32 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Activity.LoginActivity"
+            android:name="com.group6boun451.learner.activity.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/LoginTheme"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activity.SearchActivity"
+            android:name=".activity.SearchActivity"
             android:label=""
-            android:parentActivityName=".Activity.HomePage"
+            android:parentActivityName=".activity.HomePage"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize"></activity>
+            android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".Activity.HomePage"
+            android:name=".activity.HomePage"
             android:label="Home Page"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activity.AddTopicActivity"
+            android:name=".activity.AddTopicActivity"
             android:label="@string/title_activity_add_topic"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Activity.QuizActivity"
+            android:name=".activity.QuizActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
 
@@ -54,12 +53,13 @@
         </provider>
 
         <activity
-            android:name=".Activity.ProfileActivity"
+            android:name=".activity.ProfileActivity"
             android:label="@string/title_activity_profile"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Activity.RegisterActivity"
+        <activity
+            android:name=".activity.RegisterActivity"
             android:label="Register"
-            android:theme="@style/AppTheme.NoActionBar" ></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

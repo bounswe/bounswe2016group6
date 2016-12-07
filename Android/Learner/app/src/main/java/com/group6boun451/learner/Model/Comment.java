@@ -1,6 +1,6 @@
 package com.group6boun451.learner.model;
 
-import com.group6boun451.learner.Activity.HomePage;
+import com.group6boun451.learner.activity.HomePage;
 
 import java.util.Date;
 

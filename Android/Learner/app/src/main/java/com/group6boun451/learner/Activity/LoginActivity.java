@@ -1,4 +1,4 @@
-package com.group6boun451.learner.Activity;
+package com.group6boun451.learner.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;

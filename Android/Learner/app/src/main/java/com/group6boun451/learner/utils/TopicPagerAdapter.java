@@ -12,9 +12,9 @@ import android.widget.TextView;
 
 import com.doodle.android.chips.ChipsView;
 import com.doodle.android.chips.model.Contact;
-import com.group6boun451.learner.Activity.HomePage;
-import com.group6boun451.learner.Activity.Task;
 import com.group6boun451.learner.R;
+import com.group6boun451.learner.activity.HomePage;
+import com.group6boun451.learner.activity.Task;
 import com.group6boun451.learner.model.Tag;
 import com.group6boun451.learner.model.Topic;
 import com.group6boun451.learner.model.User;

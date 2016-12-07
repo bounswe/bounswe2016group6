@@ -1,4 +1,4 @@
-package com.group6boun451.learner.Activity;
+package com.group6boun451.learner.activity;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -12,46 +12,28 @@ import android.widget.Toast;
 
 import com.group6boun451.learner.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.BindViews;
 import butterknife.ButterKnife;
 
 public class RegisterActivity extends AppCompatActivity {
-
-    @BindView(R.id.btnSelectRole)
-    Button btnSelectRole;
-    @BindView(R.id.usrFirstName)
-    EditText usrFirstName;
-    @BindView(R.id.usrSurname) EditText usrSurname;
-    @BindView(R.id.usrEmail) EditText usrEmail;
-    @BindView(R.id.usrPass1) EditText password;
-    @BindView(R.id.usrPass2) EditText password2;
+    @BindView(R.id.btnSelectRole) Button btnSelectRole;
+    @BindViews({R.id.usrFirstName,R.id.usrSurname,R.id.usrEmail,R.id.usrPass1,R.id.usrPass2}) List<EditText> mItems;
     @BindView(R.id.btnCreateAccount) Button btnCreateAccount;
-    private List<EditText> mItems;
+
     private String whatIsRole = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register_layout);
         ButterKnife.bind(this);
-        mItems = new ArrayList<EditText>();
-        fillList();
 
-
-    }
-
-    private void fillList(){
-        mItems.add(usrFirstName);
-        mItems.add(usrSurname);
-        mItems.add(usrEmail);
-        mItems.add(password);
-        mItems.add(password2);
     }
 
     private boolean checkPasswords(){
-       return password.getText().toString().equals(password2.getText().toString());
+       return mItems.get(3).getText().toString().equals(mItems.get(4).getText().toString());
     }
 
     private boolean checkFields(){
@@ -60,10 +42,7 @@ public class RegisterActivity extends AppCompatActivity {
                 return false;
             }
         }
-        if(whatIsRole == null){
-            return false;
-        }
-        return true;
+        return whatIsRole != null;
     }
 
     public void btnCreateAccountClicked (View view){
@@ -92,8 +71,6 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         whatIsRole = items[which];
                         btnSelectRole.setText(whatIsRole);
-
-
                         dialog.dismiss();
                     }
                 }).create().show();
