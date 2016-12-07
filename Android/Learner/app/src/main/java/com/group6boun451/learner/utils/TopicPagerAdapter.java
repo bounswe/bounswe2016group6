@@ -2,7 +2,6 @@ package com.group6boun451.learner.utils;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +15,6 @@ import com.doodle.android.chips.model.Contact;
 import com.group6boun451.learner.Activity.HomePage;
 import com.group6boun451.learner.Activity.Task;
 import com.group6boun451.learner.R;
-import com.group6boun451.learner.model.GenericResponse;
 import com.group6boun451.learner.model.Tag;
 import com.group6boun451.learner.model.Topic;
 import com.group6boun451.learner.model.User;
@@ -25,6 +23,7 @@ import com.group6boun451.learner.widget.CanaroTextView;
 import java.util.List;
 
 import static com.group6boun451.learner.utils.GlideHelper.getReadableDateFromDate;
+import static com.group6boun451.learner.utils.GlideHelper.showResult;
 
 /**
  * Created by Ahmet Zorer on 12/6/2016.
@@ -85,7 +84,7 @@ public class TopicPagerAdapter extends PagerAdapter {
             public void onClick(View view) {
                 Task<String> likeTask = new Task<>(mContext, new Task.Callback() {
                     @Override
-                    public void onResult(String result) {showResult(result);}
+                    public void onResult(String result) {showResult((Activity) mContext,result);}
                 });
                 if(likeButton.getCurrentTextColor()!=mContext.getResources().getColor(R.color.selected_item_color)) {
                     likeTask.execute(mContext.getString(R.string.base_url) + "topic/like/"+topic.getId());
@@ -103,18 +102,6 @@ public class TopicPagerAdapter extends PagerAdapter {
 
     private boolean isLiked(List<User> likedBy) {
         for (User u:likedBy){if(u.getEmail().equalsIgnoreCase(HomePage.username))return true;} return false;
-    }
-    private boolean showResult(String resultString) {
-        GenericResponse result = Task.getResult(resultString,GenericResponse.class);
-        if(result==null) {
-            return false;
-        }else if (result.getError() == null) {// display a notification to the user with the response information
-            Snackbar.make(((Activity)mContext).findViewById(android.R.id.content),  result.getMessage(), Snackbar.LENGTH_SHORT).show();
-            return true;
-        } else {
-            Snackbar.make(((Activity)mContext).findViewById(android.R.id.content),  result.getError(), Snackbar.LENGTH_SHORT).show();
-            return false;
-        }
     }
     @Override public void destroyItem(ViewGroup collection, int position, Object view) {collection.removeView((View) view);}
 

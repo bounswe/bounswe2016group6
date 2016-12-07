@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/main_content"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:background="#d9d9d9">
-
+    android:background="@color/white"
+    android:fitsSystemWindows="true">
+    <!--topiclist-->
     <RelativeLayout
         android:id="@+id/parent_view"
         android:layout_width="match_parent"
@@ -47,14 +47,51 @@
                 app:floatingSearch_showSearchKey="true"
                 app:floatingSearch_dimBackground="false"/>
         </android.support.design.widget.AppBarLayout>
-
         <android.support.v7.widget.RecyclerView
             android:id="@+id/search_results_list"
-            android:layout_below="@id/appbar"
             android:layout_width="match_parent"
+            android:background="@color/white"
             android:layout_height="match_parent"
+            android:layout_below="@id/appbar"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
             android:clipToPadding="false"/>
     </RelativeLayout>
-</android.support.design.widget.CoordinatorLayout>
+    <View
+        android:id="@+id/touch_interceptor_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?actionBarSize" />
+    <!--topic-->
+    <include layout="@layout/fragment_topic"/>
+
+    <com.alexvasilkov.foldablelayout.UnfoldableView
+        android:id="@+id/unfoldable_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?actionBarSize" />
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        app:backgroundTint="@color/guillotine_background"
+        android:src="@drawable/ic_add_black_24dp"
+        android:visibility="invisible"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab2"
+        app:backgroundTint="@color/guillotine_background"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="96dp"
+        android:src="@drawable/ic_attachment_black_24dp"
+        android:visibility="invisible"/>
+
+</merge>

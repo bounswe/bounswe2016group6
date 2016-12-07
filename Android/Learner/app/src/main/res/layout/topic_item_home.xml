@@ -102,7 +102,6 @@
         android:overScrollMode="ifContentScrolls"
         android:layout_marginLeft="@dimen/md_keylines_mini"
         android:layout_marginRight="@dimen/md_keylines_mini"
-        app:cv_max_height="120dp"
         app:cv_vertical_spacing="2dp"
         app:cv_icon_placeholder="@drawable/ic_whatshot_black_24dp"
         app:cv_bg_color="@color/cardview_dark_background"

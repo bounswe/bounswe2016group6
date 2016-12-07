@@ -1,12 +1,16 @@
 package com.group6boun451.learner.utils;
 
+import android.app.Activity;
 import android.content.Context;
+import android.support.design.widget.Snackbar;
 import android.text.format.DateUtils;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.group6boun451.learner.Activity.Task;
 import com.group6boun451.learner.R;
+import com.group6boun451.learner.model.GenericResponse;
 import com.group6boun451.learner.model.Topic;
 
 import org.joda.time.DateTime;
@@ -45,4 +49,16 @@ public class GlideHelper {
         return date+ ", " + time;
     }
 
+    public static boolean showResult(Activity a, String resultString) {
+        GenericResponse result = Task.getResult(resultString,GenericResponse.class);
+        if(result==null) {
+            return false;
+        }else if (result.getError() == null) {// display a notification to the user with the response information
+            Snackbar.make(a.findViewById(android.R.id.content),  result.getMessage(), Snackbar.LENGTH_SHORT).show();
+            return true;
+        } else {
+            Snackbar.make(a.findViewById(android.R.id.content),  result.getError(), Snackbar.LENGTH_SHORT).show();
+            return false;
+        }
+    }
 }

@@ -40,7 +40,6 @@ import com.doodle.android.chips.model.Contact;
 import com.group6boun451.learner.CommentListAdapter;
 import com.group6boun451.learner.R;
 import com.group6boun451.learner.model.Comment;
-import com.group6boun451.learner.model.GenericResponse;
 import com.group6boun451.learner.model.Tag;
 import com.group6boun451.learner.model.Topic;
 import com.group6boun451.learner.model.User;
@@ -71,8 +70,7 @@ public class HomePage extends AppCompatActivity{
     private static final int EDITOR = 3;
 
     @BindView(R.id.touch_interceptor_view) View listTouchInterceptor;
-    @BindView(R.id.summernote)
-    Summernote summernote;
+    @BindView(R.id.summernote) Summernote summernote;
     @BindView(R.id.topic_TabHost) TabHost tabHost;
     @BindView(R.id.details_scrollView) ScrollView detailsScrollView;
     @BindView(R.id.unfoldable_view) UnfoldableView unfoldableView;
@@ -87,8 +85,7 @@ public class HomePage extends AppCompatActivity{
     @BindView(R.id.topicPage_comment_text_area) EditText commentText;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.content_hamburger) View contentHamburger;
-    @BindView(R.id.topic_content_TouchyWebView)
-    TouchyWebView contentView;
+    @BindView(R.id.topic_content_TouchyWebView) TouchyWebView contentView;
 
     public static List<Topic> topics;
     public static String username;
@@ -277,7 +274,7 @@ public class HomePage extends AppCompatActivity{
                         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getString(R.string.base_url) + "topic/edit/"+t.getId()).queryParam("header",t.getHeader()).queryParam("content",content);
                         new Task<URI>(HomePage.this, new Task.Callback() {
                             @Override
-                            public void onResult(String result) {showResult(result);}
+                            public void onResult(String result) {GlideHelper.showResult(HomePage.this,result);}
                         }).execute(builder.build().encode().toUri());
                     }
                     contentView.loadDataWithBaseURL("https://www.youtube.com/embed/", content,
@@ -299,7 +296,7 @@ public class HomePage extends AppCompatActivity{
                     new Task<URI>(HomePage.this, new Task.Callback() {
                         @Override
                         public void onResult(String result) {
-                            if(showResult(result)) {
+                            if(GlideHelper.showResult(HomePage.this,result)) {
                                 ((CommentListAdapter)comments.getAdapter()).add(new Comment(commentContent));
                             }
                         }
@@ -423,19 +420,5 @@ public class HomePage extends AppCompatActivity{
     public AssetManager getAssets() {
         return getResources().getAssets();
     }
-
-    private boolean showResult(String resultString) {
-        GenericResponse result = Task.getResult(resultString,GenericResponse.class);
-        if(result==null) {
-            return false;
-        }else if (result.getError() == null) {// display a notification to the user with the response information
-            Snackbar.make(findViewById(android.R.id.content),  result.getMessage(), Snackbar.LENGTH_SHORT).show();
-            return true;
-        } else {
-            Snackbar.make(findViewById(android.R.id.content),  result.getError(), Snackbar.LENGTH_SHORT).show();
-            return false;
-        }
-    }
-
 
 }

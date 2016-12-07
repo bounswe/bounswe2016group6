@@ -12,11 +12,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.arlib.floatingsearchview.util.Util;
+import com.doodle.android.chips.ChipsView;
+import com.doodle.android.chips.model.Contact;
+import com.group6boun451.learner.Activity.HomePage;
+import com.group6boun451.learner.Activity.Task;
 import com.group6boun451.learner.R;
+import com.group6boun451.learner.model.Tag;
 import com.group6boun451.learner.model.Topic;
+import com.group6boun451.learner.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.group6boun451.learner.utils.GlideHelper.getReadableDateFromDate;
+import static com.group6boun451.learner.utils.GlideHelper.showResult;
 
 public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResultsListAdapter.ViewHolder> {
 
@@ -37,22 +46,26 @@ public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResults
 
     private OnItemClickListener mItemsOnClickListener;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        public final TextView mLocation;
+     class ViewHolder extends RecyclerView.ViewHolder {
         private final ImageView img;
-        public TextView textTopicTitle;
-        public TextView textAuthor;
-        public TextView textDate;
-        public Button likeButton;
+        private TextView textTopicTitle;
+        private TextView textAuthor;
+        private TextView textDate;
+        private Button likeButton;
+        private ChipsView mChipsView;
+        private ImageView imgProfile;
 
-        public ViewHolder(View view) {
+        private ViewHolder(View view) {
             super(view);
-            mLocation = (TextView) view.findViewById(R.id.textTopicTitle);
             textTopicTitle = (TextView) view.findViewById(R.id.textTopicTitle);
             textAuthor = ((TextView) view.findViewById(R.id.textAuthor));
             textDate = ((TextView) view.findViewById(R.id.textDate));
             img = (ImageView) view.findViewById(R.id.imageTopic);
             likeButton = (Button)view.findViewById(R.id.like_button);
+            mChipsView = (ChipsView) view.findViewById(R.id.cv_contacts);
+            imgProfile = (ImageView) view.findViewById(R.id.imgTopicPageUserImage);
+
+
         }
     }
 
@@ -66,43 +79,52 @@ public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResults
     }
 
     @Override
-    public SearchResultsListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.topic_item_home, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final SearchResultsListAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         final Topic topic = mDataSet.get(position);
         holder.textTopicTitle.setText(topic.getHeader());
         holder.textAuthor.setText(topic.getOwner().getFirstName());
-        holder.textDate.setText(topic.getRevealDate().toString());
+        holder.textDate.setText(getReadableDateFromDate(context,topic.getRevealDate()));
 
+        // change EditText config
+        holder.mChipsView.getEditText().setVisibility(View.GONE);
+        int k = holder.mChipsView.getChips().size();
+        Contact c = new Contact(null,null,null,"",null);
+        for(int i =0;i<k;i++){holder.mChipsView.removeChipBy(c);}
+        for(Tag t : topic.getTags()){
+            String tagName = t.getName();
+            Contact contact = new Contact(tagName, t.getContext(), t.getId()+"", "", null);
+            holder.mChipsView.addChip(tagName, null, contact,true);
+        }
 
         GlideHelper.loadImage(context,holder.img, topic);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-              //  ((HomePage) v.getContext()).openDetails(v.findViewById(R.id.card_view), topic);
-            }
-        });
 
+        holder.imgProfile.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_menu_profile));
 
-      //  if(isLiked(topic.getLikedBy())) likeButton.setTextColor(context.getResources().getColor(R.color.mdtp_accent_color));
+        if(isLiked(topic.getLikedBy())) holder.likeButton.setTextColor(context.getResources().getColor(R.color.selected_item_color));
         holder.likeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO likes
-                if(!topic.getLikedBy().contains(topic)) {
-                  //  new HomePage.LikeTopicTask().execute(""+topic.getId(),"like");
-                    holder.likeButton.setTextColor(context.getResources().getColor(R.color.mdtp_accent_color));
+                Task<String> likeTask = new Task<>(context, new Task.Callback() {
+                    @Override
+                    public void onResult(String result) {showResult((Activity) context,result);}
+                });
+                if(holder.likeButton.getCurrentTextColor()!=context.getResources().getColor(R.color.selected_item_color)) {
+                    likeTask.execute(context.getString(R.string.base_url) + "topic/like/"+topic.getId());
+                    holder.likeButton.setTextColor(context.getResources().getColor(R.color.selected_item_color));
                 }else {
-                 //   new HomePage.LikeTopicTask().execute(""+topic.getId(),"");
+                    likeTask.execute(context.getString(R.string.base_url) + "topic/unlike/"+topic.getId());
                     holder.likeButton.setTextColor(context.getResources().getColor(R.color.white));
                 }
             }
         });
+
         if(mLastAnimatedItemPosition < position){
             animateItem(holder.itemView);
             mLastAnimatedItemPosition = position;
@@ -117,7 +139,9 @@ public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResults
             });
         }
     }
-
+    private boolean isLiked(List<User> likedBy) {
+        for (User u:likedBy){if(u.getEmail().equalsIgnoreCase(HomePage.username))return true;} return false;
+    }
     @Override
     public int getItemCount() {
         return mDataSet.size();
