@@ -157,8 +157,15 @@ public class QuizActivity extends AppCompatActivity {
         init();
 
         mQuestions = HomePage.currentTopic.getQuestions();
-        Question q1 = new Question();
-        q1.setAnswerA("A   "); q1.setAnswerB("b   "); q1.setAnswerC("c  "); q1.setCorrect(0); q1.setQuestion("testtest"); mQuestions.add(q1);
+        if(!mQuestions.get(mQuestions.size()-1).getQuestion().equals("testtest123456789test")) {
+            Question q1 = new Question();
+            q1.setAnswerA("A   ");
+            q1.setAnswerB("b   ");
+            q1.setAnswerC("c  ");
+            q1.setCorrect(0);
+            q1.setQuestion("testtest123456789test");
+            mQuestions.add(q1);
+        }
         numOfQuestion = mQuestions.size();
 
         questionsPager.setAdapter(new QuestionPagerAdapter(this));
