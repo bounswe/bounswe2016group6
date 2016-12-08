@@ -43,13 +43,17 @@ import com.group6boun451.learner.utils.SearchResultsListAdapter;
 import com.group6boun451.learner.widget.CanaroTextView;
 import com.group6boun451.learner.widget.Summernote;
 import com.group6boun451.learner.widget.TouchyWebView;
+import com.simplicityapks.reminderdatepicker.lib.OnDateSelectedListener;
+import com.simplicityapks.reminderdatepicker.lib.ReminderDatePicker;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.text.DateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 
 import butterknife.BindView;
@@ -78,6 +82,7 @@ public class SearchActivity extends AppCompatActivity {
     @BindView(R.id.topicPage_comment_text_area) EditText commentText;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.topic_content_TouchyWebView) TouchyWebView contentView;
+    @BindView(R.id.date_picker) ReminderDatePicker datePicker;
 
     public static String username;
     private boolean isSnackBarActive = false;
@@ -237,6 +242,27 @@ public class SearchActivity extends AppCompatActivity {
                     commentText.setText("");
                     commentView(view);
                 }
+            }
+        });
+
+
+        // setup listener for a date change:
+        datePicker.setOnDateSelectedListener(new OnDateSelectedListener() {
+            @Override
+            public void onDateSelected(Calendar date) {
+                Snackbar.make(findViewById(android.R.id.content),
+                        "Selected date: "+ DateFormat.getDateTimeInstance().format(datePicker.getSelectedDate().getTime()),Snackbar.LENGTH_SHORT).show();
+            }
+        });
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR,calendar.get(Calendar.YEAR)-1);
+        datePicker.setMinDate(calendar);
+        datePicker.setMaxDate(Calendar.getInstance());
+        datePicker.setCustomDatePicker(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(findViewById(android.R.id.content),
+                        "Selected date: "+ DateFormat.getDateTimeInstance().format(datePicker.getSelectedDate().getTime()),Snackbar.LENGTH_SHORT).show();
             }
         });
     }
