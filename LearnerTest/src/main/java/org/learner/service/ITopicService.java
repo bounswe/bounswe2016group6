@@ -76,6 +76,12 @@ public interface ITopicService {
 	List<Topic> getPopularTopics();
 
 	List<Topic> getTopicsWithCommonTag(Topic topic);
+
+	boolean addQuestionsToTopic(Topic topic, List<Question> questions);
+
+	boolean removeQuestion(Long questionId);
+
+	List<Topic> semanticSearch(String q);
 	
 	
 }

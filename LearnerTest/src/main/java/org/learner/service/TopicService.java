@@ -2,8 +2,10 @@ package org.learner.service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -19,11 +21,16 @@ import org.learner.persistence.model.Tag;
 import org.learner.persistence.model.Topic;
 import org.learner.persistence.model.User;
 import org.learner.web.dto.TopicDto;
+import org.learner.web.util.ConceptNetEdge;
+import org.learner.web.util.ConceptNetModel;
+import org.learner.web.util.ConceptNetSearch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import com.google.common.collect.Sets;
 
 
 @Service
@@ -115,7 +122,7 @@ public class TopicService implements ITopicService{
 		}
 		
 		User user = getCurrentUser();
-		System.out.println("User :" + user);
+		System.out.println("Like User :" + user);
 		
 		if(!liked.getLikedBy().contains(user)){
 			liked.getLikedBy().add(user);
@@ -125,7 +132,6 @@ public class TopicService implements ITopicService{
 			return null;
 		}
 		
-		//TODO insert tags
 		return liked;
 	}
 	
@@ -273,6 +279,16 @@ public class TopicService implements ITopicService{
 	@Override
 	public Tag createTag(Tag tag) {
 		tag.setCreatedAt(new Date());
+		
+		try{
+			ConceptNetModel cnmodel = ConceptNetSearch.conceptNetQuery(tag.getName().toLowerCase() );
+			HashSet<String> hs =  cnmodel.retrieveConcepts("/c/en/"+tag.getName().toLowerCase().replace(" ", "_"));
+			tag.setConceptRelations(hs);
+		} catch (Exception e) {
+		System.out.println("Cannot create concepts");
+			e.printStackTrace();
+		}
+		
 		Tag created = tagRepo.save(tag);
 		return created;
 	}
@@ -338,6 +354,89 @@ public class TopicService implements ITopicService{
 		
 		List<Topic> popular = repository.topicsWithCommonTags(ttags,topic.getId());
 		return popular;
+	}
+
+	@Override
+	public boolean addQuestionsToTopic(Topic topic, List<Question> questions) {
+		System.out.println("LOG -- Questions are added to topic");
+		try {
+			for(Question qt : questions){
+				qt.setRelatedTopic(topic);
+				questionRepo.save(qt);
+			}
+		} catch (Exception e) {
+			System.out.println("LOG -- Failed adding questions.");
+			return false;
+		}
+		
+		return true;
+	}
+
+	@Override
+	public boolean removeQuestion(Long questionId) {
+		
+		try {
+			questionRepo.delete(questionId);
+		} catch (Exception e) {
+			System.out.println("Question deletion failed!");
+			return false;
+			
+		}
+		return true;
+	}
+
+	@Override
+	public List<Topic> semanticSearch(String q) {
+		
+		ConceptNetModel cnmodel = ConceptNetSearch.conceptNetQuery(q);
+		
+		List<ConceptNetEdge> edges = cnmodel.getEdges();
+		
+		Set<String> originalSet = new HashSet<String>();
+		Set<String> tagset = new HashSet<String>();
+		
+		tagset.add("/c/en/juicy");
+		tagset.add("/c/en/warm_color");
+		tagset.add("/c/en/lololol");
+		
+		for(ConceptNetEdge cnedge: edges){
+			int ei = cnedge.getEnd().lastIndexOf("/")+1;
+			String end = cnedge.getEnd().substring(ei).replaceAll("_", " ");
+			
+			int si = cnedge.getStart().lastIndexOf("/")+1;
+			String start = cnedge.getStart().substring(si).replaceAll("_", " ");
+			
+			int ri = cnedge.getRel().lastIndexOf("/")+1;
+			String rel = cnedge.getRel().substring(ri).replaceAll("_", " ");
+			
+			System.out.println("Start : " + start + " , End : " + end + " ,Rel : " + rel + " Weight : " + cnedge.getWeigth());
+			
+			String related = end.equalsIgnoreCase(q) ? start : end ;
+			String originalform =  end.equalsIgnoreCase(q) ? cnedge.getStart() : cnedge.getEnd();
+			
+			originalSet.add(originalform);
+			
+			System.out.println("Related : " + related);
+			
+			//List<Tag> relatedTags = tagRepo.findByNameContaining(related);
+			//Direct related Tags
+			//for(Tag rt: relatedTags){
+			//	System.out.println("TAG TAG : " + rt.getName());
+			//}
+			
+		}
+		
+		List<Tag> alltags = tagRepo.findAll();
+		
+		for(Tag tt : alltags){
+			Sets.SetView<String> sw =  Sets.intersection(originalSet, tt.getConceptRelations());
+			System.out.println("TAG : " + tt.getName());
+			System.out.println("Common : " + sw );
+			System.out.println("Size : " + sw.size());
+			System.out.println("----");
+		}
+		
+		return null;
 	}
 	
 }

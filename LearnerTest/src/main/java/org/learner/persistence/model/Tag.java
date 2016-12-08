@@ -2,9 +2,11 @@ package org.learner.persistence.model;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -14,6 +16,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -30,6 +33,10 @@ public class Tag {
     private String name;
     
     private String context;
+    
+    @JsonIgnore
+    @ElementCollection
+    private Set<String> conceptRelations;
     
     @Column(name = "created_at")
     private Date createdAt;
@@ -86,6 +93,16 @@ public class Tag {
 
 	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
+	}
+
+
+	public Set<String> getConceptRelations() {
+		return conceptRelations;
+	}
+
+
+	public void setConceptRelations(Set<String> conceptRelations) {
+		this.conceptRelations = conceptRelations;
 	}
 
 
