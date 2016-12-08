@@ -164,6 +164,7 @@ public class SearchActivity extends AppCompatActivity {
                 if(isThereQuiz){
                     fabQuiz.setVisibility(View.VISIBLE);
                 }
+                mSearchView.clearSearchFocus();
                 //TODO make fab animation here
             }
 
@@ -358,12 +359,10 @@ public class SearchActivity extends AppCompatActivity {
                 }
             }
         });
-
         mSearchResultsAdapter.setItemsOnClickListener(new SearchResultsListAdapter.OnItemClickListener() {
             @Override
             public void onClick(Topic location) {
                 openDetails(findViewById(R.id.card_view2), location);
-                mSearchView.clearSearchFocus();
             }
         });
         mSearchView.setSearchFocused(true);

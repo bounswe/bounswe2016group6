@@ -88,7 +88,6 @@ public class HomePage extends AppCompatActivity{
     @BindView(R.id.content_hamburger) View contentHamburger;
     @BindView(R.id.topic_content_TouchyWebView) TouchyWebView contentView;
 
-    public static List<Topic> topics;
     public static String username;
     private boolean isTeacher = true;
     private boolean isSnackBarActive = false;
@@ -110,17 +109,9 @@ public class HomePage extends AppCompatActivity{
         user = com.group6boun451.learner.activity.Task.getResult(getIntent().getStringExtra("user"),User.class);
         username = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString(getString(R.string.user_name), " ");
 //        fetch topics
-        new com.group6boun451.learner.activity.Task<String>(this, new com.group6boun451.learner.activity.Task.Callback() {
-            @Override
-            public void onResult(String resultString) {
-                Topic[] result = com.group6boun451.learner.activity.Task.getResult(resultString,Topic[].class);
-                topics = new ArrayList(Arrays.asList(result));
-                //TODO handle this
-                viewpager.setAdapter(new TopicPagerAdapter(HomePage.this,topics));
-                viewpager2.setAdapter(new TopicPagerAdapter(HomePage.this,topics));
-                viewpager3.setAdapter(new TopicPagerAdapter(HomePage.this,topics));
-            }
-        }).execute(getString(R.string.base_url) + "topic/recent");
+       fetchTasks("recent",viewpager);// TODO: 12/8/2016 recommended
+       fetchTasks("popular",viewpager2);
+       fetchTasks("recent",viewpager3);
 
         summernote.setRequestCodeforFilepicker(EDITOR);
 
@@ -310,6 +301,19 @@ public class HomePage extends AppCompatActivity{
                 }
             }
         });
+    }
+
+    private void fetchTasks(String category, final ViewPager viewpager) {
+        new com.group6boun451.learner.activity.Task<String>(this, new com.group6boun451.learner.activity.Task.Callback() {
+            @Override
+            public void onResult(String resultString) {
+                Topic[] result = com.group6boun451.learner.activity.Task.getResult(resultString,Topic[].class);
+                List<Topic> topics = new ArrayList(Arrays.asList(result));
+                //TODO handle this
+                viewpager.setAdapter(new TopicPagerAdapter(HomePage.this,topics));
+
+            }
+        }).execute(getString(R.string.base_url) + "topic/"+category);
     }
 
     private void commentView(View view) {
