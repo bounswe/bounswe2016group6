@@ -46,6 +46,12 @@
                 app:floatingSearch_searchHint="@string/search_hint"
                 app:floatingSearch_showSearchKey="true"
                 app:floatingSearch_dimBackground="false"/>
+            <com.simplicityapks.reminderdatepicker.lib.ReminderDatePicker
+                android:id="@+id/date_picker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:flags="mode_google"/>
+
         </android.support.design.widget.AppBarLayout>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/search_results_list"
