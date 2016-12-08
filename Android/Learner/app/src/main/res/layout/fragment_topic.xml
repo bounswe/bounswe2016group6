@@ -79,35 +79,41 @@
                                 android:padding="4dp" />
                             <com.group6boun451.learner.widget.CanaroTextView
                                 android:id="@+id/txtTopicPageUserName"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dip"
                                 android:layout_height="wrap_content"
                                 android:textAllCaps="true"
                                 android:gravity="bottom"
+                                android:layout_weight="1"
                                 android:textSize="16sp"/>
 
-                            <com.group6boun451.learner.widget.CanaroTextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:gravity="bottom"
-                                android:text=" - "
-                                android:textSize="12sp"/>
+
                             <com.group6boun451.learner.widget.CanaroTextView
                                 android:id="@+id/txtTopicPageDate"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:gravity="bottom"
+                                android:layout_width="0dip"
+                                android:layout_height="wrap_content"
+                                android:gravity="bottom|right"
+                                android:layout_weight="1"
                                 style="?android:dateTextAppearance"
                                 android:textSize="12sp"/>
                         </LinearLayout>
 
                         <com.group6boun451.learner.widget.CanaroTextView
-                            android:id="@+id/details_title"
+                                android:id="@+id/details_title"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+
+                                style="?android:windowTitleStyle"
+                                android:layout_marginLeft="@dimen/default_margin"
+                                android:layout_marginRight="@dimen/default_margin"
+                                android:textSize="30sp"/>
+
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            style="?android:windowTitleStyle"
-                            android:layout_marginLeft="@dimen/default_margin"
-                            android:layout_marginRight="@dimen/default_margin"
-                            android:textSize="30sp"/>
+                            android:layout_height="1dip"
+                            android:background="#ffffff"></LinearLayout>
+
+
+
 
 
                         <com.doodle.android.chips.ChipsView
@@ -147,7 +153,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/comment_tab"
-                android:background="@color/guillotine_background_dark"
+                android:background="@color/guillotine_background"
                 android:orientation="vertical">
                 <ListView
                     android:id="@+id/topicPageCommentList"
