@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Clean Blog - Sample Post</title>
+    <title th:text="${topic.header}">Topic header</title>
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"
 	integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
 	crossorigin="anonymous"></script>
@@ -84,9 +84,17 @@
 		});
 		
 		$("#likebutton").click(function(){
+			
 			event.preventDefault();
+			//if( this.attr('disabled') ) return;
+			
 			$.get($("#likebutton").attr('href')).done(function(data){
 				if(data.error!=null){
+					alert("You already liked the topic!");
+					$("#likebutton").removeClass('btn-danger');
+					$("#likebutton").addClass('btn-success');
+					$("#likebutton").attr('disabled', true);
+				} else if(data.message != null){
 					alert("Liked!");
 					$("#likebutton").removeClass('btn-danger');
 					$("#likebutton").addClass('btn-success');
