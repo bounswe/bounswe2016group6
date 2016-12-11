@@ -64,11 +64,25 @@ public class User {
     @OneToMany(mappedBy = "owner")
     private List<Comment> comments;
     
+    @JsonIgnore
     @ManyToMany(cascade = CascadeType.ALL ,fetch = FetchType.LAZY)
     @JoinTable(name = "user_follow", 
 				joinColumns = @JoinColumn(name = "user_id"), 
 				inverseJoinColumns = @JoinColumn(name = "follower_id"))
     private List<User> followedBy;
+    
+    
+    
+    public List<User> getFollowing() {
+		return following;
+	}
+
+	public void setFollowing(List<User> following) {
+		this.following = following;
+	}
+
+	@ManyToMany(mappedBy = "followedBy", fetch = FetchType.LAZY)
+    private List<User> following;
     
     private String picture;
     

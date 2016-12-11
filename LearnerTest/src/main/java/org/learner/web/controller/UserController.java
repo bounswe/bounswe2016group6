@@ -3,6 +3,7 @@ package org.learner.web.controller;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Locale;
 
 import org.learner.persistence.model.User;
@@ -68,11 +69,23 @@ public class UserController {
     @ResponseBody
     public GenericResponse unfollowTeacher(@PathVariable Long teacherId){
     	
-    	User user = userService.followUser(teacherId);
+    	User user = userService.unfollowUser(teacherId);
     	if(user == null){
     		return new GenericResponse("UNFollow operation failed!","UNFollow operation failed!");
     	}
     	return new GenericResponse("Teacher with id :" + user.getId() +" unfollowed!");
     }
+    
+    @RequestMapping(value="/user/following")
+    @ResponseBody
+    public List<User> retrieveFollowing(final Principal principal){
+    	String currentUsername = principal.getName();
+    	User user = userService.findUserByEmail(currentUsername);
+    	
+    	
+    	return user.getFollowing();
+    }
+    
+    
     
 }

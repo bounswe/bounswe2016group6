@@ -210,7 +210,7 @@ public class UserService implements IUserService {
 		}
 		
 		Role teacherrole = roleRepository.getOne((long) 3);
-		if(teacherToFollow.getRoles().contains(teacherrole) ){
+		if(teacherToFollow.getRoles().contains(teacherrole) && !teacherToFollow.getFollowedBy().contains(curuser) ){
 			teacherToFollow.getFollowedBy().add(curuser);
 		} else {
 			return null;
@@ -224,6 +224,8 @@ public class UserService implements IUserService {
 		final Authentication curAuth = SecurityContextHolder.getContext().getAuthentication();
 		String username = curAuth.getName();
 		User curuser =repository.findByEmail(username);
+		System.out.println("Unfollow service!");
+		
 		
 		User teacherToFollow = getUserByID(userid);
 		if(teacherToFollow == null){
@@ -232,7 +234,7 @@ public class UserService implements IUserService {
 		
 		Role teacherrole = roleRepository.getOne((long) 3);
 		if(teacherToFollow.getRoles().contains(teacherrole) ){
-			teacherToFollow.getFollowedBy().add(curuser);
+			teacherToFollow.getFollowedBy().remove(curuser);
 		} else {
 			return null;
 		}
