@@ -25,12 +25,14 @@ public class HomeController {
     @RequestMapping(value="/home")
     public String homepage(Model model){
     	List<Topic> topicList = topicService.getRecentTopics();
+    	List<Topic> popularList = topicService.getPopularTopics();
     	
     	final Authentication curAuth = SecurityContextHolder.getContext().getAuthentication();
         String currentUser =  curAuth.getName();
     	LOGGER.debug("USERNAME :" + currentUser);
     	LOGGER.debug("DETAILS :" + curAuth.getDetails());
     	
+    	model.addAttribute("popular", popularList);
     	model.addAttribute("username", currentUser);
     	model.addAttribute("topics", topicList);
     	return "home";
