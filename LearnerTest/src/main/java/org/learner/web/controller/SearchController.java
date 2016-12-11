@@ -81,12 +81,19 @@ public class SearchController {
 		return "searchresult";
 	}
 	
-	
-	@RequestMapping(value="/advancedSearch")
+	@RequestMapping(value="/tag/search/{tagId}")
 	@ResponseBody
-	public List<Topic> advanced(){
-		
-		return null;
+	public List<Topic> tagRelatedTopics(@PathVariable Long tagId){
+		List<Topic> relatedTopics = topicService.getRelatedTopicsViaTags(tagId);
+		return relatedTopics;
+	}
+	
+	@RequestMapping(value="/semanticSearch")
+	@ResponseBody
+	public List<Topic> advanced(@RequestParam String q){
+		LOGGER.debug("Semantic Search");
+		List<Topic> semantics = topicService.semanticSearch(q);
+		return semantics;
 	}
 	
 	@RequestMapping(value="/common/{topicId}")

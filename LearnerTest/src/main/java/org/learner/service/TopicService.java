@@ -1,6 +1,8 @@
 package org.learner.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -388,16 +390,12 @@ public class TopicService implements ITopicService{
 	@Override
 	public List<Topic> semanticSearch(String q) {
 		
-		ConceptNetModel cnmodel = ConceptNetSearch.conceptNetQuery(q);
+		String searchterm = q.toLowerCase().replaceAll(" ", "_"); 
+		ConceptNetModel cnmodel = ConceptNetSearch.conceptNetQuery(searchterm);
 		
 		List<ConceptNetEdge> edges = cnmodel.getEdges();
 		
 		Set<String> originalSet = new HashSet<String>();
-		Set<String> tagset = new HashSet<String>();
-		
-		tagset.add("/c/en/juicy");
-		tagset.add("/c/en/warm_color");
-		tagset.add("/c/en/lololol");
 		
 		for(ConceptNetEdge cnedge: edges){
 			int ei = cnedge.getEnd().lastIndexOf("/")+1;
@@ -411,32 +409,88 @@ public class TopicService implements ITopicService{
 			
 			System.out.println("Start : " + start + " , End : " + end + " ,Rel : " + rel + " Weight : " + cnedge.getWeigth());
 			
-			String related = end.equalsIgnoreCase(q) ? start : end ;
-			String originalform =  end.equalsIgnoreCase(q) ? cnedge.getStart() : cnedge.getEnd();
+			String related = end.equalsIgnoreCase(searchterm) ? start : end ;
+			String originalform =  end.equalsIgnoreCase(searchterm) ? cnedge.getStart() : cnedge.getEnd();
 			
 			originalSet.add(originalform);
 			
 			System.out.println("Related : " + related);
 			
-			//List<Tag> relatedTags = tagRepo.findByNameContaining(related);
-			//Direct related Tags
-			//for(Tag rt: relatedTags){
-			//	System.out.println("TAG TAG : " + rt.getName());
-			//}
-			
 		}
 		
 		List<Tag> alltags = tagRepo.findAll();
 		
+		List<Tag> nonzerotags = new ArrayList<Tag>();
 		for(Tag tt : alltags){
+			if(tt.getName().startsWith(q)){
+				//TODO give point
+				tt.incrementSearchPoint(30);
+				
+			}
+			
+			if(tt.getConceptRelations().isEmpty()){
+				System.out.println("No concept for tag : " + tt.getName());
+				continue;
+			}
+			
+			if(tt.getConceptRelations().contains("/c/en/" + searchterm)){
+				//TODO direct search relation 
+				tt.incrementSearchPoint(15);
+			}
+			
 			Sets.SetView<String> sw =  Sets.intersection(originalSet, tt.getConceptRelations());
 			System.out.println("TAG : " + tt.getName());
 			System.out.println("Common : " + sw );
 			System.out.println("Size : " + sw.size());
+			
+			//TODO Give point sw.size * 3 ;
+			tt.incrementSearchPoint(sw.size() * 5 );
 			System.out.println("----");
+			
+			if(tt.getSearchPoint() > 0) {
+				nonzerotags.add(tt);
+			}
+			
 		}
 		
-		return null;
+		Collections.sort(nonzerotags, Comparator.comparingInt(Tag::getSearchPoint));
+		
+		
+		
+		List<Topic> weighted = new ArrayList<Topic>();
+		System.out.println("Non-zero tag count : " + nonzerotags.size());
+		
+		
+		for (Tag nztag : nonzerotags) {
+			for(Topic wtop : nztag.getRelatedTopics()){
+				int index = weighted.indexOf(wtop);
+				if(index == -1){
+					wtop.incrementSearchScore(nztag.getSearchPoint());
+					weighted.add(wtop);
+				} else {
+					weighted.get(index).incrementSearchScore(nztag.getSearchPoint());
+				}
+			}
+		}
+		
+		
+		return weighted;
 	}
 	
+	
+	public List<Topic> recommendByTopic(Topic topic){
+		
+		//TODO Implement recommendation by topic
+		return null;
+	}
+	@Override
+	public List<Topic> getOtherTopicsInPack(Topic topic){
+		List<Topic> topicsInPack = new ArrayList<Topic>();
+		List<Topic> tt = topic.getTopicPack().getTopicList();
+		if(tt != null) {
+			topicsInPack.addAll(tt);
+			topicsInPack.remove(topic);
+		}
+		return topicsInPack;
+	}
 }

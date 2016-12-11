@@ -14,12 +14,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @Entity
 @Table (name = "tag")
@@ -45,8 +44,25 @@ public class Tag {
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "tags")
 	private List<Topic> relatedTopics;
 	
-	
-    public List<Topic> getRelatedTopics() {
+    
+    @Transient
+	int searchPoint = 0;
+    
+    public void incrementSearchPoint(int inc) {
+		this.searchPoint += inc;
+	}
+    
+    public int getSearchPoint() {
+		return searchPoint;
+	}
+
+
+	public void setSearchPoint(int searchPoint) {
+		this.searchPoint = searchPoint;
+	}
+
+
+	public List<Topic> getRelatedTopics() {
 		return relatedTopics;
 	}
 
