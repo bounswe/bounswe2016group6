@@ -43,6 +43,7 @@ public class User {
     @Column(length = 60)
     private String password;
     
+    
     private boolean enabled;
     
     @JsonIgnore
@@ -80,7 +81,8 @@ public class User {
 	public void setFollowing(List<User> following) {
 		this.following = following;
 	}
-
+	
+	@JsonBackReference
 	@ManyToMany(mappedBy = "followedBy", fetch = FetchType.LAZY)
     private List<User> following;
     
