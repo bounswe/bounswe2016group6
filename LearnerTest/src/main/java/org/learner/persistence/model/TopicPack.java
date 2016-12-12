@@ -8,6 +8,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 public class TopicPack {
@@ -17,7 +20,7 @@ public class TopicPack {
     private Long id;
 	private String name;
 	
-	
+	@JsonBackReference
 	@OneToMany(mappedBy = "topicPack" , fetch = FetchType.LAZY)
 	private List<Topic> topicList;
 	

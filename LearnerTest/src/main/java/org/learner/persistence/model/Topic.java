@@ -17,8 +17,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -71,7 +73,39 @@ public class Topic {
     private Date createdAt;
     private Date revealDate;
     
-    public Topic() {
+
+
+    @ManyToOne
+    @JoinColumn(name="pack_id")
+    private TopicPack topicPack;
+    
+    @Transient
+    private int searchScore;
+    
+    
+    public TopicPack getTopicPack() {
+		return topicPack;
+	}
+
+	public void setTopicPack(TopicPack topicPack) {
+		this.topicPack = topicPack;
+	}
+    
+    public void incrementSearchScore(int inc){
+    	this.searchScore += inc;
+    }
+    
+    public int getSearchScore() {
+		return searchScore;
+	}
+
+
+	public void setSearchScore(int searchScore) {
+		this.searchScore = searchScore;
+	}
+
+
+	public Topic() {
         super();
     }
 	

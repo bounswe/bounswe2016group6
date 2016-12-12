@@ -44,18 +44,14 @@ public interface ITopicService {
 	Tag createTag(Tag tag);
 	List<Tag> createTags(List<Tag> tags);
 	
-	
 	Tag createTagToTopic(Topic topic,Tag tag);
 	List<Tag> createTagsToTopic(Topic topic,List<Tag> tags);
 	
-	
 	List<Tag> tagSuggest(String q);
-	
-	void deleteTagFromQuestion(long tid,long tagid);
 	
 	List<Topic> basicKeywordSearch(String keyword);
 	
-	List<Topic> getRelatedTopicsViaTopics(long topicId);
+	List<Topic> getRelatedTopicsViaTopics(Topic topic);
 	
 	List<Topic> getRelatedTopicsViaTags(long tagid);
 	
@@ -64,10 +60,6 @@ public interface ITopicService {
 	List<Topic> getTopicsLikedByUser();
 	
 	List<Topic> getTopicsCommentedByUser();
-	
-	List<Topic> getTopicsFromFollowedTeacher();
-	
-	int getLikeCount(long tid);
 
 	Topic unlikeTopic(long topicId);
 	
@@ -82,6 +74,10 @@ public interface ITopicService {
 	boolean removeQuestion(Long questionId);
 
 	List<Topic> semanticSearch(String q);
+
+	List<Topic> getOtherTopicsInPack(Topic topic);
+
+	List<Topic> latestTopicsFromFollowing(List<User> teachers);
 	
 	
 }

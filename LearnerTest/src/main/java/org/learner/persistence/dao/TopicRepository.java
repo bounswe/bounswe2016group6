@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.learner.persistence.model.Tag;
 import org.learner.persistence.model.Topic;
+import org.learner.persistence.model.User;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -23,6 +24,7 @@ public interface TopicRepository extends JpaRepository<Topic, Long> {
 	
 	public List<Topic> findTop10ByHeaderContainingOrderByCreatedAtDesc(String hdr);
 	
+	public List<Topic> findByOwnerInOrderByCreatedAtDesc(List<User> creators);
 	
 	@Query( "select distinct tp from Topic tp "
 			+ " join tp.tags tg "
