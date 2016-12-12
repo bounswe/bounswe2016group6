@@ -100,7 +100,6 @@ public class TopicService implements ITopicService{
 		edit.setContent(topicdto.getContent());
 		edit.setHeader(topicdto.getHeader());
 		repository.save(edit);
-		//TODO insert tags
 		return edit;
 	}
 
@@ -150,7 +149,6 @@ public class TopicService implements ITopicService{
 		
 		liked.getLikedBy().remove(user);
 		
-		//TODO insert tags
 		return liked;
 	}
 	
@@ -193,7 +191,7 @@ public class TopicService implements ITopicService{
 
 	@Override
 	public List<Topic> getRecommendedTopics() {
-		// TODO Auto-generated method stub
+		// TODO User specific recommendations
 		return null;
 	}
 
@@ -204,11 +202,6 @@ public class TopicService implements ITopicService{
 		return tag;
 	}
 
-	@Override
-	public void deleteTagFromQuestion(long tid, long tagid) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public List<Topic> basicKeywordSearch(String keyword) {
@@ -217,7 +210,7 @@ public class TopicService implements ITopicService{
 	}
 
 	@Override
-	public List<Topic> getRelatedTopicsViaTopics(long topicId) {
+	public List<Topic> getRelatedTopicsViaTopics(Topic topic) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -225,10 +218,7 @@ public class TopicService implements ITopicService{
 	@Override
 	public List<Topic> getRelatedTopicsViaTags(long tagid) {
 		Tag tag = tagRepo.findOne(tagid);
-		
 		if(tag == null) return null;
-		
-		
 		return tag.getRelatedTopics();
 	}
 
@@ -248,18 +238,6 @@ public class TopicService implements ITopicService{
 	public List<Topic> getTopicsCommentedByUser() {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public List<Topic> getTopicsFromFollowedTeacher() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int getLikeCount(long tid) {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 	
 	
@@ -423,9 +401,7 @@ public class TopicService implements ITopicService{
 		List<Tag> nonzerotags = new ArrayList<Tag>();
 		for(Tag tt : alltags){
 			if(tt.getName().startsWith(q)){
-				//TODO give point
 				tt.incrementSearchPoint(30);
-				
 			}
 			
 			if(tt.getConceptRelations().isEmpty()){
@@ -434,20 +410,22 @@ public class TopicService implements ITopicService{
 			}
 			
 			if(tt.getConceptRelations().contains("/c/en/" + searchterm)){
-				//TODO direct search relation 
 				tt.incrementSearchPoint(15);
 			}
 			
 			Sets.SetView<String> sw =  Sets.intersection(originalSet, tt.getConceptRelations());
-			System.out.println("TAG : " + tt.getName());
-			System.out.println("Common : " + sw );
-			System.out.println("Size : " + sw.size());
+
 			
 			//TODO Give point sw.size * 3 ;
 			tt.incrementSearchPoint(sw.size() * 5 );
-			System.out.println("----");
+			
 			
 			if(tt.getSearchPoint() > 0) {
+				System.out.println("TAG : " + tt.getName());
+				System.out.println("Common : " + sw );
+				System.out.println("Size : " + sw.size());
+				System.out.println("Search Points : " + tt.getSearchPoint());
+				System.out.println("----");
 				nonzerotags.add(tt);
 			}
 			
@@ -477,12 +455,12 @@ public class TopicService implements ITopicService{
 		return weighted;
 	}
 	
-	
-	public List<Topic> recommendByTopic(Topic topic){
-		
-		//TODO Implement recommendation by topic
-		return null;
+	@Override
+	public List<Topic> latestTopicsFromFollowing(List<User> teachers){
+		return repository.findByOwnerInOrderByCreatedAtDesc(teachers);
 	}
+	
+
 	@Override
 	public List<Topic> getOtherTopicsInPack(Topic topic){
 		List<Topic> topicsInPack = new ArrayList<Topic>();

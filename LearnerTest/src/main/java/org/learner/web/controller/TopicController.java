@@ -1,5 +1,6 @@
 package org.learner.web.controller;
 
+import java.security.Principal;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -8,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.learner.persistence.model.Topic;
+import org.learner.persistence.model.User;
 import org.learner.persistence.model.Question;
 import org.learner.registration.TopicEvent;
 import org.learner.service.ITopicService;
@@ -241,7 +243,32 @@ public class TopicController {
     	
     }
     
+    @RequestMapping(value="/{id}/recommend")
+    @ResponseBody
+    public List<Topic> recommendByTopic(@PathVariable Long id){
+    	Topic t = topicService.getTopicById(id);
+    	if(t == null) return null;
+    	
+    	List<Topic> commonTagTopics = topicService.getTopicsWithCommonTag(t);
+    	return commonTagTopics;
+    }
     
+    @RequestMapping(value="/{id}/pack")
+    @ResponseBody
+    public List<Topic> othersInPack(@PathVariable Long id){
+    	Topic t = topicService.getTopicById(id);
+    	if(t == null) return null;
+    	List<Topic>  packTopics = topicService.getOtherTopicsInPack(t);
+    	return packTopics;
+    }
     
+    @RequestMapping(value="/user/following/latest")
+    @ResponseBody
+    public List<Topic> latestTopicFromFollowing(final Principal principal){
+    	String currentUsername = principal.getName();
+    	User user = userService.findUserByEmail(currentUsername);
+    	List<Topic> teacherLatest = topicService.latestTopicsFromFollowing(user.getFollowing());
+    	return teacherLatest;
+    }
     
 }
