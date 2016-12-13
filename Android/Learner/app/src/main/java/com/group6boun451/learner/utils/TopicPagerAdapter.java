@@ -2,7 +2,9 @@ package com.group6boun451.learner.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,7 @@ import com.doodle.android.chips.ChipsView;
 import com.doodle.android.chips.model.Contact;
 import com.group6boun451.learner.R;
 import com.group6boun451.learner.activity.HomePage;
+import com.group6boun451.learner.activity.SearchActivity;
 import com.group6boun451.learner.activity.Task;
 import com.group6boun451.learner.model.Tag;
 import com.group6boun451.learner.model.Topic;
@@ -40,7 +43,7 @@ public class TopicPagerAdapter extends PagerAdapter {
     }
 
     @Override
-    public Object instantiateItem(ViewGroup collection, int position) {
+    public Object instantiateItem(final ViewGroup collection, int position) {
         final Topic topic = topics.get(position);
         LayoutInflater inflater = LayoutInflater.from(mContext);
         ViewGroup v = (ViewGroup) inflater.inflate(R.layout.topic_item_home, collection, false);
@@ -59,8 +62,6 @@ public class TopicPagerAdapter extends PagerAdapter {
             Contact contact = new Contact(tagName, t.getContext(), t.getId()+"", tagName, null);
             mChipsView.addChip(tagName, null, contact,true);
         }
-
-
         final ImageView img = (ImageView) v.findViewById(R.id.imageTopic);
         GlideHelper.loadImage(mContext,img, topic);
         v.setOnClickListener(new View.OnClickListener() {
@@ -76,7 +77,18 @@ public class TopicPagerAdapter extends PagerAdapter {
         final ImageView imgProfile = (ImageView) v.findViewById(R.id.imgTopicPageUserImage);
         imgProfile.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_menu_profile));
 
-
+        for(final ChipsView.Chip chip: mChipsView.getChips()) {
+            chip.getView().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d("ssss", chip.getContact().toString());
+                    Intent intent = new Intent(mContext, SearchActivity.class);
+                    intent.putExtra("tagName",chip.getContact().getFirstName());
+                    intent.putExtra("query",chip.getContact().getDisplayName());
+                    mContext.startActivity(intent);
+                }
+            });
+        }
         final Button likeButton = (Button)v.findViewById(R.id.like_button);
         if(isLiked(topic.getLikedBy())) likeButton.setTextColor(mContext.getResources().getColor(R.color.selected_item_color));
         likeButton.setOnClickListener(new View.OnClickListener() {

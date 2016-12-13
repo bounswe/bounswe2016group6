@@ -25,6 +25,10 @@ public class Topic {
     private Date createdAt;
     private Date revealDate;
 
+    private TopicPack topicPack;
+    private int searchScore;
+
+
     public Topic() {
         super();
     }
@@ -85,6 +89,13 @@ public class Topic {
 		this.likes = likes;
 	}
 
+    public TopicPack getTopicPack() {
+        return topicPack;
+    }
+
+    public void setTopicPack(TopicPack topicPack) {
+        this.topicPack = topicPack;
+    }
 	@Override
     public int hashCode() {
         final int prime = 31;

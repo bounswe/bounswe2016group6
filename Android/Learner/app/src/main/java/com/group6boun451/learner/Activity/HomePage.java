@@ -430,6 +430,17 @@ public class HomePage extends AppCompatActivity{
             Contact contact = new Contact(tagName, t.getContext(), t.getId()+"", "", null);
             mChipsView.addChip(tagName, null, contact,true);
         }
+        for(final ChipsView.Chip chip: mChipsView.getChips()) {
+            chip.getView().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(HomePage.this, SearchActivity.class);
+                    intent.putExtra("tagName",chip.getContact().getFirstName());
+                    intent.putExtra("query",chip.getContact().getDisplayName());
+                    startActivity(intent);
+                }
+            });
+        }
 //content
         contentView.loadDataWithBaseURL("https://www.youtube.com/embed/", topic.getContent(),
                 "text/html; charset=utf-8", "UTF-8", null);

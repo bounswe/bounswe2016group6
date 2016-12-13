@@ -2,6 +2,7 @@ package com.group6boun451.learner.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.doodle.android.chips.ChipsView;
 import com.doodle.android.chips.model.Contact;
 import com.group6boun451.learner.R;
 import com.group6boun451.learner.activity.HomePage;
+import com.group6boun451.learner.activity.SearchActivity;
 import com.group6boun451.learner.activity.Task;
 import com.group6boun451.learner.model.Tag;
 import com.group6boun451.learner.model.Topic;
@@ -103,6 +105,17 @@ public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResults
             holder.mChipsView.addChip(tagName, null, contact,true);
         }
 
+        for(final ChipsView.Chip chip: holder.mChipsView.getChips()) {
+            chip.getView().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, SearchActivity.class);
+                    intent.putExtra("tagName",chip.getContact().getFirstName());
+                    intent.putExtra("query",chip.getContact().getDisplayName());
+                    context.startActivity(intent);
+                }
+            });
+        }
         GlideHelper.loadImage(context,holder.img, topic);
 
         holder.imgProfile.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_menu_profile));

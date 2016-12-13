@@ -2,13 +2,16 @@ package com.group6boun451.learner.model;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 public class Tag {
     private Long id;
     private String name;
     private String context;
+    private Set<String> conceptRelations;
     private Date createdAt;
     private List<Topic> relatedTopics;
+    private int searchPoint = 0;
 
     public Tag(){}
     public Long getId() {
@@ -57,5 +60,21 @@ public class Tag {
 
     public void setRelatedTopics(List<Topic> relatedTopics) {
         this.relatedTopics = relatedTopics;
+    }
+
+    public Set<String> getConceptRelations() {
+        return conceptRelations;
+    }
+
+    public void setConceptRelations(Set<String> conceptRelations) {
+        this.conceptRelations = conceptRelations;
+    }
+
+    public int getSearchPoint() {
+        return searchPoint;
+    }
+
+    public void setSearchPoint(int searchPoint) {
+        this.searchPoint = searchPoint;
     }
 }

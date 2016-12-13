@@ -169,6 +169,7 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
         mChipsView.setChipsListener(new ChipsView.ChipsListener() {
             @Override
             public void onChipAdded(ChipsView.Chip chip) {
+
                 for (ChipsView.Chip chipItem : mChipsView.getChips()) {
                     Log.d("ChipList", "chip: " + chipItem.toString());
                 }

@@ -105,7 +105,7 @@ public class SearchActivity extends AppCompatActivity {
         ((TextView)findViewById(R.id.header)).setText(title);
         findViewById(R.id.search_suggestions_section).setLayoutParams(new LinearLayout.LayoutParams(0,0));
         mSearchView = (FloatingSearchView) findViewById(R.id.floating_search_view);
-        RecyclerView mSearchResultsList = (RecyclerView) findViewById(R.id.search_results_list);
+        final RecyclerView mSearchResultsList = (RecyclerView) findViewById(R.id.search_results_list);
         mSearchResultsAdapter = new SearchResultsListAdapter(this);
         mSearchResultsList.setAdapter(mSearchResultsAdapter);
         mSearchResultsList.setLayoutManager(new LinearLayoutManager(this));
@@ -115,6 +115,22 @@ public class SearchActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         } catch (NullPointerException e) {}
         setupFloatingSearch();
+
+        String query = getIntent().getStringExtra("query");
+        if(query.length()>0){
+            mSearchView.setSearchText(getIntent().getStringExtra("tagName"));
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getString(R.string.base_url) + "tag/"+query);
+            f =  new Task<>(SearchActivity.this, new Task.Callback() {
+                @Override
+                public void onResult(String resultString) {
+                   onResultofQuery(resultString);
+                    mSearchView.clearSearchFocus();
+                }
+            });
+
+            f.execute(builder.build().encode().toUri());
+        }
+
 
         summernote.setRequestCodeforFilepicker(EDITOR);
 
@@ -266,6 +282,15 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void onResultofQuery(String resultString) {
+        Topic[] result = Task.getResult(resultString, Topic[].class);
+        if (result != null) {
+            mSearchResultsAdapter.swapData(Arrays.asList(result));
+        }
+        mSearchView.hideProgress();
+    }
+
     private void commentView(View view) {
         LinearLayout lyt = (LinearLayout) findViewById(R.id.new_comment_snack);
         if(isSnackBarActive) {
@@ -324,6 +349,17 @@ public class SearchActivity extends AppCompatActivity {
             Contact contact = new Contact(tagName, t.getContext(), t.getId()+"", "", null);
             mChipsView.addChip(tagName, null, contact,true);
         }
+        for(final ChipsView.Chip chip: mChipsView.getChips()) {
+            chip.getView().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(SearchActivity.this, SearchActivity.class);
+                    intent.putExtra("tagName",chip.getContact().getFirstName());
+                    intent.putExtra("query",chip.getContact().getDisplayName());
+                    startActivity(intent);
+                }
+            });
+        }
 //content
         contentView.loadDataWithBaseURL("https://www.youtube.com/embed/", topic.getContent(),
                 "text/html; charset=utf-8", "UTF-8", null);
@@ -371,11 +407,7 @@ public class SearchActivity extends AppCompatActivity {
                     f =  new Task<>(SearchActivity.this, new Task.Callback() {
                                 @Override
                                 public void onResult(String resultString) {
-                                    Topic[] result = Task.getResult(resultString, Topic[].class);
-                                    if (result != null) {
-                                        mSearchResultsAdapter.swapData(Arrays.asList(result));
-                                    }
-                                    mSearchView.hideProgress();
+                                   onResultofQuery(resultString);
                                 }
                             });
                     UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getString(R.string.base_url) + "search/keyword")
