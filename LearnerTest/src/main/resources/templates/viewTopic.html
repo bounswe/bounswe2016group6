@@ -197,11 +197,19 @@
 		<div class="panel-heading">
 		<strong th:text="${cmnt.owner.firstName+' '+cmnt.owner.lastName}" >myusername</strong> <span class="text-muted" th:text="${'commented on ' + #dates.format(cmnt.createdAt,'YYYY/MM/dd HH:mm')}">commented </span>
 		</div>
+		<div>
+		<textarea readonly class="panel-body" name="text" cols="37" rows="2" th:text="${cmnt.content}">
+		</textarea>
+		</div>
+		</div><!-- /panel panel-default -->
+		</div><!-- /col-sm-5 -->
+		
+		<!-- 
 		<div th:text="${cmnt.content}" class="panel-body">
 		Panel content
 		</div><!-- /panel-body -->
-		</div><!-- /panel panel-default -->
-		</div><!-- /col-sm-5 -->
+		 
+		
 		
 		</div>
 
