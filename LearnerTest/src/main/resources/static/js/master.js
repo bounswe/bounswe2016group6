@@ -1,6 +1,8 @@
 // Put all your page JS here
 
 var questions = [];
+var totalQuestions = 0;
+var totalCorrect = 0;
 
 $(function () {
 	
@@ -34,4 +36,23 @@ $(function () {
 		location.replace('/topic/'+topicID);
 	});
 	
+	
+	$("#resultSaveButton").click(function (){
+		alert("Hello");
+		alert("Total questions : " + totalQuestions  + " , Total correct: " + totalCorrect );
+		var quizResult = {"title": "Topic Quiz", "correct" : totalCorrect , "questionCount": totalQuestions};
+		$.ajax
+	    ({
+	        type: "POST",
+	        url: '/quiz/result/save',
+	        dataType: 'json',
+	        contentType: 'application/json',
+	        data: JSON.stringify(quizResult),
+	        cache: false,
+	        success: function () {
+
+	        alert("Your quiz results are saved!"); 
+	        }
+	    })
+	});
 });

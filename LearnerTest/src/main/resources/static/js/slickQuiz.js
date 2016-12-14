@@ -52,6 +52,8 @@
                 events: {
                     onStartQuiz: function (options) {},
                     onCompleteQuiz: function (options) {
+                    	totalQuestions = options.questionCount;
+                    	totalCorrect = options.score;
                     	alert("Quiz done!");
                     }  // reserved: options.questionCount, options.score
                 }

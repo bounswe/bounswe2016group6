@@ -29,10 +29,10 @@
     <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
 	
-	
-	<script src="/js/master.js"></script>
-	<script src="/js/slickquiz.js"></script>
+	<script src="/js/slickQuiz.js"></script>
 	<script src="/js/slickQuiz-config.js"></script>
+	<script src="/js/master.js"></script>
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -45,7 +45,8 @@
 	
 	    var topicID = [[${topicId}]];
 	    console.log(topicID);
-	
+		
+	    
 	/*]]>*/
 	</script>
 
@@ -111,6 +112,7 @@
 	            <h3 class="quizLevel"><strong>Ranking:</strong> <span><!-- where the quiz ranking level goes --></span></h3>
 				<br><br>
 				<a th:href="'/topic/' + ${topicId}" class="btn btn-primary">Back to topic page</a>
+	            <a id="resultSaveButton" class ="btn btn-info">Save quiz results</a>
 	            <div class="quizResultsCopy">
 	                <!-- where the quiz result copy goes -->
 	            </div>
