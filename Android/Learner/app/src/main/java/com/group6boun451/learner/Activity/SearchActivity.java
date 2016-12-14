@@ -119,7 +119,19 @@ public class SearchActivity extends AppCompatActivity {
         String query = getIntent().getStringExtra("query");
         if(query!=null && query.length()>0){
             mSearchView.setSearchText(getIntent().getStringExtra("tagName"));
-            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getString(R.string.base_url) + "tag/"+query);
+            String type = getIntent().getStringExtra("type");
+            String myQuery;
+            if(type==null) {
+                myQuery = "tag/" + query;
+            }else if(type.equals("pack")){
+                myQuery = "topic/" + query +"/pack";
+            } else if(type.equals("recommend")){
+                myQuery = "topic/" + query +"/recommend";
+            }else {
+                myQuery = "topic/popular";
+            }
+
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getString(R.string.base_url) + myQuery);
             f =  new Task<>(SearchActivity.this, new Task.Callback() {
                 @Override
                 public void onResult(String resultString) {
@@ -327,7 +339,7 @@ public class SearchActivity extends AppCompatActivity {
         }
     }
 
-    public void openDetails(View coverView, Topic topic) {
+    public void openDetails(View coverView, final Topic topic) {
         currentTopic = topic;
         Log.d("topic",currentTopic.getId()+"");
         GlideHelper.loadImage(this,(ImageView) Views.find(tabHost, R.id.details_image), topic);
@@ -360,6 +372,31 @@ public class SearchActivity extends AppCompatActivity {
                 }
             });
         }
+        Button packButton = Views.find(tabHost,R.id.pack_button);
+        packButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(SearchActivity.this, SearchActivity.class);
+                intent.putExtra("tagName",topic.getTopicPack().getName());
+                intent.putExtra("query",topic.getId()+"");
+                intent.putExtra("type","pack");
+                startActivity(intent);
+            }
+        });
+
+        Button recommendButton = Views.find(tabHost,R.id.recommend_button);
+        recommendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(SearchActivity.this, SearchActivity.class);
+                intent.putExtra("tagName",topic.getHeader());
+                intent.putExtra("query",topic.getId()+"");
+                intent.putExtra("type","recommend");
+                startActivity(intent);
+            }
+        });
+
+
 //content
         contentView.loadDataWithBaseURL("https://www.youtube.com/embed/", topic.getContent(),
                 "text/html; charset=utf-8", "UTF-8", null);

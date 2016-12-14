@@ -382,7 +382,7 @@ public class HomePage extends AppCompatActivity{
 
     }
 
-    public void openDetails(View coverView, Topic topic) {
+    public void openDetails(View coverView, final Topic topic) {
         //test Quiz
         List<Question> mQues = new ArrayList<Question>();
         Question q1 = new Question();
@@ -441,6 +441,31 @@ public class HomePage extends AppCompatActivity{
                 }
             });
         }
+        Button packButton = Views.find(tabHost,R.id.pack_button);
+        packButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomePage.this, SearchActivity.class);
+                intent.putExtra("tagName",topic.getTopicPack().getName());
+                intent.putExtra("query",topic.getId()+"");
+                intent.putExtra("type","pack");
+                startActivity(intent);
+            }
+        });
+
+        Button recommendButton = Views.find(tabHost,R.id.recommend_button);
+        recommendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomePage.this, SearchActivity.class);
+                intent.putExtra("tagName",topic.getHeader());
+                intent.putExtra("query",topic.getId()+"");
+                intent.putExtra("type","recommend");
+                startActivity(intent);
+            }
+        });
+
+
 //content
         contentView.loadDataWithBaseURL("https://www.youtube.com/embed/", topic.getContent(),
                 "text/html; charset=utf-8", "UTF-8", null);

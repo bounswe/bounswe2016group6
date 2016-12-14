@@ -124,7 +124,25 @@
                             app:cv_vertical_spacing="2dp"
                             app:cv_bg_color="@color/semi_transparent"
                             app:cv_icon_placeholder="@drawable/ic_whatshot_black_24dp" />
-
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <Button
+                                android:id="@+id/pack_button"
+                                style="?android:attr/borderlessButtonStyle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="GO TO THE PACK"
+                                android:textColor="@color/white"/>
+                            <Button
+                                android:id="@+id/recommend_button"
+                                style="?android:attr/borderlessButtonStyle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="SIMILAR CONTENTS"
+                                android:textColor="@color/white"/>
+                        </LinearLayout>
                         <FrameLayout
                             android:layout_width="match_parent"
                             android:minHeight="200dp"
