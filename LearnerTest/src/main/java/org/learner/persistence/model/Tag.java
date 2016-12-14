@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -41,7 +40,7 @@ public class Tag {
     private Date createdAt;
     
     @JsonBackReference(value="relatedTopics")
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "tags")
+	@ManyToMany(mappedBy = "tags")
 	private List<Topic> relatedTopics;
 	
     

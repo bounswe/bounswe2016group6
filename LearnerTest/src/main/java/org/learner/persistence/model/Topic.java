@@ -2,8 +2,8 @@ package org.learner.persistence.model;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -48,14 +48,14 @@ public class Topic {
     
     private int likes;
     
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(name = "topic_like",
     			joinColumns = {@JoinColumn(name="topic_id")},
     			inverseJoinColumns = {@JoinColumn(name = "user_id")}
     			)		
     private List<User> likedBy;
     
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(	name = "topic_tag" , 
     			joinColumns = {@JoinColumn(name="topic_id")}, 
     			inverseJoinColumns={@JoinColumn(name="tag_id")}
@@ -68,6 +68,9 @@ public class Topic {
     
     @OneToMany(mappedBy="relatedTopic")
     private List<Question> questions;
+    
+    //@OneToMany(mappedBy = "masterTopic")
+    //private List
     
     private String headerImage;
     private Date createdAt;

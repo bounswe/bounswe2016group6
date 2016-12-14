@@ -1,6 +1,7 @@
 package org.learner.web.controller;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.learner.persistence.model.Topic;
+import org.learner.persistence.model.TopicPack;
 import org.learner.persistence.model.User;
 import org.learner.persistence.model.Question;
 import org.learner.registration.TopicEvent;
@@ -44,11 +46,12 @@ public class TopicController {
     @Autowired
     private ITopicService topicService;
     
+    
     @Autowired
     private ApplicationEventPublisher eventPublisher;
     
     private StorageService storageService;
-
+    
     @Autowired
     public TopicController(StorageService storageService) {
         this.storageService = storageService;
@@ -271,4 +274,11 @@ public class TopicController {
     	return teacherLatest;
     }
     
+    @RequestMapping(value = "/pack/suggest/{q}")
+    @ResponseBody
+    public List<TopicPack> suggestTopicPack(@PathVariable String q){
+    	List<TopicPack> tp = new ArrayList<TopicPack>();
+    	tp = topicService.packSuggest(q);
+    	return tp;
+    }
 }

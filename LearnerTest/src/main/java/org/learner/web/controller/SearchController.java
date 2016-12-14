@@ -67,7 +67,7 @@ public class SearchController {
 			return null;
 		}
 		
-		List<Topic> queryResults = topicService.basicKeywordSearch(q);
+		List<Topic> queryResults = topicService.semanticSearch(q);
 		model.addAttribute("topics", queryResults);
 		return "searchresult";
 	}
