@@ -5,8 +5,10 @@ import java.util.List;
 
 import org.learner.persistence.model.Comment;
 import org.learner.persistence.model.Question;
+import org.learner.persistence.model.QuizResult;
 import org.learner.persistence.model.Tag;
 import org.learner.persistence.model.Topic;
+import org.learner.persistence.model.TopicPack;
 import org.learner.persistence.model.User;
 import org.learner.web.dto.TopicDto;
 
@@ -78,6 +80,10 @@ public interface ITopicService {
 	List<Topic> getOtherTopicsInPack(Topic topic);
 
 	List<Topic> latestTopicsFromFollowing(List<User> teachers);
+
+	QuizResult saveQuizResult(QuizResult quizResult);
+
+	List<TopicPack> packSuggest(String q);
 	
 	
 }

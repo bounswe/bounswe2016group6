@@ -3,7 +3,6 @@ package org.learner.persistence.model;
 import java.util.Collection;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,13 +15,10 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.hibernate.engine.internal.Cascade;
 import org.jboss.aerogear.security.otp.api.Base32;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name = "user_account")
@@ -66,7 +62,7 @@ public class User {
     private List<Comment> comments;
     
     @JsonIgnore
-    @ManyToMany(cascade = CascadeType.ALL ,fetch = FetchType.LAZY)
+    @ManyToMany
     @JoinTable(name = "user_follow", 
 				joinColumns = @JoinColumn(name = "user_id"), 
 				inverseJoinColumns = @JoinColumn(name = "follower_id"))
@@ -83,9 +79,14 @@ public class User {
 	}
 	
 	@JsonBackReference
-	@ManyToMany(mappedBy = "followedBy", fetch = FetchType.LAZY)
+	@ManyToMany(mappedBy = "followedBy")
     private List<User> following;
     
+	@JsonBackReference(value ="quizResults")
+	@OneToMany(mappedBy = "solver")
+	private List<QuizResult> quizResults;
+	
+	
     private String picture;
     
     

@@ -14,13 +14,17 @@ import javax.transaction.Transactional;
 
 import org.learner.persistence.dao.CommentRepository;
 import org.learner.persistence.dao.QuestionRepository;
+import org.learner.persistence.dao.QuizResultRepository;
 import org.learner.persistence.dao.TagRepository;
+import org.learner.persistence.dao.TopicPackRepository;
 import org.learner.persistence.dao.TopicRepository;
 import org.learner.persistence.dao.UserRepository;
 import org.learner.persistence.model.Comment;
 import org.learner.persistence.model.Question;
+import org.learner.persistence.model.QuizResult;
 import org.learner.persistence.model.Tag;
 import org.learner.persistence.model.Topic;
+import org.learner.persistence.model.TopicPack;
 import org.learner.persistence.model.User;
 import org.learner.web.dto.TopicDto;
 import org.learner.web.util.ConceptNetEdge;
@@ -33,7 +37,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Sets;
-
 
 @Service
 @Transactional
@@ -52,8 +55,13 @@ public class TopicService implements ITopicService{
 	CommentRepository commentRepository;
 	
 	@Autowired
+	TopicPackRepository packRepo;
+	
+	@Autowired
 	QuestionRepository questionRepo;
 	
+	@Autowired
+	QuizResultRepository quizResultRepo;
 	@Override
 	public Topic setTopicImage(long tid, String imgpath) {
 		Topic edit = repository.findOne(tid);
@@ -367,7 +375,7 @@ public class TopicService implements ITopicService{
 
 	@Override
 	public List<Topic> semanticSearch(String q) {
-		
+		q = q.toLowerCase();
 		String searchterm = q.toLowerCase().replaceAll(" ", "_"); 
 		ConceptNetModel cnmodel = ConceptNetSearch.conceptNetQuery(searchterm);
 		
@@ -400,12 +408,12 @@ public class TopicService implements ITopicService{
 		
 		List<Tag> nonzerotags = new ArrayList<Tag>();
 		for(Tag tt : alltags){
-			if(tt.getName().startsWith(q)){
+			if(tt.getName().toLowerCase().startsWith(q)){
 				tt.incrementSearchPoint(30);
 			}
 			
 			if(tt.getConceptRelations().isEmpty()){
-				System.out.println("No concept for tag : " + tt.getName());
+				//System.out.println("No concept for tag : " + tt.getName());
 				continue;
 			}
 			
@@ -433,11 +441,24 @@ public class TopicService implements ITopicService{
 		
 		Collections.sort(nonzerotags, Comparator.comparingInt(Tag::getSearchPoint));
 		
+		List<Topic> nameSearchTopics = repository.findByHeaderContaining(q);
+
 		
 		
 		List<Topic> weighted = new ArrayList<Topic>();
 		System.out.println("Non-zero tag count : " + nonzerotags.size());
 		
+		for(Topic wtop : nameSearchTopics){
+			int index = weighted.indexOf(wtop);
+			if(index == -1){
+				wtop.incrementSearchScore(45);
+				weighted.add(wtop);
+			} else {
+				weighted.get(index).incrementSearchScore(45);
+			}
+		}
+		
+			
 		
 		for (Tag nztag : nonzerotags) {
 			for(Topic wtop : nztag.getRelatedTopics()){
@@ -471,4 +492,23 @@ public class TopicService implements ITopicService{
 		}
 		return topicsInPack;
 	}
+
+	@Override
+	public QuizResult saveQuizResult(QuizResult quizResult) {
+		User u = getCurrentUser();
+		quizResult.setSolver(u);
+		System.out.println("Quiz Correct : " + quizResult.getCorrect() );
+		System.out.println("Quiz Total : " + quizResult.getQuestionCount() );
+		System.out.println("Quiz Solver : " + quizResult.getSolver() );
+		System.out.println("Quiz Title : " + quizResult.getTitle() );
+		return quizResultRepo.save(quizResult);
+	}
+
+	@Override
+	public List<TopicPack> packSuggest(String q) {
+		
+		return packRepo.findByNameContaining(q);
+	}
+	
+	
 }
