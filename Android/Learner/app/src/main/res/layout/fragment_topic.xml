@@ -102,7 +102,7 @@
                                 android:id="@+id/details_title"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                style="?android:windowTitleStyle"
+                                android:ellipsize="none"
                                 android:layout_marginLeft="@dimen/default_margin"
                                 android:layout_marginRight="@dimen/default_margin"
                                 android:textSize="30sp"/>
@@ -110,8 +110,31 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="1dip"
+                            android:layout_marginLeft="@dimen/default_margin"
+                            android:layout_marginRight="@dimen/default_margin"
                             android:background="#ffffff" />
 
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            <Button
+                                android:id="@+id/pack_button"
+                                style="?android:attr/borderlessButtonStyle"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
+                                android:text="GO TO THE PACK"
+                                android:textColor="@color/white"/>
+                            <Button
+                                android:id="@+id/recommend_button"
+                                style="?android:attr/borderlessButtonStyle"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
+                                android:text="SIMILAR CONTENTS"
+                                android:textColor="@color/white"/>
+                        </LinearLayout>
 
                         <com.doodle.android.chips.ChipsView
                             android:id="@+id/cv_contacts"
@@ -122,27 +145,8 @@
                             android:padding="@dimen/default_margin"
                             android:elevation="6dp"
                             app:cv_vertical_spacing="2dp"
-                            app:cv_bg_color="@color/semi_transparent"
+                            app:cv_bg_color="@color/white"
                             app:cv_icon_placeholder="@drawable/ic_whatshot_black_24dp" />
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-                            <Button
-                                android:id="@+id/pack_button"
-                                style="?android:attr/borderlessButtonStyle"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="GO TO THE PACK"
-                                android:textColor="@color/white"/>
-                            <Button
-                                android:id="@+id/recommend_button"
-                                style="?android:attr/borderlessButtonStyle"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="SIMILAR CONTENTS"
-                                android:textColor="@color/white"/>
-                        </LinearLayout>
                         <FrameLayout
                             android:layout_width="match_parent"
                             android:minHeight="200dp"
