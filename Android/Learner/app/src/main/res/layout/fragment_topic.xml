@@ -18,8 +18,8 @@
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:layout_weight="1"
-            android:background="@color/guillotine_background_dark"
-            />
+            android:background="@color/guillotine_background_dark" />
+
         <FrameLayout
             android:id="@android:id/tabcontent"
             android:layout_width="match_parent"
@@ -97,11 +97,11 @@
                                 android:textSize="12sp"/>
                         </LinearLayout>
 
+                        <!--title-->
                         <com.group6boun451.learner.widget.CanaroTextView
                                 android:id="@+id/details_title"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-
                                 style="?android:windowTitleStyle"
                                 android:layout_marginLeft="@dimen/default_margin"
                                 android:layout_marginRight="@dimen/default_margin"
@@ -110,10 +110,7 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="1dip"
-                            android:background="#ffffff"></LinearLayout>
-
-
-
+                            android:background="#ffffff" />
 
 
                         <com.doodle.android.chips.ChipsView

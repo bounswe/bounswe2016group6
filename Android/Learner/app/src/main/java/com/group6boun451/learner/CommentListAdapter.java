@@ -13,6 +13,8 @@ import com.group6boun451.learner.utils.GlideHelper;
 
 import java.util.List;
 
+import static com.group6boun451.learner.utils.GlideHelper.getReadableDateFromDate;
+
 /**
  * Created by muaz on 05.11.2016.
  * adapter for list view of comments
@@ -22,10 +24,12 @@ public class CommentListAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
     private List<Comment> comments;
+    private Context context;
     public CommentListAdapter(Context context, List<Comment> items) {
         mInflater = (LayoutInflater) context.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
         comments = items;
+        this.context = context;
     }
 
 
@@ -58,7 +62,7 @@ public class CommentListAdapter extends BaseAdapter {
         GlideHelper.loadImage(usrImg,com.getOwner().getPicture());
 
         usrName.setText(com.getOwner().getFirstName());
-        comDate.setText(com.getCreatedAt().toString());
+        comDate.setText(getReadableDateFromDate(context,com.getCreatedAt()));
         comText.setText(com.getContent());
 
         return v;
