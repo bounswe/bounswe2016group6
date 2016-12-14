@@ -59,7 +59,8 @@
                     android:id="@+id/imgTopicPageUserImage"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    android:gravity="bottom"
+                    android:gravity="center"
+                    android:layout_gravity="center"
                     android:src="@drawable/ic_menu_profile"
                     android:padding="4dp" />
                 <com.group6boun451.learner.widget.CanaroTextView
@@ -81,17 +82,25 @@
                     android:textSize="12sp"/>
             </LinearLayout>
 
-            <Button
+
+            <com.like.LikeButton
+                app:icon_type="thumb"
+                app:icon_size="20dp"
                 android:id="@+id/like_button"
-                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/user_layout"
                 android:layout_alignParentEnd="true"
-                android:text="LIKE"
-                android:textColor="@color/white"
                 android:layout_alignParentRight="true" />
 
+            <com.like.LikeButton
+                app:icon_type="heart"
+                app:icon_size="20dp"
+                android:id="@+id/follow_button"
+                android:layout_width="wrap_content"
+                android:layout_below="@+id/user_layout"
+                android:layout_toLeftOf="@id/like_button"
+                android:layout_height="wrap_content"/>
 
         </RelativeLayout>
     </android.support.v7.widget.CardView>

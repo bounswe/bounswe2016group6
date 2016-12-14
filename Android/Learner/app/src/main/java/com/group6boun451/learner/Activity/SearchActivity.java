@@ -117,7 +117,7 @@ public class SearchActivity extends AppCompatActivity {
         setupFloatingSearch();
 
         String query = getIntent().getStringExtra("query");
-        if(query.length()>0){
+        if(query!=null && query.length()>0){
             mSearchView.setSearchText(getIntent().getStringExtra("tagName"));
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getString(R.string.base_url) + "tag/"+query);
             f =  new Task<>(SearchActivity.this, new Task.Callback() {

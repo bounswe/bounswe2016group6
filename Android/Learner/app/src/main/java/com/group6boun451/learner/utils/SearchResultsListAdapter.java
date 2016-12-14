@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,6 +21,8 @@ import com.group6boun451.learner.activity.Task;
 import com.group6boun451.learner.model.Tag;
 import com.group6boun451.learner.model.Topic;
 import com.group6boun451.learner.model.User;
+import com.like.LikeButton;
+import com.like.OnLikeListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +54,8 @@ public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResults
         private TextView textTopicTitle;
         private TextView textAuthor;
         private TextView textDate;
-        private Button likeButton;
+        private LikeButton likeButton;
+        private LikeButton followButton;
         private ChipsView mChipsView;
         private ImageView imgProfile;
 
@@ -63,7 +65,8 @@ public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResults
             textAuthor = ((TextView) view.findViewById(R.id.textAuthor));
             textDate = ((TextView) view.findViewById(R.id.textDate));
             img = (ImageView) view.findViewById(R.id.imageTopic);
-            likeButton = (Button)view.findViewById(R.id.like_button);
+            likeButton = (LikeButton)view.findViewById(R.id.like_button);
+            followButton= (LikeButton)view.findViewById(R.id.follow_button);
             mChipsView = (ChipsView) view.findViewById(R.id.cv_contacts);
             imgProfile = (ImageView) view.findViewById(R.id.imgTopicPageUserImage);
 
@@ -120,23 +123,48 @@ public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResults
 
         holder.imgProfile.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_menu_profile));
 
-        if(isLiked(topic.getLikedBy())) holder.likeButton.setTextColor(context.getResources().getColor(R.color.selected_item_color));
-        holder.likeButton.setOnClickListener(new View.OnClickListener() {
+        holder.likeButton.setLiked(isLiked(topic.getLikedBy()));
+        holder.likeButton.setOnLikeListener(new OnLikeListener() {
             @Override
-            public void onClick(View view) {
-                Task<String> likeTask = new Task<>(context, new Task.Callback() {
+            public void liked(LikeButton likeButton) {
+                new Task<String>(context, new Task.Callback() {
                     @Override
                     public void onResult(String result) {showResult((Activity) context,result);}
-                });
-                if(holder.likeButton.getCurrentTextColor()!=context.getResources().getColor(R.color.selected_item_color)) {
-                    likeTask.execute(context.getString(R.string.base_url) + "topic/like/"+topic.getId());
-                    holder.likeButton.setTextColor(context.getResources().getColor(R.color.selected_item_color));
-                }else {
-                    likeTask.execute(context.getString(R.string.base_url) + "topic/unlike/"+topic.getId());
-                    holder.likeButton.setTextColor(context.getResources().getColor(R.color.white));
-                }
+                })
+                        .execute(context.getString(R.string.base_url) + "topic/like/"+topic.getId());
+            }
+
+            @Override
+            public void unLiked(LikeButton likeButton) {
+                new Task<String>(context, new Task.Callback() {
+                    @Override
+                    public void onResult(String result) {showResult((Activity) context,result);}
+                })
+                        .execute(context.getString(R.string.base_url) + "topic/unlike/"+topic.getId());
             }
         });
+        if(topic.getOwner().getEmail().equalsIgnoreCase(HomePage.username)) holder.followButton.setEnabled(false);
+        holder.followButton.setLiked(isLiked(topic.getOwner().getFollowedBy()));
+        holder.followButton.setOnLikeListener(new OnLikeListener() {
+            @Override
+            public void liked(LikeButton likeButton) {
+                new Task<String>(context, new Task.Callback() {
+                    @Override
+                    public void onResult(String result) {showResult((Activity) context,result);}
+                })
+                        .execute(context.getString(R.string.base_url) + "follow/"+topic.getOwner().getId());
+            }
+
+            @Override
+            public void unLiked(LikeButton likeButton) {
+                new Task<String>(context, new Task.Callback() {
+                    @Override
+                    public void onResult(String result) {showResult((Activity) context,result);}
+                })
+                        .execute(context.getString(R.string.base_url) + "unfollow/"+topic.getOwner().getId());
+            }
+        });
+
 
         if(mLastAnimatedItemPosition < position){
             animateItem(holder.itemView);
@@ -153,6 +181,7 @@ public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResults
         }
     }
     private boolean isLiked(List<User> likedBy) {
+        if(likedBy==null)return false;
         for (User u:likedBy){if(u.getEmail().equalsIgnoreCase(HomePage.username))return true;} return false;
     }
     @Override
