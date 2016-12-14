@@ -52,8 +52,7 @@
 
         <activity
             android:name=".activity.ProfileActivity"
-            android:label="@string/title_activity_profile"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label=""/>
         <activity
             android:name=".activity.RegisterActivity"
             android:label="Register"

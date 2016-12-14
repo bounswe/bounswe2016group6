@@ -87,8 +87,6 @@ public class SearchActivity extends AppCompatActivity {
     public static String username;
     private boolean isSnackBarActive = false;
     private boolean isTopicActive= false;
-    public static boolean isThereQuiz = false;
-    public static Topic currentTopic = null;
     private String commentContent;
 
     Task<URI> f;
@@ -141,6 +139,8 @@ public class SearchActivity extends AppCompatActivity {
             });
 
             f.execute(builder.build().encode().toUri());
+        }else{
+            findViewById(R.id.date_picker).setVisibility(View.VISIBLE);
         }
 
 
@@ -194,7 +194,7 @@ public class SearchActivity extends AppCompatActivity {
                 isTopicActive = true;
                 fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_floatmenu_comment));
                 fab.setVisibility(View.VISIBLE);
-                if(isThereQuiz){
+                if(HomePage.isThereQuiz){
                     fabQuiz.setVisibility(View.VISIBLE);
                 }
                 mSearchView.clearSearchFocus();
@@ -217,7 +217,7 @@ public class SearchActivity extends AppCompatActivity {
                 isTopicActive = false;
                 fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_add_black_24dp));
                 fab.setVisibility(View.INVISIBLE);
-                if(isThereQuiz){
+                if(HomePage.isThereQuiz){
                     fabQuiz.setVisibility(View.INVISIBLE);
                 }
                 editDone();
@@ -235,7 +235,7 @@ public class SearchActivity extends AppCompatActivity {
                 }else {
                     editDone();
                     String content = summernote.getText();
-                    Topic t = currentTopic;
+                    Topic t = HomePage.currentTopic;
                     if(!t.getContent().equals(content)){
                         t.setContent(content);
                         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getString(R.string.base_url) + "topic/edit/"+t.getId()).queryParam("header",t.getHeader()).queryParam("content",content);
@@ -256,7 +256,7 @@ public class SearchActivity extends AppCompatActivity {
                 if(commentContent.length() < 9){
                     Snackbar.make(findViewById(android.R.id.content),"Comment is too short",Snackbar.LENGTH_SHORT).show();
                 }else{
-                    Topic t = currentTopic;
+                    Topic t = HomePage.currentTopic;
                     UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getString(R.string.base_url) + "topic/comment/create")
                             .queryParam("topicId",t.getId()).queryParam("content",commentContent);
                     new Task<URI>(SearchActivity.this, new Task.Callback() {
@@ -340,8 +340,9 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     public void openDetails(View coverView, final Topic topic) {
-        currentTopic = topic;
-        Log.d("topic",currentTopic.getId()+"");
+        HomePage.isThereQuiz = topic.getQuestions().size() != 0;
+        HomePage.currentTopic = topic;
+        Log.d("topic",HomePage.currentTopic.getId()+"");
         GlideHelper.loadImage(this,(ImageView) Views.find(tabHost, R.id.details_image), topic);
         ((CanaroTextView)Views.find(tabHost, R.id.details_title)).setText(topic.getHeader());
         ((CanaroTextView)Views.find(tabHost, R.id.txtTopicPageUserName)).setText(topic.getOwner().getFirstName());
