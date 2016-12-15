@@ -21,27 +21,12 @@
 
             <ImageView
                 android:id="@+id/commentUserImg"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_marginEnd="@dimen/md_keylines_mini"
                 android:layout_marginRight="@dimen/md_keylines_mini"
                 android:layout_marginTop="@dimen/md_keylines_mini"
                 android:src="@drawable/usericon" />
-
-            <TextView
-                android:id="@+id/commentUsrName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/commentUserImg"
-                android:layout_alignTop="@id/commentUserImg"
-                android:layout_toEndOf="@+id/commentUserImg"
-                android:layout_toRightOf="@+id/commentUserImg"
-                android:ellipsize="end"
-                android:gravity="center"
-                android:maxLength="22"
-                android:maxLines="1"
-                android:text="abdullah muaz ekici"
-                android:textColor="@color/cardview_dark_background" />
 
             <com.like.LikeButton
                 app:icon_type="heart"
@@ -52,24 +37,29 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true" />
 
-            <View
-                android:id="@+id/divider"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_below="@id/commentUserImg"
-                android:layout_marginBottom="@dimen/md_keylines_mini"
-                android:layout_marginTop="@dimen/md_keylines_mini"
-                android:background="@android:color/darker_gray" />
-
+            <TextView
+                android:id="@+id/commentUsrName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="abdullah muaz ekici"
+                android:textColor="@color/cardview_dark_background"
+                android:layout_above="@+id/divider"
+                android:layout_toRightOf="@+id/commentUserImg"
+                android:layout_toEndOf="@+id/commentUserImg" />
             <TextView
                 android:id="@+id/commentText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/divider"
+                android:layout_below="@id/commentUsrName"
                 android:layout_margin="@dimen/md_keylines_mini"
                 android:ellipsize="end"
                 android:maxLines="3"
-                android:text="asdkjhasıldfhbsafbuasdbausodygsavfasdrytfugblıkdyuafsvdlnşıbuvbfcuşadgfısdafyaıufdbjaksugfaysfvbduksf6ayusfvduıasgfdyuıaslvdylıasfdgı7uasgdbyaıuslfylsfasdaslkjhfjnpıoashfuıoasghfduıagsbhufıgashfdıasd"
+                android:layout_toRightOf="@+id/commentUserImg"
+                android:layout_toEndOf="@+id/commentUserImg"
+                android:text="test@test.com"
                 android:textColor="@color/cardview_dark_background" />
 
         </RelativeLayout>
