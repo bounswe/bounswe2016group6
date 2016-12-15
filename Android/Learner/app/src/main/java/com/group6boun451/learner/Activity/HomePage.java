@@ -446,7 +446,7 @@ public class HomePage extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(HomePage.this, SearchActivity.class);
-                intent.putExtra("tagName",topic.getTopicPack().getName());
+                if(topic.getTopicPack()!=null) intent.putExtra("tagName",topic.getTopicPack().getName());
                 intent.putExtra("query",topic.getId()+"");
                 intent.putExtra("type","pack");
                 startActivity(intent);

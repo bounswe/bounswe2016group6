@@ -4,6 +4,7 @@ package com.group6boun451.learner.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.group6boun451.learner.R;
+import com.group6boun451.learner.activity.HomePage;
+import com.group6boun451.learner.activity.SearchActivity;
 import com.group6boun451.learner.activity.Task;
 import com.group6boun451.learner.model.Comment;
 import com.group6boun451.learner.model.User;
@@ -70,7 +73,16 @@ public class UserListAdapter extends BaseAdapter {
 
         usrName.setText(user.getFirstName() +" " +user.getLastName() );
         comText.setText(user.getEmail());
-
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, SearchActivity.class);
+                intent.putExtra("tagName","Topics of "+ user.getFirstName());
+                intent.putExtra("query",user.getId()+"");
+                intent.putExtra("type","following");
+                context.startActivity(intent);
+            }
+        });
         followButton.setLiked(true);
         followButton.setOnLikeListener(new OnLikeListener() {
             @Override
