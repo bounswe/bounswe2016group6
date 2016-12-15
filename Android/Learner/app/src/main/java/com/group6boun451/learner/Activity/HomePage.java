@@ -106,7 +106,7 @@ public class HomePage extends AppCompatActivity{
         setContentView(R.layout.activity_home_page);
         ButterKnife.bind(this);
         JodaTimeAndroid.init(this);
-        user = com.group6boun451.learner.activity.Task.getResult(getIntent().getStringExtra("user"),User.class);
+        user = Task.getResult(getIntent().getStringExtra("user"),User.class);
         username = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString(getString(R.string.user_name), " ");
 //        fetch topics
        fetchTasks("recent",viewpager);// TODO: 12/8/2016 recommended

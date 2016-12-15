@@ -116,10 +116,10 @@ public class ProfileActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-
-        GlideHelper.loadImage(profileImageView,"https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAJlAAAAJGIxNDQ3YzhiLTYyZjUtNDU2NS04ZTg3LWYxZjFlNjg3NmE5MQ.jpg");
-        mailTextView.setText("esra@learner.com");
-        nameTextView.setText("Esra Alınca");
+//"https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAJlAAAAJGIxNDQ3YzhiLTYyZjUtNDU2NS04ZTg3LWYxZjFlNjg3NmE5MQ.jpg"
+        GlideHelper.loadImage(profileImageView,HomePage.user.getPicture());
+        mailTextView.setText(HomePage.user.getEmail());
+        nameTextView.setText(HomePage.user.getFirstName()+" "+HomePage.user.getLastName());
 
         ListView comments = (ListView) findViewById(R.id.commentList);
         CommentListAdapter cladap = new CommentListAdapter(this, (new CommentContainer(this)).getComments());
