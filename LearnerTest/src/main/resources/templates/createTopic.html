@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-
+<thymeleaf th:replace="fragments/navbar::head" />  
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link> 
 <title th:text="#{label.pages.home.title}"></title>
 
@@ -15,7 +15,7 @@
 	
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
-<link href="/css/clean-blog.min.css" rel="stylesheet">
+<link href="/css/clean-blog.css" rel="stylesheet">
 <link rel="stylesheet" href="/css/bootstrap-tagsinput.css">
 
 <link href="/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -204,39 +204,7 @@
 
 
 <body>
-<nav class="navbar navbar-static-top navbar-default navbar-custom " style="background-color: black">
-        <div class="container-fluid">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header page-scroll">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                    <span class="sr-only">Toggle navigation</span>
-                    Menu <i class="fa fa-bars"></i>
-                </button>
-                <a class="navbar-brand" href="/home">Learner</a>
-            </div>
-
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="/home">Home</a>
-                    </li>
-                    <li>
-                        <a sec:authentication="name" href="/profile">Profile</a>
-                    </li>
-                    <li>
-                        <a href="/home">Sample Post</a>
-                    </li>
-                    <li>
-                        <a href="/logout">Logout</a>
-                    </li>
-                </ul>
-            </div>
-            <!-- /.navbar-collapse -->
-        </div>
-        <!-- /.container -->
-    </nav>
-
+<nav th:replace="fragments/navbar :: navbar"></nav>    
 
 <div class="container">   
     <br><br>
