@@ -95,6 +95,30 @@ public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResults
         final Topic topic = mDataSet.get(position);
         holder.textTopicTitle.setText(topic.getHeader());
         holder.textAuthor.setText(topic.getOwner().getFirstName());
+        holder.textAuthor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, SearchActivity.class);
+                intent.putExtra("tagName","Topics of "+ topic.getOwner().getFirstName());
+                intent.putExtra("query",topic.getOwner().getId()+"");
+                intent.putExtra("type","following");
+                context.startActivity(intent);
+            }
+        });
+        holder.imgProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, SearchActivity.class);
+                intent.putExtra("tagName","Topics of "+ topic.getOwner().getFirstName());
+                intent.putExtra("query",topic.getOwner().getId()+"");
+                intent.putExtra("type","following");
+                context.startActivity(intent);
+            }
+        });
+
+
+
+
         holder.textDate.setText(getReadableDateFromDate(context,topic.getRevealDate()));
 
         // change EditText config

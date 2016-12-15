@@ -125,6 +125,8 @@ public class SearchActivity extends AppCompatActivity {
                 myQuery = "topic/" + query +"/pack";
             } else if(type.equals("recommend")){
                 myQuery = "topic/" + query +"/recommend";
+            }else if(type.equals("following")){
+                myQuery = "topic/user/following/latest";// TODO: 15.12.2016 change it with user id
             }else {
                 myQuery = "topic/popular";
             }
@@ -346,7 +348,16 @@ public class SearchActivity extends AppCompatActivity {
         GlideHelper.loadImage(this,(ImageView) Views.find(tabHost, R.id.details_image), topic);
         ((CanaroTextView)Views.find(tabHost, R.id.details_title)).setText(topic.getHeader());
         ((CanaroTextView)Views.find(tabHost, R.id.txtTopicPageUserName)).setText(topic.getOwner().getFirstName());
-
+        Views.find(tabHost, R.id.user_layout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(SearchActivity.this, SearchActivity.class);
+                intent.putExtra("tagName","Topics of "+ topic.getOwner().getFirstName());
+                intent.putExtra("query",topic.getOwner().getId()+"");
+                intent.putExtra("type","following");
+                startActivity(intent);
+            }
+        });
 
         ((CanaroTextView)Views.find(tabHost, R.id.txtTopicPageDate)).setText(getReadableDateFromDate(SearchActivity.this,topic.getRevealDate()));
 

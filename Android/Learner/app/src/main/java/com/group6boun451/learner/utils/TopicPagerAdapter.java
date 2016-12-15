@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.alexvasilkov.android.commons.utils.Views;
 import com.doodle.android.chips.ChipsView;
 import com.doodle.android.chips.model.Contact;
 import com.group6boun451.learner.R;
@@ -51,6 +52,26 @@ public class TopicPagerAdapter extends PagerAdapter {
         ((TextView) v.findViewById(R.id.textTopicTitle)).setText(topic.getHeader());
         ((CanaroTextView) v.findViewById(R.id.textAuthor)).setText(topic.getOwner().getFirstName());
         ((CanaroTextView) v.findViewById(R.id.textDate)).setText(getReadableDateFromDate(context,topic.getRevealDate()));
+        Views.find(v, R.id.textAuthor).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, SearchActivity.class);
+                intent.putExtra("tagName","Topics of "+ topic.getOwner().getFirstName());
+                intent.putExtra("query",topic.getOwner().getId()+"");
+                intent.putExtra("type","following");
+                context.startActivity(intent);
+            }
+        });
+        Views.find(v, R.id.imgTopicPageUserImage).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, SearchActivity.class);
+                intent.putExtra("tagName","Topics of "+ topic.getOwner().getFirstName());
+                intent.putExtra("query",topic.getOwner().getId()+"");
+                intent.putExtra("type","following");
+                context.startActivity(intent);
+            }
+        });
 
         ChipsView mChipsView = (ChipsView) v.findViewById(R.id.cv_contacts);
         // change EditText config

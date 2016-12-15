@@ -414,7 +414,16 @@ public class HomePage extends AppCompatActivity{
         GlideHelper.loadImage(this,(ImageView) Views.find(tabHost, R.id.details_image), topic);
         ((CanaroTextView)Views.find(tabHost, R.id.details_title)).setText(topic.getHeader());
         ((CanaroTextView)Views.find(tabHost, R.id.txtTopicPageUserName)).setText(topic.getOwner().getFirstName());
-
+        Views.find(tabHost, R.id.user_layout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomePage.this, SearchActivity.class);
+                intent.putExtra("tagName","Topics of "+ topic.getOwner().getFirstName());
+                intent.putExtra("query",topic.getOwner().getId()+"");
+                intent.putExtra("type","following");
+                startActivity(intent);
+            }
+        });
 
         ((CanaroTextView)Views.find(tabHost, R.id.txtTopicPageDate)).setText(getReadableDateFromDate(HomePage.this,topic.getRevealDate()));
 
