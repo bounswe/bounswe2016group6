@@ -378,7 +378,7 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(SearchActivity.this, SearchActivity.class);
-                intent.putExtra("tagName",topic.getTopicPack().getName());
+                if(topic.getTopicPack()!=null) intent.putExtra("tagName",topic.getTopicPack().getName());
                 intent.putExtra("query",topic.getId()+"");
                 intent.putExtra("type","pack");
                 startActivity(intent);
@@ -448,8 +448,8 @@ public class SearchActivity extends AppCompatActivity {
                                    onResultofQuery(resultString);
                                 }
                             });
-                    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getString(R.string.base_url) + "search/keyword")
-                            .queryParam("keyword",newQuery);
+                    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getString(R.string.base_url) + "semanticSearch")
+                            .queryParam("q",newQuery);
 
                     f.execute(builder.build().encode().toUri());
                 }

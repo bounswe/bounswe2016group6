@@ -118,15 +118,15 @@ public class ProfileActivity extends AppCompatActivity {
         mailTextView.setText(HomePage.user.getEmail());
         nameTextView.setText(HomePage.user.getFirstName()+" "+HomePage.user.getLastName());
 
-        final ListView comments = (ListView) findViewById(R.id.teachersList);
-        new com.group6boun451.learner.activity.Task<String>(this, new com.group6boun451.learner.activity.Task.Callback() {
+        final ListView teacherList = (ListView) findViewById(R.id.teachersList);
+        new Task<String>(this, new Task.Callback() {
             @Override
             public void onResult(String resultString) {
                 User[] result = Task.getResult(resultString,User[].class);
                 List<User> users = new ArrayList(Arrays.asList(result));
                 //TODO handle this
                 UserListAdapter uladap = new UserListAdapter(ProfileActivity.this,users);
-                comments.setAdapter(uladap);
+                teacherList.setAdapter(uladap);
             }
         }).execute(getString(R.string.base_url) + "user/following");
 
