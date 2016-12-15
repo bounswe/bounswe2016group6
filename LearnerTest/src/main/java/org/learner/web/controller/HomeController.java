@@ -47,11 +47,12 @@ public class HomeController {
     @RequestMapping(value="/")
     public String redirectToPage(final Principal principal){
     	LOGGER.debug("Context root!");
+    	/*
     	if(principal == null) {
     		LOGGER.debug("Principal : "+ principal );
     		return "redirect:/login";
     	}
-    	
+    	*/
     	return "redirect:/home";
     }
     

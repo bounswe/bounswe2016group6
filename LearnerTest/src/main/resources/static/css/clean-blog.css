@@ -334,9 +334,12 @@ footer .copyright {
 .floating-label-form-group-with-focus label {
   color: #0085A1;
 }
+
+/*
 form .row:first-child .floating-label-form-group {
   border-top: 1px solid #eeeeee;
 }
+
 .btn {
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   text-transform: uppercase;
@@ -346,6 +349,7 @@ form .row:first-child .floating-label-form-group {
   border-radius: 0;
   padding: 15px 25px;
 }
+
 .btn-lg {
   font-size: 16px;
   padding: 25px 35px;
@@ -356,6 +360,7 @@ form .row:first-child .floating-label-form-group {
   border: 1px solid #0085A1;
   color: white;
 }
+
 .pager {
   margin: 20px 0 0;
 }
