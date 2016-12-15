@@ -20,9 +20,17 @@ import android.widget.TextView;
 import com.group6boun451.learner.CommentContainer;
 import com.group6boun451.learner.CommentListAdapter;
 import com.group6boun451.learner.R;
+import com.group6boun451.learner.model.Topic;
+import com.group6boun451.learner.model.User;
 import com.group6boun451.learner.utils.GlideHelper;
+import com.group6boun451.learner.utils.TopicPagerAdapter;
+import com.group6boun451.learner.utils.UserListAdapter;
 import com.yalantis.guillotine.animation.GuillotineAnimation;
 import com.yalantis.guillotine.interfaces.GuillotineListener;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,14 +39,12 @@ public class ProfileActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.content_hamburger) View contentHamburger;
-    @BindView(R.id.fab) FloatingActionButton fab;
     @BindView(R.id.profile_imageView) ImageView profileImageView;
     @BindView(R.id.name_textView) TextView nameTextView;
     @BindView(R.id.mail_textView) TextView mailTextView;
     @BindView(R.id.profile_TabHost) TabHost tabHost;
     @BindView(R.id.topicList) ListView topicList;
     @BindView(R.id.teachersList) ListView teachersList;
-    @BindView(R.id.commentList) ListView commentList;
 
 
     private boolean isGuillotineOpened = false;
@@ -91,13 +97,11 @@ public class ProfileActivity extends AppCompatActivity {
                     @Override
                     public void onGuillotineOpened() {
                         isGuillotineOpened=true;
-                        fab.setVisibility(View.INVISIBLE);
                     }
 
                     @Override
                     public void onGuillotineClosed() {
                         isGuillotineOpened=false;
-                        fab.setVisibility(View.VISIBLE);
 
                     }
                 })
@@ -105,25 +109,28 @@ public class ProfileActivity extends AppCompatActivity {
                 .build();
 
         tabHost.setup();
-        tabHost.addTab(tabHost.newTabSpec("Tab One").setContent(R.id.interested_topics_tab).setIndicator("Favorites"));
+        tabHost.addTab(tabHost.newTabSpec("Tab One").setContent(R.id.interested_topics_tab).setIndicator("Progress"));
         tabHost.addTab(tabHost.newTabSpec("Tab Two").setContent(R.id.followed_teachers_tab).setIndicator("Followed"));
-        tabHost.addTab(tabHost.newTabSpec("Tab Three").setContent(R.id.comment_tab).setIndicator("Comments"));
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
 //"https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAJlAAAAJGIxNDQ3YzhiLTYyZjUtNDU2NS04ZTg3LWYxZjFlNjg3NmE5MQ.jpg"
         GlideHelper.loadImage(profileImageView,HomePage.user.getPicture());
         mailTextView.setText(HomePage.user.getEmail());
         nameTextView.setText(HomePage.user.getFirstName()+" "+HomePage.user.getLastName());
 
-        ListView comments = (ListView) findViewById(R.id.commentList);
-        CommentListAdapter cladap = new CommentListAdapter(this, (new CommentContainer(this)).getComments());
-        comments.setAdapter(cladap);
+        final ListView comments = (ListView) findViewById(R.id.teachersList);
+        new com.group6boun451.learner.activity.Task<String>(this, new com.group6boun451.learner.activity.Task.Callback() {
+            @Override
+            public void onResult(String resultString) {
+                User[] result = Task.getResult(resultString,User[].class);
+                List<User> users = new ArrayList(Arrays.asList(result));
+                //TODO handle this
+                UserListAdapter uladap = new UserListAdapter(ProfileActivity.this,users);
+                comments.setAdapter(uladap);
+            }
+        }).execute(getString(R.string.base_url) + "user/following");
+
+
 
     }
 
