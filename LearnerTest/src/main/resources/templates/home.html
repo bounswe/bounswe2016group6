@@ -1,159 +1,165 @@
+<!DOCTYPE html>
 <html>
 
 <head>
 
-<thymeleaf th:replace="fragments/navbar::head" />  
-  
+	<thymeleaf th:replace="fragments/navbar::head" />
 
 
- <style>
-  .carousel-inner > .item {
-  height: 430px;
-  background: cover;
-  
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  background-size: cover;
-  -o-background-size: cover;
-  
-   background-repeat: no-repeat;
-  background-position: center; 
-  
-  
-  
-}
-.popular {
-border-radius: 5px ;
-border: 1px solid #A4A4A4;
-}
-.carousel-inner > .item > img {
 
-}
-  
-  
+	<style>
+		.carousel-inner > .item {
+			height: 430px;
+			background: cover;
+			-webkit-background-size: cover;
+			-moz-background-size: cover;
+			background-size: cover;
+			-o-background-size: cover;
+			background-repeat: no-repeat;
+			background-position: center;
+		}
+		.popular {
+			border-radius: 5px;
+			border: 1px solid #A4A4A4;
+		}
+		.carousel-inner > .item > img {} .carousel-inner > .item > img,
+		.carousel-inner > .item > a > img {
+			width: 70%;
+			margin: auto;
+		}
+	</style>
+	<title>Learner Home</title>
 
-  .carousel-inner > .item > img,
-  .carousel-inner > .item > a > img {
-      width: 70%;
-      margin: auto;
-  }
-  
-</style>
-<title>Learner Home</title>
-    
 	<script type="text/javascript">
-	$(function() {
-		$(".carousel-inner .item:first-child").addClass("active");
-		$(".carousel-indicators li:first-child").addClass("active");
-		
-		 $.each( jQuery('.carousel .item'), function( i, val ) {
-			    $(this).css('background-image','url('+$(this).find('img').attr('src')+')').css('background-size','cover').find('img').css('visibility','hidden');
-			  });
-		
-		$('#autocomplete').autocomplete({
-			serviceUrl: '/search/suggest',
-		    onSelect: function (suggestion) {
-		        alert('You selected: ' + suggestion.value + ', ' + suggestion.data + ', ' + suggestion.owner);
-		    	location.replace("/topic/" + suggestion.data);
-		    },
-			paramName: 'query',
-		    transformResult: function(response) {
-		        return {
-		            suggestions: $.map( $.parseJSON(response) , function(dataItem) {
-		                return { value: dataItem.header, data: dataItem.id, owner:dataItem.owner};
-		            })
-		        };
-		    }
+		$(function() {
+			$(".carousel-inner .item:first-child").addClass("active");
+			$(".carousel-indicators li:first-child").addClass("active");
+
+			$.each(jQuery('.carousel .item'), function(i, val) {
+				$(this).css('background-image', 'url(' + $(this).find('img').attr('src') + ')').css('background-size', 'cover').find('img').css('visibility', 'hidden');
+			});
+
+			$('#autocomplete').autocomplete({
+				serviceUrl: '/search/suggest',
+				onSelect: function(suggestion) {
+					alert('You selected: ' + suggestion.value + ', ' + suggestion.data + ', ' + suggestion.owner);
+					location.replace("/topic/" + suggestion.data);
+				},
+				paramName: 'query',
+				transformResult: function(response) {
+					return {
+						suggestions: $.map($.parseJSON(response), function(dataItem) {
+							return {
+								value: dataItem.header,
+								data: dataItem.id,
+								owner: dataItem.owner
+							};
+						})
+					};
+				}
+			});
 		});
-	});
-</script>
+	</script>
 </head>
 
-<body >
-<nav th:replace="fragments/navbar :: navbar"></nav>    
-    <header class="intro-header" style="background-image: url('/images/post-bg.jpg')">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                    <div class="post-heading">
-                        <h1 >Learner</h1>
-                        <h2 class="subheading">An explanatory learning platform</h2>
-                        <!-- <span class="meta">A project by <a href="#"> BounSWE Group6</a></span> -->
-                    </div>
-                </div>
-            </div>
-            <div class="btn-group" role="group">
-  			</div>
-                
-            
-        </div>
-    </header>
-
-
-
-
-<div class="container">
-	<div class="row">
-		<div class="col-md-1">
-
-		</div>
-		
-		<div class="col-md-8">
-		
-		
-	
-    <div id="myCarousel" class="carousel slide " data-ride="carousel">
-  <!-- Indicators -->
-  <ol class="carousel-indicators">
-    <li th:each="tpc,iterationStatus : ${topics}" data-target="#myCarousel" th:attr="data-slide-to=${iterationStatus.count-1}"></li>
-  </ol>
-
-  <!-- Wrapper for slides -->
-  <div  class="carousel-inner" role="listbox">
-    
-    <div th:each="tpc,iterationStatus : ${topics}" class="item">
-    <a th:href="'/topic/'+${tpc.id}">
-      <img th:attr="src=${tpc.headerImage}" alt="Chania">
-      <div class="carousel-caption">
-        <h3 th:text="${tpc.header}">Chania</h3>
-        <p th:text="${tpc.owner.firstName}">The atmosphere in Chania has a touch of Florence and Venice.</p>
-      </div>
-      </a>
-    </div>
-
-  </div>
-
-  <!-- Left and right controls -->
-  <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
-    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-    <span class="sr-only">Previous</span>
-  </a>
-  <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
-    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-    <span class="sr-only">Next</span>
-  </a>
-</div>
-    
-		
-		</div>
-			
-		
-		<div class="sidebar col-md-3">
-			<div sec:authorize="hasAuthority('TEACHER_PRIVILEGE')" class="container">
-				<a th:href="'/topic/create'" class="btn btn-info btn-lg">Create Topic</a>
+<body>
+	<nav th:replace="fragments/navbar :: navbar"></nav>
+	<header class="intro-header" style="background-image: url('/images/post-bg.jpg')">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+					<div class="post-heading">
+						<h1>Learner</h1>
+						<h2 class="subheading">An explanatory learning platform</h2>
+						<!-- <span class="meta">A project by <a href="#"> BounSWE Group6</a></span> -->
+					</div>
+				</div>
 			</div>
-			
-			<h4>Popular topics</h4>
-			<div  th:each="poptop,itstat :${popular}" th:unless="${itstat.index >6}">
-				<p>
-				<a th:text="${poptop.header}"  th:href="'/topic/' + ${poptop.id}" style="font-size:14px; text-decoration:none" > header</a>
-				</p>			
+			<div class="btn-group" role="group">
 			</div>
+
+
 		</div>
-		
+	</header>
+
+
+
+
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-1 col-md-1 col-sm-1">
+				<div sec:authorize="hasAuthority('TEACHER_PRIVILEGE')" class="container">
+					<a th:href="'/topic/create'" class="btn btn-info btn-lg">+</a>
+				</div>
+				
+			</div>
+
+			<div class=" col-lg-8 col-sm-8 col-md-8">
+
+				<div class="panel panel-info">
+					<div class="panel-heading">Recent Topics</div>
+					<div class="panel-body">
+
+
+						<div id="myCarousel" class="carousel slide " data-ride="carousel">
+							<!-- Indicators -->
+							<ol class="carousel-indicators">
+								<li th:each="tpc,iterationStatus : ${topics}" data-target="#myCarousel" th:attr="data-slide-to=${iterationStatus.count-1}"></li>
+							</ol>
+
+							<!-- Wrapper for slides -->
+							<div class="carousel-inner" role="listbox">
+
+								<div th:each="tpc,iterationStatus : ${topics}" class="item">
+									<a th:href="'/topic/'+${tpc.id}">
+										<img th:attr="src=${tpc.headerImage}" alt="Chania">
+										<div class="carousel-caption">
+											<h3 th:text="${tpc.header}">Chania</h3>
+											<p th:text="${tpc.owner.firstName}">The atmosphere in Chania has a touch of Florence and Venice.</p>
+										</div>
+									</a>
+								</div>
+
+							</div>
+
+							<!-- Left and right controls -->
+							<a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+								<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+								<span class="sr-only">Previous</span>
+							</a>
+							<a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+								<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+								<span class="sr-only">Next</span>
+							</a>
+						</div>
+
+
+					</div>
+				</div>
+
+			</div>
+
+
+			<div class="sidebar col-sm-4 col-lg-3 col-md-4">
+				
+				<div class="panel panel-primary">
+					<div class="panel-heading">Popular Topics</div>
+					<div class="panel-body">
+						<ul class="list-group">
+							<li th:each="poptop,itstat :${popular}" th:unless="${itstat.index >6}">
+								<a th:text="${poptop.header}" th:href="'/topic/' + ${poptop.id}" style="font-size:14px; text-decoration:none"> header</a>
+								<div class="thumbnail">
+									<img th:src="${poptop.headerImage}" class="img-responsive">
+								</div>
+							</li>
+						</ul>
+
+					</div>
+				</div>
+			</div>
+
+		</div>
 	</div>
-</div>
 </body>
 
 </html>
-
