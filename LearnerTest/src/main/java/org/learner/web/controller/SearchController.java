@@ -61,11 +61,17 @@ public class SearchController {
 	
 	
 	@RequestMapping(value = "/search")
-	public String basicSearchResults(@RequestParam String q,Model model){
+	public String basicSearchResults(@RequestParam String q,
+									Model model){
 		System.out.println("HELLOWORLD");
 		if(q == null){
 			return null;
+		} 
+		
+		if(q.length() <2){
+			return "redirect:/home";
 		}
+		
 		
 		List<Topic> queryResults = topicService.semanticSearch(q);
 		model.addAttribute("topics", queryResults);
@@ -79,6 +85,27 @@ public class SearchController {
 		List<Topic> queryResults = relatedTopics == null ? new ArrayList<Topic>(): relatedTopics;
 		model.addAttribute("topics", queryResults);
 		return "searchresult";
+	}
+	
+	@RequestMapping(value = "/search/pack/{packId}")
+	public String packSearchResults(@PathVariable Long packId,Model model){
+		List<Topic> relatedTopics = topicService.getTopicsInPack(packId);
+		
+		List<Topic> queryResults = relatedTopics == null ? new ArrayList<Topic>(): relatedTopics;
+		model.addAttribute("searchTitle", "Topics in pack : ");
+		model.addAttribute("topics", queryResults);
+		return "searchresult";
+	}
+	// REST API functions
+	
+	@RequestMapping(value = "/pack/search/{packId}")
+	@ResponseBody
+	public List<Topic> packTopics(@PathVariable Long packId,Model model){
+		List<Topic> relatedTopics = topicService.getTopicsInPack(packId);
+		
+		List<Topic> queryResults = relatedTopics == null ? new ArrayList<Topic>(): relatedTopics;
+		
+		return queryResults;
 	}
 	
 	@RequestMapping(value="/tag/search/{tagId}")

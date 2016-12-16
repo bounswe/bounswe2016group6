@@ -84,6 +84,8 @@ public interface ITopicService {
 	QuizResult saveQuizResult(QuizResult quizResult);
 
 	List<TopicPack> packSuggest(String q);
+
+	List<Topic> getTopicsInPack(long topicPackId);
 	
 	
 }

@@ -492,6 +492,21 @@ public class TopicService implements ITopicService{
 		}
 		return topicsInPack;
 	}
+	
+	@Override
+	public List<Topic> getTopicsInPack(long topicPackId){
+		TopicPack tpPack = packRepo.findOne(topicPackId);
+		if(tpPack == null){
+			return null;
+		}
+		
+		List<Topic> topicsInPack = new ArrayList<Topic>();
+		List<Topic> tt = tpPack.getTopicList();
+		if(tt != null) {
+			topicsInPack.addAll(tt);
+		}
+		return topicsInPack;
+	} 
 
 	@Override
 	public QuizResult saveQuizResult(QuizResult quizResult) {
