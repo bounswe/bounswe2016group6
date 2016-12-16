@@ -166,7 +166,7 @@ public class TopicService implements ITopicService{
 		return repository.findAll();
 		
 	}
-
+	
 	@Override
 	public Comment createComment(long id, String content) {
 		
@@ -525,5 +525,11 @@ public class TopicService implements ITopicService{
 		return packRepo.findByNameContaining(q);
 	}
 	
+	@Override
+	public boolean deleteTagFromTopic(Topic top, Tag tag){
+		System.out.println("Deleting tag from topic: ");
+		boolean result  = top.getTags().remove(tag);
+		return result;
+	}
 	
 }

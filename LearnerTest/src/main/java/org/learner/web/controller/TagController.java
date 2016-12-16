@@ -118,15 +118,15 @@ public class TagController {
 		return suggested;
 	}
 	
-	@RequestMapping(value="/{topicId}/remove")
+	@RequestMapping(value="/{topicId}/remove/{tagId}")
 	@ResponseBody
-	public GenericResponse removeTagFromTopic(@PathVariable Long topicId,@RequestBody Tag tag,HttpServletResponse response){
+	public GenericResponse removeTagFromTopic(@PathVariable Long topicId,@PathVariable Long tagId,HttpServletResponse response){
 		Topic topic = topicService.getTopicById(topicId);
 		if(topic == null){
 			return new GenericResponse("", "Topic not found!");
 		} 
-		Tag dbtag = tagRepo.findOne(tag.getId());
-		boolean success = topic.getTags().remove(dbtag);
+		Tag dbtag = tagRepo.findOne(tagId);
+		boolean success = topicService.deleteTagFromTopic(topic, dbtag);
 		
 		if(!success){
 			return new GenericResponse("","Does not exists");
