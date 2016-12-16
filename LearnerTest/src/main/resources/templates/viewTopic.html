@@ -60,19 +60,26 @@
 		$("#likebutton").click(function(){
 			
 			event.preventDefault();
-			//if( this.attr('disabled') ) return;
-			
+						
 			$.get($("#likebutton").attr('href')).done(function(data){
 				if(data.error!=null){
 					alert("You already liked the topic!");
 					$("#likebutton").removeClass('btn-danger');
 					$("#likebutton").addClass('btn-success');
-					$("#likebutton").attr('disabled', true);
 				} else if(data.message != null){
-					alert("Liked!");
-					$("#likebutton").removeClass('btn-danger');
-					$("#likebutton").addClass('btn-success');
+					alert(data.message);
+					if($("#likebutton").hasClass('btn-danger')){
+						$("#likebutton").removeClass('btn-danger');
+						$("#likebutton").addClass('btn-success');
+						$("#likebutton").attr('href' , $("#likebutton").attr('href').replace("/like/","/unlike/") );
+						
+					} else if( $("#likebutton").hasClass('btn-success')){
+						$("#likebutton").removeClass('btn-success');
+						$("#likebutton").addClass('btn-danger');
+						$("#likebutton").attr('href' , $("#likebutton").attr('href').replace("/unlike/","/like/") );
+					} 
 				}
+				location.reload();
 			}).fail(function(){
 				alert("Like fail!");
 			})
@@ -110,10 +117,21 @@
                         <br>
                         <span class="meta">Posted by <a href="#" th:text="${topic.owner.firstName + ' ' + topic.owner.lastName}">Start Bootstrap</a>  <a th:text="${'on ' + #dates.format(topic.createdAt,'YYYY/MM/dd HH:mm')}"></a></span>
                     	<span class="meta"> <a th:text="${#lists.size(topic.comments) + ' comments  ' }"> likes</a> <a th:text="${#lists.size(topic.likedBy) + ' likes  ' }"> likes</a></span>
-                    
+                    	<br>
+                		<div sec:authorize="isAuthenticated()" class="col-lg-offset-2 col-md-offset-2" >
+        					<div class="btn-group" role="group">
+			        			<a th:if="${#authentication.name==topic.owner.email}" class="btn btn-lg btn-primary" th:href="${'/topic/edit/' + topic.id}"><span class="glyphicon glyphicon-edit"></span> Edit Topic</a>
+		        				<a th:if="${topic.likedBy.?[email == #authentication.name].isEmpty()}" id="likebutton" class="btn btn-lg btn-danger" th:href="${'/topic/like/' + topic.id}">
+		        					<span class="glyphicon glyphicon-heart"></span></a>
+				        		<a th:if="${not topic.likedBy.?[email == #authentication.name].isEmpty()}" id="likebutton" class="btn btn-lg btn-success" th:href="${'/topic/unlike/' + topic.id}">
+				        			<span class="glyphicon glyphicon-heart"></span></a>
+		        				<a class="btn btn-lg btn-info" th:href="${'/topic/quiz/' + topic.id}"><span class="glyphicon glyphicon-book"></span> Take Quiz</a>
+			       			</div>
+			            </div>
                     </div>
                 </div>
             </div>
+
         </div>
         </div>
     </header>
@@ -122,22 +140,44 @@
         <div class="container">
         	
             <div class="row">
-                <div th:utext="${topic.content}" id="topicContent" class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                Topic content
-                </div>
+            
+            
+            <div class="col-lg-2 col-md-2 col-sm-2" >
+
+       		</div>
+                        
+            <div th:utext="${topic.content}" id="topicContent" class="col-sm-8 col-lg-8 col-md-8">
+            Topic content
+            </div>
+            
+            <div class="sidebar col-md-2 col-lg-2 col-sm-2">
+				<div class="panel panel-primary">
+					<div class="panel-heading">You might be interested in :</div>
+					<div class="panel-body">
+						<ul class="list-group">
+							<li th:each="poptop,itstat :${relatedTopics}" th:unless="${itstat.index >5}">
+								<a th:text="${poptop.header}" th:href="'/topic/' + ${poptop.id}" style="font-size:14px; text-decoration:none"> header</a>
+								<a th:text="${'by ' +poptop.owner.firstName + ' ' + poptop.owner.lastName}" th:href="'/profile/' + poptop.owner.id" style="font-size:12px; text-decoration:none"> owner</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				
+				<div class="panel panel-primary">
+					<div class="panel-heading">Other Topics in pack :</div>
+					<div class="panel-body">
+						<ul class="list-group">
+							<li th:each="poptop,itstat :${othersInPack}" th:unless="${itstat.index >5}">
+								<a th:text="${poptop.header}" th:href="'/topic/' + ${poptop.id}" style="font-size:14px; text-decoration:none"> header</a>
+								<a th:text="${'by ' +poptop.owner.firstName + ' ' + poptop.owner.lastName}" th:href="'/profile/' + poptop.owner.id" style="font-size:12px; text-decoration:none"> owner</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
                 
-                <div sec:authorize="isAuthenticated()" class="col-lg-2 col-md-1" >
-        		<a th:if="${#authentication.name==topic.owner.email}" class="btn btn-primary btn-xs" th:href="${'/topic/edit/' + topic.id}"><span class="glyphicon glyphicon-edit"></span> Edit Topic</a>
-        		
-        		<a th:if="${topic.likedBy.?[email == #authentication.name].isEmpty()}" id="likebutton" class="btn btn-danger" th:href="${'/topic/like/' + topic.id}">
-        		<span class="glyphicon glyphicon-heart"></span> Like Topic</a>
-        		
-        		<a th:if="${not topic.likedBy.?[email == #authentication.name].isEmpty()}" id="likebutton" class="btn btn-success" th:href="${'/topic/unlike/' + topic.id}">
-        		<span class="glyphicon glyphicon-heart"></span> UnLike Topic</a>
-        		
-        		
-        		<a class="btn btn-info" th:href="${'/topic/quiz/' + topic.id}"><span class="glyphicon glyphicon-book"></span> Take Quiz</a>
-        		</div>
+	             
                 
             </div>
         </div>

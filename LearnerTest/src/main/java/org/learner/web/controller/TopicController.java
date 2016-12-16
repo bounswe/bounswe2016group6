@@ -237,9 +237,15 @@ public class TopicController {
     public String viewTopicPage(@PathVariable Long id,Model model){
     	
     	Topic topic = topicService.getTopicById(id);
+    	
     	if(topic==null){
     		model.addAttribute("errormessage","Topic not found!");
     	}
+    	List<Topic> othersInPack = topicService.getOtherTopicsInPack(topic);
+    	List<Topic> relatedTopics = topicService.getRelatedTopicsViaTopics(topic);
+    	
+    	model.addAttribute("othersInPack", othersInPack);
+    	model.addAttribute("relatedTopics", relatedTopics);
     	model.addAttribute("topic", topic);
     	
     	return "viewTopic";
@@ -274,9 +280,10 @@ public class TopicController {
     	return teacherLatest;
     }
     
-    @RequestMapping(value = "/pack/suggest/{q}")
+    @RequestMapping(value = "/pack/suggest")
     @ResponseBody
-    public List<TopicPack> suggestTopicPack(@PathVariable String q){
+    public List<TopicPack> suggestTopicPack(@RequestParam String q){
+    	System.out.println("Pack suggest");
     	List<TopicPack> tp = new ArrayList<TopicPack>();
     	tp = topicService.packSuggest(q);
     	return tp;
