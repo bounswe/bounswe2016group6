@@ -2,330 +2,348 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-<thymeleaf th:replace="fragments/navbar::head" />  
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link> 
-<title th:text="#{label.pages.home.title}"></title>
-
-
-<script src="https://code.jquery.com/jquery-3.1.1.min.js"
-	integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
-	crossorigin="anonymous"></script>
-
-<script src="http://code.jquery.com/ui/1.12.1/jquery-ui.js" integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30=" crossorigin="anonymous"></script>
-	
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-
-<link href="/css/clean-blog.css" rel="stylesheet">
-<link rel="stylesheet" href="/css/bootstrap-tagsinput.css">
-
-<link href="/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-<link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
+	<title th:text="#{label.pages.home.title}"></title>
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+	<script src="http://code.jquery.com/ui/1.12.1/jquery-ui.js" integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30=" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<link href="/css/clean-blog.css" rel="stylesheet">
+	<link rel="stylesheet" href="/css/bootstrap-tagsinput.css">
+	<link href="/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.devbridge-autocomplete/1.2.27/jquery.autocomplete.js"></script>
-	<script src="/js/bootstrap-tagsinput.js"></script>		
-	
-		<!-- include summernote css/js-->
-		<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.css" rel="stylesheet">
-		<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.js"></script>
-		
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.devbridge-autocomplete/1.2.27/jquery.autocomplete.js"></script>
+	<script src="/js/bootstrap-tagsinput.js"></script>
+	<!-- include summernote css/js-->
+	<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.css" rel="stylesheet">
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.js"></script>
+	<style>
+.autocomplete-suggestions {
+	border: 1px solid #999;
+	background: #FFF;
+	overflow: auto;
+}
+.autocomplete-suggestion {
+	padding: 2px 5px;
+	white-space: nowrap;
+	overflow: hidden;
+}
+.autocomplete-selected {
+	background: #F0F0F0;
+}
+.autocomplete-suggestions strong {
+	font-weight: normal;
+	color: #3399FF;
+}
+.autocomplete-group {
+	padding: 2px 5px;
+}
+.autocomplete-group strong {
+	display: block;
+	border-bottom: 1px solid #000;
+}
+	</style>
+	<script>
+$(document).ready(function() {
+	$('.nav-tabs li:first-child').addClass('active');
+	$("div.questionContainer .addQuestion").click(function() {
+		$(".topicQuestion").clone(true).insertAfter("div.topicQuestion:last").find("input[type='text']").val("");
+	});
+	$("div.topicQuestion .rmQuestion").click(function() {
+		if ($('.topicQuestion').length > 1) {
+			$(this).closest('.topicQuestion').remove();
+		} else {
+			alert("Cannot remove first question!");
+		}
+	});
+	$('#summernote').summernote({
+		toolbar: [
+			['style', ['style']],
+			['font', ['bold', 'italic', 'underline', 'clear']],
+			['insert', ['link', 'picture', 'video', 'hr']],
+			['color', ['color']],
+			['para', ['ul', 'ol', 'paragraph']],
+			['height', ['height']],
+			['view', ['codeview']]
+		]
+	});
+	$('#summernote').summernote({
+		height: 200,
+		onImageUpload: function(files, editor, welEditable) {
+			sendFile(files[0], editor, welEditable);
+		}
+	});
 
-		<script>
-		$(document).ready(function() {
-				
-			$('.nav-tabs li:first-child').addClass('active');
-			$("div.questionContainer .addQuestion").click(function(){
-				$(".topicQuestion").clone(true).insertAfter("div.topicQuestion:last").find("input[type='text']").val("");
-			});
-			
-			$("div.topicQuestion .rmQuestion").click(function(){
-				if( $('.topicQuestion').length>1 ){
-					$(this).closest('.topicQuestion').remove();
-				} else {
-					alert("Cannot remove first question!");
-				}
-				
-			});
-			
-			 
-			$('#summernote').summernote({
-					  toolbar: [
-						    ['style', ['style']],
-						    ['font', ['bold', 'italic', 'underline', 'clear']],
-						    ['insert', ['link', 'picture','video','hr']],
-						    ['color', ['color']],
-						    ['para', ['ul', 'ol', 'paragraph']],
-						    ['height', ['height']],
-						    ['view', ['codeview']]
-						  ]		  
-			  });
-			  
-			  $('#summernote').summernote({
-		            height: 200,
-		            onImageUpload: function(files, editor, welEditable) {
-		                sendFile(files[0], editor, welEditable);
-		            }
-		        });
-			  
-			  function sendFile(file, editor, welEditable) {
-		            data = new FormData();
-		            data.append("file", file);
-		            $.ajax({
-		                data: data,
-		                type: "POST",
-		                url: "/topic/imageUpload",
-		                cache: false,
-		                contentType: false,
-		                processData: false,
-		                success: function(url) {
-		                    editor.insertImage(welEditable, url);
-		                }
-		            });
-		        }
-			  
-			  $(':file').change(function(){
-				    var file = this.files[0];
-				    var name = file.name;
-				    var size = file.size;
-				    var type = file.type;
-				    
-				    alert("Name :" + name + " Size: " + type + " Type: " + type );
-				});
-			  
-			  function progressHandlingFunction(e){
-				    if(e.lengthComputable){
-				        $('progress').attr({value:e.loaded,max:e.total});
-				    }
-				}	  
-				$('#tagfi').tagsinput({
-					  itemValue: 'name',
-					  itemText: 'name'
-					});
-				
-				$('#tagfi').on('beforeItemRemove', function(event) {
-					alert("Remove");
-					
-					});
-			  
-				$('#autocomplete').autocomplete({
-					serviceUrl: '/tag/suggest',
-					deferRequestBy: 300,
-					minChars : 3,
-				    onSelect: function (suggestion) {
-				        alert('You selected: ' + suggestion.value + ', ' + suggestion.data + ', ' + suggestion.context);
-				        $('#tagfi').tagsinput('add', { "name": suggestion.name , "id": suggestion.id   , "context": suggestion.context    });
-				        $('#autocomplete').autocomplete("clear");
-				    },
-					paramName: 'query',
-				    transformResult: function(response) {
-				        return {
-				            suggestions: $.map( $.parseJSON(response) , function(dataItem) {
-				                return { value: dataItem.name + " - ( "+ dataItem.context+ " )", data: dataItem.id, id: dataItem.id, name: dataItem.name , context:dataItem.context};
-				            })
-				        };
-				    }
-				});
-		
-			//TOPIC CREATION
-		  $('#topicform').submit(function() {
-			  alert("Form submit!");
-			  event.preventDefault();
-			  var markupStr = $('#summernote').summernote('code');
-			  console.log(markupStr);
-			  $("#tpContent").val(markupStr);
-			  
-			  var formData = new FormData($('#topicform')[0]);
-			  console.log(formData );
-			  var toprec = $.ajax({
-			        url: '/topic/create',  //Server script to process data
-			        type: 'POST',
-			        
-			        xhr: function() {  // Custom XMLHttpRequest
-			           var myXhr = $.ajaxSettings.xhr();
-			            if(myXhr.upload){ // Check if upload property exists
-			                myXhr.upload.addEventListener('progress',progressHandlingFunction, false); // For handling the progress of the upload
-			            }
-			            return myXhr;
-			        },
-			        
-			        //Ajax events
-			        beforeSend: function(){ alert("Sending!");},
-			        // Form data
-			        data: formData,
-			        //Options to tell jQuery not to process data or worry about content-type.
-			        cache: false,
-			        contentType: false,
-			        processData: false
-			    });
-			  toprec.done(function(data){
-				  
-				  alert("Sending complete!"); 
-				  var topicID = data.message;
-				  //location.replace('/topic/'+data.message);
-				  
-				  $.ajax({
-					  url : '/tag/'+ topicID +'/add',
-				  	  type:'POST',
-					  data: JSON.stringify( $('#tagfi').tagsinput('items') ),					  	
-				  	  contentType: 'application/json',
-				  	  dataType:'json'
-				  }).done(function(response){
-					  alert(response.message);
-					  location.replace('/topic/'+topicID);
-				  }).fail(function(response){
-					  alert("Tag creation failed!");
-					  
-				  });
-			  })
-			  .fail(function(data){
-				  alert("Error!"); 
-				});
-			  
-			  return true;
-			});
+	function sendFile(file, editor, welEditable) {
+		data = new FormData();
+		data.append("file", file);
+		$.ajax({
+			data: data,
+			type: "POST",
+			url: "/topic/imageUpload",
+			cache: false,
+			contentType: false,
+			processData: false,
+			success: function(url) {
+				editor.insertImage(welEditable, url);
+			}
 		});
-		</script>
+	}
+	$(':file').change(function() {
+		var file = this.files[0];
+		var name = file.name;
+		var size = file.size;
+		var type = file.type;
+		alert("Name :" + name + " Size: " + type + " Type: " + type);
+	});
 
-<style type="text/css">
-	#autocomplete,#tagfi
-  {
-        display: block;
-        width: 100%;
-    }
-</style>
-
+	function progressHandlingFunction(e) {
+		if (e.lengthComputable) {
+			$('progress').attr({
+				value: e.loaded,
+				max: e.total
+			});
+		}
+	}
+	$('#tagfi').tagsinput({
+		itemValue: 'name',
+		itemText: 'name'
+	});
+	$('#tagfi').on('beforeItemRemove', function(event) {
+		alert("Remove");
+	});
+	$('#autocompleteTag').autocomplete({
+		serviceUrl: '/tag/suggest',
+		deferRequestBy: 300,
+		minChars: 3,
+		onSelect: function(suggestion) {
+			alert('You selected: ' + suggestion.value + ', ' + suggestion.data + ', ' + suggestion.context);
+			$('#tagfi').tagsinput('add', {
+				"name": suggestion.name,
+				"id": suggestion.id,
+				"context": suggestion.context
+			});
+			$('#autocompleteTag').autocomplete("clear");
+		},
+		paramName: 'query',
+		transformResult: function(response) {
+			return {
+				suggestions: $.map($.parseJSON(response), function(dataItem) {
+					return {
+						value: dataItem.name + " - ( " + dataItem.context + " )",
+						data: dataItem.id,
+						id: dataItem.id,
+						name: dataItem.name,
+						context: dataItem.context
+					};
+				})
+			};
+		}
+	});
+	//Topic Pack autocomplete packInputField
+	$('#packInputField').autocomplete({
+		serviceUrl: '/topic/pack/suggest',
+		paramName: 'q',
+		deferRequestBy: 200,
+		minChars: 2,
+		onSelect: function(suggestion) {
+			alert('You selected: ' + suggestion.value + ', ' + suggestion.data);
+			$("#tpPackName").val(suggestion.data);
+		},
+		transformResult: function(response) {
+			return {
+				suggestions: $.map($.parseJSON(response), function(dataItem) {
+					return {
+						value: dataItem.name,
+						data: dataItem.id,
+					};
+				})
+			};
+		}
+	});
+	//TOPIC CREATION
+	$('#topicform').submit(function() {
+		alert("Form submit!");
+		event.preventDefault();
+		var markupStr = $('#summernote').summernote('code');
+		console.log(markupStr);
+		$("#tpContent").val(markupStr);
+		var formData = new FormData($('#topicform')[0]);
+		console.log(formData);
+		var toprec = $.ajax({
+			url: '/topic/create', //Server script to process data
+			type: 'POST',
+			xhr: function() { // Custom XMLHttpRequest
+				var myXhr = $.ajaxSettings.xhr();
+				if (myXhr.upload) { // Check if upload property exists
+					myXhr.upload.addEventListener('progress', progressHandlingFunction, false); // For handling the progress of the upload
+				}
+				return myXhr;
+			},
+			//Ajax events
+			beforeSend: function() {
+				alert("Sending!");
+			},
+			// Form data
+			data: formData,
+			//Options to tell jQuery not to process data or worry about content-type.
+			cache: false,
+			contentType: false,
+			processData: false
+		});
+		toprec.done(function(data) {
+			alert("Sending complete!");
+			var topicID = data.message;
+			//location.replace('/topic/'+data.message);
+			$.ajax({
+				url: '/tag/' + topicID + '/add',
+				type: 'POST',
+				data: JSON.stringify($('#tagfi').tagsinput('items')),
+				contentType: 'application/json',
+				dataType: 'json'
+			}).done(function(response) {
+				alert(response.message);
+				location.replace('/topic/' + topicID);
+			}).fail(function(response) {
+				alert("Tag creation failed!");
+			});
+		}).fail(function(data) {
+			alert("Error!");
+		});
+		return true;
+	});
+});
+	</script>
+	<style type="text/css">
+#autocompleteTag,
+#tagfi {
+	display: block;
+	width: 100%;
+}
+	</style>
 </head>
 
-
 <body>
-<nav th:replace="fragments/navbar :: navbar"></nav>    
-
-<div class="container">   
-    <br><br>
-    <h1>Create a Topic</h1>
-    
-    <div>
-	
-  <!-- Nav tabs -->
-  <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation"><a href="#1" aria-controls="1" role="tab" data-toggle="tab">Title and Image</a></li>
-    <li role="presentation"><a href="#2" aria-controls="2" role="tab" data-toggle="tab">Content</a></li>
-    <li role="presentation"><a href="#3" aria-controls="3" role="tab" data-toggle="tab">Tags</a></li>
-    <li role="presentation"><a href="#4" aria-controls="4" role="tab" data-toggle="tab">Questions</a></li>
-  </ul>
-
-
-
-  <!-- Tab panes -->
-  <div class="tab-content">
-    <div role="tabpanel" class="tab-pane" id="1">
-    	<br>
-    	<div>
-			<form class="form-horizontal" id="topicform" action="/topic/create" method="post" enctype="multipart/form-data">
-				<div class="form-group">
-					<label class="col-sm-2">Topic Title</label>
-					<div class="col-sm-10">
-						<input type="text" name="header"/>
+	<nav th:replace="fragments/navbar :: navbar"></nav>
+	<div class="container">
+		<br>
+		<br>
+		<h1>Create a Topic</h1>
+		<div>
+			<!-- Nav tabs -->
+			<ul class="nav nav-tabs" role="tablist">
+				<li role="presentation"><a href="#1" aria-controls="1" role="tab" data-toggle="tab">Title and Image</a> </li>
+				<li role="presentation"><a href="#2" aria-controls="2" role="tab" data-toggle="tab">Content</a> </li>
+				<li role="presentation"><a href="#3" aria-controls="3" role="tab" data-toggle="tab">Tags</a> </li>
+				<li role="presentation"><a href="#4" aria-controls="4" role="tab" data-toggle="tab">Questions</a> </li>
+			</ul>
+			<!-- Tab panes -->
+			<div class="tab-content">
+				<div role="tabpanel" class="tab-pane active" id="1">
+					<br>
+					<div class=c ontainer>
+						<form class="form-horizontal" id="topicform" action="/topic/create" method="post" enctype="multipart/form-data">
+							<div class="form-group row">
+								<label class="col-sm-2 col-form-label">Topic Title</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" name="header" /> </div>
+							</div>
+							<div class="form-group row">
+								<label class="col-sm-2 col-form-label">Topic Pack</label>
+								<div class="col-sm-10">
+									<input id="packInputField" type="text" class="form-control" name="topicPackName" /> </div>
+							</div>
+							<div class="form-group row">
+								<label class="col-sm-2 col-form-label">Topic Image</label>
+								<div class="col-sm-10">
+									<input name="image" class="form-control-file" type="file" />
+									<progress></progress>
+								</div>
+							</div>
+							<input id="tpPackName" type="hidden" name="topicPack">
+							<input id="tpContent" type="hidden" name="content" value="" /> </form>
 					</div>
-					
-					<label class="col-sm-2">Topic Image</label>
-					<div class="col-sm-10">
-						<br>
-						<input name="image" type="file" />
-						<br>
-						<progress></progress> 
+				</div>
+				<div role="tabpanel" class="tab-pane" id="2">
+					<br>
+					<h3>Create your content :</h3>
+					<div id="summernote"></div>
+				</div>
+				<div role="tabpanel" class="tab-pane" id="3">
+					<div class="container">
+						<h3>Tags Input</h3>
+						<form class="form-horizontal">
+							<div class="form-group row">
+								<label for="tagfi" class="col-sm-2">Tag List:</label>
+								<div class="col-sm-10">
+									<input id="tagfi" class="tagwindow form-control" type="text" name="gg" readonly/> </div>
+							</div>
+							<div class="form-group row">
+								<label for="autocompleteTag" class="col-sm-2">Enter your tags:</label>
+								<div class="col-sm-10">
+									<input id="autocompleteTag" class="form-control" type="text"> </div>
+							</div>
+						</form>
 					</div>
 				</div>
-	    		<input id="tpContent" type="hidden" name="content" value=""/>
-	    	</form>
-	    	   
-    	</div>
-    
-    </div>
-    <div role="tabpanel" class="tab-pane" id="2">
-    	<br>
-		<h3>Create your content :</h3>
-     	<div id="summernote"></div>
-    </div>
-    <div role="tabpanel" class="tab-pane" id="3">
-    	<br>
-    	<h3>Tags Input</h3>
-    	<form class="form-horizontal">
-			<div class="form-group">
-				<label for="tagfi" class="col-sm-2">Tag List :</label>
-				<div class="col-sm-10">
-					<input id="tagfi" class="tagwindow" type="text" name="gg" readonly/>
+				<!-- QUESTIONS -->
+				<div role="tabpanel" class="tab-pane" id="4">
+					<div class="container questionContainer">
+						<h3>Questions</h3>
+						<hr>
+						<div class="topicQuestion">  
+						
+						<div class="row">
+							<span>Question :  <a class="btn-xs btn-danger rmQuestion">X</a></span>
+						</div>
+						<form class="form-horizontal">
+							<div class="form-group row">
+								<label class="control-label col-sm-2">Question text:</label>
+								<div class="col-sm-10">
+									<input form="topicform" type="text" class="form-control" name="question" placeholder="Question text"> </div>
+							</div>
+							<div class="form-group row">
+								<label class="control-label col-sm-2">Choice 1:</label>
+								<div class="col-sm-10">
+									<input form="topicform" type="text" class="form-control" name="answerA" placeholder="Choice text"> </div>
+							</div>
+							<div class="form-group row">
+								<label class="control-label col-sm-2">Choice 2:</label>
+								<div class="col-sm-10">
+									<input form="topicform" type="text" class="form-control" name="answerB" placeholder="Choice text"> </div>
+							</div>
+							<div class="form-group row">
+								<label class="control-label col-sm-2">Choice 3:</label>
+								<div class="col-sm-10">
+									<input form="topicform" type="text" class="form-control" name="answerC" placeholder="Choice text"> </div>
+							</div>
+							<div class="form-group row">
+								<label class="control-label col-sm-2">Correct answer:</label>
+								<div class="col-sm-10">
+									<input form="topicform" type="text" class="form-control" name="correct" placeholder="Enter choice # "> </div>
+							</div>
+							<div class="form-group row">
+								<label class="control-label col-sm-2">Explanation:</label>
+								<div class="col-sm-10">
+									<input form="topicform" type="text" class="form-control" name="explanation" placeholder="Enter explanation"> </div>
+							</div>
+						</form>
+						</div>
+						<div class="row"> <a class="btn-xs btn-primary addQuestion">Add+</a> </div>
+						<hr>
+					</div>
 				</div>
 			</div>
-			<br><br> 	
-			<div class="form-group">
-				<label for="autocomplete" class="col-sm-2">Enter your tags :</label>
-				<div class="col-sm-10">
-					<input id="autocomplete" type="text">
-				</div>
-			</div>
-    	</form>
-    </div>
-    
-    <!-- QUESTIONS -->
-    <div role="tabpanel" class="tab-pane" id="4">
-    		<div class="container questionContainer">
-    		<h3>Questions</h3>
-    		<hr>
-    		
-    		<div class="row topicQuestion">
-    		<span>Question :  <a class="btn-xs btn-danger rmQuestion">X</a></span>	
-			
-			<div class="form-group">
-				<label class="control-label col-sm-2" >Question text:</label>
-			    <div class="col-sm-10">
-			      <input form="topicform" type="text" class="form-control" name="question" placeholder="Question text">
-			    </div>
-				
-				<label class="control-label col-sm-2" >Choice 1:</label>
-			    <div class="col-sm-10">
-			      <input form="topicform" type="text" class="form-control" name="answerA" placeholder="Choice text">
-			    </div>
-			    
-			    <label class="control-label col-sm-2" >Choice 2:</label>
-			    <div class="col-sm-10">
-			      <input form="topicform" type="text" class="form-control" name="answerB" placeholder="Choice text">
-			    </div>
-			    
-			    <label class="control-label col-sm-2" >Choice 3:</label>
-			    <div class="col-sm-10">
-			      <input form="topicform" type="text" class="form-control" name="answerC" placeholder="Choice text">
-			    </div>
-			    
-			    <label class="control-label col-sm-2" >Correct answer:</label>
-			    <div class="col-sm-10">
-			      <input form="topicform" type="text" class="form-control" name="correct"  placeholder="Enter choice # ">
-			    </div>
-			    
-			    <label class="control-label col-sm-2" >Explanation:</label>
-			    <div class="col-sm-10">
-			      <input form="topicform" type="text" class="form-control" name="explanation" placeholder="Enter explanation">
-			    </div>
-			    
-			</div>
-			<hr>
-			</div>
-			<a class="btn-xs btn-primary addQuestion">Add+</a>
-		</div>	
-    </div>
-  </div>
-
-</div>
-	<br>
-    <button form="topicform" type="submit" value="Submit" class="btn btn-primary">Submit Post</button>
-</div>
-
-<script src="/js/clean-blog.min.js"></script>
+		</div>
+		<br>
+		<button form="topicform" type="submit" value="Submit" class="btn btn-primary">Submit Post</button>
+	</div>
 </body>
+
 </html>
