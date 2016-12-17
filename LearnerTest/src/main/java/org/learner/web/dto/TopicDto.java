@@ -26,8 +26,9 @@ public class TopicDto {
     private Integer[] correct;
     private String[] explanation;
     
+    private Long topicPack;
+    private String topicPackName;
     
-
 	//TODO reveal > current date constraint
     private Date revealDate;
     
@@ -136,6 +137,26 @@ public class TopicDto {
 
 	public void setExplanation(String[] explanation) {
 		this.explanation = explanation;
+	}
+
+
+	public Long getTopicPack() {
+		return topicPack;
+	}
+
+
+	public void setTopicPack(Long topicPack) {
+		this.topicPack = topicPack;
+	}
+
+
+	public String getTopicPackName() {
+		return topicPackName;
+	}
+
+
+	public void setTopicPackName(String topicPackName) {
+		this.topicPackName = topicPackName;
 	}
 	
 	

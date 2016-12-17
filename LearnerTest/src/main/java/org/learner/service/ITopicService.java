@@ -86,6 +86,8 @@ public interface ITopicService {
 	List<TopicPack> packSuggest(String q);
 
 	List<Topic> getTopicsInPack(long topicPackId);
+
+	boolean deleteTagFromTopic(Topic top, Tag tag);
 	
 	
 }

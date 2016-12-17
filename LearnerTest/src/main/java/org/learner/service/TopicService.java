@@ -89,7 +89,27 @@ public class TopicService implements ITopicService{
         
         User owner = userRepo.findByEmail(currentUserName);
         topic.setOwner(owner);
-		
+		String topicPackName = topicdto.getTopicPackName();
+        if(topicdto.getTopicPack() == null) {
+        	if(topicPackName != null){
+        		if(!topicPackName.equals("") && topicPackName.length() > 1){
+        			TopicPack pack = new TopicPack();
+        			pack.setName(topicPackName.substring(0, 1).toUpperCase() + topicPackName.substring(1).toLowerCase());
+        			TopicPack dbpack =  packRepo.save(pack);
+        			topic.setTopicPack(dbpack);
+        		}
+        	} else {
+        		topic.setTopicPack(null);
+        	}
+        	
+        } else {
+        	TopicPack tp = packRepo.getOne(topicdto.getTopicPack());
+        	
+        	if(tp != null) {
+        		topic.setTopicPack(tp);
+        	}
+        	
+        }
         return repository.save(topic);
 	}
 
