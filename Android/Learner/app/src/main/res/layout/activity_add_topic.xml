@@ -59,13 +59,13 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:background="@color/guillotine_background_dark">
+
                     <ImageButton
                         android:id="@+id/content_image_button"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="@drawable/border"
-                        android:src="@drawable/almond_blossoms"
                         android:text="@string/content_image"
                         android:textSize="@dimen/home_page_text_size" />
 
