@@ -1,15 +1,18 @@
 <html>
 
 <head>
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"></script>
+
 	<!-- Bootstrap Core CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 	<!-- Theme CSS -->
 
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sceditor/1.5.0/themes/default.min.css" type="text/css" media="all" />
 	<link rel="stylesheet" href="/css/profilestyle.css">
-
 	<link href="/css/clean-blog.css" rel="stylesheet">
 
 	<!-- Custom Fonts -->
@@ -47,6 +50,38 @@
 			font-weight: 600;
 		}
 	</style>
+	
+	<script type="text/javascript">
+	$(document).ready(function() {
+		$("#followButton").click(function(){
+			
+			event.preventDefault();
+						
+			$.get($("#followButton").attr('href')).done(function(data){
+				if(data.error!=null){
+					alert("You already follow!");
+					$("#followButton").removeClass('btn-danger');
+					$("#followButton").addClass('btn-success');
+				} else if(data.message != null){
+					alert(data.message);
+					if($("#followButton").hasClass('btn-danger')){
+						$("#followButton").removeClass('btn-danger');
+						$("#followButton").addClass('btn-success');
+						$("#followButton").attr('href' , $("#followButton").attr('href').replace("/follow/","/unfollow/") );
+						
+					} else if( $("#followButton").hasClass('btn-success')){
+						$("#followButton").removeClass('btn-success');
+						$("#followButton").addClass('btn-danger');
+						$("#followButton").attr('href' , $("#followButton").attr('href').replace("/unfollow/","/follow/") );
+					} 
+				}
+			}).fail(function(){
+				alert("Follow fail!");
+			})
+		});
+	});
+	</script>
+	
 	<title th:text="${user.firstName + ' ' + user.lastName}"></title>
 </head>
 <div>
@@ -105,9 +140,8 @@
 				</div>
 				<!-- END SIDEBAR USER TITLE -->
 				<!-- SIDEBAR BUTTONS -->
-				<div class="profile-userbuttons" hidden>
-					<button type="button" class="btn btn-success btn-sm">Follow</button>
-					<button type="button" class="btn btn-danger btn-sm">Message</button>
+				<div class="profile-userbuttons">
+					<a th:href="${'/follow/' + user.id}" id="followButton" type="button" class="btn btn-danger btn-sm">Follow</a>
 				</div>
 				<!-- END SIDEBAR BUTTONS -->
 				<!-- SIDEBAR MENU -->
@@ -160,58 +194,12 @@
 							</ul>
 						</div>
 					</div>
-					<!--  				
-						<h3>Contributions</h3>
-						<div th:each="tpc,iterationStatus : ${user.topics}" th:unless="${iterationStatus.index > 5}" class="row">
-
-							<div>
-
-								<div class="row">
-									<div class="col-lg-10">
-										<h4><strong><a th:text="${tpc.header}" th:href="'/topic/' + ${tpc.id}">Title of the post</a></strong></h4>
-									</div>
-								</div>
-
-								<div class="row">
-									<div class="col-lg-10">
-										<p>
-											<span class="glyphicon glyphicon-calendar"></span> <span th:text="${#dates.format(tpc.createdAt,'YYYY/MM/dd HH:mm')}"></span> | <span class="glyphicon glyphicon-comment"></span> <a href="#" th:text="${#lists.size(tpc.comments) + ' comments' }">comments</a> | <span class="glyphicon glyphicon-thumbs-up"></span> <a href="#" th:text="${#lists.size(tpc.likedBy)} + ' likes'">Likes</a>
-										</p>
-									</div>
-									<hr>
-								</div>
-							</div>
--->
 				</div>
-
 			</div>
 		</div>
 		<div class="col-md-3 col-sm-3 col-lg-3">
 
-			<div class="panel panel-primary">
-				<div class="panel-heading">Recommended Topics :</div>
-				<div class="panel-body">
-					<ul class="list-group">
-						<li th:each="poptop,itstat :${recommended}" th:unless="${itstat.index >5}">
-							<a th:text="${poptop.header}" th:href="'/topic/' + ${poptop.id}" style="font-size:14px; text-decoration:none"> header</a>
-							<a th:text="${'by ' +poptop.owner.firstName + ' ' + poptop.owner.lastName}" th:href="'/profile/' + poptop.owner.id" style="font-size:12px; text-decoration:none"> owner</a>
-						</li>
-					</ul>
-				</div>
-			</div>
 
-			<div class="panel panel-primary">
-				<div class="panel-heading">Quiz Progress :</div>
-				<div class="panel-body">
-					<div th:each="qpr,itstat :${progress}" th:unless="${itstat.index >5}">
-						<a th:text="${qpr.topicPack.name}" th:href="${'/search/pack/' + qpr.topicPack.id}"></a>
-						<div class="progress">
-							<div class="progress-bar" role="progressbar" th:attr="aria-valuemax=${qpr.packCompleted}" aria-valuemin="0" th:attr="aria-valuemax=${qpr.packTotal}" th:style="'width:' + ${qpr.packCompleted * 100 /qpr.packTotal} + '%'" th:text="${qpr.packCompleted + '/' + qpr.packTotal}">
-								70%</div>
-						</div>
-					</div>
-				</div>
-			</div>
 		</div>
 	</div>
 

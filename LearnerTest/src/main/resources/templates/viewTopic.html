@@ -115,7 +115,7 @@
                         <a th:each="tg,iterationStatus : ${topic.tags}" th:href="'/search/tag/' + ${tg.id}"> <span th:text="${tg.name}" class="label label-info">Snipp</span></a> 
                         </span>
                         <br>
-                        <span class="meta">Posted by <a href="#" th:text="${topic.owner.firstName + ' ' + topic.owner.lastName}">Start Bootstrap</a>  <a th:text="${'on ' + #dates.format(topic.createdAt,'YYYY/MM/dd HH:mm')}"></a></span>
+                        <span class="meta">Posted by <a th:href="${'/profile/' + topic.owner.id}" th:text="${topic.owner.firstName + ' ' + topic.owner.lastName}">Start Bootstrap</a>  <a th:text="${'on ' + #dates.format(topic.createdAt,'YYYY/MM/dd HH:mm')}"></a></span>
                     	<span class="meta"> <a th:text="${#lists.size(topic.comments) + ' comments  ' }"> likes</a> <a th:text="${#lists.size(topic.likedBy) + ' likes  ' }"> likes</a></span>
                     	<br>
                 		<div sec:authorize="isAuthenticated()" class="col-lg-offset-2 col-md-offset-2" >
