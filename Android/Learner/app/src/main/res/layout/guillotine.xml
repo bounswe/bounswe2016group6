@@ -40,7 +40,7 @@
 
         <com.group6boun451.learner.widget.CanaroTextView
             style="@style/TextView.GuillotineItem"
-            android:text="@string/search" />
+            android:text="@string/feed" />
     </LinearLayout>
 
     <LinearLayout

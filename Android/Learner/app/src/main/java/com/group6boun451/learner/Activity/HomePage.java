@@ -106,7 +106,9 @@ public class HomePage extends AppCompatActivity{
         setContentView(R.layout.activity_home_page);
         ButterKnife.bind(this);
         JodaTimeAndroid.init(this);
-        user = Task.getResult(getIntent().getStringExtra("user"),User.class);
+        user = Task.getResult(
+                PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                        .getString(getString(R.string.user), " "),User.class);
         username = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString(getString(R.string.user_name), " ");
 //        fetch topics
        fetchTasks("recent",viewpager);// TODO: 12/8/2016 recommended
@@ -134,7 +136,11 @@ public class HomePage extends AppCompatActivity{
         guillotineMenu.findViewById(R.id.activity_group).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(HomePage.this, com.group6boun451.learner.activity.SearchActivity.class));
+                Intent intent = new Intent(HomePage.this, SearchActivity.class);
+                intent.putExtra("tagName",getString(R.string.feed));
+                intent.putExtra("query","0");
+                intent.putExtra("type","recommendAll");
+                startActivity(intent);
                 guillotineAnimation.close();
             }
         });

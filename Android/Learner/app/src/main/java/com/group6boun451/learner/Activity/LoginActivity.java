@@ -47,13 +47,14 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         if(preferences.getString(getString(R.string.user_name), "").length()>0){
-            new LoginTask().execute();
+            Intent intent = new Intent(LoginActivity.this, HomePage.class);
+            startActivity(intent);
+            finish();
             return;
         }
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        userNameEditText.setText("test@test.com");
-        passwordEditText.setText("test");
+
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {new LoginTask().execute();}});
@@ -115,15 +116,15 @@ public class LoginActivity extends AppCompatActivity {
             //TODO check if those are empty
             editor.putString(getString(R.string.user_name), username);
             editor.putString(getString(R.string.password),password);
-            editor.commit();
-            Intent intent = new Intent(LoginActivity.this, HomePage.class);
             String userString = null;
             try {
                 userString = new ObjectMapper().writeValueAsString(result);
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
-            intent.putExtra("user",userString);
+            editor.putString(getString(R.string.user),userString);
+            editor.commit();
+            Intent intent = new Intent(LoginActivity.this, HomePage.class);
             startActivity(intent);
             finish();
         }

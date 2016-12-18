@@ -44,6 +44,7 @@
     <string name="date_next_weekday">Last week</string>
     <string name="date_next_month">Last month</string>
     <string name="user">user</string>
+    <string name="feed">My Feed</string>
     <string-array name="register_roles">
         <item>Student</item>
         <item>Teacher</item>

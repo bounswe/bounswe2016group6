@@ -5,8 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -17,13 +15,9 @@ import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
-import com.group6boun451.learner.CommentContainer;
-import com.group6boun451.learner.CommentListAdapter;
 import com.group6boun451.learner.R;
-import com.group6boun451.learner.model.Topic;
 import com.group6boun451.learner.model.User;
 import com.group6boun451.learner.utils.GlideHelper;
-import com.group6boun451.learner.utils.TopicPagerAdapter;
 import com.group6boun451.learner.utils.UserListAdapter;
 import com.yalantis.guillotine.animation.GuillotineAnimation;
 import com.yalantis.guillotine.interfaces.GuillotineListener;
@@ -73,7 +67,11 @@ public class ProfileActivity extends AppCompatActivity {
         guillotineMenu.findViewById(R.id.activity_group).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(ProfileActivity.this, SearchActivity.class));
+                Intent intent = new Intent(ProfileActivity.this, SearchActivity.class);
+                intent.putExtra("tagName",getString(R.string.feed));
+                intent.putExtra("query","0");
+                intent.putExtra("type","recommendAll");
+                startActivity(intent);
                 guillotineAnimation.close();
                 finish();
             }
@@ -114,9 +112,15 @@ public class ProfileActivity extends AppCompatActivity {
 
 
 //"https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAJlAAAAJGIxNDQ3YzhiLTYyZjUtNDU2NS04ZTg3LWYxZjFlNjg3NmE5MQ.jpg"
-        GlideHelper.loadImage(profileImageView,HomePage.user.getPicture());
-        mailTextView.setText(HomePage.user.getEmail());
-        nameTextView.setText(HomePage.user.getFirstName()+" "+HomePage.user.getLastName());
+        if(HomePage.user==null) HomePage.user = Task.getResult(
+                PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                        .getString(getString(R.string.user), " "),User.class);
+
+        if(HomePage.user!=null){
+            GlideHelper.loadImage(profileImageView,HomePage.user.getPicture());
+            mailTextView.setText(HomePage.user.getEmail());
+            nameTextView.setText(HomePage.user.getFirstName()+" "+HomePage.user.getLastName());
+        }
 
         final ListView teacherList = (ListView) findViewById(R.id.teachersList);
         new Task<String>(this, new Task.Callback() {
