@@ -7,8 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import org.learner.persistence.model.Topic;
 import org.learner.persistence.model.User;
 import org.learner.security.ActiveUserStore;
+import org.learner.service.ITopicService;
 import org.learner.service.IUserService;
 import org.learner.web.util.GenericResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,9 @@ public class UserController {
     @Autowired
     ActiveUserStore activeUserStore;
     
+	@Autowired
+	ITopicService topicService;
+    
     @Autowired
     IUserService userService;
     
@@ -39,6 +44,8 @@ public class UserController {
     public String profilePage(final Model model,final Principal principal){
     	String currentUsername = principal.getName();
     	User user = userService.findUserByEmail(currentUsername);
+    	List<Topic> recommendedList = topicService.getRecommendedTopics();
+    	model.addAttribute("recommended", recommendedList);
     	model.addAttribute("user", user);
     	return "profile";
     }

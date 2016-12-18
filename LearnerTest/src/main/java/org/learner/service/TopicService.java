@@ -220,7 +220,39 @@ public class TopicService implements ITopicService{
 	@Override
 	public List<Topic> getRecommendedTopics() {
 		// TODO User specific recommendations
-		return null;
+		List<Topic> allTopics = repository.findAll();
+		List<Topic> likedTopics = new ArrayList<>();
+		User current = getCurrentUser();
+	
+		for(Topic tp: allTopics){
+			List<User> whoLiked = tp.getLikedBy();
+			if(whoLiked.contains(current)){
+				likedTopics.add(tp);
+			}
+		}
+		
+		List<Topic> recommendedTopics = new ArrayList<>();	
+		
+		for(Topic tpc: likedTopics){
+			List<Topic> temp = getRelatedTopicsViaTopics(tpc);
+			int counter=0;
+			for(int i=0;i<temp.size();i++){
+				if(!recommendedTopics.contains(temp.get(i)) && counter<2){
+					recommendedTopics.add(temp.get(i));
+					counter++;
+				}
+				if(counter==2){
+					break;
+				}
+			}
+		}
+		
+		recommendedTopics = recommendedTopics.subList(0,10);
+		if(recommendedTopics.size()>10){
+		}
+		
+		return recommendedTopics;
+		
 	}
 
 	
