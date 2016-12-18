@@ -245,7 +245,7 @@ public class UserService implements IUserService {
 
 	@Override
 	public List<User> usernameSuggest(String q) {
-		List<User> userlist = repository.findByFirstNameOrLastNameContaining(q);
+		List<User> userlist = repository.findByFirstNameOrLastNameContaining(q,q);
 		return userlist;
 	}
 

@@ -11,6 +11,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Override
     void delete(User user);
 
-	List<User> findByFirstNameOrLastNameContaining(String q);
+	List<User> findByFirstNameOrLastNameContaining(String q,String q2);
 
 }
