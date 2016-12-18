@@ -49,7 +49,7 @@ public class QuizController {
 		
 	}
 	
-	@RequestMapping(value = "/{topicId}/result/save")
+	@RequestMapping(value = "/{topicId}/result/save" ,consumes="application/json")
 	@ResponseBody
 	public GenericResponse saveQuizResult(@PathVariable("topicId") Long topicId, @RequestBody QuizResult quizResult){
 		System.out.println("Quiz Result Save");

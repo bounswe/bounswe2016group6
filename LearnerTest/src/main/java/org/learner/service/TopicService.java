@@ -246,6 +246,7 @@ public class TopicService implements ITopicService{
 		
 		for(Topic tpc: likedTopics){
 			List<Topic> temp = getRelatedTopicsViaTopics(tpc);
+			temp.removeAll(likedTopics);
 			int counter=0;
 			for(int i=0;i<temp.size();i++){
 				if(!recommendedTopics.contains(temp.get(i)) && counter<2){
@@ -334,6 +335,7 @@ public class TopicService implements ITopicService{
 				}
 			}
 		}
+		weighted.remove(topic);
 		Collections.sort(weighted, Comparator.comparingInt(Topic::getSearchScore));
 		return weighted;
 	}
