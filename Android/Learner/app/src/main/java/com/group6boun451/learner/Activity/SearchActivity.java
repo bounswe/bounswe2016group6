@@ -131,7 +131,7 @@ public class SearchActivity extends AppCompatActivity {
             } else if(type.equals("recommend")){
                 myQuery = "topic/" + query +"/recommend";
             }else if(type.equals("following")){
-                myQuery = "topic/user/following/latest";
+                myQuery = "/userprofile/"+ query;
             }else if(type.equals("recommendAll")){
                 myQuery = "topic/user/following/latest";// TODO: 15.12.2016 change it with user id
             }else {
