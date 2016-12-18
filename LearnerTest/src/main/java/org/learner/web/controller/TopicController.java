@@ -224,7 +224,7 @@ public class TopicController {
     @RequestMapping(value="/recommended")
     @ResponseBody
     public Collection<Topic> topicList(){
-    	return topicService.getAllTopics();
+    	return topicService.getRecommendedTopics();
     }
     
     @RequestMapping(value="/popular")

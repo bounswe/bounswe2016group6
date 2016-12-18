@@ -12,6 +12,7 @@ import org.learner.persistence.model.User;
 import org.learner.security.ActiveUserStore;
 import org.learner.service.ITopicService;
 import org.learner.service.IUserService;
+import org.learner.web.dto.QuizProgressDto;
 import org.learner.web.util.GenericResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -45,6 +46,10 @@ public class UserController {
     	String currentUsername = principal.getName();
     	User user = userService.findUserByEmail(currentUsername);
     	List<Topic> recommendedList = topicService.getRecommendedTopics();
+    	List<Topic> latestFromTeacher = topicService.latestTopicsFromFollowing(user.getFollowing());
+    	List<QuizProgressDto> qpdto = topicService.getQuizProgress();
+    	model.addAttribute("latestFromFollowed", latestFromTeacher);
+    	model.addAttribute("progress",qpdto);
     	model.addAttribute("recommended", recommendedList);
     	model.addAttribute("user", user);
     	return "profile";
@@ -53,8 +58,11 @@ public class UserController {
     @RequestMapping(value="/profile/{userId}")
     public String anotherProfilePage( @PathVariable Long userId ,final Model model){
     	User user = userService.getUserByID(userId);
+    	List<Topic> latestFromTeacher = topicService.latestTopicsFromFollowing(user.getFollowing());
+
     	model.addAttribute("user", user);
-    	return "profile";
+    	model.addAttribute("latestFromFollowed", latestFromTeacher);
+    	return "profile2";
     	
     }
     
