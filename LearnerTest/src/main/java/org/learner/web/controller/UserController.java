@@ -3,6 +3,7 @@ package org.learner.web.controller;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -16,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -37,9 +39,16 @@ public class UserController {
     public String profilePage(final Model model,final Principal principal){
     	String currentUsername = principal.getName();
     	User user = userService.findUserByEmail(currentUsername);
-    	
     	model.addAttribute("user", user);
     	return "profile";
+    }
+    
+    @RequestMapping(value="/profile/{userId}")
+    public String anotherProfilePage( @PathVariable Long userId ,final Model model){
+    	User user = userService.getUserByID(userId);
+    	model.addAttribute("user", user);
+    	return "profile";
+    	
     }
     
     @RequestMapping(value="/userprofile")
@@ -48,6 +57,13 @@ public class UserController {
     	String currentUsername = principal.getName();
     	User user = userService.findUserByEmail(currentUsername);
     	
+    	return user;
+    }
+    
+    @RequestMapping(value="/userprofile/{userId}")
+    @ResponseBody
+    public User anotherUserDetails(@PathVariable Long userId){
+    	User user = userService.getUserByID(userId);
     	return user;
     }
     
@@ -86,6 +102,14 @@ public class UserController {
     	return user.getFollowing();
     }
     
-
+    
+    @RequestMapping(value = "/user/suggest")
+    @ResponseBody
+    public List<User> usernameSuggest(@RequestParam String q){
+    	List<User> us = new ArrayList<>();
+    	us = userService.usernameSuggest(q);
+    	return us; 
+    	
+    }
     
 }

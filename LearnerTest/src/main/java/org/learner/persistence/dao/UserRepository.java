@@ -1,5 +1,7 @@
 package org.learner.persistence.dao;
 
+import java.util.List;
+
 import org.learner.persistence.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -8,5 +10,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     
     @Override
     void delete(User user);
+
+	List<User> findByFirstNameOrLastNameContaining(String q);
 
 }

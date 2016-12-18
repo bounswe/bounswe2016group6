@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 import java.util.UUID;
 
 import javax.transaction.Transactional;
@@ -240,6 +241,12 @@ public class UserService implements IUserService {
 		}
 		
 		return teacherToFollow;
+	}
+
+	@Override
+	public List<User> usernameSuggest(String q) {
+		List<User> userlist = repository.findByFirstNameOrLastNameContaining(q);
+		return userlist;
 	}
 
 }
