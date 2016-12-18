@@ -141,7 +141,7 @@ h6 {
 				<!-- END MENU -->
 			</div>
 		</div>
-		<div class="col-md-9">
+		<div class="col-md-6">
             <div class="profile-content">
 			   <div sec:authorize="hasAuthority('TEACHER_PRIVILEGE')">
 					<div class="col-lg-12 col-md-12 col-sm-12">
@@ -175,6 +175,19 @@ h6 {
 					</div>
 				</div>
             </div>
+		</div>
+		<div class="col-md-3">
+			<div class="panel panel-primary">
+			<div class="panel-heading">Recommended Topics :</div>
+			<div class="panel-body">
+				<ul class="list-group">
+					<li th:each="poptop,itstat :${recommended}" th:unless="${itstat.index >5}">
+						<a th:text="${poptop.header}" th:href="'/topic/' + ${poptop.id}" style="font-size:14px; text-decoration:none"> header</a>
+						<a th:text="${'by ' +poptop.owner.firstName + ' ' + poptop.owner.lastName}" th:href="'/profile/' + poptop.owner.id" style="font-size:12px; text-decoration:none"> owner</a>
+					</li>
+				</ul>
+			</div>
+		</div>
 		</div>
 	</div>
 </div>
