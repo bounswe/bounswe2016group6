@@ -1,6 +1,7 @@
 package org.learner.service;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 import org.learner.persistence.model.PasswordResetToken;
 import org.learner.persistence.model.User;
@@ -47,5 +48,7 @@ public interface IUserService {
     User followUser(long userid);
     
     User unfollowUser(long userid);
+
+	List<User> usernameSuggest(String q);
 
 }

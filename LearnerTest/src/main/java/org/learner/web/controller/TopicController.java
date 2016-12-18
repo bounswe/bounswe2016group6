@@ -252,6 +252,22 @@ public class TopicController {
     	
     }
     
+    
+    
+    @RequestMapping(value="/teacher/{id}")
+    @ResponseBody
+    public List<Topic> teacherTopics(@PathVariable Long id){
+    	User teacher = userService.getUserByID(id);
+    	if(teacher == null){
+    		return null;
+    	}
+    	
+    	List<Topic> ttopics = teacher.getTopics();
+    	return ttopics;
+    	
+    }	
+    	
+    
     @RequestMapping(value="/{id}/recommend")
     @ResponseBody
     public List<Topic> recommendByTopic(@PathVariable Long id){
