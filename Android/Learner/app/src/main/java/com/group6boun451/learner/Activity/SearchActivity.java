@@ -93,6 +93,11 @@ public class SearchActivity extends AppCompatActivity {
     private FloatingSearchView mSearchView;
 
     private SearchResultsListAdapter mSearchResultsAdapter;
+
+    /**
+     * Initializes all variables, sets content view and if necessary makes call to get relevant topics.
+     * @param savedInstanceState
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
@@ -299,6 +304,10 @@ public class SearchActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Update topic adapter to show the topics returned from the server.
+     * @param resultString
+     */
     private void onResultofQuery(String resultString) {
         Topic[] result = Task.getResult(resultString, Topic[].class);
         if (result != null) {
@@ -307,6 +316,10 @@ public class SearchActivity extends AppCompatActivity {
         mSearchView.hideProgress();
     }
 
+    /**
+     * Toggles comment tag.
+     * @param view
+     */
     private void commentView(View view) {
         LinearLayout lyt = (LinearLayout) findViewById(R.id.new_comment_snack);
         if(isSnackBarActive) {
@@ -323,6 +336,10 @@ public class SearchActivity extends AppCompatActivity {
             isSnackBarActive= true;
         }
     }
+
+    /**
+     * Quits from topic edit state.
+     */
     private void editDone() {
         contentView.setVisibility(View.VISIBLE);
         summernote.setVisibility(View.INVISIBLE);
@@ -334,6 +351,7 @@ public class SearchActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         summernote.onActivityResult(requestCode, resultCode, data);
     }
+
     @Override
     public void onBackPressed() {
         if (unfoldableView != null && (unfoldableView.isUnfolded() || unfoldableView.isUnfolding())) {
@@ -343,6 +361,11 @@ public class SearchActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * When user clicks any topic, the detailed view of the clicked topic is opened.
+     * @param coverView
+     * @param topic
+     */
     public void openDetails(View coverView, final Topic topic) {
         HomePage.isThereQuiz = topic.getQuestions().size() != 0;
         HomePage.currentTopic = topic;
@@ -435,12 +458,14 @@ public class SearchActivity extends AppCompatActivity {
         unfoldableView.unfold(coverView, tabHost);
     }
 
-
     @Override
     public AssetManager getAssets() {
         return getResources().getAssets();
     }
 
+    /**
+     * Sets up query change listener of search view.
+     */
     private void setupFloatingSearch() {
         mSearchView.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
 

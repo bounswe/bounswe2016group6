@@ -25,6 +25,7 @@ import java.util.Collections;
 
 /**
  * Created by Ahmet Zorer on 12/5/2016.
+ * Generic class for all the background tasks.
  *
  */
 public class Task<T> extends AsyncTask<T,Void,String> {
@@ -37,6 +38,9 @@ public class Task<T> extends AsyncTask<T,Void,String> {
         this.callback = callback;
     }
 
+    /**
+     * Gets username and password for authentication.
+     */
     @Override
     protected void onPreExecute() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -44,6 +48,11 @@ public class Task<T> extends AsyncTask<T,Void,String> {
         password = preferences.getString(context.getString(R.string.password), " ");
     }
 
+    /**
+     * Makes call for server tasks and returns the result of the call.
+     * @param params
+     * @return
+     */
     @Override
     protected String doInBackground(T... params) {
         // Populate the HTTP Basic Authentitcation header with the username and password
@@ -74,10 +83,23 @@ public class Task<T> extends AsyncTask<T,Void,String> {
         }
         return null;
     }
+
+    /**
+     * Callback method is called. The callback method changes in accordance with the place that the task is used.
+     * @param result
+     */
     @Override
     protected void onPostExecute(String result) {
         callback.onResult(result);
     }
+
+    /**
+     * Maps the given string to an object that the type is given.
+     * @param resultString
+     * @param aClass
+     * @param <T>
+     * @return
+     */
     public static <T> T getResult(String resultString, Class<T> aClass) {
         T result = null;
         ObjectMapper mapper = new ObjectMapper();
@@ -88,6 +110,10 @@ public class Task<T> extends AsyncTask<T,Void,String> {
         }
         return result;
     }
+
+    /**
+     *Callback interface for task class.
+     */
     public interface Callback{
         void onResult(String result);
     }

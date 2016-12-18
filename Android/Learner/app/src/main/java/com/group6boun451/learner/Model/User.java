@@ -2,6 +2,10 @@ package com.group6boun451.learner.model;
 
 import java.util.Collection;
 import java.util.List;
+
+/**
+ * Model class for users.
+ */
 public class User {
     private Long id;
 

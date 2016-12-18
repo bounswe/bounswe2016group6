@@ -42,6 +42,10 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.login_button)
     Button loginButton;
 
+    /**
+     * Gets login credentials.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

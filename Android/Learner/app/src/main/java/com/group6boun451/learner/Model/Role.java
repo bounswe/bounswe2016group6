@@ -1,6 +1,10 @@
 package com.group6boun451.learner.model;
 
 import java.util.Collection;
+
+/**
+ * Model class for roles.
+ */
 public class Role {
     private Long id;
     private Collection<User> users;

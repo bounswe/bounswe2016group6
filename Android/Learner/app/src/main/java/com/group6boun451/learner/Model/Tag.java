@@ -4,6 +4,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Model class for tags.
+ */
 public class Tag {
     private Long id;
     private String name;

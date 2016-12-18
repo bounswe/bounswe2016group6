@@ -1,7 +1,7 @@
 package com.group6boun451.learner.model;
 
 /**
- * Created by Ahmet Zorer on 11/12/2016.
+ * Model class for generic responses.
  */
 public class GenericResponse {
     private String message;

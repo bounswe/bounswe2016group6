@@ -99,7 +99,10 @@ public class HomePage extends AppCompatActivity{
     public static Topic currentTopic = null;
     private String commentContent;
 
-
+    /**
+     * Initializes all variables and gets topics.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -309,6 +312,11 @@ public class HomePage extends AppCompatActivity{
         });
     }
 
+    /**
+     * Fetches topics with given category.
+     * @param category
+     * @param viewpager
+     */
     private void fetchTasks(String category, final ViewPager viewpager) {
         new com.group6boun451.learner.activity.Task<String>(this, new com.group6boun451.learner.activity.Task.Callback() {
             @Override
@@ -322,6 +330,10 @@ public class HomePage extends AppCompatActivity{
         }).execute(getString(R.string.base_url) + "topic/"+category);
     }
 
+    /**
+     * Toggles add comment tab.
+     * @param view
+     */
     private void commentView(View view) {
         LinearLayout lyt = (LinearLayout) findViewById(R.id.new_comment_snack);
         if(isSnackBarActive) {
@@ -339,18 +351,27 @@ public class HomePage extends AppCompatActivity{
         }
     }
 
+    /**
+     * Quits from topic edit state.
+     */
     private void editDone() {
         contentView.setVisibility(View.VISIBLE);
         summernote.setVisibility(View.INVISIBLE);
         editButton.setText(getString(R.string.edit));
     }
 
+    /**
+     * Returns results of quiz.
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == 31415){
             //quiz finished
                 Log.d(TAG,"quiz finished");
-
+// TODO: 18.12.2016 Return quizes
             return;
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -370,12 +391,17 @@ public class HomePage extends AppCompatActivity{
         }
     }
 
+    /**
+     * Inflate the menu; this adds items to the action bar if it is present.
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home_page, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -388,6 +414,11 @@ public class HomePage extends AppCompatActivity{
 
     }
 
+    /**
+     * When user clicks any topic, the detailed view of the clicked topic is opened.
+     * @param coverView
+     * @param topic
+     */
     public void openDetails(View coverView, final Topic topic) {
         //test Quiz
         List<Question> mQues = new ArrayList<Question>();
@@ -504,8 +535,6 @@ public class HomePage extends AppCompatActivity{
         }
         unfoldableView.unfold(coverView, tabHost);
     }
-
-
 
     @Override
     public AssetManager getAssets() {

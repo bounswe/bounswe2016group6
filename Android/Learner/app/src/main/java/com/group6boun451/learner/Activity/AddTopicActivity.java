@@ -239,6 +239,10 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
 //        pickUpTimePicker.setTitle(getString(R.string.next_button));
 //    }
 
+    /**
+     * Validate topic name.
+     * @return false if topic name is empty.
+     */
     public boolean validate() {
         if (topicNameEditText.getText().toString().trim().isEmpty()) {
             topicNameLayout.setError(getString(R.string.enter_name));
@@ -248,7 +252,6 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
         }
         return true;
     }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -264,6 +267,12 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
             summernote.onActivityResult(requestCode, resultCode, data);
         }
     }
+
+    /**
+     * Returns the path of the image chosen.
+     * @param uri
+     * @return
+     */
     public String getPath(Uri uri) {
         String[] projection = { MediaStore.Images.Media.DATA };
         Cursor cursor = managedQuery(uri, projection, null, null, null);
@@ -271,6 +280,7 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
         cursor.moveToFirst();
         return cursor.getString(column_index);
     }
+
     @Override
     public void onBackPressed() {
         if (isGuillotineOpened) {
@@ -323,6 +333,10 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
 
     public void backButton(View view) {tabHost.setCurrentTab(tabHost.getCurrentTab()-1);}
 
+    /**
+     * Sends newly created topic to the server.
+     * @param view
+     */
     public void finishButton(View view) {
         if (validate()) {
             // populate the data to post
@@ -359,6 +373,9 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
         }
     }
 
+    /**
+     * Adapter class for tags.
+     */
     public class TagsAdapter extends RecyclerView.Adapter<CheckableContactViewHolder> {
 
         private List<Tag> mDataSet = new ArrayList<>();
@@ -420,6 +437,11 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
         }
     }
 
+    /**
+     * Shows the returned message from server in the snackbar.
+     * @param result
+     * @return
+     */
     private boolean showResult(GenericResponse result) {
         if (result.getError() == null) {// display a notification to the user with the response information
             finish();

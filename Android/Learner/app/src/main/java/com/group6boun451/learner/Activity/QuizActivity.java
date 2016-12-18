@@ -132,7 +132,10 @@ public class QuizActivity extends AppCompatActivity {
         isQuizFinished = false;
     }
 
-    // when quiz finshed
+    /**
+     * call when finish button is pressed.
+     * @param view
+     */
     public void clickBtnFinishQuiz(View view){
         isQuizFinished = true;
 
@@ -140,16 +143,29 @@ public class QuizActivity extends AppCompatActivity {
         questionsPager.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * call when check answers button is pressed.
+     * @param view
+     */
     public void clickBtnCheckAnswers(View view){
         questionsPager.setCurrentItem(0);
         questionsPager.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * call when quit button is pressed.
+     * @param view
+     */
     public void clickBtnFinishQuit(View view){
         Intent intent=new Intent();
         setResult(31415,intent);
         finish();
     }
+
+    /**
+     * Initializes all variables
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

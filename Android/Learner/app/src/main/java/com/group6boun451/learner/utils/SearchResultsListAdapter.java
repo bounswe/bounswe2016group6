@@ -30,6 +30,10 @@ import java.util.List;
 import static com.group6boun451.learner.utils.GlideHelper.getReadableDateFromDate;
 import static com.group6boun451.learner.utils.GlideHelper.showResult;
 
+/**
+ * List adapter for topics in search activity.
+ *
+ */
 public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResultsListAdapter.ViewHolder> {
 
     private List<Topic> mDataSet = new ArrayList<>();

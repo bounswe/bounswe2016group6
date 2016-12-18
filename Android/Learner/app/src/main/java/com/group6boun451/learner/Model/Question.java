@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.io.Serializable;
 
+/**
+ * Model class for questions.
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Question implements Serializable {
     private Long id;

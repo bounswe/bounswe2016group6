@@ -31,7 +31,8 @@ import static com.group6boun451.learner.utils.GlideHelper.getReadableDateFromDat
 import static com.group6boun451.learner.utils.GlideHelper.showResult;
 
 /**
- * Created by Ahmet Zorer on 12/6/2016.
+ * List adapter for topics in homepage activity.
+ *
  */
 public class TopicPagerAdapter extends PagerAdapter {
     private Context context;

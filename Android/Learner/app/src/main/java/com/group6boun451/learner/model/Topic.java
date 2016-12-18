@@ -4,6 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.Date;
 import java.util.List;
+
+/**
+ * Model class for topics.
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Topic {
   private Long id;
