@@ -10,6 +10,7 @@ import org.learner.persistence.model.Tag;
 import org.learner.persistence.model.Topic;
 import org.learner.persistence.model.TopicPack;
 import org.learner.persistence.model.User;
+import org.learner.web.dto.QuizProgressDto;
 import org.learner.web.dto.TopicDto;
 
 public interface ITopicService {
@@ -88,6 +89,8 @@ public interface ITopicService {
 	List<Topic> getTopicsInPack(long topicPackId);
 
 	boolean deleteTagFromTopic(Topic top, Tag tag);
+
+	List<QuizProgressDto> getQuizProgress();
 	
 	
 }

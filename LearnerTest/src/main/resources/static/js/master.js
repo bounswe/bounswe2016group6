@@ -44,7 +44,7 @@ $(function () {
 		$.ajax
 	    ({
 	        type: "POST",
-	        url: '/quiz/result/save',
+	        url: '/quiz/' + topicID + '/result/save',
 	        dataType: 'json',
 	        contentType: 'application/json',
 	        data: JSON.stringify(quizResult),
