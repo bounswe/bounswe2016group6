@@ -36,6 +36,7 @@ import com.doodle.android.chips.model.Contact;
 import com.group6boun451.learner.CommentListAdapter;
 import com.group6boun451.learner.R;
 import com.group6boun451.learner.model.Comment;
+import com.group6boun451.learner.model.QuizResult;
 import com.group6boun451.learner.model.Tag;
 import com.group6boun451.learner.model.Topic;
 import com.group6boun451.learner.utils.GlideHelper;
@@ -48,6 +49,8 @@ import com.simplicityapks.reminderdatepicker.lib.ReminderDatePicker;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
@@ -59,6 +62,7 @@ import java.util.Collections;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.group6boun451.learner.activity.HomePage.currentTopic;
 import static com.group6boun451.learner.utils.GlideHelper.getReadableDateFromDate;
 
 
@@ -179,7 +183,9 @@ public class SearchActivity extends AppCompatActivity {
         fabQuiz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(SearchActivity.this,QuizActivity.class));
+                startActivityForResult(
+                        new Intent(SearchActivity.this,QuizActivity.class),
+                        31415);
             }
         });
 
@@ -244,7 +250,7 @@ public class SearchActivity extends AppCompatActivity {
                 }else {
                     editDone();
                     String content = summernote.getText();
-                    Topic t = HomePage.currentTopic;
+                    Topic t = currentTopic;
                     if(!t.getContent().equals(content)){
                         t.setContent(content);
                         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getString(R.string.base_url) + "topic/edit/"+t.getId()).queryParam("header",t.getHeader()).queryParam("content",content);
@@ -265,7 +271,7 @@ public class SearchActivity extends AppCompatActivity {
                 if(commentContent.length() < 9){
                     Snackbar.make(findViewById(android.R.id.content),"Comment is too short",Snackbar.LENGTH_SHORT).show();
                 }else{
-                    Topic t = HomePage.currentTopic;
+                    Topic t = currentTopic;
                     UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getString(R.string.base_url) + "topic/comment/create")
                             .queryParam("topicId",t.getId()).queryParam("content",commentContent);
                     new Task<URI>(SearchActivity.this, new Task.Callback() {
@@ -348,6 +354,22 @@ public class SearchActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if(requestCode == 31415 && resultCode == RESULT_OK){
+            QuizResult quizResult = new QuizResult(
+                    data.getIntExtra("correct",0),
+                    data.getIntExtra("count",0));
+            MultiValueMap<String, Object> formData = new LinkedMultiValueMap<String, Object>();
+            formData.add("quizResult",quizResult);
+            new Task<>(SearchActivity.this, new Task.Callback() {
+                @Override
+                public void onResult(String resultString) {
+                    GlideHelper.showResult(SearchActivity.this,resultString);
+                }
+            }).execute(getString(R.string.base_url) + "quiz/" +currentTopic.getId() +"/result/save",formData);
+            return;
+        }
+
         super.onActivityResult(requestCode, resultCode, data);
         summernote.onActivityResult(requestCode, resultCode, data);
     }
@@ -368,8 +390,8 @@ public class SearchActivity extends AppCompatActivity {
      */
     public void openDetails(View coverView, final Topic topic) {
         HomePage.isThereQuiz = topic.getQuestions().size() != 0;
-        HomePage.currentTopic = topic;
-        Log.d("topic",HomePage.currentTopic.getId()+"");
+        currentTopic = topic;
+        Log.d("topic", currentTopic.getId()+"");
         GlideHelper.loadImage(this,(ImageView) Views.find(tabHost, R.id.details_image), topic);
         ((CanaroTextView)Views.find(tabHost, R.id.details_title)).setText(topic.getHeader());
         ((CanaroTextView)Views.find(tabHost, R.id.txtTopicPageUserName)).setText(topic.getOwner().getFirstName());

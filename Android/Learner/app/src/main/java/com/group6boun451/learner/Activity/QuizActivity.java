@@ -157,8 +157,14 @@ public class QuizActivity extends AppCompatActivity {
      * @param view
      */
     public void clickBtnFinishQuit(View view){
+        int correct = 0;
+        for(int i= 0;i<numOfQuestion;i++){
+            if(mQuestions.get(i).getCorrect()==answers[i]) correct++;
+        }
         Intent intent=new Intent();
-        setResult(31415,intent);
+        intent.putExtra("correct",correct);
+        intent.putExtra("count",numOfQuestion-1);
+        setResult(RESULT_OK,intent);
         finish();
     }
 

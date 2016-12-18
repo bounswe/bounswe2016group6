@@ -41,6 +41,7 @@ import com.group6boun451.learner.CommentListAdapter;
 import com.group6boun451.learner.R;
 import com.group6boun451.learner.model.Comment;
 import com.group6boun451.learner.model.Question;
+import com.group6boun451.learner.model.QuizResult;
 import com.group6boun451.learner.model.Tag;
 import com.group6boun451.learner.model.Topic;
 import com.group6boun451.learner.model.User;
@@ -54,6 +55,8 @@ import com.yalantis.guillotine.interfaces.GuillotineListener;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
@@ -368,12 +371,22 @@ public class HomePage extends AppCompatActivity{
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == 31415){
-            //quiz finished
-                Log.d(TAG,"quiz finished");
-// TODO: 18.12.2016 Return quizes
+
+        if(requestCode == 31415 && resultCode == RESULT_OK){
+            QuizResult quizResult = new QuizResult(
+                    data.getIntExtra("correct",0),
+                    data.getIntExtra("count",0));
+            MultiValueMap<String, Object> formData = new LinkedMultiValueMap<String, Object>();
+            formData.add("quizResult",quizResult);
+            new Task<>(HomePage.this, new Task.Callback() {
+                @Override
+                public void onResult(String resultString) {
+                    GlideHelper.showResult(HomePage.this,resultString);
+                }
+            }).execute(getString(R.string.base_url) + "quiz/" +currentTopic.getId() +"/result/save",formData);
             return;
         }
+
         super.onActivityResult(requestCode, resultCode, data);
         summernote.onActivityResult(requestCode, resultCode, data);
     }
