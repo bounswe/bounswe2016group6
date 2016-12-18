@@ -93,6 +93,19 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/recommended_teachers_tab"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <ListView
+                        android:id="@+id/recommendedList"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
                 <!--<LinearLayout-->
                     <!--android:id="@+id/comment_tab"-->
                     <!--android:layout_width="match_parent"-->
