@@ -239,8 +239,60 @@ public class TopicService implements ITopicService{
 
 	@Override
 	public List<Topic> getRelatedTopicsViaTopics(Topic topic) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		List<Tag> srcTopicTags = topic.getTags();
+		List<Tag> alltags = tagRepo.findAll();
+		
+		
+		List<Tag> nonzerotags = new ArrayList<Tag>();
+		for(Tag tt : alltags){
+
+			if(srcTopicTags.contains(tt)){
+				tt.incrementSearchPoint(20);
+			}
+			if(tt.getConceptRelations().isEmpty()){
+				//System.out.println("No concept for tag : " + tt.getName());
+				continue;
+			}
+			
+			for(Tag srcTag : srcTopicTags){
+				Sets.SetView<String> sw =  Sets.intersection(srcTag.getConceptRelations(), tt.getConceptRelations());
+				tt.incrementSearchPoint(sw.size() * 3 );
+			}
+			
+			
+			
+			
+			if(tt.getSearchPoint() > 0) {
+				System.out.println("TAG : " + tt.getName());
+				//System.out.println("Common : " + sw );
+				//System.out.println("Size : " + sw.size());
+				System.out.println("Search Points : " + tt.getSearchPoint());
+				System.out.println("----");
+				nonzerotags.add(tt);
+			}
+			
+		}
+		
+		Collections.sort(nonzerotags, Comparator.comparingInt(Tag::getSearchPoint));
+		
+		
+		List<Topic> weighted = new ArrayList<Topic>();
+		System.out.println("Non-zero tag count : " + nonzerotags.size());
+		
+		for (Tag nztag : nonzerotags) {
+			for(Topic wtop : nztag.getRelatedTopics()){
+				int index = weighted.indexOf(wtop);
+				if(index == -1){
+					wtop.incrementSearchScore(nztag.getSearchPoint());
+					weighted.add(wtop);
+				} else {
+					weighted.get(index).incrementSearchScore(nztag.getSearchPoint());
+				}
+			}
+		}
+		Collections.sort(weighted, Comparator.comparingInt(Topic::getSearchScore));
+		return weighted;
 	}
 
 	@Override
@@ -275,8 +327,6 @@ public class TopicService implements ITopicService{
         User owner = userRepo.findByEmail(currentUserName);
         return owner;
 	}
-	
-	
 	
 	@Override
 	public List<Tag> tagSuggest(String q) {
@@ -492,7 +542,7 @@ public class TopicService implements ITopicService{
 			}
 		}
 		
-		
+		Collections.sort(weighted, Comparator.comparingInt(Topic::getSearchScore));
 		return weighted;
 	}
 	
@@ -505,10 +555,13 @@ public class TopicService implements ITopicService{
 	@Override
 	public List<Topic> getOtherTopicsInPack(Topic topic){
 		List<Topic> topicsInPack = new ArrayList<Topic>();
-		List<Topic> tt = topic.getTopicPack().getTopicList();
-		if(tt != null) {
-			topicsInPack.addAll(tt);
-			topicsInPack.remove(topic);
+		TopicPack topicPack = topic.getTopicPack();
+		if(topicPack !=null){
+			List<Topic> tt = topicPack.getTopicList();
+			if(tt != null) {
+				topicsInPack.addAll(tt);
+				topicsInPack.remove(topic);
+			}
 		}
 		return topicsInPack;
 	}

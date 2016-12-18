@@ -42,6 +42,8 @@ public interface TopicRepository extends JpaRepository<Topic, Long> {
 			+ "where size(tp.likedBy) > 1 "
 			+ "order by size(tp.likedBy) desc")
 	public List<Topic> popularTopics(Pageable pageable);
+	
+	public List<Topic> findByLikedByContains(User user);
     @Override
     void delete(Topic topic);
 
