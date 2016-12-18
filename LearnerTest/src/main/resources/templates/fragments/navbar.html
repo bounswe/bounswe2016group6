@@ -31,6 +31,8 @@
 .autocomplete-suggestions strong { font-weight: normal; color: #3399FF; }
 .autocomplete-group { padding: 2px 5px; }
 .autocomplete-group strong { display: block; border-bottom: 1px solid #000; }
+#button-a {background-color: #FFFFF0; border-color: #808080; }
+#button-b {background-color: #1E113C; border-color: #1E113C;}
 </style>
 </thymeleaf>
 
@@ -51,8 +53,8 @@
 		        <div class="input-group">
 					<input  style ="height: initial" id="autocomplete" type="text" class="form-control input-lg" placeholder="Search" name="q">
             		 <span class="input-group-btn">
-                 	 <button style ="height: 45px" type="submit" class="btn btn-lg btn-secondary"><span class="glyphicon glyphicon-search"></span></button>
-                 	 <button style ="height: initial" type="submit" class="btn btn-lg btn-primary"><span class="glyphicon glyphicon-search"></span> Advanced</button>
+                 	 <button style ="height: 46px" type="submit" class="btn btn-lg btn-secondary" id="button-a"><span class="glyphicon glyphicon-search"></span></button>
+                 	 <button style ="height: initial" type="submit" class="btn btn-lg btn-primary" id="button-b">Advanced <span class="glyphicon glyphicon-search"></span></button>
                   	</span>
             		
 		        </div>
