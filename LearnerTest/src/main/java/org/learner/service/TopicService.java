@@ -247,8 +247,8 @@ public class TopicService implements ITopicService{
 			}
 		}
 		
-		recommendedTopics = recommendedTopics.subList(0,10);
 		if(recommendedTopics.size()>10){
+			recommendedTopics = recommendedTopics.subList(0,10);
 		}
 		
 		return recommendedTopics;
