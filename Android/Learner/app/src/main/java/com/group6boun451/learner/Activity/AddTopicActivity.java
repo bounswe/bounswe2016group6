@@ -1,14 +1,19 @@
 package com.group6boun451.learner.activity;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -56,6 +61,7 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
     protected static final String TAG = HomePage.class.getSimpleName();
     private static final int PICK_IMAGE = 2;
     private static final int EDITOR = 3;
+    private static final int REQUEST_STORAGE_READ_ACCESS_PERMISSION = 1;
     Task<URI> f;
 
     private RecyclerView mContacts;
@@ -117,16 +123,11 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
 // when you click this demo button
         contentImageButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                getIntent.setType("image/*");
-
-                Intent pickIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                pickIntent.setType("image/*");
-
-                Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
-                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
-
-                startActivityForResult(chooserIntent, PICK_IMAGE);
+                if (ActivityCompat.checkSelfPermission(AddTopicActivity.this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE, getString(R.string.permission_read_storage_rationale), REQUEST_STORAGE_READ_ACCESS_PERMISSION);
+                }else {
+                    pickFromGallery();
+                }
             }
         });
         guillotineAnimation = new GuillotineAnimation.GuillotineBuilder(guillotineMenu, guillotineMenu.findViewById(R.id.guillotine_hamburger), contentHamburger)
@@ -451,4 +452,57 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
             return false;
         }
     }
+
+    /**
+     * Requests given permission.
+     * If the permission has been denied previously, a Dialog will prompt the user to grant the
+     * permission, otherwise it is requested directly.
+     */
+    private void requestPermission(final String permission, String rationale, final int requestCode) {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(getString(R.string.permission_title_rationale));
+            builder.setMessage(rationale);
+            builder.setPositiveButton(getString(R.string.label_ok), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    ActivityCompat.requestPermissions(AddTopicActivity.this, new String[]{permission}, requestCode);
+                }
+            });
+            builder.setNegativeButton(getString(R.string.label_cancel), null);
+            builder.show();
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{permission}, requestCode);
+        }
+    }
+
+    /**
+     * Callback received when a permissions request has been completed.
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_STORAGE_READ_ACCESS_PERMISSION:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    pickFromGallery();
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+    private void pickFromGallery() {
+        Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        getIntent.setType("image/*");
+
+        Intent pickIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        pickIntent.setType("image/*");
+
+        Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
+
+        startActivityForResult(chooserIntent, PICK_IMAGE);
+    }
+
 }

@@ -126,6 +126,7 @@ public class LoginActivity extends AppCompatActivity {
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
+            Log.d("login",result.toString());
             editor.putString(getString(R.string.user),userString);
             editor.commit();
             Intent intent = new Intent(LoginActivity.this, HomePage.class);
