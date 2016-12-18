@@ -25,11 +25,10 @@ import java.util.List;
 
 import static com.group6boun451.learner.utils.GlideHelper.getReadableDateFromDate;
 import static com.group6boun451.learner.utils.GlideHelper.showResult;
-
 /**
- * Created by Esra Alınca on 15.12.2016.
+ * List adapter for users in profile activity.
+ *
  */
-
 public class UserListAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;

@@ -4,6 +4,9 @@ import com.group6boun451.learner.activity.HomePage;
 
 import java.util.Date;
 
+/**
+ * Model class for comments.
+ */
 public class Comment {
     private Long id;
     private String content;

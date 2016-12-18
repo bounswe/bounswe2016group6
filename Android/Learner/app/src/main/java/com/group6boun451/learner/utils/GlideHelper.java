@@ -18,12 +18,28 @@ import org.joda.time.DateTime;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * Helper class for loading images and getting readable dates.
+ */
 public class GlideHelper {
 
     private GlideHelper() {}
+
+    /**
+     * Loads the header image of the topic to given ImageView in given context.
+     * @param context
+     * @param image
+     * @param topic
+     */
     public static void loadImage(Context context, ImageView image, Topic topic) {
         loadImage(image,context.getString(R.string.base_url)+topic.getHeaderImage());
     }
+
+    /**
+     * Loads the image in given path to given ImageView.
+     * @param image
+     * @param path
+     */
     public static void loadImage(ImageView image, String path) {
         Glide.with(image.getContext().getApplicationContext())
                 .load(path)
@@ -32,6 +48,12 @@ public class GlideHelper {
                 .into(image);
     }
 
+    /**
+     * Convert given date to a readable format. For exmample, yesterday at 7:00 pm.
+     * @param c
+     * @param revealDate
+     * @return
+     */
     public static String getReadableDateFromDate(Context c,Date revealDate) {
         //DATE Android DateUtils
         String s = DateUtils.getRelativeDateTimeString(c,revealDate.getTime(),
@@ -49,6 +71,12 @@ public class GlideHelper {
         return date+ ", " + time;
     }
 
+    /**
+     * Shows snackbar with given text.
+     * @param a
+     * @param resultString
+     * @return
+     */
     public static boolean showResult(Activity a, String resultString) {
         GenericResponse result = Task.getResult(resultString,GenericResponse.class);
         if(result==null) {

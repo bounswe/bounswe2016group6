@@ -3,8 +3,9 @@ package com.group6boun451.learner.model;
 import java.util.List;
 
 /**
- * Created by Ahmet Zorer on 12/13/2016.
+ * Model class for topicPacks.
  */
+
 public class TopicPack {
     private Long id;
     private String name;

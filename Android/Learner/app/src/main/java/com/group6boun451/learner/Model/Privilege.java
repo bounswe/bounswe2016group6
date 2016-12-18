@@ -2,6 +2,9 @@ package com.group6boun451.learner.model;
 
 import java.util.Collection;
 
+/**
+ * Model class for priviledges
+ */
 public class Privilege {
     private Long id;
     private String name;

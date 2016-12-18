@@ -50,6 +50,10 @@ public class ProfileActivity extends AppCompatActivity {
     private boolean isGuillotineOpened = false;
     private GuillotineAnimation guillotineAnimation;
 
+    /**
+     * Initializes variables and makes call to server for getting user information.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

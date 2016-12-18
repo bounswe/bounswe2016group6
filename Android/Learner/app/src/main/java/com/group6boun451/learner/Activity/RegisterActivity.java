@@ -24,6 +24,8 @@ public class RegisterActivity extends AppCompatActivity {
     @BindView(R.id.btnCreateAccount) Button btnCreateAccount;
 
     private String whatIsRole = null;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,10 +34,18 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Onclick method for check password button.
+     * @return
+     */
     private boolean checkPasswords(){
        return mItems.get(3).getText().toString().equals(mItems.get(4).getText().toString());
     }
 
+    /**
+     * Returns if none of the fields are empty.
+     * @return
+     */
     private boolean checkFields(){
         for(EditText tmp : mItems){
             if(tmp.getText().toString().length() == 0){
@@ -45,6 +55,10 @@ public class RegisterActivity extends AppCompatActivity {
         return whatIsRole != null;
     }
 
+    /**
+     * Creates acoount when create account button is clicked.
+     * @param view
+     */
     public void btnCreateAccountClicked (View view){
         if(!checkFields()){
             Toast.makeText(this,"All fields must be filled",Toast.LENGTH_SHORT).show();
@@ -58,7 +72,10 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-
+    /**
+     * Choose role when select role button is clicked.
+     * @param view
+     */
     public void btnSelectRoleClicked(View view){
         final String[] items = new String[] {"Student","Teacher"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
