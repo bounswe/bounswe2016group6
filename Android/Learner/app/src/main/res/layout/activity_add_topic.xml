@@ -250,6 +250,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="20sp"
+                        android:id="@+id/btnAddQuestion"
                         android:layout_margin="15dp"
                         android:text="Add The Question to Topic"
                         android:textAllCaps="false"/>
@@ -328,6 +329,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
+                                android:id="@+id/groupCorrectAnswer"
                                 >
                                 <RadioButton
 
@@ -340,7 +342,7 @@
                                 <RadioButton
                                     android:layout_weight="1"
 
-                                    android:id="@+id/questAnsBS"
+                                    android:id="@+id/questAnsB"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="B"
