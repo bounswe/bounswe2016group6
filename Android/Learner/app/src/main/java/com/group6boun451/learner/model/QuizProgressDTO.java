@@ -6,7 +6,7 @@ package com.group6boun451.learner.model;
 
 import java.util.ArrayList;
 import java.util.List;
-public class QuizProgressDto {
+public class QuizProgressDTO {
     TopicPack topicPack;
     List<QuizResult> results = new ArrayList<>();
     List<Topic> remaining = new ArrayList<>();

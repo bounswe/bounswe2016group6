@@ -24,9 +24,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -76,7 +78,9 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
     @BindView(R.id.topic_name_textEdit) EditText topicNameEditText;
     @BindView(R.id.topic_TabHost) TabHost tabHost;
     @BindView(R.id.content_image_button) ImageButton contentImageButton;
-
+    @BindView(R.id.btnAddQuiz)   Button AddQuizButton;
+    @BindView(R.id.addQuizButtonLayout)
+    LinearLayout lytAddQuizButton;
 
     private DatePickerDialog pickUpDatePicker;
     private TimePickerDialog pickUpTimePicker;
@@ -101,7 +105,18 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
         tabHost.addTab(tabHost.newTabSpec("Tab One").setContent(R.id.topic_layout).setIndicator("Topic"));
         tabHost.addTab(tabHost.newTabSpec("Tab Two").setContent(R.id.tag_layout).setIndicator("Tags"));
         tabHost.addTab(tabHost.newTabSpec("Tab Three").setContent(R.id.editor_layout).setIndicator("Content"));
+        tabHost.addTab(tabHost.newTabSpec("Tab Four").setContent(R.id.quiz_layout).setIndicator("Quiz"));
 
+        tabHost.getTabWidget().getChildTabViewAt(3).setVisibility(View.GONE);
+
+        AddQuizButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tabHost.getTabWidget().getChildTabViewAt(3).setVisibility(View.VISIBLE);
+                tabHost.setCurrentTab(3);
+                lytAddQuizButton.setVisibility(View.GONE);
+            }
+        });
 
         topicNameEditText.addTextChangedListener(new TextWatcher() {
             @Override

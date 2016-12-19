@@ -178,7 +178,7 @@ public class QuizActivity extends AppCompatActivity {
         setContentView(R.layout.quiz_layout);
         init();
 
-        mQuestions = HomePage.currentTopic.getQuestions();
+        mQuestions = com.group6boun451.learner.activity.HomePage.currentTopic.getQuestions();
         if(!mQuestions.get(mQuestions.size()-1).getQuestion().equals("testtest123456789test")) {
             Question q1 = new Question();
             q1.setAnswerA("A   ");
