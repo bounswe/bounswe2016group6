@@ -65,7 +65,8 @@ public class UserService implements IUserService {
         user.setLastName(accountDto.getLastName());
         user.setPassword(passwordEncoder.encode(accountDto.getPassword()));
         user.setEmail(accountDto.getEmail());
-        user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")));
+        user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_TEACHER")));
+        user.setEnabled(true);
         return repository.save(user);
     }
 
@@ -245,7 +246,7 @@ public class UserService implements IUserService {
 
 	@Override
 	public List<User> usernameSuggest(String q) {
-		List<User> userlist = repository.findByFirstNameOrLastNameContaining(q,q);
+		List<User> userlist = repository.findByFirstNameContainingOrLastNameContaining(q,q);
 		return userlist;
 	}
 
