@@ -196,6 +196,21 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:layout_weight="0.20"
+                        android:id="@+id/addQuizButtonLayout"
+                        >
+                        <Button
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="22sp"
+                            android:text="Add Quiz"
+                            android:id="@+id/btnAddQuiz"/>
+                    </LinearLayout>
                     <LinearLayout
                         android:id="@+id/button_layout"
                         android:layout_width="match_parent"
@@ -223,6 +238,129 @@
                             android:text="@string/finish_button"
                             android:textSize="@dimen/home_page_text_size" />
                     </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/quiz_layout"
+                    android:orientation="vertical"
+                    >
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:id="@+id/btnAddQuestion"
+                        android:layout_margin="15dp"
+                        android:text="Add The Question to Topic"
+                        android:textAllCaps="false"/>
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:id="@+id/lytAddQuestion"
+                            android:padding="15dp"
+                            >
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Question?"
+                                android:gravity="center"
+                                android:textColor="@color/white"
+                                android:textSize="22sp"
+                                android:layout_marginTop="10dp"/>
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="16sp"
+                                android:id="@+id/edtTxtAddQuestionQuestion"/>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Choice A"
+                                android:gravity="center"
+                                android:textColor="@color/white"
+                                android:textSize="18sp"
+                                android:layout_marginTop="10dp"/>
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="15sp"
+                                android:id="@+id/edtTxtAddQuestionChoiceA"/>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Choice B"
+                                android:gravity="center"
+                                android:textColor="@color/white"
+                                android:textSize="18sp"
+                                android:layout_marginTop="10dp"/>
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="15sp"
+                                android:id="@+id/edtTxtAddQuestionChoiceB"/>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Choice C"
+                                android:gravity="center"
+                                android:textColor="@color/white"
+                                android:textSize="18sp"
+                                android:layout_marginTop="10dp"/>
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="15sp"
+                                android:id="@+id/edtTxtAddQuestionChoiceC"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Correct?"
+                                android:gravity="center"
+                                android:textColor="@color/white"
+                                android:textSize="18sp"
+                                android:layout_marginTop="10dp"/>
+                            <RadioGroup
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:id="@+id/groupCorrectAnswer"
+                                >
+                                <RadioButton
+
+                                    android:layout_weight="1"
+                                    android:id="@+id/questAnsA"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="A"
+                                    android:onClick="correctAnswerClicked"/>
+                                <RadioButton
+                                    android:layout_weight="1"
+
+                                    android:id="@+id/questAnsB"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="B"
+                                    android:onClick="correctAnswerClicked"/>
+                                <RadioButton
+                                    android:layout_weight="1"
+
+                                    android:id="@+id/questAnsC"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="C"
+                                    android:onClick="correctAnswerClicked"/>
+
+                            </RadioGroup>
+
+                        </LinearLayout>
+                    </ScrollView>
+
                 </LinearLayout>
             </FrameLayout>
         </LinearLayout>
