@@ -55,8 +55,6 @@ import com.yalantis.guillotine.interfaces.GuillotineListener;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
@@ -377,15 +375,12 @@ public class HomePage extends AppCompatActivity{
                     data.getIntExtra("correct",0),
                     data.getIntExtra("count",0));
 
-
-            MultiValueMap<String, Object> formData = new LinkedMultiValueMap<String, Object>();
-            formData.add("quizResult",quizResult);
             new Task<>(HomePage.this, new Task.Callback() {
                 @Override
                 public void onResult(String resultString) {
                     GlideHelper.showResult(HomePage.this,resultString);
                 }
-            }).execute(getString(R.string.base_url) + "quiz/" +currentTopic.getId() +"/result/save",formData);
+            }).execute(getString(R.string.base_url) + "quiz/" +currentTopic.getId() +"/result/save",quizResult);
             return;
         }
 

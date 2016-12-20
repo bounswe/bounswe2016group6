@@ -25,7 +25,7 @@
                 android:layout_marginEnd="@dimen/md_keylines_mini"
                 android:layout_marginRight="@dimen/md_keylines_mini"
                 android:layout_marginTop="@dimen/md_keylines_mini"
-                android:src="@drawable/usericon" />
+                android:src="@drawable/ic_whatshot_black_24dp" />
 
             <TextView
                 android:id="@+id/commentUsrName"

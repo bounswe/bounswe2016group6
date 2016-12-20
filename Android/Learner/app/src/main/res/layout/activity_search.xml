@@ -53,7 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                app:flags="mode_google"/>
+                app:flags="mode_google|hide_time"/>
 
         </android.support.design.widget.AppBarLayout>
         <android.support.v7.widget.RecyclerView

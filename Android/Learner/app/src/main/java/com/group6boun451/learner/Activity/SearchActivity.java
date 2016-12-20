@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -49,12 +50,9 @@ import com.simplicityapks.reminderdatepicker.lib.ReminderDatePicker;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.text.DateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
@@ -92,6 +90,7 @@ public class SearchActivity extends AppCompatActivity {
     private boolean isSnackBarActive = false;
     private boolean isTopicActive= false;
     private String commentContent;
+    boolean isAdvancedSearch=false;
 
     Task<URI> f;
     private FloatingSearchView mSearchView;
@@ -132,6 +131,8 @@ public class SearchActivity extends AppCompatActivity {
                 myQuery = "tag/" + query;
             }else if(type.equals("pack")){
                 myQuery = "topic/" + query +"/pack";
+            }else if(type.equals("pack2")){
+                myQuery = "pack/search/" + query;
             } else if(type.equals("recommend")){
                 myQuery = "topic/" + query +"/recommend";
             }else if(type.equals("following")){
@@ -153,7 +154,18 @@ public class SearchActivity extends AppCompatActivity {
 
             f.execute(builder.build().encode().toUri());
         }else{
-            findViewById(R.id.date_picker).setVisibility(View.VISIBLE);
+            datePicker.setVisibility(View.VISIBLE);
+            // setup listener for a date change:
+            datePicker.setOnDateSelectedListener(new OnDateSelectedListener() {
+                @Override
+                public void onDateSelected(Calendar date) {
+                    isAdvancedSearch=true;
+                }
+            });
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.YEAR,calendar.get(Calendar.YEAR)-1);
+            datePicker.setMinDate(calendar);
+            datePicker.setMaxDate(Calendar.getInstance());
         }
 
 
@@ -288,26 +300,6 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
-
-        // setup listener for a date change:
-        datePicker.setOnDateSelectedListener(new OnDateSelectedListener() {
-            @Override
-            public void onDateSelected(Calendar date) {
-                Snackbar.make(findViewById(android.R.id.content),
-                        "Selected date: "+ DateFormat.getDateTimeInstance().format(datePicker.getSelectedDate().getTime()),Snackbar.LENGTH_SHORT).show();
-            }
-        });
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.YEAR,calendar.get(Calendar.YEAR)-1);
-        datePicker.setMinDate(calendar);
-        datePicker.setMaxDate(Calendar.getInstance());
-        datePicker.setCustomDatePicker(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(findViewById(android.R.id.content),
-                        "Selected date: "+ DateFormat.getDateTimeInstance().format(datePicker.getSelectedDate().getTime()),Snackbar.LENGTH_SHORT).show();
-            }
-        });
     }
 
     /**
@@ -359,14 +351,12 @@ public class SearchActivity extends AppCompatActivity {
             QuizResult quizResult = new QuizResult(
                     data.getIntExtra("correct",0),
                     data.getIntExtra("count",0));
-            MultiValueMap<String, Object> formData = new LinkedMultiValueMap<String, Object>();
-            formData.add("quizResult",quizResult);
             new Task<>(SearchActivity.this, new Task.Callback() {
                 @Override
                 public void onResult(String resultString) {
                     GlideHelper.showResult(SearchActivity.this,resultString);
                 }
-            }).execute(getString(R.string.base_url) + "quiz/" +currentTopic.getId() +"/result/save",formData);
+            }).execute(getString(R.string.base_url) + "quiz/" +currentTopic.getId() +"/result/save",quizResult);
             return;
         }
 
@@ -508,8 +498,17 @@ public class SearchActivity extends AppCompatActivity {
                                    onResultofQuery(resultString);
                                 }
                             });
-                    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getString(R.string.base_url) + "semanticSearch")
-                            .queryParam("q",newQuery);
+
+                    UriComponentsBuilder builder;
+                    if(!isAdvancedSearch)
+                     builder = UriComponentsBuilder.fromHttpUrl(getString(R.string.base_url) + "semanticSearch").queryParam("q",newQuery);
+                    else
+                     builder = UriComponentsBuilder.fromHttpUrl(getString(R.string.base_url) + "advancedSearch")
+                             .queryParam("q",newQuery)
+                             .queryParam("teacherId","")
+                             .queryParam("topicPackId","")
+                             .queryParam("afterDate",
+                                    DateFormat.format("yyyy-MM-dd",datePicker.getSelectedDate().getTime()));
 
                     f.execute(builder.build().encode().toUri());
                 }

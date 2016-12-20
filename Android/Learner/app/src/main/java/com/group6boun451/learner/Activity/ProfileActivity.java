@@ -16,8 +16,10 @@ import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.group6boun451.learner.R;
+import com.group6boun451.learner.model.QuizProgressDTO;
 import com.group6boun451.learner.model.User;
 import com.group6boun451.learner.utils.GlideHelper;
+import com.group6boun451.learner.utils.ProgressListAdapter;
 import com.group6boun451.learner.utils.UserListAdapter;
 import com.yalantis.guillotine.animation.GuillotineAnimation;
 import com.yalantis.guillotine.interfaces.GuillotineListener;
@@ -37,7 +39,7 @@ public class ProfileActivity extends AppCompatActivity {
     @BindView(R.id.name_textView) TextView nameTextView;
     @BindView(R.id.mail_textView) TextView mailTextView;
     @BindView(R.id.profile_TabHost) TabHost tabHost;
-    @BindView(R.id.progressList) ListView topicList;
+    @BindView(R.id.progressList) ListView progressList;
     @BindView(R.id.teachersList) ListView teachersList;
 
 
@@ -125,6 +127,17 @@ public class ProfileActivity extends AppCompatActivity {
             mailTextView.setText(HomePage.user.getEmail());
             nameTextView.setText(HomePage.user.getFirstName()+" "+HomePage.user.getLastName());
         }
+
+
+        new Task<String>(this, new Task.Callback() {
+            @Override
+            public void onResult(String resultString) {
+                QuizProgressDTO[] result = Task.getResult(resultString, com.group6boun451.learner.model.QuizProgressDTO[].class);
+                progressList.setAdapter(new ProgressListAdapter(ProfileActivity.this, new ArrayList(Arrays.asList(result))));//TODO it might troublesome
+            }
+        }).execute(getString(R.string.base_url) + "quiz/progress");
+
+
 
         final ListView teacherList = (ListView) findViewById(R.id.teachersList);
         new Task<String>(this, new Task.Callback() {
