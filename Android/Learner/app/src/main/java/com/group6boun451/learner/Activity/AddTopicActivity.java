@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -34,6 +35,7 @@ import com.doodle.android.chips.ChipsView;
 import com.doodle.android.chips.model.Contact;
 import com.group6boun451.learner.R;
 import com.group6boun451.learner.model.GenericResponse;
+import com.group6boun451.learner.model.Question;
 import com.group6boun451.learner.model.Tag;
 import com.group6boun451.learner.utils.GlideHelper;
 import com.group6boun451.learner.widget.Summernote;
@@ -80,10 +82,11 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
 
     private DatePickerDialog pickUpDatePicker;
     private TimePickerDialog pickUpTimePicker;
-    private int date[];
 
     private GuillotineAnimation guillotineAnimation;
     private boolean isGuillotineOpened = false;
+
+    private List<Question> quiz;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,6 +111,7 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
         AddQuizButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                quiz = new ArrayList<Question>();
                 tabHost.getTabWidget().getChildTabViewAt(3).setVisibility(View.VISIBLE);
                 tabHost.setCurrentTab(3);
                 AddQuizButton.setVisibility(View.GONE);
@@ -220,13 +224,9 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
         });
 
         summernote.setRequestCodeforFilepicker(EDITOR);
-        date = new int[6];
 //        setDatePicker();
 //        setTimePicker();
       }
-
-
-
 
 //    private void setDatePicker() {
 //        Calendar now = Calendar.getInstance();
@@ -375,15 +375,48 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
                         tags[i++] = t;
                     }
 
-                    if (tags.length== 0) return;
-//                    add tag task
-                    new Task<>(AddTopicActivity.this, new Task.Callback() {
-                        @Override
-                        public void onResult(String result) {showResult(Task.getResult(result,GenericResponse.class));}
-                    }).execute(getString(R.string.base_url) + "tag/"+result.getMessage()+"/add",tags);
+                    if (tags.length> 0) {
+                        //                    add tag task
+                        new Task<>(AddTopicActivity.this, new Task.Callback() {
+                            @Override
+                            public void onResult(String result) {
+                                showResult(Task.getResult(result, GenericResponse.class));
+                            }
+                        }).execute(getString(R.string.base_url) + "tag/" + result.getMessage() + "/add", tags);
+                    }
+
+                    if(quiz!=null && quiz.size()>0){
+                        new Task<>(AddTopicActivity.this, new Task.Callback() {
+                            @Override
+                            public void onResult(String result) {showResult(Task.getResult(result,GenericResponse.class));}
+                        }).execute(getString(R.string.base_url) + "quiz/create/"+result.getMessage(),quiz);
+                    }
                 }
             }).execute(getString(R.string.base_url) +  "topic/create",formData);
         }
+    }
+
+    public void addQuestion(View view) {
+        Question question = new Question();
+        question.setQuestion(((EditText)findViewById(R.id.edtTxtAddQuestionQuestion)).getText().toString());
+        question.setAnswerA(((EditText)findViewById(R.id.edtTxtAddQuestionChoiceA)).getText().toString());
+        question.setAnswerB(((EditText)findViewById(R.id.edtTxtAddQuestionChoiceB)).getText().toString());
+        question.setAnswerC(((EditText)findViewById(R.id.edtTxtAddQuestionChoiceC)).getText().toString());
+        switch (((RadioGroup)findViewById(R.id.groupCorrectAnswer)).getCheckedRadioButtonId()){
+            case R.id.questAnsA:
+                question.setCorrect(0);
+                break;
+            case R.id.questAnsB:
+                question.setCorrect(1);
+                break;
+            case R.id.questAnsC:
+                question.setCorrect(2);
+                break;
+            default:
+                break;
+        }
+
+        quiz.add(question);
     }
 
     /**
@@ -456,6 +489,7 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
      * @return
      */
     private boolean showResult(GenericResponse result) {
+        if(result==null)return false;
         if (result.getError() == null) {// display a notification to the user with the response information
             finish();
             return true;

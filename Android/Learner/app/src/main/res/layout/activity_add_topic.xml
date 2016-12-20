@@ -244,6 +244,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="20sp"
                         android:id="@+id/btnAddQuestion"
+                        android:onClick="addQuestion"
                         android:layout_margin="15dp"
                         android:text="Add The Question to Topic"
                         android:textAllCaps="false"/>
@@ -322,33 +323,25 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
-                                android:id="@+id/groupCorrectAnswer"
-                                >
+                                android:id="@+id/groupCorrectAnswer">
                                 <RadioButton
-
                                     android:layout_weight="1"
                                     android:id="@+id/questAnsA"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="A"
-                                    android:onClick="correctAnswerClicked"/>
+                                    android:text="A"/>
                                 <RadioButton
                                     android:layout_weight="1"
-
                                     android:id="@+id/questAnsB"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="B"
-                                    android:onClick="correctAnswerClicked"/>
+                                    android:text="B"/>
                                 <RadioButton
                                     android:layout_weight="1"
-
                                     android:id="@+id/questAnsC"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="C"
-                                    android:onClick="correctAnswerClicked"/>
-
+                                    android:text="C"/>
                             </RadioGroup>
 
                         </LinearLayout>
