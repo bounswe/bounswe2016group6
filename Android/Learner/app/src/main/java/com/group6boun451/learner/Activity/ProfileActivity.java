@@ -37,7 +37,7 @@ public class ProfileActivity extends AppCompatActivity {
     @BindView(R.id.name_textView) TextView nameTextView;
     @BindView(R.id.mail_textView) TextView mailTextView;
     @BindView(R.id.profile_TabHost) TabHost tabHost;
-    @BindView(R.id.topicList) ListView topicList;
+    @BindView(R.id.progressList) ListView topicList;
     @BindView(R.id.teachersList) ListView teachersList;
 
 
@@ -71,7 +71,7 @@ public class ProfileActivity extends AppCompatActivity {
         guillotineMenu.findViewById(R.id.activity_group).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ProfileActivity.this, SearchActivity.class);
+                Intent intent = new Intent(ProfileActivity.this, com.group6boun451.learner.activity.SearchActivity.class);
                 intent.putExtra("tagName",getString(R.string.feed));
                 intent.putExtra("query","0");
                 intent.putExtra("type","recommendAll");
@@ -88,7 +88,7 @@ public class ProfileActivity extends AppCompatActivity {
                 editor.putString(getString(R.string.password), "");
                 editor.commit();
                 guillotineAnimation.close();
-                startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
+                startActivity(new Intent(ProfileActivity.this, com.group6boun451.learner.activity.LoginActivity.class));
                 finish();
             }
         });
@@ -130,7 +130,7 @@ public class ProfileActivity extends AppCompatActivity {
         new Task<String>(this, new Task.Callback() {
             @Override
             public void onResult(String resultString) {
-                User[] result = Task.getResult(resultString,User[].class);
+                User[] result = Task.getResult(resultString, com.group6boun451.learner.model.User[].class);
                 List<User> users = new ArrayList(Arrays.asList(result));
                 //TODO handle this
                 UserListAdapter uladap = new UserListAdapter(ProfileActivity.this,users);

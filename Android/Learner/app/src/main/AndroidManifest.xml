@@ -34,6 +34,7 @@
         <activity
             android:name=".activity.AddTopicActivity"
             android:label=""
+            android:windowSoftInputMode="adjustPan"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.QuizActivity"

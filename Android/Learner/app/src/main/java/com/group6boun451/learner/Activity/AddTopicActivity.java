@@ -27,8 +27,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -70,8 +68,7 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
     private TagsAdapter mAdapter;
     private ChipsView mChipsView;
 
-    @BindView(R.id.summernote)
-    Summernote summernote;
+    @BindView(R.id.summernote) Summernote summernote;
     @BindView(R.id.content_hamburger) View contentHamburger;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.topic_name_layout) TextInputLayout topicNameLayout;
@@ -80,8 +77,6 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
     @BindView(R.id.content_image_button) Button contentImageButton;
 
     @BindView(R.id.btnAddQuiz)   Button AddQuizButton;
-    @BindView(R.id.addQuizButtonLayout)
-    LinearLayout lytAddQuizButton;
 
     private DatePickerDialog pickUpDatePicker;
     private TimePickerDialog pickUpTimePicker;
@@ -115,7 +110,7 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
             public void onClick(View view) {
                 tabHost.getTabWidget().getChildTabViewAt(3).setVisibility(View.VISIBLE);
                 tabHost.setCurrentTab(3);
-                lytAddQuizButton.setVisibility(View.GONE);
+                AddQuizButton.setVisibility(View.GONE);
             }
         });
 
