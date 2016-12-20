@@ -117,7 +117,7 @@ public class HomePage extends AppCompatActivity{
                         .getString(getString(R.string.user), " "),User.class);
         username = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString(getString(R.string.user_name), " ");
 //        fetch topics
-       fetchTasks("recent",viewpager);// TODO: 12/8/2016 recommended
+       fetchTasks("recommended",viewpager);// TODO: 12/8/2016 recommended
        fetchTasks("popular",viewpager2);
        fetchTasks("recent",viewpager3);
 

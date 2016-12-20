@@ -75,7 +75,7 @@
                     android:orientation="vertical">
 
                     <ListView
-                        android:id="@+id/topicList"
+                        android:id="@+id/progressList"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
