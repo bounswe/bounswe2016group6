@@ -199,7 +199,7 @@
 							<ul class="list-group">
 								<li th:each="poptop,itstat : ${latestFromFollowed}" th:unless="${itstat.index >5}">
 									<a th:text="${poptop.header}" th:href="'/topic/' + ${poptop.id}" style="font-size:14px; text-decoration:none"> header</a>
-									<a th:text="${'by ' +poptop.owner.firstName + ' ' + poptop.owner.lastName}" th:href="'/profile/' + poptop.owner.id" style="font-size:12px; text-decoration:none"> owner</a>
+									<a th:text="${'by ' +poptop.owner.firstName + ' ' + poptop.owner.lastName}" th:href="${'/profile/' + poptop.owner.id}" style="font-size:12px; text-decoration:none"> owner</a>
 								</li>
 							</ul>
 						</div>

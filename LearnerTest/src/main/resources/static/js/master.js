@@ -13,6 +13,7 @@ $(function () {
 		if(data.length == 0){
 			alert("No quiz questions is specified for this quiz! Returning to topic page");
 			location.replace('/topic/'+topicID);
+			return;
 			
 		}
 		alert("Questions arrived!");
