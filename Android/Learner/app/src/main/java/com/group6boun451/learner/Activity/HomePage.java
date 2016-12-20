@@ -376,6 +376,8 @@ public class HomePage extends AppCompatActivity{
             QuizResult quizResult = new QuizResult(
                     data.getIntExtra("correct",0),
                     data.getIntExtra("count",0));
+
+
             MultiValueMap<String, Object> formData = new LinkedMultiValueMap<String, Object>();
             formData.add("quizResult",quizResult);
             new Task<>(HomePage.this, new Task.Callback() {

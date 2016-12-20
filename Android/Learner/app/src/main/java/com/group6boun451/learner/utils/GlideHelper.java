@@ -2,12 +2,19 @@ package com.group6boun451.learner.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.design.widget.Snackbar;
 import android.text.format.DateUtils;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.group6boun451.learner.R;
 import com.group6boun451.learner.activity.Task;
 import com.group6boun451.learner.model.GenericResponse;
@@ -46,6 +53,29 @@ public class GlideHelper {
                 .dontAnimate()
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(image);
+    }
+
+   /**
+     * Loads the image in given path to given ImageView.
+     * @param image
+     * @param path
+     */
+    public static void loadImage(final Button image, String path) {
+
+        Glide.with(image.getContext().getApplicationContext())
+                .load(path).asBitmap()
+                .into(new SimpleTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                Drawable drawable = new BitmapDrawable(resource);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    image.setBackground(drawable);
+                    image.setText("");
+                }
+            }
+        });
+
+
     }
 
     /**

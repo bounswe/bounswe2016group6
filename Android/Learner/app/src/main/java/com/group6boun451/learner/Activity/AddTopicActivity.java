@@ -24,9 +24,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -75,7 +75,7 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
     @BindView(R.id.topic_name_layout) TextInputLayout topicNameLayout;
     @BindView(R.id.topic_name_textEdit) EditText topicNameEditText;
     @BindView(R.id.topic_TabHost) TabHost tabHost;
-    @BindView(R.id.content_image_button) ImageButton contentImageButton;
+    @BindView(R.id.content_image_button) Button contentImageButton;
 
 
     private DatePickerDialog pickUpDatePicker;
@@ -263,6 +263,7 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
                 return;
             }
             GlideHelper.loadImage(contentImageButton,data.getData().toString());
+
             contentImageButton.setTag(getPath(data.getData()));
         } else if(requestCode==EDITOR && resultCode == Activity.RESULT_OK){
             summernote.onActivityResult(requestCode, resultCode, data);
