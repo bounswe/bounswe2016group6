@@ -28,7 +28,7 @@
     <string name="send">SEND</string>
     <string name="add_topic_name">add topic name</string>
     <string name="enter_name">topic name cannot be empty</string>
-    <string name="content_image">Content image</string>
+    <string name="content_image">Select Content image</string>
     <string name="cancel_button">CANCEL</string>
     <string name="next_button">NEXT</string>
     <string name="password">password</string>
@@ -50,6 +50,7 @@
     <string name="label_cancel">CANCEL</string>
     <string name="permission_read_storage_rationale">Storage read permission is needed to pick image.</string>
     <string name="add_question_button">Add</string>
+    <string name="select_topic_pack">Select Topic Pack</string>
     <string-array name="register_roles">
         <item>Student</item>
         <item>Teacher</item>

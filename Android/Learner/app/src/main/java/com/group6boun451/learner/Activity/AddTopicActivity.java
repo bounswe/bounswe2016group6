@@ -24,6 +24,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -37,6 +38,7 @@ import com.group6boun451.learner.R;
 import com.group6boun451.learner.model.GenericResponse;
 import com.group6boun451.learner.model.Question;
 import com.group6boun451.learner.model.Tag;
+import com.group6boun451.learner.model.TopicPack;
 import com.group6boun451.learner.utils.GlideHelper;
 import com.group6boun451.learner.widget.Summernote;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
@@ -87,6 +89,8 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
     private boolean isGuillotineOpened = false;
 
     private List<Question> quiz;
+    private TopicPack topicPack;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -357,8 +361,8 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
             MultiValueMap<String, Object> formData = new LinkedMultiValueMap<String, Object>();
             formData.add("header",topicNameEditText.getText().toString());
             formData.add("content",summernote.getText());
-            if(contentImageButton.getTag()!=null)
-            formData.add("image", new FileSystemResource(contentImageButton.getTag().toString()));
+            if(topicPack!=null) formData.add("topicPack",topicPack);
+            if(contentImageButton.getTag()!=null) formData.add("image", new FileSystemResource(contentImageButton.getTag().toString()));
 //           create topic task
             new Task<>(AddTopicActivity.this, new Task.Callback() {
                 @Override
@@ -446,6 +450,39 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
         radioGroup.clearCheck();
         Snackbar.make(findViewById(android.R.id.content),"Question is added",Snackbar.LENGTH_SHORT).show();
         quiz.add(q);
+    }
+
+    public void btnSelectPackClicked(final View view) {
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getString(R.string.base_url) + "topic/pack/suggest")
+                .queryParam("q","");
+
+        f = new Task<>(AddTopicActivity.this, new Task.Callback() {
+            @Override
+            public void onResult(String resultString) {
+                final TopicPack[] result =  Task.getResult(resultString, TopicPack[].class);
+                if (result==null)return;
+                final String[] items = new String[result.length];
+                for(int i=0;i<result.length;i++){
+                    items[i] = result[i].getName();
+                }
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(AddTopicActivity.this,
+                        android.R.layout.simple_spinner_dropdown_item, items);
+                new AlertDialog.Builder(AddTopicActivity.this)
+                        .setTitle("Select Role")
+                        .setAdapter(adapter, new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                topicPack = result[which];
+                                ((Button)view).setText(items[which]);
+                                dialog.dismiss();
+                            }
+                        }).create().show();
+            }
+        });
+        f.execute(builder.build().encode().toUri());
+
     }
 
     /**

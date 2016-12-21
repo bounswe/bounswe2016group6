@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/white"
     tools:context=".activity.AddTopicActivity">
 
 
@@ -34,7 +35,7 @@
         android:id="@+id/topic_TabHost"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/guillotine_background_dark">
+        android:background="@color/guillotine_background">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -45,7 +46,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:layout_weight="1"
-                android:background="#4372AA"
+                android:background="@color/guillotine_background"
                 />
             <FrameLayout
                 android:id="@android:id/tabcontent"
@@ -65,10 +66,20 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
+                        android:layout_margin="@dimen/md_keylines_mini"
                         android:background="@drawable/border"
                         android:text="@string/content_image"
                         android:textSize="@dimen/home_page_text_size" />
-
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btnSelectRole"
+                        android:text="@string/select_topic_pack"
+                        android:onClick="btnSelectPackClicked"
+                        android:textAllCaps="false"
+                        android:background="@drawable/border"
+                        android:layout_margin="@dimen/md_keylines_mini"
+                        android:textSize="22sp"/>
                     <LinearLayout
                         android:id="@+id/relative_layout"
                         android:layout_width="match_parent"
