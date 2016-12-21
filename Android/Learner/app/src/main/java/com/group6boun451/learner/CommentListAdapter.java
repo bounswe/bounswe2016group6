@@ -26,6 +26,7 @@ public class CommentListAdapter extends BaseAdapter {
     private List<Comment> comments;
     private Context context;
     public CommentListAdapter(Context context, List<Comment> items) {
+        if(context!=null)
         mInflater = (LayoutInflater) context.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
         comments = items;
@@ -72,6 +73,7 @@ public class CommentListAdapter extends BaseAdapter {
 
     public void add(Comment comment) {
         comments.add(comment);
+        if (context==null)return;
         notifyDataSetChanged();
         notifyDataSetInvalidated();
     }
