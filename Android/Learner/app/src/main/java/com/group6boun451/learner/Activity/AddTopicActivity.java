@@ -361,7 +361,7 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
             MultiValueMap<String, Object> formData = new LinkedMultiValueMap<String, Object>();
             formData.add("header",topicNameEditText.getText().toString());
             formData.add("content",summernote.getText());
-            if(topicPack!=null) formData.add("topicPack",topicPack);
+            if(topicPack!=null) formData.add("topicPack",topicPack.getId());
             if(contentImageButton.getTag()!=null) formData.add("image", new FileSystemResource(contentImageButton.getTag().toString()));
 //           create topic task
             new Task<>(AddTopicActivity.this, new Task.Callback() {
