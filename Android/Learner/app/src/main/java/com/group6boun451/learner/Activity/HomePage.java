@@ -40,7 +40,6 @@ import com.doodle.android.chips.model.Contact;
 import com.group6boun451.learner.CommentListAdapter;
 import com.group6boun451.learner.R;
 import com.group6boun451.learner.model.Comment;
-import com.group6boun451.learner.model.Question;
 import com.group6boun451.learner.model.QuizResult;
 import com.group6boun451.learner.model.Tag;
 import com.group6boun451.learner.model.Topic;
@@ -430,32 +429,7 @@ public class HomePage extends AppCompatActivity{
      * @param topic
      */
     public void openDetails(View coverView, final Topic topic) {
-        //test Quiz
-        List<Question> mQues = new ArrayList<Question>();
-        Question q1 = new Question();
-        q1.setAnswerA("q1aassdaasd");
-        q1.setAnswerB("sadasa");
-        q1.setAnswerC("adfasdasd");
-        q1.setCorrect(1);
-        q1.setQuestion("asdasdashdjnaksflmdasdöasdasd");
-        mQues.add(q1);
-        Question q2 = new Question();
-        q2.setAnswerA("q2aassdaasd");
-        q2.setAnswerB("sadasa");
-        q2.setAnswerC("adfasdasd");
-        q2.setCorrect(2);
-        q2.setQuestion("asdasdashdjnaksflmdasdöasdasd");
-        mQues.add(q2);
-        Question q3 = new Question();
-        q3.setAnswerA("q3aassdaasd");
-        q3.setAnswerB("sadasa");
-        q3.setAnswerC("adfasdasd");
-        q3.setCorrect(1);
-        q3.setQuestion("asdasdashdjnaksflmdasdöasdasd");
-        mQues.add(q3);
 
-        topic.setQuestions(mQues);
-        //test finish
         currentTopic = topic;
         Log.d("topic",currentTopic.getId()+"");
         GlideHelper.loadImage(this,(ImageView) Views.find(tabHost, R.id.details_image), topic);
