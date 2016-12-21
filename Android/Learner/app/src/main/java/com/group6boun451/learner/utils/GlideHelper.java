@@ -112,10 +112,12 @@ public class GlideHelper {
         if(result==null) {
             return false;
         }else if (result.getError() == null) {// display a notification to the user with the response information
-            Snackbar.make(a.findViewById(android.R.id.content),  result.getMessage(), Snackbar.LENGTH_SHORT).show();
+            if(a!=null)
+                Snackbar.make(a.findViewById(android.R.id.content),  result.getMessage(), Snackbar.LENGTH_SHORT).show();
             return true;
         } else {
-            Snackbar.make(a.findViewById(android.R.id.content),  result.getError(), Snackbar.LENGTH_SHORT).show();
+            if(a!=null)
+                Snackbar.make(a.findViewById(android.R.id.content),  result.getError(), Snackbar.LENGTH_SHORT).show();
             return false;
         }
     }
