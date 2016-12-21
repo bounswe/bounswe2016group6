@@ -237,20 +237,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:id="@+id/quiz_layout"
-                    android:orientation="vertical"
-                    >
-                    <Button
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="20sp"
-                        android:id="@+id/btnAddQuestion"
-                        android:onClick="addQuestion"
-                        android:layout_margin="15dp"
-                        android:text="Add The Question to Topic"
-                        android:textAllCaps="false"/>
+                    android:orientation="vertical">
+
                     <ScrollView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="match_parent">
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -320,29 +311,62 @@
                                 android:textSize="18sp"
                                 android:layout_marginTop="10dp"/>
                             <RadioGroup
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
+                                android:layout_gravity="center"
+                                android:gravity="center"
                                 android:id="@+id/groupCorrectAnswer">
                                 <RadioButton
                                     android:layout_weight="1"
                                     android:id="@+id/questAnsA"
+                                    android:layout_margin="@dimen/md_keylines_mini"
+
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="A"/>
                                 <RadioButton
                                     android:layout_weight="1"
                                     android:id="@+id/questAnsB"
+                                    android:layout_margin="@dimen/md_keylines_mini"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="B"/>
                                 <RadioButton
                                     android:layout_weight="1"
                                     android:id="@+id/questAnsC"
+                                    android:layout_margin="@dimen/md_keylines_mini"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="C"/>
                             </RadioGroup>
+                            <LinearLayout
+                                android:id="@+id/button_layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+                                <Button
+                                    android:id="@+id/btnAddQuestion"
+                                    android:onClick="addQuestion"
+                                    android:layout_margin="@dimen/md_keylines_mini"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/border"
+                                    android:text="@string/add_question_button"
+                                    android:textSize="@dimen/home_page_text_size" />
+
+                                <Button
+                                    android:id="@+id/finish_button"
+                                    android:layout_margin="@dimen/md_keylines_mini"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/border"
+                                    android:onClick="finishButton"
+                                    android:text="@string/finish_button"
+                                    android:textSize="@dimen/home_page_text_size" />
+                            </LinearLayout>
 
                         </LinearLayout>
                     </ScrollView>

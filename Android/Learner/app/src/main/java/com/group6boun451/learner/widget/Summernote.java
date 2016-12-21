@@ -50,7 +50,7 @@ public class Summernote extends TouchyWebView  {
         this.getSettings().setPluginState(WebSettings.PluginState.ON_DEMAND);
         this.setWebViewClient(new WebViewClient());
 
-        this.loadDataWithBaseURL("https://www.youtube.com/embed/", "",
+        this.loadDataWithBaseURL("http://www.youtube.com/embed/", "",
                 "text/html; charset=utf-8", "UTF-8", null);
         this.loadUrl("file:///android_asset/summernote.html");
         setWebChromeClient(new WebChromeClient() {

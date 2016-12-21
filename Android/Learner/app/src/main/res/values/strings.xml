@@ -49,6 +49,7 @@
     <string name="label_ok">OK</string>
     <string name="label_cancel">CANCEL</string>
     <string name="permission_read_storage_rationale">Storage read permission is needed to pick image.</string>
+    <string name="add_question_button">Add</string>
     <string-array name="register_roles">
         <item>Student</item>
         <item>Teacher</item>

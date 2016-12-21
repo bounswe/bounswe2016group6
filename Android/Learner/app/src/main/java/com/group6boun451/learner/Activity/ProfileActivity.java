@@ -133,6 +133,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onResult(String resultString) {
                 QuizProgressDTO[] result = Task.getResult(resultString, com.group6boun451.learner.model.QuizProgressDTO[].class);
+                if(result==null) return;
                 progressList.setAdapter(new ProgressListAdapter(ProfileActivity.this, new ArrayList(Arrays.asList(result))));//TODO it might troublesome
             }
         }).execute(getString(R.string.base_url) + "quiz/progress");

@@ -352,6 +352,7 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
      */
     public void finishButton(View view) {
         if (validate()) {
+            Snackbar.make(findViewById(android.R.id.content),"Topic is adding",Snackbar.LENGTH_LONG).show();
             // populate the data to post
             MultiValueMap<String, Object> formData = new LinkedMultiValueMap<String, Object>();
             formData.add("header",topicNameEditText.getText().toString());
@@ -389,7 +390,8 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
                         new Task<>(AddTopicActivity.this, new Task.Callback() {
                             @Override
                             public void onResult(String result) {showResult(Task.getResult(result,GenericResponse.class));}
-                        }).execute(getString(R.string.base_url) + "quiz/create/"+result.getMessage(),quiz);
+                        })
+                                .execute(getString(R.string.base_url) + "quiz/create/"+result.getMessage(),quiz);
                     }
                 }
             }).execute(getString(R.string.base_url) +  "topic/create",formData);
@@ -397,26 +399,53 @@ public class AddTopicActivity extends AppCompatActivity {//implements DatePicker
     }
 
     public void addQuestion(View view) {
-        Question question = new Question();
-        question.setQuestion(((EditText)findViewById(R.id.edtTxtAddQuestionQuestion)).getText().toString());
-        question.setAnswerA(((EditText)findViewById(R.id.edtTxtAddQuestionChoiceA)).getText().toString());
-        question.setAnswerB(((EditText)findViewById(R.id.edtTxtAddQuestionChoiceB)).getText().toString());
-        question.setAnswerC(((EditText)findViewById(R.id.edtTxtAddQuestionChoiceC)).getText().toString());
-        switch (((RadioGroup)findViewById(R.id.groupCorrectAnswer)).getCheckedRadioButtonId()){
+        Question q = new Question();
+        EditText question = (EditText) findViewById(R.id.edtTxtAddQuestionQuestion);
+        EditText ansA = (EditText) findViewById(R.id.edtTxtAddQuestionChoiceA);
+        EditText ansB = (EditText) findViewById(R.id.edtTxtAddQuestionChoiceB);
+        EditText ansC = (EditText) findViewById(R.id.edtTxtAddQuestionChoiceC);
+        q.setQuestion(question.getText().toString());
+        q.setAnswerA(ansA.getText().toString());
+        q.setAnswerB(ansB.getText().toString());
+        q.setAnswerC(ansC.getText().toString());
+        String errorMessage= "";
+        RadioGroup radioGroup = (RadioGroup) findViewById(R.id.groupCorrectAnswer);
+        switch (radioGroup.getCheckedRadioButtonId()){
             case R.id.questAnsA:
-                question.setCorrect(0);
+                q.setCorrect(0);
                 break;
             case R.id.questAnsB:
-                question.setCorrect(1);
+                q.setCorrect(1);
                 break;
             case R.id.questAnsC:
-                question.setCorrect(2);
+                q.setCorrect(2);
                 break;
             default:
+                errorMessage = "I am genius but I don't know answer unless you show!";
                 break;
         }
+        if (question.getText().length()==0){
+            errorMessage = "Do you really ask a question?";
+        }else if (ansA.getText().length()==0){
+            errorMessage = "Hey! Answer A is empty.";
+        }else if (ansB.getText().length()==0){
+            errorMessage = "Hey! Answer A is empty.";
+        }else if (ansC.getText().length()==0){
+            errorMessage = "Hey! Answer C is empty.";
+        }
 
-        quiz.add(question);
+        if (errorMessage.length()>0){
+            Snackbar.make(findViewById(android.R.id.content),errorMessage,Snackbar.LENGTH_SHORT).show();
+            return;
+        }
+
+        question.setText("");
+        ansA.setText("");
+        ansB.setText("");
+        ansC.setText("");
+        radioGroup.clearCheck();
+        Snackbar.make(findViewById(android.R.id.content),"Question is added",Snackbar.LENGTH_SHORT).show();
+        quiz.add(q);
     }
 
     /**

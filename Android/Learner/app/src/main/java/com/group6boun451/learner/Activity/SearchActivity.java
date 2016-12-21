@@ -271,7 +271,7 @@ public class SearchActivity extends AppCompatActivity {
                             public void onResult(String result) {GlideHelper.showResult(SearchActivity.this,result);}
                         }).execute(builder.build().encode().toUri());
                     }
-                    contentView.loadDataWithBaseURL("https://www.youtube.com/embed/", content,
+                    contentView.loadDataWithBaseURL("http://www.youtube.com/embed/", content,
                             "text/html; charset=utf-8", "UTF-8", null);
                 }
             }
@@ -447,7 +447,7 @@ public class SearchActivity extends AppCompatActivity {
 
 
 //content
-        contentView.loadDataWithBaseURL("https://www.youtube.com/embed/", topic.getContent(),
+        contentView.loadDataWithBaseURL("http://www.youtube.com/embed/", topic.getContent(),
                 "text/html; charset=utf-8", "UTF-8", null);
 //comments
         comments.setAdapter(new CommentListAdapter(this, topic.getComments()));//TODO it might troublesome
