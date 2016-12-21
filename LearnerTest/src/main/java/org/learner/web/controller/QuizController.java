@@ -7,6 +7,7 @@ import org.learner.persistence.model.Question;
 import org.learner.persistence.model.QuizResult;
 import org.learner.persistence.model.Topic;
 import org.learner.service.ITopicService;
+import org.learner.web.dto.QuizProgressDto;
 import org.learner.web.util.GenericResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -48,9 +49,9 @@ public class QuizController {
 		
 	}
 	
-	@RequestMapping(value = "/{topicId}/result/save")
+	@RequestMapping(value = "/{topicId}/result/save" ,consumes="application/json")
 	@ResponseBody
-	public GenericResponse saveQuizResult(@PathVariable Long topicId,@RequestBody QuizResult quizResult,final Principal principal){
+	public GenericResponse saveQuizResult(@PathVariable("topicId") Long topicId, @RequestBody QuizResult quizResult){
 		System.out.println("Quiz Result Save");
 		Topic t = topicService.getTopicById(topicId);
 		if(t == null ) {
@@ -64,5 +65,13 @@ public class QuizController {
 		return new GenericResponse("Quiz results are saved!");
 	}
 	
+	@RequestMapping(value = "/progress")
+	@ResponseBody
+	public List<QuizProgressDto> retrieveProgress(){
+		System.out.println("Quiz Progress retrieval!");
+		List<QuizProgressDto> quizProgress = topicService.getQuizProgress();
+		return quizProgress;
+		
+	}
 	
 }

@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -26,6 +28,7 @@ import org.learner.persistence.model.Tag;
 import org.learner.persistence.model.Topic;
 import org.learner.persistence.model.TopicPack;
 import org.learner.persistence.model.User;
+import org.learner.web.dto.QuizProgressDto;
 import org.learner.web.dto.TopicDto;
 import org.learner.web.util.ConceptNetEdge;
 import org.learner.web.util.ConceptNetModel;
@@ -89,28 +92,36 @@ public class TopicService implements ITopicService{
         
         User owner = userRepo.findByEmail(currentUserName);
         topic.setOwner(owner);
-		String topicPackName = topicdto.getTopicPackName();
-        if(topicdto.getTopicPack() == null) {
-        	if(topicPackName != null){
-        		if(!topicPackName.equals("") && topicPackName.length() > 1){
-        			TopicPack pack = new TopicPack();
-        			pack.setName(topicPackName.substring(0, 1).toUpperCase() + topicPackName.substring(1).toLowerCase());
-        			TopicPack dbpack =  packRepo.save(pack);
-        			topic.setTopicPack(dbpack);
-        		}
-        	} else {
-        		topic.setTopicPack(null);
-        	}
-        	
-        } else {
-        	TopicPack tp = packRepo.getOne(topicdto.getTopicPack());
-        	
-        	if(tp != null) {
-        		topic.setTopicPack(tp);
-        	}
-        	
-        }
-        return repository.save(topic);
+        
+        
+        
+		try {
+			String topicPackName = topicdto.getTopicPackName();
+			if (topicdto.getTopicPack() == null) {
+				if (topicPackName != null) {
+					if (!topicPackName.equals("") && topicPackName.length() > 1) {
+						TopicPack pack = new TopicPack();
+						pack.setName(
+								topicPackName.substring(0, 1).toUpperCase() + topicPackName.substring(1).toLowerCase());
+						TopicPack dbpack = packRepo.save(pack);
+						topic.setTopicPack(dbpack);
+					}
+				} else {
+					topic.setTopicPack(null);
+				}
+
+			} else {
+				TopicPack tp = packRepo.getOne(topicdto.getTopicPack());
+
+				if (tp != null) {
+					topic.setTopicPack(tp);
+				}
+
+			} 
+		} catch (Exception e) {
+			topic.setTopicPack(null);
+		}
+		return repository.save(topic);
 	}
 
 	@Override
@@ -235,6 +246,7 @@ public class TopicService implements ITopicService{
 		
 		for(Topic tpc: likedTopics){
 			List<Topic> temp = getRelatedTopicsViaTopics(tpc);
+			temp.removeAll(likedTopics);
 			int counter=0;
 			for(int i=0;i<temp.size();i++){
 				if(!recommendedTopics.contains(temp.get(i)) && counter<2){
@@ -323,6 +335,7 @@ public class TopicService implements ITopicService{
 				}
 			}
 		}
+		weighted.remove(topic);
 		Collections.sort(weighted, Comparator.comparingInt(Topic::getSearchScore));
 		return weighted;
 	}
@@ -615,8 +628,21 @@ public class TopicService implements ITopicService{
 
 	@Override
 	public QuizResult saveQuizResult(QuizResult quizResult) {
+		
+		
+		
 		User u = getCurrentUser();
 		quizResult.setSolver(u);
+		quizResult.setTakenAt(new Date());
+		QuizResult r = quizResultRepo.findByMasterTopicAndSolver(quizResult.getMasterTopic(), u);
+		
+		if(r != null ){
+			System.out.println("Quiz result exists! Updating");
+			r.setCorrect( quizResult.getCorrect());
+			r.setQuestionCount(quizResult.getQuestionCount());
+			r.setTakenAt(new Date());
+			return quizResultRepo.save(r);
+		}
 		System.out.println("Quiz Correct : " + quizResult.getCorrect() );
 		System.out.println("Quiz Total : " + quizResult.getQuestionCount() );
 		System.out.println("Quiz Solver : " + quizResult.getSolver() );
@@ -635,6 +661,41 @@ public class TopicService implements ITopicService{
 		System.out.println("Deleting tag from topic: ");
 		boolean result  = top.getTags().remove(tag);
 		return result;
+	}
+
+	@Override
+	public List<QuizProgressDto> getQuizProgress() {
+		User currentUser = getCurrentUser();
+		List<QuizResult> qresults = quizResultRepo.findBySolver(currentUser);
+		
+		List<QuizProgressDto> progress = new ArrayList<>();
+		
+		Set<TopicPack> solvedPacks = new HashSet<>();
+		
+		Map<TopicPack, QuizProgressDto> kv = new HashMap<>();
+		
+		System.out.println("Quiz results " + qresults);
+		for(QuizResult qr : qresults){
+			System.out.println("Qtitle: " + qr.getTitle());
+			TopicPack qtp = qr.getMasterTopic().getTopicPack();
+			if(qtp !=null) {
+				if(!kv.containsKey(qtp)){
+					QuizProgressDto qpdto = new QuizProgressDto();
+					qpdto.setPackTotal(qtp.getTopicList().size());
+					qpdto.setTopicPack(qtp);
+					qpdto.getRemaining().addAll(qtp.getTopicList());
+					kv.putIfAbsent(qtp, qpdto);
+				}
+			}
+			QuizProgressDto qpdto = kv.get(qtp);
+			qpdto.setPackCompleted(qpdto.getPackCompleted() + 1 );
+			qpdto.getResults().add(qr);
+			
+		}
+		
+		progress.addAll(kv.values());
+		// TODO Auto-generated method stub
+		return progress;
 	}
 	
 }

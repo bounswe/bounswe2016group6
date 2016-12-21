@@ -52,11 +52,7 @@ public class TopicPack {
 
 	public void setTopicList(List<Topic> topicList) {
 		this.topicList = topicList;
-	}
-
-
-
-	
+	}	
 	
 	
 }
