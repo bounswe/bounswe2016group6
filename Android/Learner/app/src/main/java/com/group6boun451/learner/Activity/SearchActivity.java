@@ -13,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -162,18 +161,19 @@ public class SearchActivity extends AppCompatActivity {
 
             f.execute(builder.build().encode().toUri());
         }else{
-            datePicker.setVisibility(View.VISIBLE);
+           // datePicker.setVisibility(View.VISIBLE);
             // setup listener for a date change:
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.YEAR,calendar.get(Calendar.YEAR)-1);
+            datePicker.setMinDate(calendar);
+            datePicker.setMaxDate(Calendar.getInstance());
             datePicker.setOnDateSelectedListener(new OnDateSelectedListener() {
                 @Override
                 public void onDateSelected(Calendar date) {
                     isAdvancedSearch=true;
                 }
             });
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.YEAR,calendar.get(Calendar.YEAR)-1);
-            datePicker.setMinDate(calendar);
-            datePicker.setMaxDate(Calendar.getInstance());
         }
 
 
@@ -508,16 +508,7 @@ public class SearchActivity extends AppCompatActivity {
                             });
 
                     UriComponentsBuilder builder;
-                    if(!isAdvancedSearch)
-                     builder = UriComponentsBuilder.fromHttpUrl(getString(R.string.base_url) + "semanticSearch").queryParam("q",newQuery);
-                    else
-                     builder = UriComponentsBuilder.fromHttpUrl(getString(R.string.base_url) + "advancedSearch")
-                             .queryParam("q",newQuery)
-                             .queryParam("teacherId","")
-                             .queryParam("topicPackId","")
-                             .queryParam("afterDate",
-                                    DateFormat.format("yyyy-MM-dd",datePicker.getSelectedDate().getTime()));
-
+                    builder = UriComponentsBuilder.fromHttpUrl(getString(R.string.base_url) + "semanticSearch").queryParam("q",newQuery);
                     f.execute(builder.build().encode().toUri());
                 }
             }
