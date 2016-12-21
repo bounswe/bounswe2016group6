@@ -117,6 +117,14 @@ public class SearchActivity extends AppCompatActivity {
         mSearchResultsList.setLayoutManager(new LinearLayoutManager(this));
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        new Task<String>(this, new Task.Callback() {
+            @Override
+            public void onResult(String resultString) {
+                HomePage.followedUsers = Task.getResult(resultString, com.group6boun451.learner.model.User[].class);
+            }
+        }).execute(getString(R.string.base_url) + "user/following");
+
         try {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         } catch (NullPointerException e) {}

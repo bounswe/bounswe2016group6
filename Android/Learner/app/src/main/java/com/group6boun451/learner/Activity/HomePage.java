@@ -98,7 +98,7 @@ public class HomePage extends AppCompatActivity{
     public static User user;
     public static Topic currentTopic = null;
     private String commentContent;
-
+    public static User[] followedUsers;
     /**
      * Initializes all variables and gets topics.
      * @param savedInstanceState
@@ -113,10 +113,18 @@ public class HomePage extends AppCompatActivity{
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
                         .getString(getString(R.string.user), " "),User.class);
         username = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString(getString(R.string.user_name), " ");
-//        fetch topics
-       fetchTasks("recommended",viewpager);// TODO: 12/8/2016 recommended
-       fetchTasks("popular",viewpager2);
-       fetchTasks("recent",viewpager3);
+
+        new Task<String>(this, new Task.Callback() {
+            @Override
+            public void onResult(String resultString) {
+                followedUsers = Task.getResult(resultString, com.group6boun451.learner.model.User[].class);
+                //        fetch topics
+                fetchTasks("recommended",viewpager);// TODO: 12/8/2016 recommended
+                fetchTasks("popular",viewpager2);
+                fetchTasks("recent",viewpager3);
+            }
+        }).execute(getString(R.string.base_url) + "user/following");
+
 
         summernote.setRequestCodeforFilepicker(EDITOR);
 

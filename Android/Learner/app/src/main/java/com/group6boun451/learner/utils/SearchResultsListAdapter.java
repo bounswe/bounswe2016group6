@@ -26,6 +26,7 @@ import com.like.OnLikeListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static com.group6boun451.learner.utils.GlideHelper.getReadableDateFromDate;
 import static com.group6boun451.learner.utils.GlideHelper.showResult;
@@ -171,8 +172,8 @@ public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResults
                         .execute(context.getString(R.string.base_url) + "topic/unlike/"+topic.getId());
             }
         });
-        if(topic.getOwner().getEmail().equalsIgnoreCase(HomePage.username)) holder.followButton.setEnabled(false);
-        holder.followButton.setLiked(isLiked(topic.getOwner().getFollowedBy()));
+        if(topic.getOwner().getEmail().equalsIgnoreCase(HomePage.username)) holder.followButton.setVisibility(View.GONE);
+        holder.followButton.setLiked(isFollowed(topic.getOwner().getId()));
         holder.followButton.setOnLikeListener(new OnLikeListener() {
             @Override
             public void liked(LikeButton likeButton) {
@@ -207,6 +208,13 @@ public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResults
                 }
             });
         }
+    }
+
+    private Boolean isFollowed(Long id) {
+        if(id==null)return false;
+        if(HomePage.followedUsers==null) return false;
+        for (User u:HomePage.followedUsers){if(Objects.equals(u.getId(), id))return true;} return false;
+
     }
     private boolean isLiked(List<User> likedBy) {
         if(likedBy==null)return false;

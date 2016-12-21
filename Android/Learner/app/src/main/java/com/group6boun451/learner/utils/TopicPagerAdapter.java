@@ -26,6 +26,7 @@ import com.like.LikeButton;
 import com.like.OnLikeListener;
 
 import java.util.List;
+import java.util.Objects;
 
 import static com.group6boun451.learner.utils.GlideHelper.getReadableDateFromDate;
 import static com.group6boun451.learner.utils.GlideHelper.showResult;
@@ -135,7 +136,8 @@ public class TopicPagerAdapter extends PagerAdapter {
         });
 
         final LikeButton followButton = (LikeButton)v.findViewById(R.id.follow_button);
-        followButton.setLiked(isLiked(topic.getOwner().getFollowedBy()));
+        if(topic.getOwner().getEmail().equalsIgnoreCase(HomePage.username)) followButton.setVisibility(View.GONE);
+        followButton.setLiked(isFollowed(topic.getOwner().getId()));
         followButton.setOnLikeListener(new OnLikeListener() {
             @Override
             public void liked(LikeButton likeButton) {
@@ -158,6 +160,14 @@ public class TopicPagerAdapter extends PagerAdapter {
 
         collection.addView(v);
         return v;
+    }
+
+    private Boolean isFollowed(Long id) {
+        if(id==null)return false;
+        if(HomePage.followedUsers==null) return false;
+        for (User u:HomePage.followedUsers){
+            if(Objects.equals(u.getId(), id))return true;} return false;
+
     }
 
     private boolean isLiked(List<User> likedBy) {
