@@ -2,33 +2,63 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.group6boun451.learner">
 
-    
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:hardwareAccelerated="true"
+        android:icon="@drawable/puzzle"
         android:label="@string/app_name"
         android:supportsRtl="true"
+        android:screenOrientation="portrait"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
-            android:theme="@style/LoginTheme">
+            android:name="com.group6boun451.learner.activity.LoginActivity"
+            android:theme="@style/LoginTheme"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".HomePage"
-            android:label="Home Page"
+            android:name=".activity.SearchActivity"
+            android:label=""
+            android:parentActivityName=".activity.HomePage"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".activity.HomePage"
+            android:label=""
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".activity.AddTopicActivity"
+            android:label=""
+            android:windowSoftInputMode="adjustPan"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:parentActivityName=".HomePage"
-            android:name=".TopicPage"
-            android:label="@string/title_activity_main2"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-    </application>
+            android:name=".activity.QuizActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize" />
 
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+
+        <activity
+            android:name=".activity.ProfileActivity"
+            android:label=""/>
+        <activity
+            android:name=".activity.RegisterActivity"
+            android:label="Register"
+            android:theme="@style/AppTheme.NoActionBar" />
+    </application>
 
 </manifest>

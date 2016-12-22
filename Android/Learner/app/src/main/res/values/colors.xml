@@ -2,5 +2,13 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#5c6bc0</color>
+    <color name="guillotine_background_dark">#FF424242</color>
+    <color name="guillotine_background">#212121</color>
+    <color name="selected_item_color">#30d1d5</color>
+    <color name="white">#FFFFFF</color>
+    <color name="dark_grey">#424242</color>
+    <color name="medium_grey">#9E9E9E</color>
+    <color name="button_grey">#757575</color>
+    <color name="fab_button_color">#212121</color>
 </resources>

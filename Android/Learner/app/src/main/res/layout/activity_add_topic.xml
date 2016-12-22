@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    tools:context=".activity.AddTopicActivity">
+
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        style="@style/Toolbar"
+        app:contentInsetStart="0dp">
+
+        <ImageView
+            android:id="@+id/content_hamburger"
+            style="@style/ImageView.Hamburger"
+            android:src="@drawable/ic_menu_90" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/topic_name_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <EditText
+                android:id="@+id/topic_name_textEdit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/add_topic_name" />
+        </android.support.design.widget.TextInputLayout>
+    </android.support.v7.widget.Toolbar>
+    <TabHost
+        android:id="@+id/topic_TabHost"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/guillotine_background">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:background="@color/guillotine_background"
+                />
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <!--contentimage-->
+                <LinearLayout
+                    android:id="@+id/topic_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:background="@color/guillotine_background_dark">
+
+                    <Button
+                        android:id="@+id/content_image_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:layout_margin="@dimen/md_keylines_mini"
+                        android:background="@drawable/border"
+                        android:text="@string/content_image"
+                        android:textSize="@dimen/home_page_text_size" />
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btnSelectRole"
+                        android:text="@string/select_topic_pack"
+                        android:onClick="btnSelectPackClicked"
+                        android:textAllCaps="false"
+                        android:background="@drawable/border"
+                        android:layout_margin="@dimen/md_keylines_mini"
+                        android:textSize="22sp"/>
+                    <LinearLayout
+                        android:id="@+id/relative_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <Button
+                            android:id="@+id/cancel_button"
+                            android:layout_margin="@dimen/md_keylines_mini"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/border"
+                            android:onClick="cancelButton"
+                            android:text="@string/cancel_button"
+                            android:textSize="@dimen/home_page_text_size" />
+
+                        <Button
+                            android:id="@+id/next_button"
+                            android:layout_margin="@dimen/md_keylines_mini"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/border"
+                            android:onClick="nextButton"
+                            android:text="@string/next_button"
+                            android:textSize="@dimen/home_page_text_size" />
+                    </LinearLayout>
+                </LinearLayout>
+                <!--tags-->
+                <LinearLayout
+                    android:id="@+id/tag_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:background="@color/guillotine_background_dark">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="16dp"
+                        android:elevation="6dp"
+                        android:orientation="horizontal"
+                        android:background="@color/guillotine_background">
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="8dp"
+                            android:text="Tags:"
+                            />
+
+                        <com.doodle.android.chips.ChipsView
+                            android:id="@+id/cv_contacts"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:overScrollMode="never"
+                            app:cv_max_height="120dp"
+                            app:cv_vertical_spacing="2dp"
+                            app:cv_icon_placeholder="@drawable/ic_whatshot_black_24dp" />
+
+                        <!--
+                            customize with: .. xmlns:app="http://schemas.android.com/apk/res-auto" ..
+                            app:cv_max_height="120dp"
+                            app:cv_vertical_spacing="2dp"
+                            app:cv_bg_color="#f00"
+                            app:cv_bg_color_clicked="#0f0"
+                            app:cv_color="#00f"
+                            app:cv_color_clicked="#721"
+                            app:cv_text_color="#199"
+                            app:cv_text_color_clicked="#180"
+                            app:cv_icon_placeholder="@drawable/ic_bug_report_24dp"
+                            app:cv_icon_delete="@drawable/ic_close_24dp"
+                            app:cv_dialog_title="This is the title"
+                            app:cv_dialog_et_placeholder="email2"
+                            app:cv_dialog_confirm="confirm2"
+                            app:cv_dialog_cancel="cancel2"
+                            -->
+
+                    </LinearLayout>
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_contacts"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"/>
+                    <LinearLayout
+                        android:id="@+id/button_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <Button
+                            android:id="@+id/back_button"
+                            android:layout_margin="@dimen/md_keylines_mini"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/border"
+                            android:onClick="backButton"
+                            android:text="@string/back_button"
+                            android:textSize="@dimen/home_page_text_size" />
+
+                        <Button
+                            android:id="@+id/finish_button"
+                            android:layout_margin="@dimen/md_keylines_mini"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/border"
+                            android:onClick="nextButton"
+                            android:text="@string/next_button"
+                            android:textSize="@dimen/home_page_text_size" />
+                    </LinearLayout>
+                </LinearLayout>
+                <!--content-->
+                <LinearLayout
+                    android:id="@+id/editor_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:background="@color/guillotine_background_dark">
+                    <com.group6boun451.learner.widget.Summernote
+                        android:id="@+id/summernote"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"/>
+
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="22sp"
+                        android:text="Add Quiz"
+                        android:layout_margin="@dimen/md_keylines_mini"
+                        android:background="@drawable/border"
+                        android:id="@+id/btnAddQuiz"/>
+                    <LinearLayout
+                        android:id="@+id/button_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <Button
+                            android:id="@+id/back_button"
+                            android:layout_margin="@dimen/md_keylines_mini"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/border"
+                            android:onClick="backButton"
+                            android:text="@string/back_button"
+                            android:textSize="@dimen/home_page_text_size" />
+
+                        <Button
+                            android:id="@+id/finish_button"
+                            android:layout_margin="@dimen/md_keylines_mini"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/border"
+                            android:onClick="finishButton"
+                            android:text="@string/finish_button"
+                            android:textSize="@dimen/home_page_text_size" />
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/quiz_layout"
+                    android:orientation="vertical">
+
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:id="@+id/lytAddQuestion"
+                            android:padding="15dp"
+                            >
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Question?"
+                                android:gravity="center"
+                                android:textColor="@color/white"
+                                android:textSize="22sp"
+                                android:layout_marginTop="10dp"/>
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="16sp"
+                                android:id="@+id/edtTxtAddQuestionQuestion"/>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Choice A"
+                                android:gravity="center"
+                                android:textColor="@color/white"
+                                android:textSize="18sp"
+                                android:layout_marginTop="10dp"/>
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="15sp"
+                                android:id="@+id/edtTxtAddQuestionChoiceA"/>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Choice B"
+                                android:gravity="center"
+                                android:textColor="@color/white"
+                                android:textSize="18sp"
+                                android:layout_marginTop="10dp"/>
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="15sp"
+                                android:id="@+id/edtTxtAddQuestionChoiceB"/>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Choice C"
+                                android:gravity="center"
+                                android:textColor="@color/white"
+                                android:textSize="18sp"
+                                android:layout_marginTop="10dp"/>
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="15sp"
+                                android:id="@+id/edtTxtAddQuestionChoiceC"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Correct?"
+                                android:gravity="center"
+                                android:textColor="@color/white"
+                                android:textSize="18sp"
+                                android:layout_marginTop="10dp"/>
+                            <RadioGroup
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:id="@+id/groupCorrectAnswer">
+                                <RadioButton
+                                    android:layout_weight="1"
+                                    android:id="@+id/questAnsA"
+                                    android:layout_margin="@dimen/md_keylines_mini"
+
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="A"/>
+                                <RadioButton
+                                    android:layout_weight="1"
+                                    android:id="@+id/questAnsB"
+                                    android:layout_margin="@dimen/md_keylines_mini"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="B"/>
+                                <RadioButton
+                                    android:layout_weight="1"
+                                    android:id="@+id/questAnsC"
+                                    android:layout_margin="@dimen/md_keylines_mini"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="C"/>
+                            </RadioGroup>
+                            <LinearLayout
+                                android:id="@+id/button_layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+                                <Button
+                                    android:id="@+id/btnAddQuestion"
+                                    android:onClick="addQuestion"
+                                    android:layout_margin="@dimen/md_keylines_mini"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/border"
+                                    android:text="@string/add_question_button"
+                                    android:textSize="@dimen/home_page_text_size" />
+
+                                <Button
+                                    android:id="@+id/finish_button"
+                                    android:layout_margin="@dimen/md_keylines_mini"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/border"
+                                    android:onClick="finishButton"
+                                    android:text="@string/finish_button"
+                                    android:textSize="@dimen/home_page_text_size" />
+                            </LinearLayout>
+
+                        </LinearLayout>
+                    </ScrollView>
+
+                </LinearLayout>
+            </FrameLayout>
+        </LinearLayout>
+    </TabHost>
+</LinearLayout>

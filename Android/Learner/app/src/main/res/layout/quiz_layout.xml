@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/chalkboard_green"
+    android:padding="18dip"
+    android:orientation="vertical"
+    android:gravity="center"
+
+    >
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Finish Quiz And See Answer"
+        android:textAllCaps="false"
+        android:alpha="0.8"
+        android:id="@+id/btnFinishQuiz"
+        android:visibility="gone"
+        android:onClick="clickBtnFinishQuiz"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Finish And Quit"
+        android:textAllCaps="false"
+        android:alpha="0.8"
+        android:id="@+id/btnQuitQuiz"
+        android:visibility="gone"
+        android:onClick="clickBtnFinishQuit"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Check Answers"
+        android:textAllCaps="false"
+        android:alpha="0.8"
+        android:id="@+id/btnCheckAnswers"
+        android:visibility="gone"
+        android:onClick="clickBtnCheckAnswers"/>
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:orientation="horizontal">
+      <LinearLayout
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal"
+          android:layout_weight="1"
+          android:gravity="left">
+
+          <Button
+              android:layout_width="80dip"
+              android:layout_height="40dip"
+              android:id="@+id/btnArrowPrev"
+              android:background="@drawable/chalk_arrow_prev"
+              />
+      </LinearLayout>
+
+       <LinearLayout
+           android:layout_width="0dp"
+           android:layout_height="wrap_content"
+           android:orientation="horizontal"
+           android:layout_weight="1"
+           android:gravity="right">
+          <Button
+              android:layout_width="80dip"
+              android:layout_height="40dip"
+              android:id="@+id/btnArrowNext"
+              android:background="@drawable/chalk_arrow_next"
+              />
+       </LinearLayout>
+
+
+   </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="22sp"
+        android:gravity="center"
+        android:id="@+id/txtAtWhich"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="22sp"
+        android:gravity="center"
+        android:id="@+id/correctAnswer"
+        android:visibility="gone"/>
+
+    <android.support.v4.view.ViewPager
+        android:layout_marginTop="45dip"
+        android:id="@+id/quiz_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/btnArrowPrev"
+        android:layout_centerHorizontal="true"></android.support.v4.view.ViewPager>
+
+
+
+
+</LinearLayout>

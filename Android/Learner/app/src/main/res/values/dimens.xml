@@ -6,4 +6,25 @@
     <dimen name="nav_header_vertical_spacing">16dp</dimen>
     <dimen name="nav_header_height">160dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="default_margin">16dp</dimen>
+    <!-- Guillotine screen dimens-->
+    <dimen name="guillotine_small_margin">24dp</dimen>
+    <dimen name="guillotine_medium_margin">48dp</dimen>
+    <dimen name="guillotine_large_margin">100dp</dimen>
+    <dimen name="guillotine_divider_height">40dp</dimen>
+
+    <dimen name="guillotine_item_text_size">20sp</dimen>
+    <dimen name="guillotine_actionbar_background_view_height">35dp</dimen>
+    <dimen name="md_keylines">12dp</dimen>
+    <dimen name="md_keylines_mini">6dp</dimen>
+    <dimen name="card_height">280dp</dimen>
+    <dimen name="article_subheading">16sp</dimen>
+    <dimen name="card_title_height">40dp</dimen>
+    <dimen name="card_image_height">200dp</dimen>
+    <dimen name="home_page_text_size">16sp</dimen>
+    <dimen name="home_location_button_padding">10dp</dimen>
+    <dimen name="end_padding">2dp</dimen>
+    <dimen name="home_time_button_padding">30dp</dimen>
+    <dimen name="search_view_inset">5dp</dimen>
+
 </resources>
