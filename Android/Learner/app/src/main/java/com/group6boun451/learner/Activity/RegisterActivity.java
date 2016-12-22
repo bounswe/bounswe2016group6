@@ -12,7 +12,6 @@ import com.group6boun451.learner.utils.GlideHelper;
 
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 
 import butterknife.BindView;
@@ -71,13 +70,13 @@ public class RegisterActivity extends AppCompatActivity {
                         .queryParam("matchingPassword",mItems.get(4).getText().toString())
                         .queryParam("email", mItems.get(2).getText().toString());
 
-            new Task<URI>(RegisterActivity.this, new Task.Callback() {
+            new Task<>(RegisterActivity.this, new Task.Callback() {
                 @Override
                 public void onResult(String resultString) {
                     if(!GlideHelper.showResult(RegisterActivity.this,resultString))return;
                     finish();
                 }
-            }).execute(builder.build().encode().toUri());
+            }).execute(builder.build().encode().toString(),1,1);
         }
 
     }

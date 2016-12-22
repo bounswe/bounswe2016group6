@@ -56,17 +56,19 @@ public class Task<T> extends AsyncTask<T,Void,String> {
     @Override
     protected String doInBackground(T... params) {
         // Populate the HTTP Basic Authentitcation header with the username and password
-        HttpAuthentication authHeader = new HttpBasicAuthentication(username, password);
         HttpHeaders requestHeaders = new HttpHeaders();
-        requestHeaders.setAuthorization(authHeader);
-        requestHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        if(params.length<3) {
+            HttpAuthentication authHeader = new HttpBasicAuthentication(username, password);
+            requestHeaders.setAuthorization(authHeader);
+        }
+            requestHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         // Create a new RestTemplate instance
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
         try {
             // Make the network request
             ResponseEntity<String> response = null;
-            if(params.length>1) {
+            if(params.length==2) {
                 Log.d("calls", (String) params[0]);
                 restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
                 response = restTemplate.exchange((String) params[0], HttpMethod.POST, new HttpEntity<>( params[1], requestHeaders), String.class);
