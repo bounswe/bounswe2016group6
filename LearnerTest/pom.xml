@@ -300,7 +300,7 @@
     </dependencies>
 
     <build>
-        <finalName>spring-security-login-and-registration</finalName>
+        <finalName>learner-app</finalName>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
