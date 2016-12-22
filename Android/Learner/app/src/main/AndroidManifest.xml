@@ -27,10 +27,11 @@
             android:label=""
             android:parentActivityName=".activity.HomePage"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.HomePage"
-            android:label=""/>
+            android:label=""
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.AddTopicActivity"
             android:label=""
