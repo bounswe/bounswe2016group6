@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<title th:text="#{label.pages.home.title}"></title>
+<thymeleaf th:replace="fragments/navbar::head" />  
+    		
+		<!-- include summernote css/js-->
+		<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.css" rel="stylesheet">
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.js"></script>
+
+		<script th:inline="javascript">
+				/*<![CDATA[*/
+			function initEditorContent(){
+				var cnt = [[${topic.content}]]
+				$('#summernote').summernote('code',cnt) ;
+				console.log("Content Loaded");
+				}
+				/*]]>*/
+		</script>
+<script>
+		$(document).ready(function() {
+			initEditorContent();
+			
+			  $('#summernote').summernote({
+					  toolbar: [
+						    ['style', ['style']],
+						    ['font', ['bold', 'italic', 'underline', 'clear']],
+						    ['insert', ['link', 'picture','video','hr']],
+						    ['color', ['color']],
+						    ['para', ['ul', 'ol', 'paragraph']],
+						    ['height', ['height']],
+						    ['view', ['codeview']]
+						  ]		  
+			  });
+			  
+			  $('#summernote').summernote({
+		            height: 200,
+		            onImageUpload: function(files, editor, welEditable) {
+		                sendFile(files[0], editor, welEditable);
+		            }
+		        });
+			  
+			  function sendFile(file, editor, welEditable) {
+		            data = new FormData();
+		            data.append("file", file);
+		            $.ajax({
+		                data: data,
+		                type: "POST",
+		                url: "/imageUpload",
+		                cache: false,
+		                contentType: false,
+		                processData: false,
+		                success: function(url) {
+		                    editor.insertImage(welEditable, url);
+		                }
+		            });
+		        }
+			  
+		
+		  $('#topicform').submit(function() {
+			  event.preventDefault();
+			  var markupStr = $('#summernote').summernote('code');
+			  console.log(markupStr);
+			  $("#tpContent").val(markupStr);
+			  
+			  var datastring = $("#topicform").serialize();
+			  var posturl = $("#topicform").attr("action");
+			  var topicurl = posturl.replace("edit/","");
+			  
+			  //console.log("POST TO: "+posturl);
+			  //console.log("TOPIC: URL" + topicurl)
+			  $.ajax({
+			      type: "POST",
+			      url: posturl,
+			      data: datastring,
+			      dataType: "json",
+			      success: function(data) {
+			          //var obj = jQuery.parseJSON(data);
+			          console.log(data.error)
+			          console.log(data.message)
+			          if(data.error == null){
+			        	  alert(data.message);
+			        	  location.replace(topicurl)
+			          } else {
+			        	  alert(data.error);
+			          }
+			      },
+			      error: function() {
+			          alert('error handing here');
+			      }
+			  });
+			  
+			  
+			  return false;
+			});
+		});
+		</script>
+
+</head>
+
+
+<body>
+<nav th:replace="fragments/navbar :: navbar"></nav>    
+
+
+<div class="container">   
+    
+	<h1>Learner</h1>
+     <h1>Edit Topic</h1>
+     
+         <form id="topicform" th:attr="action = '/topic/edit/'+${topic.id}" method="post" onsubmit="return submitform()">
+    	<p>Title: <input type="text" name="header" th:attr="value=${topic.header}"/></p>
+    	<input id="tpContent" type="hidden" name="content" value=""/>
+        
+    </form>
+    <h3>Create your content :</h3>
+     <div id="summernote"></div>
+     
+
+
+    <button form="topicform" type="submit" value="Submit" class="btn btn-primary">Submit Post</button>
+     
+
+
+</div>
+</body>
+</html>

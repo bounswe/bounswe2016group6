@@ -1,0 +1,220 @@
+<thymeleaf xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" 
+    th:fragment="head" th:remove="tag">
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"></script>
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.devbridge-autocomplete/1.2.27/jquery.autocomplete.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link> 
+
+<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Theme CSS -->
+    <link href="/css/clean-blog.css" rel="stylesheet">
+    <link href="/css/homestyle.css" rel="stylesheet">
+	
+    <!-- Custom Fonts -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    
+    <link href="/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+
+<style>
+.autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; }
+.autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; }
+.autocomplete-selected { background: #F0F0F0; }
+.autocomplete-suggestions strong { font-weight: normal; color: #3399FF; }
+.autocomplete-group { padding: 2px 5px; }
+.autocomplete-group strong { display: block; border-bottom: 1px solid #000; }
+</style>
+</thymeleaf>
+
+
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top" th:fragment="navbar">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    Menu <i class="fa fa-bars"></i>
+                </button>
+                <a class="navbar-brand" href="/home">Learner</a>
+            </div>
+            
+            <div class="col-sm-3 col-md-8 col-lg-8">
+            
+            <div class="container">
+	<div class="row">
+		<div class="col-md-12">
+            <div class="input-group" id="adv-search">
+		        <form role="search" action="/search" method="get">
+				<input  style ="height: initial" id="autocomplete" type="text" class="form-control input-lg" placeholder="Search" name="q">
+                </form>
+                <div class="input-group-btn">
+                    <div class="btn-group" role="group">
+                        <div class="dropdown dropdown-lg">
+                            <button type="button" class="btn btn-lg btn-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+                            <div class="dropdown-menu dropdown-menu-right" role="menu">
+                                <form class="form-horizontal" role="form">
+                                  <div class="form-group">
+                                    <label for="filter">Category</label>
+                                    <select class="form-control">
+                                        <option value="0" selected>All Categories</option>
+                                        <option value="1">Health</option>
+                                        <option value="2">Animal</option>
+                                        <option value="3">Environmental</option>
+                                        <option value="4">International</option>
+                                        <option value="5">Education</option>
+                                        <option value="6">Arts & Culture</option>
+                                    </select>
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="contain">Topic Pack </label>
+                                    <input id="topicPackInput" class="form-control" type="text" />
+                                    <input id="topicPackId" name="topicPackId" class="form-control" type="hidden" />
+                                  </div>
+                                  
+                                  <div class="form-group">
+                                    <label for="contain">After Date : </label>
+                                    <input class="form-control" type="datetime" />
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="contain">Teacher : </label>
+                                    <input id="teacherNameInput" name="teacher"class="form-control" type="text" />
+                                  	<input id="teacherId" name="teacherId" type="hidden"/>
+                                  </div>
+                                  
+                                  <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+                                </form>
+                            </div>
+                        </div>
+                 	 <button type="submit" class="btn btn-lg btn-secondary"><span class="glyphicon glyphicon-search"></span></button>
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+	</div>
+</div>
+            
+            <!--  
+		        <form class="navbar-form" role="search" action="/search" method="get">
+		        <div class="input-group">
+		        
+					<input  style ="height: initial" id="autocomplete" type="text" class="form-control input-lg" placeholder="Search" name="q">
+				<div class="input-group-btn">
+                 	 <button type="submit" class="btn btn-lg btn-secondary"><span class="glyphicon glyphicon-search"></span></button>
+					 <button type="button" class="btn btn-lg btn-secondary dropdown-toggle" data-toggle="dropdown"  aria-expanded="true"> <span class="caret"></span></button>
+					
+                           <div class="dropdown-menu dropdown-menu-right" >
+                                 <div class="form-group">
+                                   <label for="filter">Category</label>
+                                   <select class="form-control">
+                                       <option value="0" selected>All Categories</option>
+                                       <option value="1">Health</option>
+                                       <option value="2">Animal</option>
+                                       <option value="3">Environmental</option>
+                                       <option value="4">International</option>
+                                       <option value="5">Education</option>
+                                       <option value="6">Arts & Culture</option>
+                                   </select>
+                                 </div>
+                                 <div class="form-group">
+                                   <label for="contain">Contains the words</label>
+                                   <input class="form-control" type="text" />
+                                 </div>
+                                 <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+                           </div>
+                  	</div>
+            		
+		        </div>
+		        </form>
+		        
+    		</div>
+    		
+    		
+            <!--  
+            <div class="col-md-6">
+            <div style="margin-top: 10px" id="custom-search-input">
+                <div class="input-group col-md-12">
+                    <input type="text" class="form-control input-lg" placeholder="Type any text" />
+                    <span class="input-group-btn">
+                        <button style="height :30px" class="btn btn-info btn-lg" type="button">
+                            <i class="glyphicon glyphicon-search"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </div>
+		-->
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    <li sec:authorize="isAuthenticated()">
+                        <a sec:authentication="name" href="/profile">Profile</a>
+                    </li>
+                    <li sec:authorize="isAuthenticated()">
+                        <a href="/logout">Logout</a>
+                    </li>
+					<li sec:authorize="isAnonymous()">
+                        <a href="/login">Login</a>
+                    </li>
+                    <li sec:authorize="isAnonymous()">
+                        <a href="/registration">Signup</a>
+                    </li>
+                    
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+ 
+ 
+     <!-- Footer -->
+    <footer th:fragment ="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <ul class="list-inline text-center">
+                        <li>
+                            <a href="#">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://github.com/bounswe/bounswe2016group6">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                    <p class="copyright text-muted">Copyright &copy; Learner 2016</p>
+                </div>
+            </div>
+        </div>
+    </footer>   

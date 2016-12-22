@@ -1,6 +1,7 @@
 package org.learner.persistence.model;
 
 import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,12 +12,17 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.jboss.aerogear.security.otp.api.Base32;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "user_account")
+//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class User {
 
     @Id
@@ -26,25 +32,90 @@ public class User {
     private String firstName;
 
     private String lastName;
-
+    
     private String email;
-
+    
+    @JsonIgnore
     @Column(length = 60)
     private String password;
-
+    
+    
     private boolean enabled;
-
-    private boolean isUsing2FA;
-
+    
+    @JsonIgnore
     private String secret;
-
-    //
-
+    
+    @JsonBackReference(value="ownerTopics")
+    @OneToMany(mappedBy = "owner")
+    private List<Topic> topics;
+    
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    @JoinTable(name = "users_roles", 
+    			joinColumns = @JoinColumn(name = "user_id", 
+    			referencedColumnName = "id"), 
+    			inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Collection<Role> roles;
+    
+    @JsonBackReference(value="userComments")
+    @OneToMany(mappedBy = "owner")
+    private List<Comment> comments;
+    
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(name = "user_follow", 
+				joinColumns = @JoinColumn(name = "user_id"), 
+				inverseJoinColumns = @JoinColumn(name = "follower_id"))
+    private List<User> followedBy;
+    
+    
+    
+    public List<User> getFollowing() {
+		return following;
+	}
 
-    public User() {
+	public void setFollowing(List<User> following) {
+		this.following = following;
+	}
+	
+	@JsonBackReference
+	@ManyToMany(mappedBy = "followedBy")
+    private List<User> following;
+    
+	@JsonBackReference(value ="quizResults")
+	@OneToMany(mappedBy = "solver")
+	private List<QuizResult> quizResults;
+	
+	
+    private String picture;
+    
+    
+    
+    public List<User> getFollowedBy() {
+		return followedBy;
+	}
+
+	public void setFollowedBy(List<User> followedBy) {
+		this.followedBy = followedBy;
+	}
+
+	public List<Topic> getTopics() {
+		return topics;
+	}
+
+	public void setTopics(List<Topic> topics) {
+		this.topics = topics;
+	}
+
+	public List<Comment> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
+	}
+
+	public User() {
         super();
         this.secret = Base32.random();
         this.enabled = false;
@@ -106,14 +177,6 @@ public class User {
         this.enabled = enabled;
     }
 
-    public boolean isUsing2FA() {
-        return isUsing2FA;
-    }
-
-    public void setUsing2FA(boolean isUsing2FA) {
-        this.isUsing2FA = isUsing2FA;
-    }
-
     public String getSecret() {
         return secret;
     }
@@ -152,8 +215,16 @@ public class User {
     public String toString() {
         final StringBuilder builder = new StringBuilder();
         builder.append("User [id=").append(id).append(", firstName=").append(firstName).append(", lastName=").append(lastName).append(", email=").append(email).append(", password=").append(password).append(", enabled=").append(enabled).append(", isUsing2FA=")
-                .append(isUsing2FA).append(", secret=").append(secret).append(", roles=").append(roles).append("]");
+                .append(", secret=").append(secret).append(", roles=").append(roles).append("]");
         return builder.toString();
     }
+
+	public String getPicture() {
+		return picture;
+	}
+
+	public void setPicture(String picture) {
+		this.picture = picture;
+	}
 
 }

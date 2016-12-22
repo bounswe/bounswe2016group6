@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class SetupDataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
-    private boolean alreadySetup = false;
+    private boolean alreadySetup = true;
 
     @Autowired
     private UserRepository userRepository;
@@ -46,12 +46,19 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         // == create initial privileges
         final Privilege readPrivilege = createPrivilegeIfNotFound("READ_PRIVILEGE");
         final Privilege writePrivilege = createPrivilegeIfNotFound("WRITE_PRIVILEGE");
+        
+        final Privilege teacherPrivilege = createPrivilegeIfNotFound("TEACHER_PRIVILEGE");
+        final Privilege studentPrivilege = createPrivilegeIfNotFound("STUDENT_PRIVILEGE");
 
         // == create initial roles
         final List<Privilege> adminPrivileges = Arrays.asList(readPrivilege, writePrivilege);
         createRoleIfNotFound("ROLE_ADMIN", adminPrivileges);
-        createRoleIfNotFound("ROLE_USER", Arrays.asList(readPrivilege));
-
+        createRoleIfNotFound("ROLE_USER", Arrays.asList(readPrivilege,studentPrivilege));
+        
+        final List<Privilege> teacherPrivs = Arrays.asList(readPrivilege, writePrivilege,teacherPrivilege);
+        createRoleIfNotFound("ROLE_TEACHER", teacherPrivs);
+        
+        
         final Role adminRole = roleRepository.findByName("ROLE_ADMIN");
         final User user = new User();
         user.setFirstName("Test");
@@ -61,7 +68,112 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         user.setRoles(Arrays.asList(adminRole));
         user.setEnabled(true);
         userRepository.save(user);
-
+        
+        
+        //TEST USER
+        final Role userRole = roleRepository.findByName("ROLE_USER");
+        final User traduser = new User();
+        traduser.setFirstName("Ordinary");
+        traduser.setLastName("Student");
+        traduser.setPassword(passwordEncoder.encode("test"));
+        traduser.setEmail("stu@test.com");
+        traduser.setRoles(Arrays.asList(userRole));
+        traduser.setEnabled(true);
+        userRepository.save(traduser);
+        
+        //TEST TEACHER
+        final Role teacherRole = roleRepository.findByName("ROLE_TEACHER");
+        User tuser = new User();
+        tuser.setFirstName("Meister");
+        tuser.setLastName("Senpai");
+        tuser.setPassword(passwordEncoder.encode("test"));
+        tuser.setEmail("tea@test.com");
+        tuser.setRoles(Arrays.asList(teacherRole));
+        tuser.setEnabled(true);
+        userRepository.save(tuser);
+        
+        tuser = new User();
+        tuser.setFirstName("Ahmet");
+        tuser.setLastName("Zorer");
+        tuser.setPassword(passwordEncoder.encode("test"));
+        tuser.setEmail("ahmet@learner.com");
+        tuser.setRoles(Arrays.asList(teacherRole));
+        tuser.setEnabled(true);
+        userRepository.save(tuser);
+        
+        tuser = new User();
+        tuser.setFirstName("Erhan");
+        tuser.setLastName("Cagirici");
+        tuser.setPassword(passwordEncoder.encode("test"));
+        tuser.setEmail("erhan@learner.com");
+        tuser.setRoles(Arrays.asList(teacherRole));
+        tuser.setEnabled(true);
+        userRepository.save(tuser);
+        
+        tuser = new User();
+        tuser.setFirstName("Muaz");
+        tuser.setLastName("Ekici");
+        tuser.setPassword(passwordEncoder.encode("test"));
+        tuser.setEmail("muaz@learner.com");
+        tuser.setRoles(Arrays.asList(teacherRole));
+        tuser.setEnabled(true);
+        userRepository.save(tuser);
+        
+        tuser = new User();
+        tuser.setFirstName("Esra");
+        tuser.setLastName("Alinca");
+        tuser.setPassword(passwordEncoder.encode("test"));
+        tuser.setEmail("esra@learner.com");
+        tuser.setRoles(Arrays.asList(teacherRole));
+        tuser.setEnabled(true);
+        userRepository.save(tuser);
+        
+        
+        tuser = new User();
+        tuser.setFirstName("Arda");
+        tuser.setLastName("Akdemir");
+        tuser.setPassword(passwordEncoder.encode("test"));
+        tuser.setEmail("arda@learner.com");
+        tuser.setRoles(Arrays.asList(teacherRole));
+        tuser.setEnabled(true);
+        userRepository.save(tuser);
+        
+        tuser = new User();
+        tuser.setFirstName("Gufte");
+        tuser.setLastName("Surmeli");
+        tuser.setPassword(passwordEncoder.encode("test"));
+        tuser.setEmail("gufte@learner.com");
+        tuser.setRoles(Arrays.asList(teacherRole));
+        tuser.setEnabled(true);
+        userRepository.save(tuser);
+        
+        tuser = new User();
+        tuser.setFirstName("Melih");
+        tuser.setLastName("Demiroren");
+        tuser.setPassword(passwordEncoder.encode("test"));
+        tuser.setEmail("melih@learner.com");
+        tuser.setRoles(Arrays.asList(teacherRole));
+        tuser.setEnabled(true);
+        userRepository.save(tuser);
+        
+        tuser = new User();
+        tuser.setFirstName("Ali Can");
+        tuser.setLastName("Erkilic");
+        tuser.setPassword(passwordEncoder.encode("test"));
+        tuser.setEmail("ali@learner.com");
+        tuser.setRoles(Arrays.asList(teacherRole));
+        tuser.setEnabled(true);
+        userRepository.save(tuser);
+        
+        tuser = new User();
+        tuser.setFirstName("Deniz");
+        tuser.setLastName("Demirel");
+        tuser.setPassword(passwordEncoder.encode("test"));
+        tuser.setEmail("user@learner.com");
+        tuser.setRoles(Arrays.asList(userRole));
+        tuser.setEnabled(true);
+        userRepository.save(tuser);
+        
         alreadySetup = true;
     }
 

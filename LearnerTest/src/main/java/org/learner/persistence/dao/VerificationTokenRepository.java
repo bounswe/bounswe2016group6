@@ -1,13 +1,13 @@
 package org.learner.persistence.dao;
 
+import java.util.Date;
+import java.util.stream.Stream;
+
 import org.learner.persistence.model.User;
 import org.learner.persistence.model.VerificationToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-
-import java.util.Date;
-import java.util.stream.Stream;
 
 public interface VerificationTokenRepository extends JpaRepository<VerificationToken, Long> {
 

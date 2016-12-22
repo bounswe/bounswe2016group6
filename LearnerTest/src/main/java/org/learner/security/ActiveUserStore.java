@@ -3,8 +3,6 @@ package org.learner.security;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.stereotype.Component;
-
 public class ActiveUserStore {
 
     public List<String> users;

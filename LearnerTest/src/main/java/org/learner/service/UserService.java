@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 import java.util.UUID;
 
 import javax.transaction.Transactional;
@@ -13,6 +14,7 @@ import org.learner.persistence.dao.RoleRepository;
 import org.learner.persistence.dao.UserRepository;
 import org.learner.persistence.dao.VerificationTokenRepository;
 import org.learner.persistence.model.PasswordResetToken;
+import org.learner.persistence.model.Role;
 import org.learner.persistence.model.User;
 import org.learner.persistence.model.VerificationToken;
 import org.learner.web.dto.UserDto;
@@ -63,8 +65,8 @@ public class UserService implements IUserService {
         user.setLastName(accountDto.getLastName());
         user.setPassword(passwordEncoder.encode(accountDto.getPassword()));
         user.setEmail(accountDto.getEmail());
-        user.setUsing2FA(accountDto.isUsing2FA());
-        user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")));
+        user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_TEACHER")));
+        user.setEnabled(true);
         return repository.save(user);
     }
 
@@ -184,7 +186,6 @@ public class UserService implements IUserService {
     public User updateUser2FA(boolean use2FA) {
         final Authentication curAuth = SecurityContextHolder.getContext().getAuthentication();
         User currentUser = (User) curAuth.getPrincipal();
-        currentUser.setUsing2FA(use2FA);
         currentUser = repository.save(currentUser);
         final Authentication auth = new UsernamePasswordAuthenticationToken(currentUser, currentUser.getPassword(), curAuth.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(auth);
@@ -198,5 +199,55 @@ public class UserService implements IUserService {
         }
         return false;
     }
+
+	@Override
+	public User followUser(long userid) {
+		final Authentication curAuth = SecurityContextHolder.getContext().getAuthentication();
+		String username = curAuth.getName();
+		User curuser =repository.findByEmail(username);
+		
+		User teacherToFollow = getUserByID(userid);
+		if(teacherToFollow == null){
+			return null;
+		}
+		
+		Role teacherrole = roleRepository.getOne((long) 3);
+		if(teacherToFollow.getRoles().contains(teacherrole) && !teacherToFollow.getFollowedBy().contains(curuser) ){
+			teacherToFollow.getFollowedBy().add(curuser);
+		} else {
+			return null;
+		}
+		
+		return teacherToFollow;
+	}
+
+	@Override
+	public User unfollowUser(long userid) {
+		final Authentication curAuth = SecurityContextHolder.getContext().getAuthentication();
+		String username = curAuth.getName();
+		User curuser =repository.findByEmail(username);
+		System.out.println("Unfollow service!");
+		
+		
+		User teacherToFollow = getUserByID(userid);
+		if(teacherToFollow == null){
+			return null;
+		}
+		
+		Role teacherrole = roleRepository.getOne((long) 3);
+		if(teacherToFollow.getRoles().contains(teacherrole) ){
+			teacherToFollow.getFollowedBy().remove(curuser);
+		} else {
+			return null;
+		}
+		
+		return teacherToFollow;
+	}
+
+	@Override
+	public List<User> usernameSuggest(String q) {
+		List<User> userlist = repository.findByFirstNameContainingOrLastNameContaining(q,q);
+		return userlist;
+	}
 
 }

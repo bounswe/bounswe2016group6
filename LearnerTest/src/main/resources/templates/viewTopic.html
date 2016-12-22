@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+	<thymeleaf th:replace="fragments/navbar :: head" />
+
+    <title th:text="${topic.header}">Topic header</title>
+	
+
+<style type="text/css">
+.thumbnail {
+    padding:0px;
+}
+.panel {
+	position:relative;
+}
+.panel>.panel-heading:after,.panel>.panel-heading:before{
+	position:absolute;
+	top:11px;left:-16px;
+	right:100%;
+	width:0;
+	height:0;
+	display:block;
+	content:" ";
+	border-color:transparent;
+	border-style:solid solid outset;
+	pointer-events:none;
+}
+.panel>.panel-heading:after{
+	border-width:7px;
+	border-right-color:#f7f7f7;
+	margin-top:1px;
+	margin-left:2px;
+}
+.panel>.panel-heading:before{
+	border-right-color:#ddd;
+	border-width:8px;
+}
+</style>
+
+<script type="text/javascript">
+
+	$(document).ready(function() {
+		$("#commentform").submit(function() {
+			event.preventDefault();
+
+			var formdata = $("#commentform").serialize();
+				
+			$.post("/topic/comment/create", formdata).done(function(data) {
+				if(data.error == null){
+					alert(data.message);
+					window.location.href = window.location.href;
+				}
+			}).fail(function(){
+				alert("Comment creation failed!!");
+			});
+		});
+		
+		$("#likebutton").click(function(){
+			
+			event.preventDefault();
+						
+			$.get($("#likebutton").attr('href')).done(function(data){
+				if(data.error!=null){
+					alert("You already liked the topic!");
+					$("#likebutton").removeClass('btn-danger');
+					$("#likebutton").addClass('btn-success');
+				} else if(data.message != null){
+					alert(data.message);
+					if($("#likebutton").hasClass('btn-danger')){
+						$("#likebutton").removeClass('btn-danger');
+						$("#likebutton").addClass('btn-success');
+						$("#likebutton").attr('href' , $("#likebutton").attr('href').replace("/like/","/unlike/") );
+						
+					} else if( $("#likebutton").hasClass('btn-success')){
+						$("#likebutton").removeClass('btn-success');
+						$("#likebutton").addClass('btn-danger');
+						$("#likebutton").attr('href' , $("#likebutton").attr('href').replace("/unlike/","/like/") );
+					} 
+				}
+				location.reload();
+			}).fail(function(){
+				alert("Like fail!");
+			})
+		});
+		//Comment form end
+		
+	});
+</script>
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+<nav th:replace="fragments/navbar :: navbar"></nav>   
+
+    <!-- Page Header topic.topicPack.name-->
+    <!-- Set your background image for this header on the line below. -->
+    <header class="intro-header" th:style="'background-image:url(\'' + ${topic.headerImage} + '\')'" >
+        <div class="transbox">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="post-heading">
+                        <h1 th:text="${topic.header}">Topic header</h1>
+                        <span class="meta"><span class="glyphicon glyphicon-education"></span> Pack : 
+                        	<a th:href="${topic.topicPack != null} ? ${'/search/pack/' + topic.topicPack.id} : '#'" th:text="${topic.topicPack != null} ? ${topic.topicPack.name} : 'None'"> packname</a>
+                        </span>
+                        <br>
+                        
+                        <span class="meta"><span class="glyphicon glyphicon-tags"></span> Tags : 
+                        
+                        <a th:each="tg,iterationStatus : ${topic.tags}" th:href="'/search/tag/' + ${tg.id}"> <span th:text="${tg.name}" class="label label-info">Snipp</span></a> 
+                        </span>
+                        <br>
+                        <span class="meta">Posted by <a th:href="${'/profile/' + topic.owner.id}" th:text="${topic.owner.firstName + ' ' + topic.owner.lastName}">Start Bootstrap</a>  <a th:text="${'on ' + #dates.format(topic.createdAt,'YYYY/MM/dd HH:mm')}"></a></span>
+                    	<span class="meta"> <a th:text="${#lists.size(topic.comments) + ' comments  ' }"> likes</a> <a th:text="${#lists.size(topic.likedBy) + ' likes  ' }"> likes</a></span>
+                    	<br>
+                		<div sec:authorize="isAuthenticated()" class="col-lg-offset-2 col-md-offset-2" >
+        					<div class="btn-group" role="group">
+			        			<a th:if="${#authentication.name==topic.owner.email}" class="btn btn-lg btn-primary" th:href="${'/topic/edit/' + topic.id}"><span class="glyphicon glyphicon-edit"></span> Edit Topic</a>
+		        				<a th:if="${topic.likedBy.?[email == #authentication.name].isEmpty()}" id="likebutton" class="btn btn-lg btn-danger" th:href="${'/topic/like/' + topic.id}">
+		        					<span class="glyphicon glyphicon-heart"></span></a>
+				        		<a th:if="${not topic.likedBy.?[email == #authentication.name].isEmpty()}" id="likebutton" class="btn btn-lg btn-success" th:href="${'/topic/unlike/' + topic.id}">
+				        			<span class="glyphicon glyphicon-heart"></span></a>
+		        				<a class="btn btn-lg btn-info" th:href="${'/topic/quiz/' + topic.id}"><span class="glyphicon glyphicon-book"></span> Take Quiz</a>
+			       			</div>
+			            </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        </div>
+    </header>
+	
+    <!-- Post Content -->
+        <div class="container">
+        	
+            <div class="row">
+            
+            
+            <div class="col-lg-2 col-md-2 col-sm-2" >
+
+       		</div>
+                        
+            <div th:utext="${topic.content}" id="topicContent" class="col-sm-8 col-lg-8 col-md-8">
+            Topic content
+            </div>
+            
+            <div class="sidebar col-md-2 col-lg-2 col-sm-2">
+				<div class="panel panel-primary">
+					<div class="panel-heading">You might be interested in :</div>
+					<div class="panel-body">
+						<ul class="list-group">
+							<li th:each="poptop,itstat :${relatedTopics}" th:unless="${itstat.index >5}">
+								<a th:text="${poptop.header}" th:href="'/topic/' + ${poptop.id}" style="font-size:14px; text-decoration:none"> header</a>
+								<a th:text="${'by ' +poptop.owner.firstName + ' ' + poptop.owner.lastName}" th:href="'/profile/' + poptop.owner.id" style="font-size:12px; text-decoration:none"> owner</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				
+				<div class="panel panel-primary">
+					<div class="panel-heading">Other Topics in pack :</div>
+					<div class="panel-body">
+						<ul class="list-group">
+							<li th:each="poptop,itstat :${othersInPack}" th:unless="${itstat.index >5}">
+								<a th:text="${poptop.header}" th:href="'/topic/' + ${poptop.id}" style="font-size:14px; text-decoration:none"> header</a>
+								<a th:text="${'by ' +poptop.owner.firstName + ' ' + poptop.owner.lastName}" th:href="'/profile/' + poptop.owner.id" style="font-size:12px; text-decoration:none"> owner</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+                
+	             
+                
+            </div>
+        </div>
+<hr>
+	<div id="commentsSection" class="container">
+		<div th:each="cmnt,iterationStatus : ${topic.comments}" class="row">
+		
+		<div class="col-sm-1">
+		<div class="thumbnail">
+		
+		<img class="img-responsive user-photo" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png">
+		</div><!-- /thumbnail -->
+		</div><!-- /col-sm-1 -->
+		
+		<div class="col-sm-5">
+		<div class="panel panel-default">
+		<div class="panel-heading">
+		<strong th:text="${cmnt.owner.firstName+' '+cmnt.owner.lastName}" >myusername</strong> <span class="text-muted" th:text="${'commented on ' + #dates.format(cmnt.createdAt,'YYYY/MM/dd HH:mm')}">commented </span>
+		</div>
+		<div>
+		<textarea readonly class="panel-body" name="text" cols="37" rows="2" th:text="${cmnt.content}">
+		</textarea>
+		</div>
+		</div><!-- /panel panel-default -->
+		</div><!-- /col-sm-5 -->
+		
+		<!-- 
+		<div th:text="${cmnt.content}" class="panel-body">
+		Panel content
+		</div><!-- /panel-body -->
+		 
+		
+		
+		</div>
+
+<hr>
+		<div sec:authorize="isAuthenticated()" class="row">
+
+			<h3>Add a comment:</h3>
+			<textarea name="content" form="commentform" rows="4" cols="50" placeholder="Share your thoughts..."></textarea>
+			
+			<form id="commentform" action="/topic/comment/create" method="post"
+				onsubmit="">
+				
+					<input type="hidden" name="topicId" th:attr="value=${topic.id}" />
+					<input class="btn btn-primary" type="submit" name="Submit" value="Submit" />
+			</form>
+		</div>
+	</div>
+
+
+	<hr>
+
+	<footer th:replace="fragments/navbar :: footer"></footer>
+
+
+  
+    <!-- Bootstrap Core JavaScript -->
+
+
+    <!-- Contact Form JavaScript -->
+    <script src="/js/jqBootstrapValidation.js"></script>
+    <script src="/js/contact_me.js"></script>
+
+</body>
+
+</html>

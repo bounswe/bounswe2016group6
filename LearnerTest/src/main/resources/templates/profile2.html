@@ -1,0 +1,220 @@
+<html>
+
+<head>
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"></script>
+
+	<!-- Bootstrap Core CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+	<!-- Theme CSS -->
+
+	<link rel="stylesheet" href="/css/profilestyle.css">
+	<link href="/css/clean-blog.css" rel="stylesheet">
+
+	<!-- Custom Fonts -->
+	<link href="/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+	<style type="text/css">
+		body {
+			font-family: 'Lora', 'Times New Roman', serif;
+			font-size: 14px;
+			color: #333333;
+		}
+		p {
+			line-height: 1.1;
+			margin: 3px 0;
+		}
+		p a {
+			text-decoration: none;
+		}
+		h1,
+		h2,
+		h3,
+		h4,
+		h5,
+		h6 {
+			font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+			font-weight: 600;
+		}
+	</style>
+	
+	<script type="text/javascript">
+	$(document).ready(function() {
+		$("#followButton").click(function(){
+			
+			event.preventDefault();
+						
+			$.get($("#followButton").attr('href')).done(function(data){
+				if(data.error!=null){
+					alert("You already follow!");
+					$("#followButton").removeClass('btn-danger');
+					$("#followButton").addClass('btn-success');
+				} else if(data.message != null){
+					alert(data.message);
+					if($("#followButton").hasClass('btn-danger')){
+						$("#followButton").removeClass('btn-danger');
+						$("#followButton").addClass('btn-success');
+						$("#followButton").attr('href' , $("#followButton").attr('href').replace("/follow/","/unfollow/") );
+						
+					} else if( $("#followButton").hasClass('btn-success')){
+						$("#followButton").removeClass('btn-success');
+						$("#followButton").addClass('btn-danger');
+						$("#followButton").attr('href' , $("#followButton").attr('href').replace("/unfollow/","/follow/") );
+					} 
+				}
+			}).fail(function(){
+				alert("Follow fail!");
+			})
+		});
+	});
+	</script>
+	
+	<title th:text="${user.firstName + ' ' + user.lastName}"></title>
+</head>
+<div>
+	<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+		<div class="container-fluid">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header page-scroll">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+					<span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
+				</button>
+				<a class="navbar-brand" href="/home">Learner</a>
+			</div>
+
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav navbar-right">
+					<li>
+						<a href="/home">Home</a>
+					</li>
+					<li class="active">
+						<a sec:authentication="name" href="/profile">Profile</a>
+					</li>
+					<li>
+						<a href="/logout">Logout</a>
+					</li>
+				</ul>
+			</div>
+			<!-- /.navbar-collapse -->
+		</div>
+		<!-- /.container -->
+	</nav>
+</div>
+
+<div class="container">
+	<div class="row profile">
+		<div class="col-md-3 col-sm-3 col-lg-3">
+			<div class="profile-sidebar">
+				<!-- SIDEBAR USERPIC -->
+				<div class="profile-userpic">
+					<img th:src="${user.picture} ? ${user.picture} : 'https://ssl.gstatic.com/accounts/ui/avatar_2x.png'" class="img-responsive" alt="">
+				</div>
+				<!-- END SIDEBAR USERPIC -->
+				<!-- SIDEBAR USER TITLE -->
+				<div class="profile-usertitle">
+					<div th:text="${user.firstName + ' ' + user.lastName}" class="profile-usertitle-name">
+						Username
+					</div>
+					<div class="profile-usertitle-job">
+						<div sec:authorize="hasAuthority('TEACHER_PRIVILEGE')">
+							Contributor
+						</div>
+						<div sec:authorize="hasAuthority('STUDENT_PRIVILEGE')">
+							Learner
+						</div>
+					</div>
+				</div>
+				<!-- END SIDEBAR USER TITLE -->
+				<!-- SIDEBAR BUTTONS -->
+				<div class="profile-userbuttons">
+					<a
+						th:if="${user.followedBy.?[email == #authentication.name].isEmpty()}"
+						id="followButton" class="btn btn-lg btn-danger"
+						th:href="${'/follow/' + user.id}"> <span
+						class="glyphicon glyphicon-heart"></span></a> 
+						<a
+						th:if="${not user.followedBy.?[email == #authentication.name].isEmpty()}"
+						id="followButton" class="btn btn-lg btn-success"
+						th:href="${'/unfollow/' + user.id}"> <span
+						class="glyphicon glyphicon-heart"></span></a> 
+						
+				</div>
+				<!-- END SIDEBAR BUTTONS -->
+				<!-- SIDEBAR MENU -->
+				<div class="profile-usermenu" hidden>
+					<ul class="nav">
+						<li class="active">
+							<a href="#">
+								<i class="glyphicon glyphicon-home"></i> Overview </a>
+						</li>
+						<li>
+							<a href="#">
+								<i class="glyphicon glyphicon-user"></i> Account Settings </a>
+						</li>
+						<li>
+							<a href="#" target="_blank">
+								<i class="glyphicon glyphicon-ok"></i> Tasks </a>
+						</li>
+						<li>
+							<a href="#">
+								<i class="glyphicon glyphicon-flag"></i> Help </a>
+						</li>
+					</ul>
+				</div>
+				<!-- END MENU -->
+			</div>
+		</div>
+		<div class="col-md-6 col-sm-6 col-lg-6">
+			<div>
+				<div>
+					<div class="panel panel-primary">
+						<div class="panel-heading">Contributed Topics :</div>
+						<div class="panel-body">
+							<ul class="list-group">
+								<li th:each="poptop,itstat : ${user.topics}" th:unless="${itstat.index >5}">
+									<a th:text="${poptop.header}" th:href="'/topic/' + ${poptop.id}" style="font-size:14px; text-decoration:none"> header</a>
+									<a th:text="${'by ' + poptop.owner.firstName + ' ' + poptop.owner.lastName}" th:href="${'/profile/' + poptop.owner.id}" style="font-size:12px; text-decoration:none"> owner</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+
+					<div class="panel panel-primary">
+						<div class="panel-heading">Latest from followed Teachers:</div>
+						<div class="panel-body">
+							<ul class="list-group">
+								<li th:each="poptop,itstat : ${latestFromFollowed}" th:unless="${itstat.index >5}">
+									<a th:text="${poptop.header}" th:href="'/topic/' + ${poptop.id}" style="font-size:14px; text-decoration:none"> header</a>
+									<a th:text="${'by ' +poptop.owner.firstName + ' ' + poptop.owner.lastName}" th:href="${'/profile/' + poptop.owner.id}" style="font-size:12px; text-decoration:none"> owner</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3 col-sm-3 col-lg-3">
+
+
+		</div>
+	</div>
+
+</div>
+
+</body>
+
+</html>

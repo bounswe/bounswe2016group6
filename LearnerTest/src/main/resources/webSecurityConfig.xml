@@ -23,7 +23,7 @@
         <intercept-url pattern="/user/changePassword*" access="permitAll"/>
         <intercept-url pattern="/updatePassword*" access="isAuthenticated()"/>
         <intercept-url pattern="/user/savePassword*" access="isAuthenticated()"/>
-
+		<intercept-url pattern="/topic*" access="permitAll"/>
         <intercept-url pattern="/emailError*" access="permitAll"/>
         <intercept-url pattern="/resources/**" access="permitAll"/>
         <intercept-url pattern="/invalidSession*" access="isAnonymous()"/>

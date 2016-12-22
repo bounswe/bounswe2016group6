@@ -1,6 +1,7 @@
 package org.learner.service;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 import org.learner.persistence.model.PasswordResetToken;
 import org.learner.persistence.model.User;
@@ -43,5 +44,11 @@ public interface IUserService {
     String generateQRUrl(User user) throws UnsupportedEncodingException;
 
     User updateUser2FA(boolean use2FA);
+    
+    User followUser(long userid);
+    
+    User unfollowUser(long userid);
+
+	List<User> usernameSuggest(String q);
 
 }
