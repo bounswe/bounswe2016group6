@@ -16,7 +16,7 @@ $(function () {
 			return;
 			
 		}
-		alert("Questions arrived!");
+		//alert("Questions arrived!");
 		console.log("Questions" + data);
 		
 		questions = $.map(data, function(dataQuestion){
@@ -39,8 +39,8 @@ $(function () {
 	
 	
 	$("#resultSaveButton").click(function (){
-		alert("Hello");
-		alert("Total questions : " + totalQuestions  + " , Total correct: " + totalCorrect );
+		//alert("Hello");
+		//alert("Total questions : " + totalQuestions  + " , Total correct: " + totalCorrect );
 		var quizResult = {"title": "Topic Quiz", "correct" : totalCorrect , "questionCount": totalQuestions};
 		$.ajax
 	    ({

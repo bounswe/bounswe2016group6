@@ -86,7 +86,7 @@
 			<div class="profile-sidebar">
 				<!-- SIDEBAR USERPIC -->
 				<div class="profile-userpic">
-					<img src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="img-responsive" alt="">
+					<img th:src="${user.picture} ? ${user.picture} : 'https://ssl.gstatic.com/accounts/ui/avatar_2x.png'" class="img-responsive" alt="">
 				</div>
 				<!-- END SIDEBAR USERPIC -->
 				<!-- SIDEBAR USER TITLE -->

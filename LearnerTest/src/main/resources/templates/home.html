@@ -58,7 +58,7 @@
 			$('#autocomplete').autocomplete({
 				serviceUrl: '/search/suggest',
 				onSelect: function(suggestion) {
-					alert('You selected: ' + suggestion.value + ', ' + suggestion.data + ', ' + suggestion.owner);
+					//alert('You selected: ' + suggestion.value + ', ' + suggestion.data + ', ' + suggestion.owner);
 					location.replace("/topic/" + suggestion.data);
 				},
 				paramName: 'query',

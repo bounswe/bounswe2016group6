@@ -100,7 +100,7 @@ $(document).ready(function() {
 		var name = file.name;
 		var size = file.size;
 		var type = file.type;
-		alert("Name :" + name + " Size: " + type + " Type: " + type);
+		//alert("Name :" + name + " Size: " + type + " Type: " + type);
 	});
 
 	function progressHandlingFunction(e) {
@@ -116,14 +116,14 @@ $(document).ready(function() {
 		itemText: 'name'
 	});
 	$('#tagfi').on('beforeItemRemove', function(event) {
-		alert("Remove");
+		//alert("Remove");
 	});
 	$('#autocompleteTag').autocomplete({
 		serviceUrl: '/tag/suggest',
 		deferRequestBy: 300,
 		minChars: 3,
 		onSelect: function(suggestion) {
-			alert('You selected: ' + suggestion.value + ', ' + suggestion.data + ', ' + suggestion.context);
+			//alert('You selected: ' + suggestion.value + ', ' + suggestion.data + ', ' + suggestion.context);
 			$('#tagfi').tagsinput('add', {
 				"name": suggestion.name,
 				"id": suggestion.id,
@@ -153,7 +153,7 @@ $(document).ready(function() {
 		deferRequestBy: 200,
 		minChars: 2,
 		onSelect: function(suggestion) {
-			alert('You selected: ' + suggestion.value + ', ' + suggestion.data);
+			//alert('You selected: ' + suggestion.value + ', ' + suggestion.data);
 			$("#tpPackName").val(suggestion.data);
 		},
 		transformResult: function(response) {
@@ -169,7 +169,7 @@ $(document).ready(function() {
 	});
 	//TOPIC CREATION
 	$('#topicform').submit(function() {
-		alert("Form submit!");
+		//alert("Form submit!");
 		event.preventDefault();
 		var markupStr = $('#summernote').summernote('code');
 		console.log(markupStr);
@@ -188,7 +188,7 @@ $(document).ready(function() {
 			},
 			//Ajax events
 			beforeSend: function() {
-				alert("Sending!");
+				//alert("Sending!");
 			},
 			// Form data
 			data: formData,
@@ -198,7 +198,7 @@ $(document).ready(function() {
 			processData: false
 		});
 		toprec.done(function(data) {
-			alert("Sending complete!");
+			//alert("Sending complete!");
 			var topicID = data.message;
 			//location.replace('/topic/'+data.message);
 			$.ajax({

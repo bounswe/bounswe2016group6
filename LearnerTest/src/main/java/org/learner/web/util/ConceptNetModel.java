@@ -48,9 +48,24 @@ public class ConceptNetModel {
 			String related = end.equalsIgnoreCase(q) ? start : end ;
 			String originalform =  end.equalsIgnoreCase(q) ? cnedge.getStart() : cnedge.getEnd();
 			
-			originalSet.add(originalform);
+			String relation = cnedge.getRel();
+			
+			///r/HasA , IsA RelatedTo HasProperty UsedFor
+			if(cnedge.getRel().equalsIgnoreCase("/r/IsA") || 
+			   cnedge.getRel().equalsIgnoreCase("/r/HasA") ||
+			   cnedge.getRel().equalsIgnoreCase("/r/RelatedTo") ||
+			   cnedge.getRel().equalsIgnoreCase("/r/HasProperty") ){
+				
+				originalSet.add(originalform);
+				
+			}
+			
 			
 			System.out.println("Related : " + related);
+			
+			if(originalSet.size() > 11 ){
+				break;
+			}
 		}
 		
 		return originalSet;
