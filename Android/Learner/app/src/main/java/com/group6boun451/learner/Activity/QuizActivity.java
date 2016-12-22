@@ -64,9 +64,9 @@ public class QuizActivity extends AppCompatActivity {
 
             int tmp = answers[position];
             if(tmp != -1){
-                if(tmp == 0){
+                if(tmp == 1){
                     choiceA.setBackground(drw);
-                }else if(tmp == 1){
+                }else if(tmp == 2){
                     choiceB.setBackground(drw);
                 }else{
                     choiceC.setBackground(drw);
@@ -79,7 +79,7 @@ public class QuizActivity extends AppCompatActivity {
                     choiceA.setBackground(drw);
                     choiceB.setBackgroundResource(0);
                     choiceC.setBackgroundResource(0);
-                    answers[position] = 0;
+                    answers[position] = 1;
                 }
             });
 
@@ -89,7 +89,7 @@ public class QuizActivity extends AppCompatActivity {
                     choiceB.setBackground(drw);
                     choiceA.setBackgroundResource(0);
                     choiceC.setBackgroundResource(0);
-                    answers[position] = 1;
+                    answers[position] = 2;
                 }
             });
 
@@ -100,7 +100,7 @@ public class QuizActivity extends AppCompatActivity {
                     choiceB.setBackgroundResource(0);
                     choiceA.setBackgroundResource(0);
 
-                    answers[position] = 2;
+                    answers[position] = 3;
                 }
             });
 
@@ -233,11 +233,11 @@ public class QuizActivity extends AppCompatActivity {
                         txtCorrectAnswer.setVisibility(View.VISIBLE);
                     }
                     int ans = mQuestions.get(position).getCorrect();
-                    if(ans == 0){
+                    if(ans == 1){
                         txtCorrectAnswer.setText("Correct : A");
-                    }else if(ans == 1){
-                        txtCorrectAnswer.setText("Correct : B");
                     }else if(ans == 2){
+                        txtCorrectAnswer.setText("Correct : B");
+                    }else if(ans == 3){
                         txtCorrectAnswer.setText("Correct : C");
                     }
 
