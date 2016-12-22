@@ -63,7 +63,7 @@ public class RegistrationController {
 
     // Registration
 
-    @RequestMapping(value = "/user/registration", method = RequestMethod.POST)
+    @RequestMapping(value = "/user/registration")
     @ResponseBody
     public GenericResponse registerUserAccount(@Valid final UserDto accountDto, final HttpServletRequest request) {
         LOGGER.debug("Registering user account with information: {}", accountDto);

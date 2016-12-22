@@ -13,6 +13,7 @@ import org.learner.persistence.model.Topic;
 import org.learner.persistence.model.TopicPack;
 import org.learner.persistence.model.User;
 import org.learner.persistence.model.Question;
+import org.learner.persistence.model.Tag;
 import org.learner.registration.TopicEvent;
 import org.learner.service.ITopicService;
 import org.learner.service.IUserService;
@@ -114,6 +115,7 @@ public class TopicController {
         	try{
         		storageService.store(image,imgname);
         	} catch (StorageException e) {
+        		e.printStackTrace();
         		return new GenericResponse(""+posted.getId(),"Image upload failed!");
     		}
         	
@@ -303,5 +305,14 @@ public class TopicController {
     	List<TopicPack> tp = new ArrayList<TopicPack>();
     	tp = topicService.packSuggest(q);
     	return tp;
+    }
+    
+    @RequestMapping(value="/{id}/tags")
+    @ResponseBody
+    public List<Tag> tagsOfTopic(@PathVariable("id") Long id){
+    	Topic t = topicService.getTopicById(id);
+    	if(t == null) return null;
+    	return t.getTags();
+
     }
 }

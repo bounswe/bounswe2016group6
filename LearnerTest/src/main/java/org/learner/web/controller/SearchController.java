@@ -1,7 +1,12 @@
 package org.learner.web.controller;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.learner.persistence.dao.TagRepository;
 import org.learner.persistence.model.Comment;
@@ -17,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -96,7 +102,116 @@ public class SearchController {
 		model.addAttribute("topics", queryResults);
 		return "searchresult";
 	}
+	
+	@RequestMapping(value = "/advancedSearch" , method=RequestMethod.POST)
+	public String searchWithCriteriaPage(@RequestParam("topicPackId") String topicPackId,
+										  @RequestParam("afterDate") String afterDate, 
+										  @RequestParam("teacherId") String teacherId,
+										  @RequestParam("q") String q, final Model model){
+		System.out.println("WOLOLO");
+		
+		
+		final long packId ;
+		final Date dt ;
+		final long teaId ;
+		DateFormat df = new SimpleDateFormat("YYYY-MM-DD");
+		
+		List<Topic> allTopics = new ArrayList<>();
+		if(q != null){
+			if(q.length() >2){
+				allTopics = topicService.semanticSearch(q);
+			} else {
+				allTopics = topicService.getAllTopics();
+			}
+		} else {
+			allTopics = topicService.getAllTopics();
+		}
+		
+		try {
+			packId = Long.parseLong(topicPackId);
+			allTopics = allTopics.stream()
+					.filter(p -> p.getTopicPack().getId() == packId).collect(Collectors.toList());
+		} catch (Exception e) {
+			System.out.println("Pack not found");
+		}
+		
+		try {
+			teaId = Long.parseLong(teacherId);
+			allTopics = allTopics.stream()
+					.filter(p -> p.getOwner().getId() == teaId).collect(Collectors.toList());
+		} catch (Exception e) {
+			System.out.println("Teacher not found");
+		}
+		
+		try {
+			dt = df.parse(afterDate);
+			allTopics = allTopics.stream()
+					.filter(p -> p.getCreatedAt().after(dt)).collect(Collectors.toList());
+		} catch (Exception e) {
+			System.out.println("Date not found!");
+		}
+		
+		model.addAttribute("topics", allTopics);
+		return "searchresult";
+	}
+	
+	
+	
+	
 	// REST API functions
+	@RequestMapping(value = "/advancedSearch" , method=RequestMethod.GET)
+	@ResponseBody
+	public List<Topic> searchWithCriteria(@RequestParam("topicPackId") String topicPackId,
+										  @RequestParam("afterDate") String afterDate, 
+										  @RequestParam("teacherId") String teacherId,
+										  @RequestParam("q") String q){
+		System.out.println("WOLOLO");
+		
+		
+		final long packId ;
+		final Date dt ;
+		final long teaId ;
+		DateFormat df = new SimpleDateFormat("YYYY-MM-DD");
+		
+		List<Topic> allTopics = new ArrayList<>();
+		if(q != null){
+			if(q.length() >2){
+				allTopics = topicService.semanticSearch(q);
+			} else {
+				allTopics = topicService.getAllTopics();
+			}
+		} else {
+			allTopics = topicService.getAllTopics();
+		}
+		
+		try {
+			packId = Long.parseLong(topicPackId);
+			allTopics = allTopics.stream()
+					.filter(p -> p.getTopicPack().getId() == packId).collect(Collectors.toList());
+		} catch (Exception e) {
+			System.out.println("Pack not found");
+		}
+		
+		try {
+			teaId = Long.parseLong(teacherId);
+			allTopics = allTopics.stream()
+					.filter(p -> p.getOwner().getId() == teaId).collect(Collectors.toList());
+		} catch (Exception e) {
+			System.out.println("Teacher not found");
+		}
+		
+		try {
+			dt = df.parse(afterDate);
+			allTopics = allTopics.stream()
+					.filter(p -> p.getCreatedAt().after(dt)).collect(Collectors.toList());
+		} catch (Exception e) {
+			System.out.println("Date not found!");
+		}
+		
+		return allTopics;
+	}
+	
+	
 	
 	@RequestMapping(value = "/pack/search/{packId}")
 	@ResponseBody

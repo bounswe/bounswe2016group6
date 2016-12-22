@@ -270,6 +270,10 @@ public class TopicService implements ITopicService{
 	
 	@Override
 	public Tag createTagToTopic(Topic topic,Tag tag) {
+		if(topic.getTags().contains(tag)){
+			System.out.println("Already contains the tag " + tag );
+			return tag;
+		}
 		topic.getTags().add(tag);
 		return tag;
 	}
@@ -292,22 +296,16 @@ public class TopicService implements ITopicService{
 		for(Tag tt : alltags){
 
 			if(srcTopicTags.contains(tt)){
-				tt.incrementSearchPoint(20);
+				tt.incrementSearchPoint(60);
 			}
-			if(tt.getConceptRelations().isEmpty()){
-				//System.out.println("No concept for tag : " + tt.getName());
-				continue;
-			}
-			
-			for(Tag srcTag : srcTopicTags){
-				Sets.SetView<String> sw =  Sets.intersection(srcTag.getConceptRelations(), tt.getConceptRelations());
-				tt.incrementSearchPoint(sw.size() * 3 );
+			if(!tt.getConceptRelations().isEmpty()){
+				for(Tag srcTag : srcTopicTags){
+					Sets.SetView<String> sw =  Sets.intersection(srcTag.getConceptRelations(), tt.getConceptRelations());
+					tt.incrementSearchPoint(sw.size() * 3 );
+				}
 			}
 			
-			
-			
-			
-			if(tt.getSearchPoint() > 0) {
+			if(tt.getSearchPoint() > 5) {
 				System.out.println("TAG : " + tt.getName());
 				//System.out.println("Common : " + sw );
 				//System.out.println("Size : " + sw.size());
@@ -318,7 +316,7 @@ public class TopicService implements ITopicService{
 			
 		}
 		
-		Collections.sort(nonzerotags, Comparator.comparingInt(Tag::getSearchPoint));
+		Collections.sort(nonzerotags, Comparator.comparingInt(Tag::getSearchPoint).reversed());
 		
 		
 		List<Topic> weighted = new ArrayList<Topic>();
@@ -336,7 +334,10 @@ public class TopicService implements ITopicService{
 			}
 		}
 		weighted.remove(topic);
-		Collections.sort(weighted, Comparator.comparingInt(Topic::getSearchScore));
+		Collections.sort(weighted, Comparator.comparingInt(Topic::getSearchScore).reversed());
+		if(weighted.size() > 5){
+			return weighted.subList(0, 4);
+		}
 		return weighted;
 	}
 
@@ -528,25 +529,21 @@ public class TopicService implements ITopicService{
 			}
 			
 			if(tt.getConceptRelations().isEmpty()){
-				//System.out.println("No concept for tag : " + tt.getName());
-				continue;
-			}
-			
-			if(tt.getConceptRelations().contains("/c/en/" + searchterm)){
-				tt.incrementSearchPoint(15);
-			}
-			
-			Sets.SetView<String> sw =  Sets.intersection(originalSet, tt.getConceptRelations());
+				if(tt.getConceptRelations().contains("/c/en/" + searchterm)){
+					tt.incrementSearchPoint(10);
+				}
+				
+				Sets.SetView<String> sw =  Sets.intersection(originalSet, tt.getConceptRelations());
 
+				
+				//TODO Give point sw.size * 3 ;
+				tt.incrementSearchPoint(sw.size() * 4 );
+			}
 			
-			//TODO Give point sw.size * 3 ;
-			tt.incrementSearchPoint(sw.size() * 5 );
-			
-			
-			if(tt.getSearchPoint() > 0) {
+			if(tt.getSearchPoint() > 7) {
 				System.out.println("TAG : " + tt.getName());
-				System.out.println("Common : " + sw );
-				System.out.println("Size : " + sw.size());
+				//System.out.println("Common : " + sw );
+				//System.out.println("Size : " + sw.size());
 				System.out.println("Search Points : " + tt.getSearchPoint());
 				System.out.println("----");
 				nonzerotags.add(tt);
@@ -554,7 +551,7 @@ public class TopicService implements ITopicService{
 			
 		}
 		
-		Collections.sort(nonzerotags, Comparator.comparingInt(Tag::getSearchPoint));
+		Collections.sort(nonzerotags, Comparator.comparingInt(Tag::getSearchPoint).reversed());
 		
 		List<Topic> nameSearchTopics = repository.findByHeaderContaining(q);
 
@@ -566,10 +563,10 @@ public class TopicService implements ITopicService{
 		for(Topic wtop : nameSearchTopics){
 			int index = weighted.indexOf(wtop);
 			if(index == -1){
-				wtop.incrementSearchScore(45);
+				wtop.incrementSearchScore(150);
 				weighted.add(wtop);
 			} else {
-				weighted.get(index).incrementSearchScore(45);
+				weighted.get(index).incrementSearchScore(150);
 			}
 		}
 		
@@ -587,7 +584,11 @@ public class TopicService implements ITopicService{
 			}
 		}
 		
-		Collections.sort(weighted, Comparator.comparingInt(Topic::getSearchScore));
+		Collections.sort(weighted, Comparator.comparingInt(Topic::getSearchScore).reversed());
+		
+		for(Topic w : weighted){
+			System.out.println(w.getHeader() + " " + w.getSearchScore());
+		}
 		return weighted;
 	}
 	
@@ -660,6 +661,7 @@ public class TopicService implements ITopicService{
 	public boolean deleteTagFromTopic(Topic top, Tag tag){
 		System.out.println("Deleting tag from topic: ");
 		boolean result  = top.getTags().remove(tag);
+		System.out.println("Result : " + result);
 		return result;
 	}
 
