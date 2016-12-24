@@ -1,7 +1,7 @@
 # CmpE 352 Project - Group 6
 Project website is available now!
-Visit us at : [Learner Home](http://35.156.14.81:8080)
-
+Visit us at : [Learner Home](http://35.156.14.81:8080) or install our 
+[Android app](https://drive.google.com/open?id=0B46FXMd7ZbGpTGRvNTlBblZRNk0)
 
 Welcome to CmpE 352 group project for the course **CmpE 352** offered at Bogazici
 University in Spring 2016 semester. We are Group 6 and it is nice to have you
